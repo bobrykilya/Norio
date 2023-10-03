@@ -1,0 +1,1 @@
+Hello. It's Web-app for employees of corporation.
