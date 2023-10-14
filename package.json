@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/bobrikilya/StroyprTeam#readme",
   "devDependencies": {
+    "morgan": "^1.10.0",
     "nodemon": "^3.0.1"
   },
   "dependencies": {
