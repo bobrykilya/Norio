@@ -1,39 +1,31 @@
-// import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import LoginPanel from "./components/LogPanel/LoginPanel"
 import './App.css';
  
 function App() {
   
-  // const [state, setState] = useState(null);
+  const [state, setState] = useState(null);
 
-  // const callBackendAPI = async () => {
-  //   const response = await fetch('/express_backend');
-  //   const body = await response.json();
+  const callBackendAPI = async () => {
+    const response = await fetch('/api');
+    const body = await response.json();
 
-  //   if (response.status !== 200) {
-  //     throw Error(body.message)
-  //   }
-  //   return body;
-  // };
+    if (response.status !== 200) {
+      throw Error(body.message)
+    }
+    return body;
+  };
   
   // получение GET маршрута с сервера Express, который соответствует GET из server.js 
-  // useEffect(() => {
-  //   callBackendAPI()
-  //   .then(res => setState(res.express))
-  //   .catch(err => console.log(err));
-  // }, [])
-
-  // return (
-  //   <div className="App">
-  //     {/* вывод данных, полученных с сервера Express */}
-  //     <div>
-  //         {state}
-  //     </div>
-  //   </div>
-  // );
+  useEffect(() => {
+    callBackendAPI()
+    .then(res => setState(res.express))
+    .catch(err => console.log(err));
+  }, [])
   
   return(
     <div className="main-body cont">
-      Привет Мир
+      <LoginPanel />
     </div>
   )
 }
