@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import LoginPanel from "./components/LogPanel/LoginPanel"
+import LoginPanel from "./components/LoginPanel/LoginPanel"
 import './App.css';
  
 function App() {

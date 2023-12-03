@@ -1,0 +1,84 @@
+@import '../../common'
+
+
+#log-cont
+    // border: 1px solid white
+    margin-top: -1rem
+    height: auto
+    width: 80%
+    max-width: 600px
+    min-width: 350px
+    background-color: #ffffff
+    border-radius: 80px
+    box-shadow: 5px 10px 30px #00000060
+    padding-top: 1.5rem
+    padding-bottom: 0.5rem
+    #sign-in
+        // border: 2px solid black
+        h1
+            // border: 2px solid yellow
+            color: #000
+            font-size: 1.7rem
+            font-weight: 600
+            text-align: center
+        #info-but
+            margin-top: 0.8rem
+            margin-bottom: 0.3rem
+            color: #002764e8
+            font-size: 1.9rem
+            transition-duration: 0.2s
+            &:hover
+                color: #00183de8
+        .input-cont
+            width: 10rem
+            height: 1.7rem
+            margin-top: 0.3rem
+            i
+                position: absolute
+                left: 0.5rem
+                font-size: 0.6rem
+                color: #1a3e3fc6
+                transition-duration: 0.2s
+            input
+                width: 100%
+                height: 100%
+                padding: 7px 40px
+                font-size: 0.7rem
+                border: 1px solid #1a3e3f7c
+                border-radius: 40px
+                transition-duration: 0.2s
+                &:focus
+                    border-color: #002525e8
+        #submit-but
+            // border: 2px solid red
+            border-radius: 30px
+            margin-top: 1.3rem
+            margin-bottom: 1.7rem
+            width: 4.5rem
+            height: 2.2rem
+            background-color: #016d11
+            font-size: 0.8rem
+            color: white
+            transition-duration: 0.2s
+            &:hover
+                background-color: #00520c
+            &:focus
+                background-color: #00520c
+        #name-tag
+            // border: 2px solid yellow
+            font-size: 0.7rem
+
+
+@media ( max-width: 500px )
+    #log-cont
+        margin-top: 0
+        width: 100%
+        height: 100%
+        padding-top: 1.2rem
+        border-radius: 0
+        // background: radial-gradient(circle, #c7ddde4a, #a5ced017)
+        #sign-in
+            h1
+                font-size: 1.5rem
+
+
