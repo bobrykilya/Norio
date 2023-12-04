@@ -1,33 +1,33 @@
 import { useState, useEffect } from 'react';
 import LoginPanel from "./components/LoginPanel/LoginPanel"
 import './App.css';
- 
+
 function App() {
-  
-  const [state, setState] = useState(null);
 
-  const callBackendAPI = async () => {
-    const response = await fetch('/api');
-    const body = await response.json();
+    const [state, setState] = useState(null);
 
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body;
-  };
-  
-  // получение GET маршрута с сервера Express, который соответствует GET из server.js 
-  useEffect(() => {
-    callBackendAPI()
-    .then(res => setState(res.express))
-    .catch(err => console.log(err));
-  }, [])
-  
-  return(
-    <div className="main-body cont">
-      <LoginPanel />
-    </div>
-  )
+    const callBackendAPI = async () => {
+        const response = await fetch('/api');
+        const body = await response.json();
+
+        if (response.status !== 200) {
+            throw Error(body.message)
+        }
+        return body;
+    };
+
+    // получение GET маршрута с сервера Express, который соответствует GET из server.js 
+    useEffect(() => {
+        callBackendAPI()
+            .then(res => setState(res.express))
+            .catch(err => console.log(err));
+    }, [])
+
+    return (
+        <div className="main-body cont">
+            <LoginPanel />
+        </div>
+    )
 }
- 
+
 export default App;

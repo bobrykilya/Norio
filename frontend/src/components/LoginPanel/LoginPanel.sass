@@ -5,30 +5,48 @@
     // border: 1px solid white
     margin-top: -1rem
     height: auto
+    max-height: 500px
     width: 80%
-    max-width: 600px
+    max-width: 800px
     min-width: 350px
     background-color: #ffffff
     border-radius: 80px
     box-shadow: 5px 10px 30px #00000060
-    padding-top: 1.5rem
-    padding-bottom: 0.5rem
+    padding: 1.5rem
+    flex-direction: row
+    justify-content: space-around
     #sign-in
         // border: 2px solid black
+        width: 50%
         h1
             // border: 2px solid yellow
-            color: #000
-            font-size: 1.7rem
+            font-family: "Nunito"
             font-weight: 600
+            font-size: 1.7rem
+            color: #030e3c
             text-align: center
-        #info-but
+        #buts-cont
+            // border: 2px solid red
             margin-top: 0.8rem
-            margin-bottom: 0.3rem
-            color: #002764e8
-            font-size: 1.9rem
-            transition-duration: 0.2s
-            &:hover
-                color: #00183de8
+            margin-bottom: 0.6rem
+            display: flex
+            justify-content: space-between
+            $but-size: 2.3rem
+            width: $but-size*2.4
+            button
+                width: $but-size
+                height: $but-size
+                border-radius: 50%
+                background-color: #173971e8
+                color: white
+            #info-but
+                font-size: calc($but-size - 1.2rem)
+                i
+                    margin-top: -0.12rem
+            #pwa-but
+                font-size: calc($but-size - 1.4rem)
+                i
+                    margin-top: 0.1rem
         .input-cont
             width: 10rem
             height: 1.7rem
@@ -37,7 +55,7 @@
                 position: absolute
                 left: 0.5rem
                 font-size: 0.6rem
-                color: #1a3e3fc6
+                color: #1a303fc6
                 transition-duration: 0.2s
             input
                 width: 100%
@@ -46,9 +64,10 @@
                 font-size: 0.7rem
                 border: 1px solid #1a3e3f7c
                 border-radius: 40px
-                transition-duration: 0.2s
+                transition-duration: 0.3s
+                text-transform: lowercase
                 &:focus
-                    border-color: #002525e8
+                    border-color: #000a3ee8
         #submit-but
             // border: 2px solid red
             border-radius: 30px
@@ -59,26 +78,28 @@
             background-color: #016d11
             font-size: 0.8rem
             color: white
-            transition-duration: 0.2s
-            &:hover
-                background-color: #00520c
-            &:focus
-                background-color: #00520c
         #name-tag
             // border: 2px solid yellow
+            font-family: "Nunito"
+            font-weight: 400
             font-size: 0.7rem
+    #logo-img
+        // border: 2px solid black
 
 
-@media ( max-width: 500px )
+@media ( max-width: 900px )
     #log-cont
         margin-top: 0
-        width: 100%
-        height: 100%
+        // width: 100%
+        // height: 100%
+        // max-height: none
         padding-top: 1.2rem
-        border-radius: 0
+        border-radius: 30px
         // background: radial-gradient(circle, #c7ddde4a, #a5ced017)
         #sign-in
+            width: 100%
             h1
                 font-size: 1.5rem
-
+        #logo-img
+            display: none
 
