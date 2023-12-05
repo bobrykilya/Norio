@@ -6,7 +6,7 @@
 .main-body
     color: #1a3e3f
     font-family: "Nunito"
-    background: radial-gradient(circle, #6281a7, #1a293f)
+    background: radial-gradient(circle, #6281a7c4, #142032)
     // Selecting ban
     -moz-user-select: none
     -o-user-select:none
@@ -14,3 +14,18 @@
     -webkit-user-select: none
     -ms-user-select: none
     user-select: none
+    video
+        z-index: -1
+        -o-object-fit: cover
+        object-fit: cover
+        position: fixed
+        width: 100%
+        height: 100%
+        top: 0
+        left: 0
+
+@media ( max-width: 900px )
+    .main-body
+        background: radial-gradient(circle, #6281a7, #1a293f)
+        video
+            display: none

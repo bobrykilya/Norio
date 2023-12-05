@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './LoginPanel.css';
 import mainLogo from '../../imgs/full_logo_vertic.png';
+import CheckBox from './CheckBox/CheckBox';
 
 
 function LoginPanel() {
@@ -17,7 +18,7 @@ function LoginPanel() {
 
     return (
         <div id='log-cont' className='cont'>
-            <form id='sign-in' className='cont'>
+            <form id='sign-in-form' className='cont'>
                 <h1>Выполнить<br />вход</h1>
                 <div id='buts-cont'>
                     <button id='info-but' type="button" className='cont'>
@@ -28,7 +29,6 @@ function LoginPanel() {
                     </button>
                 </div>
                 <div className='input-cont cont'>
-                    <i className="fa-solid fa-user"></i>
                     <input
                         id='name'
                         type="text"
@@ -37,9 +37,9 @@ function LoginPanel() {
                         value={name}
                         onChange={e => setName(e.target.value)}
                     />
+                    <i className="fa-solid fa-user"></i>
                 </div>
                 <div className='input-cont cont'>
-                    <i className="fa-solid fa-key"></i>
                     <input
                         id='passw'
                         type="password"
@@ -48,7 +48,12 @@ function LoginPanel() {
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                     />
+                    <i className="fa-solid fa-key"></i>
                 </div>
+                <label id='checkbox-cont' className='cont'>
+                    <CheckBox />
+                    <span>Не запоминать меня</span>
+                </label>
                 <button
                     id='submit-but'
                     type='submit'
@@ -58,14 +63,15 @@ function LoginPanel() {
                         handleLogin()
                             .then(() => setLoad(false));
                     }}
+                    className='cont'
                 >
                     <i className="fa-solid fa-right-to-bracket"></i>
                 </button>
                 <h3 id='name-tag'>bobrykilya</h3>
             </form>
-            <img id='logo-img' src={mainLogo} style={{ height: '100%' }} alt="/" />
+            <img id='logo-img' src={mainLogo} alt="/" />
         </div>
     );
-}
+};
 
 export default LoginPanel;
