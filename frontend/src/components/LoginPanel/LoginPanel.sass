@@ -9,63 +9,80 @@
     min-width: 350px
     $backgr-color: #fffffff4
     background-color: $backgr-color
-    border-radius: 80px
+    border-radius: 60px
     box-shadow: 5px 10px 30px #00000040
     padding: 1.5rem
     flex-direction: row
-    justify-content: space-around
+    justify-content: space-between
+    // justify-content: space-around
     #sign-in-form
         // border: 2px solid black
         width: 50%
-        h1
+        #enter-text-cont
             // border: 2px solid yellow
-            font-family: "Nunito"
-            font-weight: 600
-            font-size: 1.7rem
-            color: #030e3c
-            text-align: center
+            flex-direction: row
+            height: auto
+            margin-left: 0.3rem
+            i
+                color: #030e3cc1
+                font-size: 2.4rem
+                margin-right: 0.7rem
+            h1
+                color: #030e3c
+                font-family: "Nunito"
+                font-weight: 600
+                font-size: 1.4rem
+                text-align: start
         #buts-cont
             // border: 2px solid red
-            margin-top: 0.9rem
-            margin-bottom: 0.7rem
-            display: flex
+            margin-top: 1.2rem
+            margin-bottom: 0.5rem
+            flex-direction: row
             justify-content: space-between
-            $but-size: 2.3rem
-            width: $but-size*2.4
+            height: auto
+            $but-size: 1.9rem
+            width: $but-size*3.8
+            overflow: visible
             button
                 width: $but-size
                 height: $but-size
                 border-radius: 50%
                 background-color: #173971e8
+                // border: 1px solid #173971e8
                 &:hover, &:focus
                     background-color: #173a71
+                label
+                    transition-duration: 0.2s
+                    position: absolute
+                    opacity: 0
                 i
+                    // color: #173971e8
                     color: $backgr-color
+                    // pointer-events: auto
+                    &:hover ~ label
+                        opacity: 1
             #info-but
-                font-size: calc($but-size - 1.2rem)
+                font-size: calc($but-size - 1.05rem)
                 i
                     margin-top: -0.12rem
             #pwa-but
-                font-size: calc($but-size - 1.4rem)
+                font-size: calc($but-size - 1.2rem)
+                i
+                    margin-top: 0.1rem
+            #new-user-but
+                font-size: calc($but-size - 1.11rem)
                 i
                     margin-top: 0.1rem
         .input-cont
             width: 10rem
             height: 1.7rem
             margin-top: 0.3rem
-            i
-                position: absolute
-                left: 0.5rem
-                font-size: 0.6rem
-                color: #1a303fc6
-                transition-duration: 0.2s
             input
                 width: 100%
                 height: 100%
-                padding: 7px 40px
+                padding: 7px 42px
                 font-size: 0.7rem
-                border: 1px solid #1a3e3f7c
-                border-radius: 40px
+                border-bottom: 1px solid #1a3e3f7c
                 transition-duration: 0.3s
                 text-transform: lowercase
                 background-color: transparent
@@ -73,8 +90,13 @@
                     border-color: #000a3ee8
                 &:focus ~ i
                     color: #000a3ee8
-                &::placeholder
-                    color: #142733d9
+            i
+                position: absolute
+                left: 0.5rem
+                font-size: 0.6rem
+                color: #1a303fc6
+                transition-duration: 0.5s
+                color: #142733d9
         #checkbox-cont
             // border: 2px solid red
             width: auto
@@ -92,7 +114,7 @@
                 cursor: pointer
         #submit-but
             // border: 2px solid red
-            border-radius: 30px
+            border-radius: 25px
             margin-top: 0.9rem
             margin-bottom: 1.4rem
             width: 4.5rem
@@ -117,11 +139,15 @@
     #log-cont
         margin-top: 0
         padding-top: 1.2rem
-        border-radius: 30px
+        border-radius: 40px
         #sign-in-form
             width: 100%
-            h1
-                font-size: 1.5rem
+            #enter-text-cont
+                width: 100%
+                i
+                    font-size: 2rem
+                h1
+                    font-size: 1.2rem
         #logo-img
             display: none
 
