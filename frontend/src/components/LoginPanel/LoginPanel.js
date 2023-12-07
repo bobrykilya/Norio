@@ -1,36 +1,36 @@
 import { useState } from 'react';
 import './LoginPanel.css';
-import mainLogo from '../../imgs/full_logo_vertic.png';
+// import mainLogo from '../../imgs/full_logo_vertic.png';
 import CheckBox from './CheckBox/CheckBox';
+import PasswordInput from './PasswordInput/PasswordInput';
 
 
 function LoginPanel() {
 
     const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-
     const [load, setLoad] = useState(false);
-    const [user, setUser] = useState(null);
 
+    const [user, setUser] = useState(null);
+    
     const handleLogin = async () => {
         return
     };
 
     return (
-        <div id='log-cont' className='cont'>
-            <form id='sign-in-form' className='cont'>
-                <div id='enter-text-cont' className='cont'>
-                    <i class="fa-solid fa-door-open"></i>
-                    <h1>Выполнить<br />вход</h1>
+        <div id='login_panel-cont' className='cont'>
+            <form id='sign_in-form' className='cont'>
+                <div id='enter_text-cont' className='cont'>
+                    {/* <i class="fa-solid fa-door-open"></i> */}
+                    <h1>Авторизация</h1>
                 </div>
                 <div id='buts-cont' className='cont'>
-                    <button
+                    {/* <button
                         id='new-user-but'
                         title='Создать заявку на регистрацию нового пользователя'
                         type="button"
                         className='cont'>
                             <i class="fa-regular fa-address-card"></i>
-                    </button>
+                    </button> */}
                     <button 
                         id='pwa-but'
                         title='Создать ярлык на рабочем столе'
@@ -55,19 +55,9 @@ function LoginPanel() {
                         value={name}
                         onChange={e => setName(e.target.value)}
                     />
-                    <i className="fa-solid fa-user"></i>
+                    <i className="info-icon fa-solid fa-user"></i>
                 </div>
-                <div className='input-cont cont'>
-                    <input
-                        id='passw'
-                        type="password"
-                        maxLength={15}
-                        placeholder='Пароль'
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                    <i className="fa-solid fa-key"></i>
-                </div>
+                <PasswordInput />
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox />
                     <span>Не запоминать меня</span>
@@ -85,9 +75,10 @@ function LoginPanel() {
                 >
                     <i className="fa-solid fa-right-to-bracket"></i>
                 </button>
-                <h3 id='name-tag'>bobrykilya</h3>
+                <h3 id='name_tag'>bobrykilya</h3>
             </form>
-            <img id='logo-img' src={mainLogo} alt="/" />
+
+            {/* <img id='logo-img' src={mainLogo} alt="/" /> */}
         </div>
     );
 };

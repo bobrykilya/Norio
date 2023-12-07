@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import LoginPanel from './components/LoginPanel/LoginPanel';
-import backVideo from './imgs/background.webm';
 import './App.css';
 
 function App() {
@@ -25,10 +24,7 @@ function App() {
     }, [])
 
     return (
-        <div className="main-body cont">
-            <video className='videoTag' autoPlay loop muted>
-                <source src={backVideo} type='video/webm' />
-            </video>
+        <div id='main_body-cont' className="cont">
             <LoginPanel />
         </div>
     )

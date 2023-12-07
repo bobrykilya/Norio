@@ -1,10 +1,11 @@
 
-#log-cont
+#login_panel-cont
     // border: 2px solid orange
     margin-top: -1rem
     height: auto
-    max-height: 600px
+    // max-height: 600px
     width: 80%
+    // width: auto
     max-width: 800px
     min-width: 350px
     $backgr-color: #fffffff4
@@ -14,11 +15,10 @@
     padding: 1.5rem
     flex-direction: row
     justify-content: space-between
-    // justify-content: space-around
-    #sign-in-form
+    #sign_in-form
         // border: 2px solid black
-        width: 50%
-        #enter-text-cont
+        // width: 50%
+        #enter_text-cont
             // border: 2px solid yellow
             flex-direction: row
             height: auto
@@ -32,7 +32,7 @@
                 font-family: "Nunito"
                 font-weight: 600
                 font-size: 1.4rem
-                text-align: start
+                // text-align: start
         #buts-cont
             // border: 2px solid red
             margin-top: 1.2rem
@@ -41,7 +41,7 @@
             justify-content: space-between
             height: auto
             $but-size: 1.9rem
-            width: $but-size*3.8
+            width: $but-size*2.6
             overflow: visible
             button
                 width: $but-size
@@ -69,10 +69,6 @@
                 font-size: calc($but-size - 1.2rem)
                 i
                     margin-top: 0.1rem
-            #new-user-but
-                font-size: calc($but-size - 1.11rem)
-                i
-                    margin-top: 0.1rem
         .input-cont
             width: 10rem
             height: 1.7rem
@@ -88,9 +84,9 @@
                 background-color: transparent
                 &:hover, &:focus
                     border-color: #000a3ee8
-                &:focus ~ i
+                &:focus ~ .info-icon
                     color: #000a3ee8
-            i
+            .info-icon
                 position: absolute
                 left: 0.5rem
                 font-size: 0.6rem
@@ -124,15 +120,11 @@
             color: $backgr-color
             &:hover, &:focus
                 background-color: #047815
-        #name-tag
+        #name_tag
             // border: 2px solid red
             font-family: "Nunito"
             font-weight: 400
             font-size: 0.7rem
-    #logo-img
-        // border: 2px solid black
-        // height: 85%
-        width: 43%
 
 
 @media ( max-width: 900px )
@@ -140,14 +132,12 @@
         margin-top: 0
         padding-top: 1.2rem
         border-radius: 40px
-        #sign-in-form
+        #sign_in-form
             width: 100%
-            #enter-text-cont
+            #enter_text-cont
                 width: 100%
                 i
                     font-size: 2rem
                 h1
                     font-size: 1.2rem
-        #logo-img
-            display: none
 

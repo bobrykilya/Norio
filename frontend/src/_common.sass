@@ -2,34 +2,32 @@
 
 input
   transition: all 0.2s ease
-    &::placeholder
-      text-transform: capitalize
+  &::placeholder
+    text-transform: capitalize
 
 button
-  transition: all 0.1s ease
+  transition: all 0.2s ease
   &:hover, &:focus
-    transform: scale(1.05)
+    transform: translateY(-1.5px)
   &:active
     transform: scale(0.95)
 
 i
-  // pointer-events: none
-
+  pointer-events: none
 
 .cont
-    width: 100%
-    height: 100%
-    position: relative
-    overflow: hidden
-    display: flex
-    flex-direction: column
-    justify-content: center
-    align-items: center
-    overscroll-behavior: contain
-    flex-shrink: 0
+  width: 100%
+  height: 100%
+  position: relative
+  overflow: hidden
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  overscroll-behavior: contain
+  flex-shrink: 0
 
 @media ( max-width: 900px )
   button
     &:focus
       outline: none
-
