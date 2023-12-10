@@ -1,5 +1,5 @@
 import { useState } from 'react'
-// import './NameInput.sass'
+
 
 
 const NameInput = (props) => {

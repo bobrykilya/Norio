@@ -1,5 +1,15 @@
+@import './ButtonsCont/ButtonsCont'
+@import './Forms/SignInForm/CheckBox/CheckBox'
+@import './CoverPanel/CoverPanel'
+@import './Forms/Forms'
+@import './Forms/SignInForm/SignInForm'
+@import './Forms/SignUpForm/SignUpForm'
+@import './Inputs/Inputs'
+@import './Inputs/NameInput/NameInput'
+@import './Inputs/PasswordInput/PasswordInput'
+@import './SubmitBut/SubmitBut'
 
-$backgr-color: #fffffff4
+
 
 #login_panel-cont
     // border: 2px solid orange
@@ -12,35 +22,7 @@ $backgr-color: #fffffff4
     min-width: 350px
     border-radius: 60px
     box-shadow: 2px 10px 30px #00000040
-    #forms-cont
-        padding: 1.5rem
-        flex-direction: row
-        // justify-content: space-between
-        background-color: $backgr-color
-        section
-            // border: 2px solid black
-            width: 50%
-            .enter_text-cont
-                // border: 2px solid yellow
-                flex-direction: row
-                height: auto
-                margin-left: 0.3rem
-                i
-                    color: #030e3cc1
-                    font-size: 2.4rem
-                    margin-right: 0.7rem
-                h1
-                    color: #030e3c
-                    font-weight: 600
-                    font-size: 1.4rem
-                    // text-align: start
-            form
-                height: auto
-            .name_tag
-                // border: 2px solid red
-                font-family: "Nunito"
-                font-weight: 400
-                font-size: 0.7rem
+
 
 
 @media ( max-width: 900px )

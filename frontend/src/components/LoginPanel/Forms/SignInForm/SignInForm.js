@@ -1,9 +1,8 @@
 // import { useState } from 'react'
-import NameInput from '../NameInput/NameInput'
-import PasswordInput from '../PasswordInput/PasswordInput'
-import CheckBox from '../CheckBox/CheckBox'
-import SubmitBut from '../SubmitBut/SubmitBut'
-import './SignInForm.sass'
+import NameInput from '../../Inputs/NameInput/NameInput'
+import PasswordInput from '../../Inputs/PasswordInput/PasswordInput'
+import CheckBox from './CheckBox/CheckBox'
+import SubmitBut from '../../SubmitBut/SubmitBut'
 
 
 
@@ -42,12 +41,20 @@ const SignInForm = (props) => {
         CheckBoxVal = checked
     }
 
-    const handleLogIn = async () => {
+    // const CheckInput = (e) => {
+    //     console.log(e)
+    // }
+
+    // const handleCheckInputs = (e) => {
+    //     // console.log(CheckInput(e))
+    // }
+
+    const SignIn = async () => {
         const LOG_INFO = {
             u_name: name_el.value,
             u_passw: passw_el.value,
             u_device: navigator.userAgent,
-            once: CheckBoxVal,
+            is_once: CheckBoxVal,
         }
         console.log(LOG_INFO)
     }
@@ -57,12 +64,13 @@ const SignInForm = (props) => {
             {/* <NameInput onChange={handleChangeInputName}/>
             <PasswordInput onChange={handleChangeInputPassword}/> */}
             <NameInput/>
+            {/* <PasswordInput form={form_name} onCheckInput={CheckInput}/> */}
             <PasswordInput form={form_name}/>
             <label id='checkbox-cont' className='cont'>
                 <CheckBox onChange={handleChangeCheckBox}/>
                 <span>Не запоминать меня</span>
             </label>
-            <SubmitBut handleLog={handleLogIn}/>
+            <SubmitBut onClick={SignIn}/>
         </form>
     )  
 }

@@ -1,21 +1,72 @@
-$backgr-color: #fffffff4
+@import '../_variables'
+
+
 
 #cover-cont
     position: absolute
     right: 0
     z-index: 3
     width: 50%
-    border-radius: 30% 0 0 30%
-    #cover
-        background: linear-gradient(45deg,#0a295a, #335b9a)
-        color: $backgr-color
-        padding: 1.5rem
-        h1
-            font-weight: 600
-            font-size: 1.4rem
-        p
-            margin-top: 1.5rem
-            margin-bottom: 1.5rem
-            text-align: center
-        button
-            label
+    border-radius: $up-rad 0 0 $down-rad
+    transition: all $trans-dur $trans-style
+    background: linear-gradient(80deg,#4a6f9c, 40% , $but-act-color)
+    // background: linear-gradient(60deg, $but-act-color, 60% , #335b9a)
+    #cover-content
+        // border: 2px solid orange
+        overflow: visible
+        flex-direction: row
+        transform: translateX(50%)
+        transition: all $trans-dur + 0.1s $trans-style
+        section
+            // border: 2px solid red
+            padding: 1.5rem
+            transition: all $trans-dur + 0.25s $trans-style
+            h1
+                font-weight: 600
+                font-size: $h1-size
+                color: $backgr-color
+            p
+                // border: 2px solid red
+                margin-top: 2rem
+                margin-bottom: 2rem
+                display: block
+                width: 70%
+                text-align: center
+                font-size: $main-text-size
+                line-height: $main-text-size + 0.2rem
+                color: $backgr-color
+            button
+                border: 1px solid $backgr-color
+                width: $confirm-but-size + 0.5rem
+                height: $confirm-but-size / 2
+                border-radius: $but-border-rad
+                &:hover
+                    border-radius: $but-border-rad + 10px
+                label
+                    font-size: 0.6rem
+                    color: $backgr-color
+        #sign_up_info-cont
+            transform: none
+            opacity: 1
+            pointer-events: auto
+        #sign_in_info-cont
+            transform: scale(1 + $trans-content-scale)
+            opacity: 0
+            pointer-events: none
+    // CoverPanel toggle
+    &.opened_sign_up
+        border-radius: 0 $up-rad $down-rad 0
+        transform: translateX(-100%)
+        background: linear-gradient(-80deg,#335b9a, 40% , $but-act-color)
+        // background: linear-gradient(-60deg, $but-act-color, 60% , #335b9a)
+        #cover-content
+            transform: translateX(-50%)
+            #sign_up_info-cont
+                transform: scale(1 + $trans-content-scale)
+                opacity: 0
+                pointer-events: none
+            #sign_in_info-cont
+                transform: none
+                opacity: 1
+                pointer-events: auto
+        

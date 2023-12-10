@@ -1,4 +1,6 @@
-$backgr-color: #fffffff4
+@import '../_variables'
+
+
 
 #buts-cont
     // border: 2px solid red
@@ -7,29 +9,25 @@ $backgr-color: #fffffff4
     flex-direction: row
     justify-content: space-between
     height: auto
-    $but-size: 1.9rem
-    width: $but-size * 2.6
+    width: $small-but-size * 2.6
     overflow: visible
     button
-        width: $but-size
-        height: $but-size
+        width: $small-but-size
+        height: $small-but-size
         border-radius: 50%
-        // background-color: #173971e8
-        background-color: #173971e8
-        // $but-color: #142733d9
+        background-color: $but-color
         // border: 1px solid $but-color
         &:hover, &:focus
-            background-color: #173a71
-            // background-color: #173a71
+            background-color: $but-act-color
         i
             color: $backgr-color
             // color: $but-color
             // pointer-events: auto
     #info-but
         i
-            font-size: $but-size - 1.05rem
+            font-size: $small-but-size - 1.05rem
             margin-top: -0.12rem
     #pwa-but
         i
-            font-size: $but-size - 1.2rem
+            font-size: $small-but-size - 1.2rem
             margin-top: 0.1rem

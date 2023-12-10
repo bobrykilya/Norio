@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './CheckBox.sass'
+
 
 
 const CheckBox = (props) => {

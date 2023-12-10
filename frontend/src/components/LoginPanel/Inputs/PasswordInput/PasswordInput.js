@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './PasswordInput.sass'
+
 
 
 const PasswordInput = (props) => {
@@ -8,25 +8,29 @@ const PasswordInput = (props) => {
     const input_el = document.querySelector(props.form + ' .passw_input')
 
     const [password, setPassword] = useState('')
-    const [lockIcon, setlockIcon] = useState('fa-lock')
+    const [lockIcon, setLockIcon] = useState('fa-lock')
+
+    // props.onCheckInput = (e) => {
+    //     if (e.value && e.value.length > 3) return true
+    // }
 
     const handleChangePassword = (e) => {
         // props.onChange(password)
-        handleShowLock(e)
+        handleShowLockIcon(e)
     }
 
-    const handleShowLock = (e) => {
+    const handleShowLockIcon = (e) => {
         e.target.value ? lock_but_el.classList.add('active') : lock_but_el.classList.remove('active')
         // console.log(lock_but_el)
         setPassword(e.target.value)
     }
 
     const handleSwitchLockIcon = (e) => {
-        const NextlockPosition = (lockIcon === 'fa-lock') ? ['text', 'fa-unlock'] : ['password', 'fa-lock']
+        const NextLockPosition = (lockIcon === 'fa-lock') ? ['text', 'fa-unlock'] : ['password', 'fa-lock']
 
-        e.target.querySelector('i').className = `fa-solid ${NextlockPosition[1]}`
-        input_el.type = NextlockPosition[0]
-        setlockIcon(NextlockPosition[1])
+        e.target.querySelector('i').className = `fa-solid ${NextLockPosition[1]}`
+        input_el.type = NextLockPosition[0]
+        setLockIcon(NextLockPosition[1])
         input_el.focus()
     }
 
