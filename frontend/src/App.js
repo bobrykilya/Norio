@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import LoginPanel from './components/LoginPanel/LoginPanel';
-import './App.css';
+import './App.sass';
+
+
 
 function App() {
 

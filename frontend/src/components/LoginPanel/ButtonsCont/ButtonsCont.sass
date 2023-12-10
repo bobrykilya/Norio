@@ -8,31 +8,28 @@ $backgr-color: #fffffff4
     justify-content: space-between
     height: auto
     $but-size: 1.9rem
-    width: $but-size*2.6
+    width: $but-size * 2.6
     overflow: visible
     button
         width: $but-size
         height: $but-size
         border-radius: 50%
+        // background-color: #173971e8
         background-color: #173971e8
-        // border: 1px solid #173971e8
+        // $but-color: #142733d9
+        // border: 1px solid $but-color
         &:hover, &:focus
             background-color: #173a71
-        label
-            transition-duration: 0.2s
-            position: absolute
-            opacity: 0
+            // background-color: #173a71
         i
-            // color: #173971e8
             color: $backgr-color
+            // color: $but-color
             // pointer-events: auto
-            &:hover ~ label
-                opacity: 1
     #info-but
-        font-size: calc($but-size - 1.05rem)
         i
+            font-size: $but-size - 1.05rem
             margin-top: -0.12rem
     #pwa-but
-        font-size: calc($but-size - 1.2rem)
         i
+            font-size: $but-size - 1.2rem
             margin-top: 0.1rem

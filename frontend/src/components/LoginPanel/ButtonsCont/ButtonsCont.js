@@ -1,5 +1,5 @@
+import './ButtonsCont.sass'
 
-import './ButtonsCont.css';
 
 
 const ButtonsCont = () => {
@@ -22,10 +22,10 @@ const ButtonsCont = () => {
                 id='info-but'
                 title='Описание приложения и инструкция'
                 className='cont'>
-                <i className="fa-solid fa-info"></i>
+                    <i className="fa-solid fa-info"></i>
             </button>
         </div>
-    );
-};
+    )
+}
 
-export default ButtonsCont;
+export default ButtonsCont
