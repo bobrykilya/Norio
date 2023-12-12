@@ -15,7 +15,7 @@ const CoverPanel = () => {
     }
 
     return ( 
-        <div id='cover-cont' className='cont'>
+        <div id='cover-cont' className='cont opened_sign_up'>
             <div id='cover-content' className='cont'>
                 <section id='sign_up_info-cont' className='cont'>
                     <h1>Нет аккаунта?</h1>

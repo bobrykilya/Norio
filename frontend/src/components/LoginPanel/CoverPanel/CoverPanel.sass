@@ -10,7 +10,17 @@
     border-radius: $up-rad 0 0 $down-rad
     transition: all $trans-dur $trans-style
     background: linear-gradient(80deg,#4a6f9c, 40% , $but-act-color)
-    // background: linear-gradient(60deg, $but-act-color, 60% , #335b9a)
+    &::after //* Smooth gradient toggle
+        background: linear-gradient(-80deg,#335b9a, 40% , $but-act-color)
+        content: ''
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        z-index: -1
+        transition: opacity $trans-dur + 0.5s
+        opacity: 0
     #cover-content
         // border: 2px solid orange
         overflow: visible
@@ -34,7 +44,8 @@
                 text-align: center
                 font-size: $main-text-size
                 line-height: $main-text-size + 0.2rem
-                color: $backgr-color
+                // color: $backgr-color
+                color: #d9d8d8f2
             button
                 border: 1px solid $backgr-color
                 width: $confirm-but-size + 0.5rem
@@ -53,12 +64,13 @@
             transform: scale(1 + $trans-content-scale)
             opacity: 0
             pointer-events: none
-    // CoverPanel toggle
+
+    //* CoverPanel toggle
     &.opened_sign_up
         border-radius: 0 $up-rad $down-rad 0
         transform: translateX(-100%)
-        background: linear-gradient(-80deg,#335b9a, 40% , $but-act-color)
-        // background: linear-gradient(-60deg, $but-act-color, 60% , #335b9a)
+        &::after
+            opacity: 1
         #cover-content
             transform: translateX(-50%)
             #sign_up_info-cont

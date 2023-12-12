@@ -2,38 +2,51 @@
 
 
 
-#forms-cont
-    padding: 1.5rem
-    flex-direction: row
-    // justify-content: space-between
-    background-color: $backgr-color
-    section
+#signs-cont
+    .sign-cont
         // border: 2px solid black
+        // justify-content: flex-start
         width: 50%
+        height: auto
         .enter_text-cont
             // border: 2px solid yellow
             flex-direction: row
-            height: auto
-            margin-left: 0.3rem
+            // height: auto
+            // margin-left: 0.3rem
             i
-                color: #030e3cc1
+                color: $main-text-color
                 font-size: 1.8rem
                 margin-right: 0.7rem
             h1
-                color: #030e3c
+                color: $main-text-color
                 font-weight: 600
                 font-size: $h1-size
                 // text-align: start
-        form
-            height: auto
+        #buts-cont
+            // border: 2px solid red
+            // height: auto
+            margin-top: 1.2rem
+            margin-bottom: 0.5rem
+        .form
+            // border: 2px solid yellow
+            // flex-shrink: 1
+            // height: auto
+            .input-cont
+                margin-top: 0.4rem
+        #checkbox-cont
+            margin-top: 0.9rem
+        .submit-but
+            margin-top: 1rem
+            margin-bottom: 1.4rem
         .name_tag
             // border: 2px solid red
+            color: $main-text-color
             font-family: "Nunito"
             font-weight: 400
             font-size: 0.7rem
-   
-    // CoverPanel toggle
-    section
+
+    // * CoverPanel toggle
+    .sign-cont
         transition: transform $trans-dur + 0.2s $trans-style, opacity $trans-dur $trans-style
         opacity: 0
         &.active
@@ -47,4 +60,4 @@
         transform: translateX(-$trans-content-X) scale(1 - $trans-content-scale)
         &.active
             transform: none
-    
+        

@@ -12,7 +12,7 @@ const NameInput = (props) => {
     }
 
     return (
-        <div className='input-cont cont'>
+        <div className='name_input-cont input-cont cont'>
             <input
                 className='name_input'
                 type="text"

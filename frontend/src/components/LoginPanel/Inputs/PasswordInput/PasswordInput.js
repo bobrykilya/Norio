@@ -35,7 +35,7 @@ const PasswordInput = (props) => {
     }
 
     return (
-        <div id='password_input-cont' className='input-cont cont'>
+        <div className='password_input-cont input-cont cont'>
             <input
                 className='passw_input'
                 type="password"

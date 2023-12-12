@@ -5,13 +5,18 @@
 #sign_in-form
     // border: 2px solid red
     #checkbox-cont
+        overflow: visible
         // border: 2px solid red
+        z-index: 2
         width: auto
         height: auto
         height: 1rem
-        margin-top: 0.8rem
         flex-direction: row
+        &:hover
+            span
+                color: $main-text-act-color
         span
+            color: $main-text-color
             margin-left: 0.4rem
             font-size: $main-text-size
             cursor: pointer

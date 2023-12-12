@@ -1,24 +1,24 @@
-// import { useState } from 'react'
+import { useState } from 'react'
 
 
 
 const SubmitBut = (props) => {
 
-    // const [load, setLoad] = useState(false)
-
+    const [load, setLoad] = useState(false)
+    
     return (
         <button
             className='submit-but'
             //! type='submit'
             type='button'
-            // disabled={load}
+            disabled={load}
             onClick={() => {
-                // setLoad(true)
+                setLoad(true)
                 props.onClick()
-                // .then(() => setLoad(false))
+                .then(() => setLoad(false))
             }}
         >
-            <i className="fa-solid fa-right-to-bracket"></i>
+            <i className={props.icon}></i>
         </button>
     )
 }

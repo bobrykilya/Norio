@@ -1,13 +1,13 @@
 // import { useState } from 'react'
-import NameInput from '../../Inputs/NameInput/NameInput'
-import PasswordInput from '../../Inputs/PasswordInput/PasswordInput'
-import SubmitBut from '../../SubmitBut/SubmitBut'
-
+import NameInput from '../../../Inputs/NameInput/NameInput'
+import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
+import SubmitBut from '../../../SubmitBut/SubmitBut'
+import StoresInput from '../../../Inputs/StoresInput/StoresInput'
 
 
 const SignUpForm = (props) => {
 
-    const form_name = '#sign_up-cont'
+    const form_name = '#sign_up-form'
     const passw_el = document.querySelector(form_name + ' .passw_input')
     const name_el = document.querySelector(form_name + ' .name_input')
 
@@ -22,10 +22,11 @@ const SignUpForm = (props) => {
     }
 
     return (
-        <form id='sign_up-form' className='cont'>
+        <form id='sign_up-form' className='form cont'>
             <NameInput/>
             <PasswordInput form={form_name}/>
-            <SubmitBut handleSign={handleSignUp}/>
+            <StoresInput />
+            <SubmitBut icon='fa-solid fa-arrow-right' onClick={handleSignUp}/>
         </form>
     )  
 }
