@@ -5,9 +5,44 @@
 .stores_input-cont
     // border: 2px solid black
     flex-direction: row
-    label
-        margin-right: 0.5rem 
+    overflow: visible
+    // label
+    //     margin-right: 0.5rem 
     #stores_input
         cursor: pointer
         color: $main-text-color
         text-transform: capitalize
+        align-items: flex-start
+        // overflow: visible
+        &:hover
+            transform: none
+        &:active
+            transform: none
+        span
+            // border: 2px solid red
+            color: $place-holder-color
+            font-size: $main-text-size
+            margin-top: 1px
+    #dropdown-stores-cont
+        // display: none
+        position: absolute
+        overflow: visible
+        top: $input-height + 0.2rem
+        padding: 0.5rem
+        background-color: #759acc6c
+        backdrop-filter: blur(15px)
+        height: auto
+        width: 120%
+        border-radius: $but-border-rad
+        z-index: 10
+        li
+            display: inline-block
+            border-radius: $but-border-rad
+            background-color: #ffffffb1
+            padding: 8px 10px
+            font-size: $main-text-size
+            color: $main-text-color
+            margin: 3px
+            width: auto
+            cursor: pointer
+

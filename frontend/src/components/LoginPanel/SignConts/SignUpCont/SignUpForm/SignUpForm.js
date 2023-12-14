@@ -23,9 +23,9 @@ const SignUpForm = (props) => {
 
     return (
         <form id='sign_up-form' className='form cont'>
+            <StoresInput />
             <NameInput/>
             <PasswordInput form={form_name}/>
-            <StoresInput />
             <SubmitBut icon='fa-solid fa-arrow-right' onClick={handleSignUp}/>
         </form>
     )  
