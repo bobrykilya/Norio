@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import LoginPanel from './components/LoginPanel/LoginPanel'
+import MainView from './components/MainView/MainView'
 import './App.sass'
 
 
@@ -27,7 +28,8 @@ function App() {
 
     return (
         <div id='main_body-cont' className="cont">
-            <LoginPanel />
+            {/* <LoginPanel /> */}
+            <MainView />
         </div>
     )
 }
