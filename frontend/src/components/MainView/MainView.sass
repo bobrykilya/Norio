@@ -1,0 +1,76 @@
+@import './MainView_variables'
+
+
+
+#main_view-cont
+    padding: $cards-margin
+    padding-bottom: 1rem
+    flex-direction: row
+    font-size: 0.7rem
+    overflow: visible
+    .first-column
+        // border: 2px solid orange
+        width: auto
+        max-width: $info-column-max-width
+        min-width: $info-column-min-width
+        overflow: visible
+        .menu_bar
+            flex-shrink: 1
+            margin-bottom: $cards-margin
+            #logo-cont
+        .notifs
+            height: 5rem
+            .notif_elem
+    .second-column
+        margin: 0 $cards-margin
+        flex-shrink: 1
+        overflow: visible
+        .search_and_day_info-cont
+            margin-bottom: $cards-margin
+            height: 3rem
+            flex-direction: row
+            overflow: visible
+            .search-cont
+                margin-right: $cards-margin
+                flex-shrink: 1
+            .day_info-cont
+                width: 6rem
+        .tasks_filters-cont
+            margin-bottom: $cards-margin
+            flex-direction: row
+            height: 5rem
+            overflow: visible
+            .main_filters-cont
+                margin-right: $cards-margin
+                flex-shrink: 1
+                // width: 100%
+            .date_filters-cont
+                width: 10rem
+        .tasks
+            margin-bottom: $cards-margin
+            flex-shrink: 1
+        .new_task_but-cont
+            // border: 2px solid orange
+            height: 2rem
+            flex-direction: row
+            overflow: visible
+            button
+                height: 100%
+                width: 100%
+                &:nth-child(2)
+                    width: 15rem
+                    margin: 0 $cards-margin
+                // width: 3rem
+    .third-column
+        max-width: $info-column-max-width
+        min-width: $info-column-min-width
+        width: auto
+        overflow: visible
+        .account
+            height: 3rem
+        .recent_changes
+            flex-shrink: 1
+            // height: 60%
+            margin: $cards-margin 0
+        .recent_messages
+            height: 7rem
