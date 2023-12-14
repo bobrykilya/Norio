@@ -1,4 +1,4 @@
-@import '../_variables'
+@import '../LoginPanel_variables'
 
 
 
@@ -7,11 +7,11 @@
     right: 0
     z-index: 3
     width: 50%
-    border-radius: $up-rad 0 0 $down-rad
+    border-radius: $rad-up-cover-panel 0 0 $rad-down-cover-panel
     transition: all $trans-dur $trans-style
-    background: linear-gradient(80deg,#4a6f9c, 40% , $but-act-color)
+    background: linear-gradient(80deg,#4a6f9c, 40% , $color-but-act)
     &::after //* Smooth gradient toggle
-        background: linear-gradient(-80deg,#335b9a, 40% , $but-act-color)
+        background: linear-gradient(-80deg,#335b9a, 40% , $color-but-act)
         content: ''
         position: absolute
         top: 0
@@ -33,29 +33,28 @@
             transition: all $trans-dur + 0.25s $trans-style
             h1
                 font-weight: 600
-                font-size: $h1-size
-                color: $backgr-color
+                font-size: $size-h1
+                color: $color-backgr
             p
                 // border: 2px solid red
-                margin-top: 2rem
-                margin-bottom: 2rem
+                margin: 18% 0
                 display: block
                 width: 70%
                 text-align: center
-                font-size: $main-text-size
-                line-height: $main-text-size + 0.2rem
-                // color: $backgr-color
+                font-size: $size-main-text
+                line-height: $size-main-text + 0.2rem
+                // color: $color-backgr
                 color: #d9d8d8f2
             button
-                border: 1px solid $backgr-color
-                width: $confirm-but-size + 0.5rem
-                height: $confirm-but-size / 2
-                border-radius: $but-border-rad
+                border: 1px solid $color-backgr
+                width: $size-confirm-but + 0.5rem
+                height: $size-confirm-but / 2
+                border-radius: $rad-but-border
                 &:hover
-                    border-radius: $but-border-rad + 10px
+                    border-radius: $rad-but-border + 10px
                 label
                     font-size: 0.6rem
-                    color: $backgr-color
+                    color: $color-backgr
         #sign_up_info-cont
             transform: none
             opacity: 1
@@ -67,7 +66,7 @@
 
     //* CoverPanel toggle
     &.opened_sign_up
-        border-radius: 0 $up-rad $down-rad 0
+        border-radius: 0 $rad-up-cover-panel $rad-down-cover-panel 0
         transform: translateX(-100%)
         &::after
             opacity: 1

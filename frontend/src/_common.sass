@@ -1,11 +1,12 @@
-@import './components/LoginPanel/_variables'
+@import './components/LoginPanel/LoginPanel_variables'
 
 
 
 input
     transition: all 0.2s ease
+    color: $color-input
     &::placeholder
-        color: $place-holder-color
+        color: $color-place-holder
         text-transform: capitalize
 
 button
@@ -36,5 +37,6 @@ i
     border-radius: 25px
     box-shadow: 2px 10px 30px #00000027
     padding: 0.5rem
+    transition: all 0.3s ease
 // *
 //     border: 1px solid

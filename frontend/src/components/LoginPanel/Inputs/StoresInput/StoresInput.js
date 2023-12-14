@@ -1,8 +1,24 @@
-
+import { useState } from 'react'
 
 
 
 const StoresInput = () => {
+    
+    const dropdown_stores = document.getElementById('dropdown-stores-cont')
+    const store_name = document.getElementById('store_name')
+    
+    const [store, setStore] = useState(null)
+
+
+    const handleToggleDropDownStores = () => {
+        dropdown_stores.classList.toggle('opened')
+    }
+    const handleSetStoreName = (e) => {
+        store_name.classList.add('selected')
+        setStore(e.target.textContent)
+        store_name.innerHTML = e.target.textContent
+    }
+
     return ( 
         <div className='stores_input-cont input-cont cont'>
             {/* <label htmlFor='stores_input'>Точка</label> */}
@@ -18,18 +34,25 @@ const StoresInput = () => {
                 <option value='8'>Test 8</option>
                 <option value='9'>Test 9</option>
             </select> */}
-            <button type='button' id='stores_input' className='cont' tabIndex={3}>
-                <span>Точка</span>
+            <button 
+                type='button'
+                id='stores_input'
+                className='cont'
+                tabIndex={3}
+                onClick={handleToggleDropDownStores}
+                // onBlur={handleToggleDropDownStores}
+            >
+                <span id='store_name'>Точка</span>
             </button>
-                <i class="info-icon fa-solid fa-house-chimney"></i>
-            <ul id='dropdown-stores-cont'>
+                <i className="info-icon fa-solid fa-house-chimney"></i>
+            <ul id='dropdown-stores-cont' onClick={handleSetStoreName}>
                 <li>Офис</li>
                 <li>Красное</li>
-                <li>Радошковичи</li>
                 <li>Полоцк</li>
                 <li>БелМаш</li>
                 <li>Тюрли</li>
                 <li>Глубокое</li>
+                <li>Радошковичи</li>
                 <li>Спутник</li>
                 <li>Либава</li>
             </ul>

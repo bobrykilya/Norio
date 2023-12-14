@@ -16,7 +16,7 @@ const NameInput = (props) => {
             <input
                 className='name_input'
                 type="text"
-                maxLength={15}
+                maxLength={13}
                 placeholder='Логин'
                 value={name}
                 onChange={handleChangeName}

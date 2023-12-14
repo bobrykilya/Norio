@@ -1,4 +1,4 @@
-// import React, { useState } from 'react';
+// import { useState } from 'react';
 import SignInCont from './SignConts/SignInCont/SignInCont'
 import SignUpCont from './SignConts/SignUpCont/SignUpCont'
 import CoverPanel from './CoverPanel/CoverPanel'

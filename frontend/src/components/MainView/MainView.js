@@ -27,24 +27,19 @@ const MainView = () => {
                 </div>
             </div>
             <div className="second-column cont">
-                <div className="search_and_day_info-cont cont">
-                    <div className="search-cont cont card">
-
+                <div className="search_filters_day-cont cont">
+                    <div className="search_and_main_filters-cont cont">
+                        <div className="search-cont cont card">
+                        </div>
+                        <div className="main_filter-cont cont card">
+                        </div>
+                    </div>
+                    <div className="date_filter-cont cont card">
                     </div>
                     <div className="day_info-cont cont card">
-
-                    </div>
-                </div>
-                <div className="tasks_filters-cont cont">
-                    <div className="main_filters-cont cont card">
-
-                    </div>
-                    <div className="date_filters-cont cont card">
-
                     </div>
                 </div>
                 <div className="tasks cont card">
-                    
                 </div>
                 <div className="new_task_but-cont cont">
                     <button className="card">Новая задача</button>

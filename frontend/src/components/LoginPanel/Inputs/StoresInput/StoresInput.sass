@@ -1,4 +1,4 @@
-@import '../../_variables'
+@import '../../LoginPanel_variables'
 
 
 
@@ -10,7 +10,7 @@
     //     margin-right: 0.5rem 
     #stores_input
         cursor: pointer
-        color: $main-text-color
+        color: $color-main-text
         text-transform: capitalize
         align-items: flex-start
         // overflow: visible
@@ -20,29 +20,48 @@
             transform: none
         span
             // border: 2px solid red
-            color: $place-holder-color
-            font-size: $main-text-size
+            color: $color-place-holder
+            font-size: $size-main-text
             margin-top: 1px
+            &.selected
+                color: $color-input
     #dropdown-stores-cont
         // display: none
         position: absolute
         overflow: visible
-        top: $input-height + 0.2rem
+        top: $height-input + 0.2rem
         padding: 0.5rem
-        background-color: #759acc6c
-        backdrop-filter: blur(15px)
+        background-color: $color-backgr
+        box-shadow: 2px 10px 30px #00000040
+        // backdrop-filter: blur(15px)
         height: auto
-        width: 120%
-        border-radius: $but-border-rad
+        width: 125%
+        border-radius: $rad-but-border
         z-index: 10
+        text-align: center
+        pointer-events: none
+        opacity: 0
+        transform: scale(0.8) translateY(-1.5rem)
+        transition: all 0.3s ease
+        &.opened
+            pointer-events: auto
+            opacity: 1
+            transform: scale(1) translateY(0)
         li
+            // border: 1px solid #acabab
             display: inline-block
-            border-radius: $but-border-rad
-            background-color: #ffffffb1
-            padding: 8px 10px
-            font-size: $main-text-size
-            color: $main-text-color
-            margin: 3px
+            border-radius: 15px
+            box-shadow: 1px 2px 5px #0000001c
+            padding: 8px 12px
+            font-size: $size-main-text
+            color: $color-main-text
+            margin: 4px 3px
             width: auto
             cursor: pointer
+            transition: all 0.2s ease
+            &:hover
+                background-color: #e7e7e79b
+            &:active
+                transform: scale(0.95)
+                
 

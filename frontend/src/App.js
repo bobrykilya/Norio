@@ -28,8 +28,8 @@ function App() {
 
     return (
         <div id='main_body-cont' className="cont">
-            {/* <LoginPanel /> */}
-            <MainView />
+            <LoginPanel />
+            {/* <MainView /> */}
         </div>
     )
 }

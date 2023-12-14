@@ -39,7 +39,7 @@ const PasswordInput = (props) => {
             <input
                 className='passw_input'
                 type="password"
-                maxLength={15}
+                maxLength={13}
                 placeholder='Пароль'
                 value={password}
                 onChange={handleChangePassword}

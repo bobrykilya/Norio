@@ -1,4 +1,4 @@
-@import '../_variables'
+@import '../LoginPanel_variables'
 
 
 
@@ -14,13 +14,13 @@
             // height: auto
             // margin-left: 0.3rem
             i
-                color: $main-text-color
+                color: $color-main-text
                 font-size: 1.8rem
                 margin-right: 0.7rem
             h1
-                color: $main-text-color
+                color: $color-main-text
                 font-weight: 600
-                font-size: $h1-size
+                font-size: $size-h1
                 // text-align: start
         #buts-cont
             // border: 2px solid red
@@ -40,7 +40,7 @@
             margin-bottom: 1.4rem
         .name_tag
             // border: 2px solid red
-            color: $main-text-color
+            color: $color-main-text
             font-family: "Nunito"
             font-weight: 400
             font-size: 0.7rem
@@ -49,9 +49,11 @@
     .sign-cont
         transition: transform $trans-dur + 0.2s $trans-style, opacity $trans-dur $trans-style
         opacity: 0
+        pointer-events: none
         &.active
             transition: all $trans-dur + 0.2s $trans-style
             opacity: 1
+            pointer-events: auto
     #sign_in-cont
         transform: translateX($trans-content-X) scale(1 - $trans-content-scale)
         &.active
