@@ -1,56 +1,54 @@
-@import './MainView_variables'
+// @import './MainView_variables'
+@import '../Cards/MenuBarCard/MenuBarCard'
 
 
 
 #main_view-cont
-    padding: $cards-margin
+    padding: $margin-cards
     padding-bottom: 1rem
     flex-direction: row
-    font-size: 0.7rem
     overflow: visible
     .first-column
         // border: 2px solid orange
-        width: 9rem
+        width: 7rem
         overflow: visible
-        .menu_bar
-            margin-bottom: $cards-margin
+        .menu_bar_card-cont
+            margin-bottom: $margin-cards
             height: 60%
-            #logo-cont
-        .notifs
+        .notification_card-cont
             flex-shrink: 1
-            .notif_elem
     .second-column
-        margin: 0 $cards-margin
+        margin: 0 $margin-cards
         flex-shrink: 1
         overflow: visible
         .search_filters_day-cont
-            margin-bottom: $cards-margin
+            margin-bottom: $margin-cards
             min-height: 7rem
             height: 23%
             max-height: 8rem 
             flex-direction: row
             overflow: visible
             .search_and_main_filters-cont
-                margin-right: $cards-margin
+                margin-right: $margin-cards
                 flex-shrink: 1
                 overflow: visible
-                .search-cont
+                .search_card-cont
                     height: 2rem
-                    margin-bottom: $cards-margin
-                .main_filter-cont
+                    margin-bottom: $margin-cards
+                .main_filter_card-cont
                     flex-shrink: 1
                     // width: 100%
-            .date_filter-cont
-                margin-right: $cards-margin
+            .date_filter_card-cont
+                margin-right: $margin-cards
                 min-width: 7rem
                 width: 24%
                 max-width: 16rem
-            .day_info-cont
+            .day_info_card-cont
                 min-width: 7rem
                 width: 20%
                 max-width: 12rem
-        .tasks
-            margin-bottom: $cards-margin
+        .task_card-cont
+            margin-bottom: $margin-cards
             flex-shrink: 1
         .new_task_but-cont
             // border: 2px solid orange
@@ -62,17 +60,17 @@
                 width: 100%
                 &:nth-child(2)
                     width: 15rem
-                    margin: 0 $cards-margin
+                    margin: 0 $margin-cards
     .third-column
         min-width: 10rem
         width: 18%
         max-width: 13rem
         overflow: visible
-        .account
+        .account_info_card-cont
             height: 3rem
-        .recent_changes
+        .recent_changes_card-cont
             height: 50%
             // height: 60%
-            margin: $cards-margin 0
-        .recent_messages
+            margin: $margin-cards 0
+        .recent_messages_card-cont
             flex-shrink: 1

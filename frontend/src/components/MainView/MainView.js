@@ -1,4 +1,5 @@
-
+import MenuBarCard from '../Cards/MenuBarCard/MenuBarCard.js'
+import NotificationCard from '../Cards/NotificationCard/NotificationCard.js'
 
 
 
@@ -6,40 +7,23 @@ const MainView = () => {
     return ( 
         <div id='main_view-cont' className='cont'>
             <div className='first-column cont'>
-                <div className='menu_bar cont card'>
-                    <div id='logo-cont' className='cont'>
-                        <p>Stroypr<br/>Team</p>
-                    </div>
-                </div>
-                <div className='notifs cont card' >
-                    <div className='notif_elem'>
-                        <span className='notif_elem-icon'>
-                        </span>
-                        <div className='notif_elem_info-cont'>
-                            <h2>
-                                Вход с нового устройcтва
-                            </h2>
-                            <span className='notif_elem_time-cont'>
-                                <p>12:32  19.08.2023</p>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                <MenuBarCard />
+                <NotificationCard />
             </div>
             <div className="second-column cont">
                 <div className="search_filters_day-cont cont">
                     <div className="search_and_main_filters-cont cont">
-                        <div className="search-cont cont card">
+                        <div className="search_card-cont cont card">
                         </div>
-                        <div className="main_filter-cont cont card">
+                        <div className="main_filter_card-cont cont card">
                         </div>
                     </div>
-                    <div className="date_filter-cont cont card">
+                    <div className="date_filter_card-cont cont card">
                     </div>
-                    <div className="day_info-cont cont card">
+                    <div className="day_info_card-cont cont card">
                     </div>
                 </div>
-                <div className="tasks cont card">
+                <div className="task_card-cont cont card">
                 </div>
                 <div className="new_task_but-cont cont">
                     <button className="card">Новая задача</button>
@@ -48,13 +32,13 @@ const MainView = () => {
                 </div>
             </div>
             <div className="third-column cont">
-                <div className="account cont card">
+                <div className="account_info_card-cont cont card">
                     
                 </div>
-                <div className="recent_changes cont card">
+                <div className="recent_changes_card-cont cont card">
                     
                 </div>
-                <div className="recent_messages cont card">
+                <div className="recent_messages_card-cont cont card">
                     
                 </div>
             </div>
