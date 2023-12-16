@@ -6,6 +6,7 @@ const StoresInput = () => {
     
     const dropdown_stores = document.getElementById('dropdown-stores-cont')
     const store_name = document.getElementById('store_name')
+    const user_name = document.querySelector('#sign_up-form .name_input')
     
     const [store, setStore] = useState(null)
 
@@ -14,9 +15,14 @@ const StoresInput = () => {
         dropdown_stores.classList.toggle('opened')
     }
     const handleSetStoreName = (e) => {
-        store_name.classList.add('selected')
-        setStore(e.target.textContent)
-        store_name.innerHTML = e.target.textContent
+        // console.log(user_name)
+        if (e.target.tagName !== 'UL') {
+            store_name.classList.add('selected')
+            setStore(e.target.textContent)
+            store_name.innerHTML = e.target.textContent
+            dropdown_stores.classList.remove('opened')
+            user_name.focus()
+        }
     }
 
     return ( 
@@ -38,7 +44,6 @@ const StoresInput = () => {
                 type='button'
                 id='stores_input'
                 className='cont'
-                tabIndex={3}
                 onClick={handleToggleDropDownStores}
                 // onBlur={handleToggleDropDownStores}
             >

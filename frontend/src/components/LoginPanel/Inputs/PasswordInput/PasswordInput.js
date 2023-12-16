@@ -48,7 +48,7 @@ const PasswordInput = (props) => {
             <button 
                 className='lock-but' 
                 type='button'
-                tabIndex='-1' 
+                tabIndex={-1} 
                 onClick={handleSwitchLockIcon}
             >
                 <i id='lock-icon' className="fa-solid fa-lock"></i>

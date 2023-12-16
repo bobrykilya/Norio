@@ -15,13 +15,17 @@ const ButtonsCont = () => {
             <button 
                 id='pwa-but'
                 title='Создать ярлык на рабочем столе'
-                className='cont'>
+                className='cont'
+                tabIndex={-1}
+                >
                     <i className="fa-solid fa-desktop"></i>
             </button>
             <button
                 id='info-but'
                 title='Описание приложения и инструкция'
-                className='cont'>
+                className='cont'
+                tabIndex={-1}
+                >
                     <i className="fa-solid fa-info"></i>
             </button>
         </div>

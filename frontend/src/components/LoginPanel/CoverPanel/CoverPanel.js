@@ -20,7 +20,7 @@ const CoverPanel = () => {
                 <section id='sign_up_info-cont' className='cont'>
                     <h1>Нет аккаунта?</h1>
                     <p>Подай заявку на регистрацию и дождись активации профиля пользователя</p>
-                    <button id='open_sign_up-but' onClick={handleToggleCoverPanel}>
+                    <button id='open_sign_up-but' onClick={handleToggleCoverPanel} tabIndex={-1}>
                         <label htmlFor="open_sign_up-but">
                             Регистрация
                         </label>
@@ -29,7 +29,7 @@ const CoverPanel = () => {
                 <section id='sign_in_info-cont' className='cont'>
                     <h1>Есть аккаунт?</h1>
                     <p>Выполни вход по регистрационным данным</p>
-                    <button id='open_sign_in-but' onClick={handleToggleCoverPanel}>
+                    <button id='open_sign_in-but' onClick={handleToggleCoverPanel} tabIndex={-1}>
                         <label htmlFor="open_sign_in-but">
                             Авторизация
                         </label>

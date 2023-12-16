@@ -36,14 +36,15 @@
         // backdrop-filter: blur(15px)
         height: auto
         width: 125%
-        border-radius: $rad-but-border
+        border-radius: $rad-but-border + 50px
         z-index: 10
         text-align: center
         pointer-events: none
         opacity: 0
-        transform: scale(0.8) translateY(-1.5rem)
+        transform: scale(0.9) translateY(-1.5rem)
         transition: all 0.3s ease
         &.opened
+            border-radius: $rad-but-border
             pointer-events: auto
             opacity: 1
             transform: scale(1) translateY(0)
