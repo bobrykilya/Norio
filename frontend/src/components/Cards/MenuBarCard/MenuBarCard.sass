@@ -1,0 +1,42 @@
+@import '../Cards_variables'
+
+
+
+.menu_bar_card-cont
+    .logo-cont
+        // border: 2px solid red
+        flex-direction: row
+        height: auto
+        .little_logo-img
+            margin-top: 0.12rem
+            margin-right: 0.3rem
+            width: 2rem
+        p
+            text-align: start
+            line-height: $size-main-text + 0.2rem
+            font-weight: 800
+            font-size: 1rem
+    .views_list-cont
+        // border: 2px solid green
+        margin-top: 0.5rem
+        flex-shrink: 1
+        justify-content: flex-start
+        li
+            // border: 2px solid black
+            margin-top: 0.5rem
+            height: auto
+            flex-direction: row
+            justify-content: flex-start
+            overflow: visible
+            i
+                // position: absolute
+                // left: 0.5rem
+                margin-top: -0.1rem
+                margin-right: 0.4rem
+                font-size: 0.6rem
+                color: $color-main-text
+                transition-duration: 0.5s
+            label
+                z-index: 2
+                width: 100%
+                height: 100%
