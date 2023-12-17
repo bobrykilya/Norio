@@ -1,19 +1,16 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 
 
 
 const CheckBox = (props) => {
 
-    const [checked, setChecked] = useState(false)
-
     const handleChangeChecked = () => {
-        setChecked(!checked)
-        props.onChange(!checked)
+        props.onChange()
     }
 
     return (
         <div className="checkbox-wrapper-7">
-            <input className="tgl tgl-ios" id="cb2-7" type="checkbox" checked={checked} onChange={handleChangeChecked}/>
+            <input className="tgl tgl-ios" id="cb2-7" type="checkbox" checked={props.checked} onChange={handleChangeChecked}/>
             <label className="tgl-btn" htmlFor="cb2-7"></label>
         </div>  
     )

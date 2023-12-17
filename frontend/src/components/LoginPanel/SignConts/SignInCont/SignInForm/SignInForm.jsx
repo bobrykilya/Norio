@@ -1,4 +1,4 @@
-// import { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import NameInput from '../../../Inputs/NameInput/NameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
@@ -9,11 +9,10 @@ import SubmitBut from '../../../SubmitBut/SubmitBut'
 
 const SignInForm = (props) => {
 
-    const form_name = '#sign_in-form'
-    const submit_but = document.querySelector(form_name + ' .submit-but')
-    const passw_el = document.querySelector(form_name + ' .passw_input')
-    const name_el = document.querySelector(form_name + ' .name_input')
-    let CheckBoxVal = false
+    //! notSaveUser = false
+    const [notSaveUser, setNotSaveUser] = useState(true)
+
+    // let CheckBoxVal = false
     
     // const SignIn = async () => {
     //     const LOG_INFO = {
@@ -34,25 +33,33 @@ const SignInForm = (props) => {
     } = useForm()
 
 
-    const handleChangeCheckBox = (checked) => {
-        checked ? submit_but.type = 'button' : submit_but.type = 'submit'
-        CheckBoxVal = checked
+    const handleChangeCheckBox = () => {
+        // CheckBoxVal = notSaveUser
+        setNotSaveUser(!notSaveUser)
     }
+
 
     const onSubmit = (data) => {
         alert(JSON.stringify({...register()}))
         // alert(JSON.stringify(data))
     }
+    const handleClickSubmit = async () => {
+        return
+    }
+
 
     return (
         <form id='sign_in-form' className='form cont' onSubmit={handleSubmit(onSubmit)}>
             <NameInput/>
-            <PasswordInput checkMethods={{...register()}} form={form_name}/>
+            <PasswordInput checkMethods={{...register()}}/>
             <label id='checkbox-cont' className='cont'>
-                <CheckBox onChange={handleChangeCheckBox}/>
+                <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
                 <span>Не запоминать меня</span>
             </label>
-            <SubmitBut icon='fa-solid fa-right-to-bracket'/>
+            <SubmitBut 
+                icon='fa-solid fa-right-to-bracket'
+                onClick={handleClickSubmit}
+                notSaveUser={notSaveUser}/>
         </form>
     )  
 }

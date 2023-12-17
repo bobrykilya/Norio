@@ -1,4 +1,4 @@
-// import { useState } from 'react';
+import { useState } from 'react'
 import SignInCont from './SignConts/SignInCont/SignInCont'
 import SignUpCont from './SignConts/SignUpCont/SignUpCont'
 import CoverPanel from './CoverPanel/CoverPanel'
@@ -10,14 +10,19 @@ import './LoginPanel.sass'
 const LoginPanel = () => {
 
     // const [user, setUser] = useState(null)
+    const [isOpenedSignUp, setIsOpenedSignUp] = useState(true)
+
+    const handleToggleCoverPanel = () => {
+        setIsOpenedSignUp(!isOpenedSignUp)
+    }
 
     return ( 
         <div id='login_panel-cont' className='cont'>
             <div id='signs-cont' className='cont'>
-                <SignInCont />
-                <SignUpCont />
+                <SignInCont isOpenedSignUp={isOpenedSignUp}/>
+                <SignUpCont isOpenedSignUp={isOpenedSignUp}/>
             </div>
-            <CoverPanel />
+            <CoverPanel onToggleCoverPanel={handleToggleCoverPanel} isOpenedSignUp={isOpenedSignUp}/>
         </div>
     )
 }

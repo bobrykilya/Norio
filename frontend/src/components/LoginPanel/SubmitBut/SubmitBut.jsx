@@ -9,8 +9,7 @@ const SubmitBut = (props) => {
     return (
         <button
             className='submit-but'
-            //! type='submit'
-            type='button'
+            type={props.notSaveUser ? 'button' : 'submit'}
             disabled={load}
             onClick={() => {
                 setLoad(true)

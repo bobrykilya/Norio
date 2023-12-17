@@ -4,11 +4,11 @@ import { useState } from 'react'
 
 const PasswordInput = (props) => {
 
-    const lock_but_el = document.querySelector(props.form + ' .lock-but')
-    const input_el = document.querySelector(props.form + ' .passw_input')
+    //! const input_el = document.querySelector(props.form + ' .passw_input')
 
     const [password, setPassword] = useState('')
-    const [lockIcon, setLockIcon] = useState('fa-lock')
+    const [isLockVisible, setIsLockVisible] = useState(false)
+    const [isLockOpened, setIsLockOpened] = useState(false)
 
     // props.onCheckInput = (e) => {
     //     if (e.value && e.value.length > 3) return true
@@ -20,18 +20,14 @@ const PasswordInput = (props) => {
     }
 
     const handleShowLockIcon = (e) => {
-        e.target.value ? lock_but_el.classList.add('active') : lock_but_el.classList.remove('active')
+        e.target.value ? setIsLockVisible(true) : setIsLockVisible(false)
         // console.log(lock_but_el)
         setPassword(e.target.value)
     }
 
-    const handleSwitchLockIcon = (e) => {
-        const NextLockPosition = (lockIcon === 'fa-lock') ? ['text', 'fa-unlock'] : ['password', 'fa-lock']
-
-        e.target.querySelector('i').className = `fa-solid ${NextLockPosition[1]}`
-        input_el.type = NextLockPosition[0]
-        setLockIcon(NextLockPosition[1])
-        input_el.focus()
+    const handleSwitchLockPosition = (e) => {
+        // //! input_el.focus()
+        setIsLockOpened(!isLockOpened)
     }
 
     return (
@@ -39,7 +35,7 @@ const PasswordInput = (props) => {
             <input
                 name='password'
                 className='passw_input'
-                type="password"
+                type={isLockOpened ? 'text' : 'password'}
                 maxLength={13}
                 placeholder='Пароль'
                 value={password}
@@ -48,12 +44,12 @@ const PasswordInput = (props) => {
             />
             <i className="info-icon fa-solid fa-key"></i>
             <button 
-                className='lock-but' 
+                className={`lock-but ${isLockVisible ? 'active' : ''}`}
                 type='button'
                 tabIndex={-1} 
-                onClick={handleSwitchLockIcon}
+                onClick={(handleSwitchLockPosition)}
             >
-                <i id='lock-icon' className="fa-solid fa-lock"></i>
+                <i id='lock-icon' className={`fa-solid ${isLockOpened ? 'fa-unlock' : 'fa-lock'}`}></i>
             </button>
         </div>
     )

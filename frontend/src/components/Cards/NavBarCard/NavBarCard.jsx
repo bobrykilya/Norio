@@ -2,7 +2,7 @@ import LittleLogoImg from '../../../assets/logos/little_logo.png'
 
 
 
-const MenuBarCard = () => {
+const NavBarCard = () => {
     return ( 
         <div className='menu_bar_card-cont cont card'>
             <button className='logo-cont cont'>
@@ -19,4 +19,4 @@ const MenuBarCard = () => {
      )
 }
  
-export default MenuBarCard
+export default NavBarCard
