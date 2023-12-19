@@ -5,7 +5,7 @@
 const ButtonsCont = () => {
 
     return (
-        <div id='buts-cont' className='cont'>
+        <div className='buts-cont cont'>
             {/* <button
                 id='new-user-but'
                 title='Создать заявку на регистрацию нового пользователя'
@@ -13,17 +13,15 @@ const ButtonsCont = () => {
                     <i className="fa-regular fa-address-card"></i>
             </button> */}
             <button 
-                id='pwa-but'
                 title='Создать ярлык на рабочем столе'
-                className='cont'
+                className='pwa-but cont'
                 tabIndex={-1}
                 >
                     <i className="fa-solid fa-desktop"></i>
             </button>
             <button
-                id='info-but'
                 title='Описание приложения и инструкция'
-                className='cont'
+                className='info-but cont'
                 tabIndex={-1}
                 >
                     <i className="fa-solid fa-info"></i>

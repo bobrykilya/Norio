@@ -1,13 +1,13 @@
-import MenuBarCard from '../Cards/MenuBarCard/MenuBarCard.jsx'
-import NotificationCard from '../Cards/NotificationCard/NotificationCard.jsx'
+import NavBarCard from '../../Cards/NavBarCard/NavBarCard.jsx'
+import NotificationCard from '../../Cards/NotificationCard/NotificationCard.jsx'
 
 
 
-const MainView = () => {
+const HomePage = () => {
     return ( 
         <div id='main_view-cont' className='cont'>
             <div className='first-column cont'>
-                <MenuBarCard />
+                <NavBarCard />
                 <NotificationCard />
             </div>
             <div className="second-column cont">
@@ -46,4 +46,4 @@ const MainView = () => {
      )
 }
  
-export default MainView
+export default HomePage

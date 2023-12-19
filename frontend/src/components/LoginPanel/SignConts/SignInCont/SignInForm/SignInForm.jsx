@@ -47,7 +47,6 @@ const SignInForm = (props) => {
         return
     }
 
-
     return (
         <form id='sign_in-form' className='form cont' onSubmit={handleSubmit(onSubmit)}>
             <NameInput/>
