@@ -7,6 +7,7 @@
         // border: 2px solid red
         flex-direction: row
         height: auto
+        overflow: visible
         .little_logo-img
             margin-top: 0.12rem
             margin-right: 0.3rem
@@ -16,18 +17,40 @@
             line-height: $size-main-text + 0.2rem
             font-weight: 800
             font-size: 1rem
+        &::after
+            content: ''
+            position: absolute
+            bottom: -0.5rem
+            height: 1px
+            width: 50%
+            background-color: $color-after-element
     .views_list-cont
         // border: 2px solid green
         margin-top: 0.5rem
         flex-shrink: 1
         justify-content: flex-start
-        li
+        align-items: flex-start
+        overflow: visible
+        margin-left: -0.4rem
+        a
             // border: 2px solid black
-            margin-top: 0.7rem
+            // margin-top: 0.7rem
+            width: auto
             height: auto
             flex-direction: row
             justify-content: flex-start
             overflow: visible
+            transition: all 0.15s ease
+            padding: 0.3rem 0.4rem
+            border-radius: $rad-but-border
+            &:first-child
+                margin-top: 0.5rem
+            &:hover
+                transform: translateX(0.4rem) + scale(1.05)
+                color: $color-main-text-act
+                background-color: #a1a5b123
+                i
+                    color: $color-main-text-act
             i
                 // position: absolute
                 // left: 0.5rem
@@ -38,8 +61,19 @@
                 transition-duration: 0.5s
             label
                 z-index: 2
-                font-size: $size-main-text + 0.1rem
+                // font-size: $size-main-text + 0.1rem
                 width: 100%
                 height: 100%
-        .buts-cont
-            margin-top: 1rem
+    .buts-cont
+        // border: 1px solid black
+        $but-top-margin-top: 1rem
+        margin-top: $but-top-margin-top
+        justify-content: space-around
+        width: 90%
+        &::before
+            content: ''
+            position: absolute
+            top: - calc($but-top-margin-top / 2.1)
+            height: 1px
+            width: 50%
+            background-color: $color-after-element

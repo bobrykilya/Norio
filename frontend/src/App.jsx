@@ -1,5 +1,5 @@
 // import { useState, useEffect } from 'react'
-// import LoginPanel from './components/LoginPanel/LoginPanel'
+import LoginPanel from './components/LoginPanel/LoginPanel'
 import HomePage from './components/Pages/HomePage/HomePage'
 import './App.sass'
 
