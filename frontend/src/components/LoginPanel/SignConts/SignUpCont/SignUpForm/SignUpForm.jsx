@@ -3,6 +3,8 @@ import NameInput from '../../../Inputs/NameInput/NameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import StoresInput from '../../../Inputs/StoresInput/StoresInput'
+import { FaArrowRightLong } from "react-icons/fa6";
+
 
 
 const SignUpForm = (props) => {
@@ -27,7 +29,7 @@ const SignUpForm = (props) => {
             <NameInput/>
             <PasswordInput />
             <SubmitBut 
-                icon='fa-solid fa-arrow-right'
+                icon={<FaArrowRightLong className='fa-icon'/>}
                 onClick={handleSignUp}
                 notSaveUser={true}
             />

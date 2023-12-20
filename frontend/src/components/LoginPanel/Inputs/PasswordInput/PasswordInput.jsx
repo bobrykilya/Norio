@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import { FaKey } from "react-icons/fa"
 
 
 const PasswordInput = (props) => {
@@ -42,7 +42,7 @@ const PasswordInput = (props) => {
                 autoComplete='current-password'
                 onChange={handleChangePassword}
             />
-            <i className="info-icon fa-solid fa-key"></i>
+            <FaKey className='input-icon'/>
             <button 
                 className={`lock-but ${isLockVisible ? 'active' : ''}`}
                 type='button'

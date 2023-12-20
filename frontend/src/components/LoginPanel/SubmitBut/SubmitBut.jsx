@@ -2,13 +2,14 @@ import { useState } from 'react'
 
 
 
+
 const SubmitBut = (props) => {
 
     const [load, setLoad] = useState(false)
     
     return (
         <button
-            className='submit-but'
+            className='submit-but cont'
             type={props.notSaveUser ? 'button' : 'submit'}
             disabled={load}
             onClick={() => {
@@ -17,7 +18,7 @@ const SubmitBut = (props) => {
                 .then(() => setLoad(false))
             }}
         >
-            <i className={props.icon}></i>
+            {props.icon}
         </button>
     )
 }

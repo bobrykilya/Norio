@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FaHouseChimneyUser } from "react-icons/fa6"
 
 
 
@@ -33,7 +34,7 @@ const StoresInput = () => {
                     {store}
                 </span>
             </button>
-                <i className="info-icon fa-solid fa-house-chimney"></i>
+            <FaHouseChimneyUser className='input-icon'/>
             <ul
                 id='dropdown-stores-cont'
                 className={isDropDownOpened ? 'opened' : ''}

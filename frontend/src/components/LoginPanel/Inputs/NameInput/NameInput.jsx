@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FaUser } from "react-icons/fa"
 
 
 
@@ -23,7 +24,7 @@ const NameInput = (props) => {
                 autoComplete='username'
                 onChange={handleChangeName}
             />
-            <i className="info-icon fa-solid fa-user"></i>
+            <FaUser className='input-icon'/>
         </div>
     )
 }

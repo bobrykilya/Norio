@@ -4,6 +4,7 @@ import NameInput from '../../../Inputs/NameInput/NameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import CheckBox from './CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
+import { BiLogInCircle } from "react-icons/bi"
 
 
 
@@ -56,7 +57,7 @@ const SignInForm = (props) => {
                 <span>Не запоминать меня</span>
             </label>
             <SubmitBut 
-                icon='fa-solid fa-right-to-bracket'
+                icon={<BiLogInCircle className='fa-icon'/>}
                 onClick={handleClickSubmit}
                 notSaveUser={notSaveUser}/>
         </form>

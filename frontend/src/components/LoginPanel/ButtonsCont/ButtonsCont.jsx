@@ -1,4 +1,5 @@
-
+import { MdInstallDesktop } from "react-icons/md"
+import { FaInfo } from "react-icons/fa6"
 
 
 
@@ -17,14 +18,14 @@ const ButtonsCont = () => {
                 className='pwa-but cont'
                 tabIndex={-1}
                 >
-                    <i className="fa-solid fa-desktop"></i>
+                    <MdInstallDesktop className='fa-icon'/>
             </button>
             <button
                 title='Описание приложения и инструкция'
                 className='info-but cont'
                 tabIndex={-1}
                 >
-                    <i className="fa-solid fa-info"></i>
+                    <FaInfo className='fa-icon'/>
             </button>
         </div>
     )
