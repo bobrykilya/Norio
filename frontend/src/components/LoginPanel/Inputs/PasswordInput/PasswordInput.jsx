@@ -1,33 +1,41 @@
-import { useState } from 'react'
+import { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { FaKey } from "react-icons/fa"
+import { FaLock, FaUnlock } from "react-icons/fa6";
+
 
 
 const PasswordInput = (props) => {
-
-    //! const input_el = document.querySelector(props.form + ' .passw_input')
-
+    
     const [password, setPassword] = useState('')
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
+    
+    const inputRef = useRef(null);
+    const lock_icon = isLockOpened ? <FaUnlock className='fa-icon'/> : <FaLock className='fa-icon'/>
 
     // props.onCheckInput = (e) => {
     //     if (e.value && e.value.length > 3) return true
     // }
 
     const handleChangePassword = (e) => {
-        // props.onChange(password)
-        handleShowLockIcon(e)
-    }
-
-    const handleShowLockIcon = (e) => {
-        e.target.value ? setIsLockVisible(true) : setIsLockVisible(false)
-        // console.log(lock_but_el)
+        e.target.value ? setIsLockVisible(true) : 
+            setIsLockVisible(false) & setIsLockOpened(false)
         setPassword(e.target.value)
     }
 
     const handleSwitchLockPosition = (e) => {
-        // //! input_el.focus()
         setIsLockOpened(!isLockOpened)
+        inputRef.current.focus()
+    }
+
+    //* Moving cursor to the end
+    const handleInputFocus = () => {
+        const length = inputRef.current.value.length
+        inputRef.current.setSelectionRange(length, length)
+        // inputRef.current.selectionStart = inputRef.current.value.length;
+        // inputRef.current.selectionEnd = inputRef.current.value.length;
+
+        // console.log(inputRef.current.value.length)
     }
 
     return (
@@ -41,6 +49,8 @@ const PasswordInput = (props) => {
                 value={password}
                 autoComplete='current-password'
                 onChange={handleChangePassword}
+                ref={inputRef}
+                onFocus={handleInputFocus}
             />
             <FaKey className='input-icon'/>
             <button 
@@ -49,7 +59,7 @@ const PasswordInput = (props) => {
                 tabIndex={-1} 
                 onClick={(handleSwitchLockPosition)}
             >
-                <i id='lock-icon' className={`fa-solid ${isLockOpened ? 'fa-unlock' : 'fa-lock'}`}></i>
+                {lock_icon}
             </button>
         </div>
     )

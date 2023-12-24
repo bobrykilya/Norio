@@ -1,5 +1,5 @@
 import LittleLogoImg from '../../../assets/logos/little_logo.png'
-import ButtonsCont from './../../LoginPanel/ButtonsCont/ButtonsCont'
+import ButtonsCont from './../../ButtonsCont/ButtonsCont'
 import { AiOutlineHome } from "react-icons/ai"
 import { MdOutlineTaskAlt } from "react-icons/md"
 import { TbTableShortcut } from "react-icons/tb"

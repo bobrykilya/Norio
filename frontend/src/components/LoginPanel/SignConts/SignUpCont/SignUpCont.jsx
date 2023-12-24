@@ -1,5 +1,5 @@
 import SignUpForm from './SignUpForm/SignUpForm'
-import ButtonsCont from '../../ButtonsCont/ButtonsCont'
+import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
 
 
 
