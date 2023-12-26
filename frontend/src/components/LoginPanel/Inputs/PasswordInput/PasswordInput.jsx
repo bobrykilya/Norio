@@ -11,7 +11,6 @@ const PasswordInput = (props) => {
     const [isLockOpened, setIsLockOpened] = useState(false)
     
     const inputRef = useRef(null);
-    const lock_icon = isLockOpened ? <FaUnlock className='fa-icon'/> : <FaLock className='fa-icon'/>
 
     // props.onCheckInput = (e) => {
     //     if (e.value && e.value.length > 3) return true
@@ -59,7 +58,8 @@ const PasswordInput = (props) => {
                 tabIndex={-1} 
                 onClick={(handleSwitchLockPosition)}
             >
-                {lock_icon}
+                {isLockOpened ? <FaUnlock className='fa-icon'/> : 
+                <FaLock className='fa-icon'/>}
             </button>
         </div>
     )

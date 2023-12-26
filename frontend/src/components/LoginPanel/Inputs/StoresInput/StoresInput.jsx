@@ -1,22 +1,32 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { FaHouseChimneyUser } from "react-icons/fa6"
+import { useClickOutside } from "../../../Hooks/useClickOutside"
 
 
 
 const StoresInput = () => {
     
-    const user_name = document.querySelector('#sign_up-form .name_input')
+    //! const user_name = document.querySelector('#sign_up-form .name_input')
     
     const [store, setStore] = useState('Точка')
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
+    const dropDownRef = useRef(null)
+    const dropDownButtonRef = useRef(null)
 
     const handleSetStoreName = (e) => {
         // console.log(user_name)
         if (e.target.tagName !== 'UL') {
             setStore(e.target.textContent)
-            user_name.focus()
+            setIsDropDownOpened(false)
+            //! user_name.focus()
         }
     }
+    
+    useClickOutside(dropDownRef, dropDownButtonRef, isDropDownOpened, () => {
+        setIsDropDownOpened(setIsDropDownOpened(false))
+    })
+    // useEffect(() => {
+    // }, [isDropDownOpened])
 
     return ( 
         <div className="stores_input-cont input-cont cont">
@@ -25,6 +35,7 @@ const StoresInput = () => {
                 id='stores_input'
                 className='cont'
                 onClick={() => {setIsDropDownOpened(!isDropDownOpened)}}
+                ref={dropDownButtonRef}
                 // onBlur={handleToggleDropDownStores}
             >
                 <span 
@@ -36,9 +47,10 @@ const StoresInput = () => {
             </button>
             <FaHouseChimneyUser className='input-icon'/>
             <ul
-                id='dropdown-stores-cont'
+                id='dropdown_stores-cont'
                 className={isDropDownOpened ? 'opened' : ''}
                 onClick={handleSetStoreName}
+                ref={dropDownRef}
             >
                 <li>Офис</li>
                 <li>Красное</li>

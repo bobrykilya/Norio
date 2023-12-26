@@ -2,9 +2,9 @@
 
 
 #cover_and_img-cont
-    // border: 2px solid orange
+    // border: 2px solid red
     position: absolute
-    right: 0
+    // right: 0
     overflow: visible
     pointer-events: none
     #cover-cont
@@ -66,6 +66,7 @@
                     label
                         font-size: 0.6rem
                         color: $color-backgr
+                        pointer-events: none
             #sign_up_info-cont
                 transform: none
                 opacity: 1
@@ -86,22 +87,21 @@
         bottom: 0.2rem
         z-index: 5
         align-items: flex-end
-        transform: translateX(-4rem)
+        transform: translateX(-3.7rem)
         transition: all $trans-dur + 0.3s $trans-style
+        pointer-events: none
         img
             // border: 2px solid red
         .sign_up-img
             transition: all $trans-dur - 0.2s $trans-style
             height: 8.2rem
-            transform: translateY(2rem) scale(1 - $trans-content-scale)
+            transform: translateY(1rem) scale(1.2 - $trans-content-scale)
             opacity: 0
-            pointer-events: none
         .sign_in-img
             transition: all $trans-dur - 0.1s $trans-style
-            height: 9.3rem
+            height: 9.4rem
             transform: none
             opacity: 1
-            pointer-events: auto
 
     //* CoverPanel toggles
     &.opened_sign_up
@@ -115,22 +115,19 @@
                 #sign_up_info-cont
                     transform: scale(1 + $trans-content-scale)
                     opacity: 0
-                    pointer-events: none
                 #sign_in_info-cont
                     transform: none
                     opacity: 1
                     pointer-events: auto
         #img-cont
-            transform: translateX(3rem) 
+            transform: translateX(2.7rem) 
             .sign_up-img
                 transition: all $trans-dur - 0.1s $trans-style
                 transform: none
                 opacity: 1
-                pointer-events: auto
             .sign_in-img
                 transition: all $trans-dur - 0.2s $trans-style
-                transform: translateY(2rem) scale(1 - $trans-content-scale)
+                transform: translateY(1rem) scale(1.2 - $trans-content-scale)
                 opacity: 0
-                pointer-events: none
             
         

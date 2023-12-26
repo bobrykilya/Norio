@@ -9,7 +9,7 @@ const NameInput = (props) => {
 
     const handleChangeName = (e) => {
         // props.onChange(name)
-        setName(e.target.value)
+        setName(e.target.value.replace(/[^a-zA-Zа-яА-Я]/, ''))
     }
 
     return (
