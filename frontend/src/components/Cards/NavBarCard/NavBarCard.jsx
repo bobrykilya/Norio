@@ -13,34 +13,40 @@ const NavBarCard = () => {
 
     const NAV_BAR_LIST = [
         {
-            id: 'home_page',
+            key: 'home_page',
+            label: 'Главная',
             icon: <AiOutlineHome className='fa-icon'/>,
-            label: 'Главная'
+            link:   '',
         },
         {
-            id: 'tasks_page',
+            key: 'tasks_page',
+            label: 'Задачи',
             icon: <MdOutlineTaskAlt className='fa-icon'/>,
-            label: 'Задачи'
+            link:   '',
         },
         {
-            id: 'tables_page',
+            key: 'tables_page',
+            label: 'Таблицы',
             icon: <TbTableShortcut className='fa-icon'/>,
-            label: 'Таблицы'
+            link:   '',
         },
         {   
-            id: 'analytics_page',
+            key: 'analytics_page',
+            label: 'Аналитика',
             icon: <TbReportAnalytics className='fa-icon'/>,
-            label: 'Аналитика'
+            link:   '',
         },
         {
-            id: 'company_page',
+            key: 'company_page',
+            label: 'Компания',
             icon: <LuBuilding className='fa-icon'/>,
-            label: 'Компания'
+            link:   '',
         },
         {
-            id: 'settings_page',
+            key: 'settings_page',
+            label: 'Настройки',
             icon: <FiSettings className='fa-icon'/>,
-            label: 'Настройки'
+            link:   '',
         },
     ]
 
@@ -54,7 +60,7 @@ const NavBarCard = () => {
             {
                 NAV_BAR_LIST.map((el) => {
                     return (
-                        <a className='cont' key={el.id}>
+                        <a className='cont' key={el.key}>
                             <div className='inner-cont cont'>
                                 {el.icon}
                                 <span className='cont'>{el.label}</span>

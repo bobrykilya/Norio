@@ -10,10 +10,11 @@ import './LoginPanel.sass'
 const LoginPanel = () => {
 
     // const [user, setUser] = useState(null)
+    //! useState(false)
     const [isOpenedSignUp, setIsOpenedSignUp] = useState(true)
 
     const handleToggleCoverPanel = () => {
-        setIsOpenedSignUp(!isOpenedSignUp)
+        setIsOpenedSignUp((prev) => !prev)
     }
 
     return ( 

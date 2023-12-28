@@ -1,18 +1,18 @@
 import { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { FaKey } from "react-icons/fa"
-import { FaLock, FaUnlock } from "react-icons/fa6";
+import { FaLock, FaUnlock } from "react-icons/fa6"
 
 
 
-const PasswordInput = (props) => {
+const PasswordInput = () => {
     
     const [password, setPassword] = useState('')
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
     
-    const inputRef = useRef(null);
+    const inputRef = useRef(null)
 
-    // props.onCheckInput = (e) => {
+    // onCheckInput = (e) => {
     //     if (e.value && e.value.length > 3) return true
     // }
 
@@ -23,18 +23,14 @@ const PasswordInput = (props) => {
     }
 
     const handleSwitchLockPosition = (e) => {
-        setIsLockOpened(!isLockOpened)
+        setIsLockOpened((prev) => !prev)
         inputRef.current.focus()
-    }
 
-    //* Moving cursor to the end
-    const handleInputFocus = () => {
+        //* Moving cursor to the input end
         const length = inputRef.current.value.length
-        inputRef.current.setSelectionRange(length, length)
-        // inputRef.current.selectionStart = inputRef.current.value.length;
-        // inputRef.current.selectionEnd = inputRef.current.value.length;
-
-        // console.log(inputRef.current.value.length)
+        setTimeout(() => {
+            inputRef.current.setSelectionRange(length, length)
+        }, 1)
     }
 
     return (
@@ -48,8 +44,8 @@ const PasswordInput = (props) => {
                 value={password}
                 autoComplete='current-password'
                 onChange={handleChangePassword}
+                // onFocus={handleInputFocus}
                 ref={inputRef}
-                onFocus={handleInputFocus}
             />
             <FaKey className='input-icon'/>
             <button 

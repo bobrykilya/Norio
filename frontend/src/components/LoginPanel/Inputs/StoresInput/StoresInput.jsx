@@ -12,21 +12,57 @@ const StoresInput = () => {
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const dropDownRef = useRef(null)
     const dropDownButtonRef = useRef(null)
+    const STORES_LIST = [
+        {
+            key: 'office',
+            text: 'Офис'
+        },
+        {
+            key: 'krasnoe',
+            text: 'Красное'
+        },
+        {
+            key: 'polock',
+            text: 'Полоцк'
+        },
+        {
+            key: 'belmash',
+            text: 'БелМаш'
+        },
+        {
+            key: 'turly',
+            text: 'Тюрли'
+        },
+        {
+            key: 'glubokoe',
+            text: 'Глубокое'
+        },
+        {
+            key: 'radoshk',
+            text: 'Радошковичи'
+        },
+        {
+            key: 'sputnik',
+            text: 'Спутник'
+        },
+        {
+            key: 'libava',
+            text: 'Либава'
+        },
+    ]
 
     const handleSetStoreName = (e) => {
-        // console.log(user_name)
-        if (e.target.tagName !== 'UL') {
+        if (e.target.tagName === 'LI') {
+            // console.log(e.target.textContent)
             setStore(e.target.textContent)
             setIsDropDownOpened(false)
             //! user_name.focus()
         }
     }
     
-    useClickOutside(dropDownRef, dropDownButtonRef, isDropDownOpened, () => {
+    useClickOutside(dropDownRef, dropDownButtonRef, () => {
         setIsDropDownOpened(setIsDropDownOpened(false))
     })
-    // useEffect(() => {
-    // }, [isDropDownOpened])
 
     return ( 
         <div className="stores_input-cont input-cont cont">
@@ -34,9 +70,9 @@ const StoresInput = () => {
                 type='button'
                 id='stores_input'
                 className='cont'
-                onClick={() => {setIsDropDownOpened(!isDropDownOpened)}}
+                onClick={() => {setIsDropDownOpened((prev) => !prev)}}
                 ref={dropDownButtonRef}
-                // onBlur={handleToggleDropDownStores}
+                // onBlur={handleToggleDropDownStores}  
             >
                 <span 
                     id='store_name'
@@ -52,15 +88,14 @@ const StoresInput = () => {
                 onClick={handleSetStoreName}
                 ref={dropDownRef}
             >
-                <li>Офис</li>
-                <li>Красное</li>
-                <li>Полоцк</li>
-                <li>БелМаш</li>
-                <li>Тюрли</li>
-                <li>Глубокое</li>
-                <li>Радошковичи</li>
-                <li>Спутник</li>
-                <li>Либава</li>
+                {
+                    STORES_LIST.map((el) => {
+                        // console.log(el)
+                        return (
+                            <li key={el.key}>{el.text}</li>
+                        )
+                    })
+                }
             </ul>
         </div>
      )

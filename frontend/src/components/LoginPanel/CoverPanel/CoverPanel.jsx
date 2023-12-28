@@ -4,14 +4,14 @@ import SignInImg from '../../../assets/sign_in.png'
 
 
 
-const CoverPanel = (props) => {
+const CoverPanel = ({isOpenedSignUp, onToggleCoverPanel}) => {
 
     const handleToggleCoverPanel = () => {
-        props.onToggleCoverPanel()
+        onToggleCoverPanel()
     }
 
     return ( 
-        <div id='cover_and_img-cont' className={`cont ${props.isOpenedSignUp ? 'opened_sign_up' : ''}`}>
+        <div id='cover_and_img-cont' className={`cont ${isOpenedSignUp ? 'opened_sign_up' : ''}`}>
             <div id='cover-cont' className='cont'>
                 <div id='cover-content' className='cont'>
                     <section id='sign_up_info-cont' className='cont'>

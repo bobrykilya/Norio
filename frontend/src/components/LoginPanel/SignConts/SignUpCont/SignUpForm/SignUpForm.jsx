@@ -7,7 +7,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 
 
 
-const SignUpForm = (props) => {
+const SignUpForm = () => {
 
     // const passw_el = document.querySelector(form_name + ' .passw_input')
     // const name_el = document.querySelector(form_name + ' .name_input')

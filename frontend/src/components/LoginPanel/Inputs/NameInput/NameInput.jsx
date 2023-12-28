@@ -3,12 +3,12 @@ import { FaUser } from "react-icons/fa"
 
 
 
-const NameInput = (props) => {
+const NameInput = () => {
 
     const [name, setName] = useState('')
 
     const handleChangeName = (e) => {
-        // props.onChange(name)
+        // onChange(name)
         setName(e.target.value.replace(/[^a-zA-Zа-яА-Я]/, ''))
     }
 

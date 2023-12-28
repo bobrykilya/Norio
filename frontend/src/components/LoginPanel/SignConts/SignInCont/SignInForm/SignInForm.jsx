@@ -8,7 +8,7 @@ import { BiLogInCircle } from "react-icons/bi"
 
 
 
-const SignInForm = (props) => {
+const SignInForm = () => {
 
     //! notSaveUser = false
     const [notSaveUser, setNotSaveUser] = useState(true)
@@ -36,7 +36,7 @@ const SignInForm = (props) => {
 
     const handleChangeCheckBox = () => {
         // CheckBoxVal = notSaveUser
-        setNotSaveUser(!notSaveUser)
+        setNotSaveUser((prev) => !prev)
     }
 
 
@@ -50,7 +50,7 @@ const SignInForm = (props) => {
 
     return (
         <form id='sign_in-form' className='form cont' onSubmit={handleSubmit(onSubmit)}>
-            <NameInput/>
+            <NameInput />
             <PasswordInput checkMethods={{...register()}}/>
             <label id='checkbox-cont' className='cont'>
                 <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
@@ -59,7 +59,8 @@ const SignInForm = (props) => {
             <SubmitBut 
                 icon={<BiLogInCircle className='fa-icon'/>}
                 onClick={handleClickSubmit}
-                notSaveUser={notSaveUser}/>
+                notSaveUser={notSaveUser}
+            />
         </form>
     )  
 }

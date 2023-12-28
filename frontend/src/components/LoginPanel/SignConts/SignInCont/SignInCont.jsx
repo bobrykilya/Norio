@@ -3,12 +3,12 @@ import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
 
 
 
-const SignInCont = (props) => {
+const SignInCont = ({isOpenedSignUp}) => {
 
     return ( 
         <section 
             id='sign_in-cont'
-            className={`sign-cont cont ${!props.isOpenedSignUp ? 'active' : ''}`}
+            className={`sign-cont cont ${!isOpenedSignUp ? 'active' : ''}`}
         >
             <div className='enter_text-cont cont'>
                 {/* <i className="fa-solid fa-door-open"></i> */}
