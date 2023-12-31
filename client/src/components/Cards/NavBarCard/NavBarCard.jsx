@@ -52,25 +52,27 @@ const NavBarCard = () => {
 
     return ( 
         <div className='nav_bar_card-cont cont card'>
-            <button className='logo-cont cont'>
+            <button className='card_label-cont cont'>
                 <img src={LittleLogoImg} alt="" className='little_logo-img' />
-                <p>Stroypr<br/>Team</p>
+                <p className='little_logo-name'>Stroypr<br/>Team</p>
             </button>
-            <nav className='views_list-cont cont'>
-            {
-                NAV_BAR_LIST.map((el) => {
-                    return (
-                        <a className='cont' key={el.key}>
-                            <div className='inner-cont cont'>
-                                {el.icon}
-                                <span className='cont'>{el.label}</span>
-                            </div>
-                        </a>
-                    )
-                })
-            }   
-            </nav>
-            <ButtonsCont />
+            <div className='card_content-cont cont'>
+                <nav className='views_list-cont cont'>
+                {
+                    NAV_BAR_LIST.map((el) => {
+                        return (
+                            <a className='cont' key={el.key}>
+                                <div className='nav_bar__inner-cont cont'>
+                                    {el.icon}
+                                    <span className='cont'>{el.label}</span>
+                                </div>
+                            </a>
+                        )
+                    })
+                }
+                </nav>
+                <ButtonsCont />
+            </div>
         </div>
      )
 }

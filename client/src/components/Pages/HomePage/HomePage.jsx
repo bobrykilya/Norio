@@ -1,5 +1,7 @@
 import NavBarCard from '../../Cards/NavBarCard/NavBarCard.jsx'
 import NotificationCard from '../../Cards/NotificationCard/NotificationCard.jsx'
+import TaskCard from '../../Cards/TaskCard/TaskCard.jsx'
+import AccountInfoCard from '../../Cards/AccountInfoCard/AccountInfoCard.jsx'
 
 
 
@@ -23,8 +25,7 @@ const HomePage = () => {
                     <div className="day_info_card-cont cont card">
                     </div>
                 </div>
-                <div className="task_card-cont cont card">
-                </div>
+                <TaskCard />
                 <div className="new_task_but-cont cont">
                     <button className="card">Новая задача</button>
                     <button className="card">Все задачи</button>
@@ -32,9 +33,7 @@ const HomePage = () => {
                 </div>
             </div>
             <div className="third-column cont">
-                <div className="account_info_card-cont cont card">
-                    
-                </div>
+                <AccountInfoCard />
                 <div className="recent_changes_card-cont cont card">
                     
                 </div>

@@ -1,0 +1,42 @@
+@import '../Cards_variables'
+
+
+
+.account_info_card-cont
+    height: auto
+    flex-direction: row
+    justify-content: space-between
+    .mode-but
+        border: 1px solid $color-border-but
+        width: $size-small-but
+        height: $size-small-but
+        border-radius: 50%
+        // background-color: #b3b3b3
+        &:hover
+            border: 1px solid $color-but
+        .fa-icon
+            color: $color-but
+            font-size: 0.8rem
+    .account_info-cont
+        // border: 1px solid yellow
+        flex-shrink: 1
+        margin: 0 5%
+        // display: none
+        span
+            width: 100%
+            text-transform: capitalize
+            text-align: end
+        .account_name
+            // border: 1px solid orange
+            font-size: $size-main-text
+            font-weight: 600
+        .account_role
+            // border: 2px solid orange
+            margin-top: 0.2rem
+            font-size: $size-main-text - 0.1rem
+    .account-img
+        width: $size-small-but + 0.5rem
+        height: $size-small-but + 0.5rem
+        border-radius: 50%
+        background-color: #73dace
+        img

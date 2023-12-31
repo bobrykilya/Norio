@@ -1,4 +1,4 @@
-@import '../../Cards/NavBarCard/NavBarCard'
+@import '../../Cards/Cards_variables'
 
 
 
@@ -49,14 +49,15 @@
                 width: 20%
                 max-width: 12rem
         .task_card-cont
-            margin-bottom: $margin-cards
-            flex-shrink: 1
+                flex-shrink: 1
+                margin-bottom: $margin-cards
         .new_task_but-cont
             // border: 2px solid orange
             height: 2rem
             flex-direction: row
             overflow: visible
             button
+                flex-shrink: 1
                 height: 100%
                 width: 100%
                 &:nth-child(2)
@@ -64,11 +65,10 @@
                     margin: 0 $margin-cards
     .third-column
         min-width: 10rem
-        width: 18%
-        max-width: 13rem
+        width: 15%
+        max-width: 14rem
         overflow: visible
         .account_info_card-cont
-            height: 3rem
         .recent_changes_card-cont
             height: 50%
             // height: 60%

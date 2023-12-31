@@ -1,4 +1,5 @@
 @import './components/LoginPanel/LoginPanel_variables'
+@import './components/Cards/Cards_variables'
 
 
 
@@ -10,6 +11,7 @@ input
         text-transform: capitalize
 
 button
+    flex-shrink: 0
     transition: all 0.2s ease
     // &:hover, &:focus
     &:hover
@@ -37,6 +39,38 @@ img
     align-items: center
     overscroll-behavior: contain
     flex-shrink: 0
+
+.card
+    background-color: $color-cards-background
+    border-radius: 25px
+    box-shadow: 2px 10px 30px #00000027
+    padding: $padding-card
+    transition: all 0.3s ease
+    .card_label-cont
+        // border: 2px solid orange
+        margin-top: -$padding-card / 3
+        height: auto
+        flex-direction: row
+        overflow: visible
+        margin-bottom: $padding-card + 0.3rem
+        &::after
+            content: ''
+            position: absolute
+            bottom: -$padding-card / 2
+            height: 1px
+            width: 80%
+            background-color: $color-after-element
+        .fa-icon
+            font-size: 0.9rem
+            margin-right: 0.3rem
+        .label-name
+            // color: red
+            font-size: $size-main-text - 0.05rem
+    .card_content-cont
+        // border: 2px solid red
+        overflow: visible
+        flex-shrink: 1
+        // justify-content: flex-start
 
 // *
 //     border: 1px solid
