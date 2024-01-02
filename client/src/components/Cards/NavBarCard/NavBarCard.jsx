@@ -52,7 +52,10 @@ const NavBarCard = () => {
 
     return ( 
         <div className='nav_bar_card-cont cont card'>
-            <button className='card_label-cont cont'>
+            <button 
+                className='card_label-cont cont'
+                title='Улыбнись, заяц)'
+            >
                 <img src={LittleLogoImg} alt="" className='little_logo-img' />
                 <p className='little_logo-name'>Stroypr<br/>Team</p>
             </button>

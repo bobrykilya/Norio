@@ -6,37 +6,60 @@
     height: auto
     flex-direction: row
     justify-content: space-between
-    .mode-but
-        border: 1px solid $color-border-but
-        width: $size-small-but
-        height: $size-small-but
-        border-radius: 50%
-        // background-color: #b3b3b3
-        &:hover
-            border: 1px solid $color-but
-        .fa-icon
-            color: $color-but
-            font-size: 0.8rem
+    .mode-but_role-cont
+        // border: 1px solid yellow
+        // justify-content: space-between
+        width: auto
+        .account_role
+            // border: 2px solid red
+            margin-top: 0.2rem
+            padding: 5px
+            border-radius: 10px
+            text-align: start
+            text-transform: lowercase
+            font-size: $size-main-text - 0.3rem
+            background-color: #2c79af
+            color: $color-backgr
     .account_info-cont
         // border: 1px solid yellow
         flex-shrink: 1
-        margin: 0 5%
-        // display: none
+        margin-right: 9%
+        overflow: visible
+        // justify-content: space-between
         span
             width: 100%
-            text-transform: capitalize
             text-align: end
-        .account_name
+        .user_name
             // border: 1px solid orange
-            font-size: $size-main-text
+            text-transform: capitalize
+            position: relative
+            overflow: visible
             font-weight: 600
-        .account_role
-            // border: 2px solid orange
-            margin-top: 0.2rem
+            margin-bottom: 0.43rem
+            &::after
+                content: ''
+                position: absolute
+                bottom: -0.25rem
+                right: -0.1rem
+                width: 40%
+                height: 0.5px
+                background-color: $color-after-element
+        .user_job
+            // border: 1px solid orange
+            text-transform: lowercase
+            color: $color-main-text-clear
             font-size: $size-main-text - 0.1rem
     .account-img
-        width: $size-small-but + 0.5rem
-        height: $size-small-but + 0.5rem
+        // border: 1px solid orange
+        width: $size-small-but + 0.7rem
+        height: $size-small-but + 0.7rem
         border-radius: 50%
         background-color: #73dace
+        overflow: hidden
+        &:hover
+            border-radius: 40%
         img
+            width: 100%
+            height: 100%
+            object-fit: cover
+            z-index: -2

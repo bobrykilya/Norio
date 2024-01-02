@@ -1,6 +1,6 @@
 // import { useState } from 'react'
-import SignUpImg from '../../../assets/sign_up.png'
-import SignInImg from '../../../assets/sign_in.png' 
+import SignUpImg from '../../../assets/login/sign_up.png'
+import SignInImg from '../../../assets/login/sign_in.png' 
 
 
 

@@ -1,0 +1,39 @@
+
+
+
+.mode-but
+    // border: 1px solid $color-but-border
+    $size-but-mode: 1.4rem
+    width: $size-but-mode
+    height: $size-but-mode
+    border-radius: 50%
+    overflow: hidden
+    // background-color: #b3b3b3
+    &::after
+        content: ''
+        position: absolute
+        width: 100%
+        height: 100%
+        border-radius: 50%
+        background-color: #cbcbcb75
+        transition-duration: 0.18s
+        z-index: -1
+        transform: scale(0)
+    &:hover
+        &::after
+            transform: scale(1)
+    .icons-section
+        // border: 1px solid yellow
+        height: $size-but-mode * 1.6
+        justify-content: space-between
+        transition: transform 0.3s $trans-style
+        transform: translateY($size-but-mode / 2)
+        &.dark_mode
+            transform: translateY(-$size-but-mode / 2)
+        .fa-icon
+            color: $color-but-icon
+            transition-delay: 0.16s
+            font-size: 0.9rem
+            color: #e6a900
+            &:last-child
+                color: #7500e9
