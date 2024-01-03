@@ -1,38 +1,46 @@
 // import { useEffect } from 'react';
 import { IoMdNotifications } from "react-icons/io"
-import Notification from './Notification/Notification';
+import Notification from './Notification/Notification'
 
 
 
 const NotificationCard = () => {
 
-    const now = new Date().toISOString()
+    const now = new Date()
     
     const NOTIFICATIONS_LIST = [
         {
             key: 'guard_1',
             type: 'guard',
-            time: '2024-01-03T12:03:17.723Z',
-            // label: 'Безопасность',
+            time: 1704295745795,
             other: 'Вход с нового устройcтва',
         },
         {
             key: 'certificate_1',
             type: 'certificate',
-            time: '2023-01-02T12:03:17.723Z',
-            // mess: 'Заканчивается сертификат',
+            time: 1704295545795,
             other: 'Стройпродукт',
         },
         {
             key: 'new_user_1',
             type: 'new_user',
-            time: '2024-01-02T12:03:17.723Z',
-            // mess: 'Новый пользователь пытается зар',
+            time: 1703295745795,
+        },
+        {
+            key: 'new_user_2',
+            type: 'new_user',
+            time: 1703295745795,
+        },
+        {
+            key: 'new_user_3',
+            type: 'new_user',
+            time: 1703295745795,
         },
     ]
+    // console.log(NOTIFICATIONS_LIST)
     
-    const now_ms = Date.now()
-    console.log(now)
+    const now_ms = new Date().getTime()
+    // console.log(now_ms)
     const cutoffs = [60, 3600, 86400, 86400 * 7, 86400 * 30, 86400 * 365, Infinity]
     const units = ['second', 'minute', 'hour', 'day', 'week', 'month', 'year']
     const rtf = new Intl.RelativeTimeFormat('ru', {
@@ -51,6 +59,7 @@ const NotificationCard = () => {
         return rtf.format(Math.floor(deltaSeconds / divisor), units[unitIndex])
     }
 
+    
 
     // useEffect(() => {
         
@@ -65,19 +74,27 @@ const NotificationCard = () => {
             <div className='card_content-cont cont'>
                 <ul className='notif_list-cont cont'>
                     {
-                        NOTIFICATIONS_LIST.map((elem) => {
-
-                            const notif_time = new Date(elem.time).getTime()
+                        !NOTIFICATIONS_LIST[0] ? 
+                        (
+                            <div className='no_messages-text cont'>
+                                Новых<br/>уведомлений<br/>нет
+                            </div>
+                         ) : 
+                        NOTIFICATIONS_LIST.slice(0, 10).map((elem) => {
+                            
+                            const notif_time = new Date(elem.time)
 
                             return <Notification 
                                         key={elem.key} 
                                         el={elem} 
-                                        timeAgo={timeAgoSinceNotifCounting(notif_time)}
+                                        timeAgo={timeAgoSinceNotifCounting(elem.time)}
+                                        timeExact={`${notif_time.toLocaleString()}`}
                                     />
                         })
                     }
                 </ul>
             </div>
+            <div className='notif_list-blackout'></div>
         </div>
      )
 }

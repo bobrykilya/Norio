@@ -1,47 +1,53 @@
-import { FaShieldAlt } from "react-icons/fa";
-import { GiUsbKey } from "react-icons/gi";
-import { FaRegIdCard } from "react-icons/fa";
+import { FaShieldAlt } from "react-icons/fa"
+import { AiFillUsb } from "react-icons/ai"
+import { FaUserCheck } from "react-icons/fa"
 
 
 
-const Notification = ({el, timeAgo}) => {
+const Notification = ({el, timeAgo, timeExact}) => {
 
-    let icon, label, mess
+    let elem
 
     switch (el.type) {
         case 'guard':
-            icon = <FaShieldAlt className='fa-icon'/>
-            label = 'Безопасность'
-            mess = 'Вход с нового устройства'
-            break;
+            elem = {
+                icon : <FaShieldAlt className='fa-icon'/>,
+                label : 'Безопасность',
+                mess : 'Вход с нового устройства'
+            }
+            break
         case 'certificate':
-            icon = <GiUsbKey className='fa-icon'/>
-            label = 'Сертификат'
-            mess = 'Заявка на регистрацию'
-            break;
+            elem = {
+                icon : <AiFillUsb className='fa-icon'/>,
+                label : 'Сертификат',
+                mess : 'Кончается сертификат'
+            }
+            break
         case 'new_user':
-            icon = <FaRegIdCard className='fa-icon'/>
-            label = 'Новый пользователь'
-            mess = 'Заявка на регистрацию'
-            break;
+            elem = {
+                icon : <FaUserCheck className='fa-icon'/>,
+                label : 'Новый пользователь',
+                mess : 'Заявка на регистрацию'
+            }
+            break
     }
     
 
     return (  
-        <li className='notif_elem'>
-            {icon}
-            <div className='notif_elem_info-cont'>
-                <h2>
-                    {label}
-                </h2>
-                <span className='notif_elem_time-cont'>
-                    {mess}
-                    <p>{timeAgo}</p>
-                </span>
+        <li className='notif_elem cont'>
+            <h2>
+                {elem.label}
+            </h2>
+            <div className={`notif_elem__info-cont cont ${el.type}`}>
+                <div className='notif_elem__ic_and_mess-cont cont'>
+                    <span className='notif_elem__icon-cont cont'>{elem.icon}</span>
+                    <span className='notif_elem__mess'>{elem.mess}</span>
+                </div>
+                <button className='notif_elem__but'>Подробнее</button>
             </div>
-            <button>Подробнее</button>
+            <div className='notif_elem__time cont' title={timeExact}>{timeAgo}</div>
         </li>
-    );
+    )
 }
  
-export default Notification;
+export default Notification

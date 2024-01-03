@@ -18,9 +18,9 @@ button
     // &:active
     //     transform: translateY(-1.2px) + scale(0.95)
 
-i, .fa-icon
-    pointer-events: none
-img
+
+img, .fa-icon
+    flex-shrink: 0
     pointer-events: none
     -webkit-user-select: none
     -moz-user-select: none
@@ -68,7 +68,7 @@ img
             font-size: $size-main-text - 0.05rem
     .card_content-cont
         // border: 2px solid red
-        // overflow: visible
+        overflow: visible
         flex-shrink: 1
         // justify-content: flex-start
 
