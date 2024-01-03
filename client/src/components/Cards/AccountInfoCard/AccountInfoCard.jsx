@@ -1,4 +1,4 @@
-import Me from '../../../assets/avatars/Бобр.jpg'
+import Me from '../../../assets/avatars/Белый медведь малыш.jpg'
 import ModeBut from './ModeBut/ModeBut'
 
 

@@ -33,18 +33,18 @@
                 border-radius: 12px
                 cursor: pointer
                 overflow: visible
+                transition: all 0.1s ease
                 &:hover
                     background-color: #a1a5b123
                     .nav_bar__inner-cont
-                        transform: translateX(0.2rem)
+                        transform: translateX(-$height-but-act-jump * 3)
                         color: $color-main-text-act
                         .fa-icon
                             color: $color-main-text-act
                         // span
                         //     font-weight: 700
                 &:active
-                    .nav_bar__inner-cont
-                        transform: translateX(0.2rem) + scale(0.97)
+                    transform: scale(0.93)
                 .nav_bar__inner-cont
                     // border: 1px solid red
                     flex-direction: row

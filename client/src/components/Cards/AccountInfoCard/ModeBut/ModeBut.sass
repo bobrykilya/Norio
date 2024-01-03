@@ -3,7 +3,8 @@
 
 .mode-but
     // border: 1px solid $color-but-border
-    $size-but-mode: 1.4rem
+    $size-but-mode: 1.5rem
+    $size-but-mode-icon: 0.9rem
     width: $size-but-mode
     height: $size-but-mode
     border-radius: 50%
@@ -15,25 +16,31 @@
         width: 100%
         height: 100%
         border-radius: 50%
-        background-color: #cbcbcb75
+        background-color: #cbcbcb4e
         transition-duration: 0.18s
         z-index: -1
         transform: scale(0)
     &:hover
         &::after
             transform: scale(1)
+        .icons-section
+            .fa-icon
+                transform: rotate(15deg)
+    &:active
+        transform: translateY($height-but-act-jump) + scale(0.9)
     .icons-section
         // border: 1px solid yellow
-        height: $size-but-mode * 1.6
+        height: $size-but-mode-icon * 3
         justify-content: space-between
-        transition: transform 0.3s $trans-style
-        transform: translateY($size-but-mode / 2)
+        transition: all 0.3s $trans-style
+        transform: translateY($size-but-mode-icon)
         &.dark_mode
-            transform: translateY(-$size-but-mode / 2)
+            transform: translateY(-$size-but-mode-icon)
         .fa-icon
             color: $color-but-icon
-            transition-delay: 0.16s
-            font-size: 0.9rem
+            transition-duration: 0.2s
+            font-size: $size-but-mode-icon
             color: #e6a900
-            &:last-child
+            &:last-child //* dark_mode
+                font-size: $size-but-mode-icon - 0.1rem
                 color: #7500e9

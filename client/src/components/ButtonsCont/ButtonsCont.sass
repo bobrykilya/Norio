@@ -15,17 +15,20 @@
         border-radius: 50%
         // background-color: $color-but-icon
         border: 1px solid $color-but-border
+        // transition: all 0.1s ease
         // border: 1px solid $color-but-icon
         &:hover
             border: 1px solid $color-but-icon
+        &:active
+            transform: translateY($height-but-act-jump) + scale(0.92)
         .fa-icon
             // color: $color-backgr
             color: $color-but-icon
     .pwa-but
         .fa-icon
             font-size: $size-small-but - 0.8rem
-            margin-top: 0.05rem
+            margin-top: 0.18rem
     .info-but
         .fa-icon
-            font-size: $size-small-but - 0.9rem
-            margin-top: -0.12rem
+            font-size: $size-small-but - 0.93rem
+            margin-top: 0.1rem
