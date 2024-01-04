@@ -1,6 +1,7 @@
 import { FaShieldAlt } from "react-icons/fa"
 import { AiFillUsb } from "react-icons/ai"
 import { FaUserCheck } from "react-icons/fa"
+import { GrUpdate } from "react-icons/gr"
 
 
 
@@ -28,6 +29,13 @@ const Notification = ({el, timeAgo, timeExact}) => {
                 icon : <FaUserCheck className='fa-icon'/>,
                 label : 'Новый пользователь',
                 mess : 'Заявка на регистрацию'
+            }
+            break
+        case 'system':
+            elem = {
+                icon : <GrUpdate className='fa-icon'/>,
+                label : 'Система',
+                mess : 'Произошло обновление!'
             }
             break
     }

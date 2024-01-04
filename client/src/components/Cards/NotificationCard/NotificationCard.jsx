@@ -14,27 +14,32 @@ const NotificationCard = () => {
             type: 'guard',
             time: 1704295745795,
             other: 'Вход с нового устройcтва',
+            link: '',
         },
         {
             key: 'certificate_1',
             type: 'certificate',
             time: 1704295545795,
             other: 'Стройпродукт',
+            link: '',
         },
         {
             key: 'new_user_1',
             type: 'new_user',
             time: 1703295745795,
+            link: '',
+        },
+        {
+            key: 'system_1',
+            type: 'system',
+            time: 1703295745795,
+            link: '',
         },
         {
             key: 'new_user_2',
             type: 'new_user',
             time: 1703295745795,
-        },
-        {
-            key: 'new_user_3',
-            type: 'new_user',
-            time: 1703295745795,
+            link: '',
         },
     ]
     // console.log(NOTIFICATIONS_LIST)
@@ -44,7 +49,7 @@ const NotificationCard = () => {
     const cutoffs = [60, 3600, 86400, 86400 * 7, 86400 * 30, 86400 * 365, Infinity]
     const units = ['second', 'minute', 'hour', 'day', 'week', 'month', 'year']
     const rtf = new Intl.RelativeTimeFormat('ru', {
-        numeric: 'auto',
+        numeric: 'always',
         style: 'short',
         localeMatcher: 'best fit'
     })

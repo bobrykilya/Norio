@@ -47,16 +47,16 @@ img, .fa-icon
     justify-content: flex-start
     .card_label-cont
         // border: 2px solid orange
-        margin-top: -$padding-card / 3
+        margin-top: calc(-1 * $padding-card / 3)
         height: auto
         flex-direction: row
         overflow: visible
-        margin-bottom: $padding-card + 0.3rem
+        margin-bottom: $padding-card + 0.1rem
         // margin-top: 2rem
         &::after
             content: ''
             position: absolute
-            bottom: -$padding-card / 2
+            bottom: calc(-1 * $padding-card / 2)
             height: 1px
             width: 80%
             background-color: $color-after-element

@@ -5,11 +5,13 @@
 .notif_elem
     // border: 2px solid gray
     margin-bottom: 0.3rem
-    padding: 0.2rem 5%
+    padding-right: 0.2rem
+    padding-left: 0.5rem
+    padding-top: 0.2rem
     padding-bottom: 0
     height: auto
-    background-color: #d1d1d150
-    border-radius: 30px
+    background-color: #d1d1d144
+    border-radius: 25px
     h2
         margin-bottom: 0.4rem
         text-align: center
@@ -27,12 +29,13 @@
             margin-bottom: 0.4rem
             // flex-shrink: 1
             .notif_elem__icon-cont
-                margin-right: 0.4rem
+                margin-right: 0.35rem
                 width: $size-main-text + 0.5rem
                 height: $size-main-text + 0.5rem
                 border-radius: 50%
                 // border: 1px solid $color-main-text
                 .fa-icon
+                    margin-left: -1px
                     font-size: $size-main-text
                     position: relative
             .notif_elem__mess
@@ -42,38 +45,59 @@
                 width: 100%
                 font-size: $size-main-text - 0.1rem
         .notif_elem__but
-            width: 80%
+            width: 75%
             height: auto
             padding: 5px 10px
             border-radius: 20px
             color: $color-cards-background
-            // background-color: #9524ff
-    .guard
-        $color-icon-guard: #058c00
-        .notif_elem__icon-cont
-            border: 1px solid $color-icon-guard
-            color: $color-icon-guard
-        .notif_elem__but
-            background-color: $color-icon-guard
-    .certificate
-        $color-icon-certificate: #6d00d3
-        .notif_elem__icon-cont
-            border: 1px solid $color-icon-certificate
-            color: $color-icon-certificate
-        .notif_elem__but
-            background-color: $color-icon-certificate
-    .new_user
-        $color-icon-new_user: #009999
-        .notif_elem__icon-cont
-            border: 1px solid $color-icon-new_user
-            color: $color-icon-new_user
-            .fa-icon
-                margin-right: -4px
-        .notif_elem__but
-            background-color: $color-icon-new_user
+            background-color: #8e8e8e
     .notif_elem__time
         // border: 1px solid orange
         align-items: fl
         height: 1rem
         font-size: $size-main-text - 0.22rem
         color: $color-main-text-clear
+    
+    //* Notifications colorize
+    .guard
+        $color-icon-guard: #058c00ce
+        .notif_elem__icon-cont
+            background-color: $color-icon-guard
+            color: $color-cards-background
+            // border: 1px solid $color-icon-guard
+            // color: $color-icon-guard
+        .notif_elem__but
+            background-color: $color-icon-guard
+    .certificate
+        $color-icon-certificate: #6d00d3bd
+        .notif_elem__icon-cont
+            background-color: $color-icon-certificate
+            color: $color-cards-background
+            // border: 1px solid $color-icon-certificate
+            // color: $color-icon-certificate
+        .notif_elem__but
+            background-color: $color-icon-certificate
+    .new_user
+        $color-icon-new_user: #009999bf
+        .notif_elem__icon-cont
+            background-color: $color-icon-new_user
+            color: $color-cards-background
+            // border: 1px solid $color-icon-new_user
+            // color: $color-icon-new_user
+            .fa-icon
+                margin-right: -3px
+        .notif_elem__but
+            background-color: $color-icon-new_user
+    .system
+        $color-icon-system: #0c00aeb8
+        .notif_elem__ic_and_mess-cont
+            .notif_elem__icon-cont
+                background-color: $color-icon-system
+                color: $color-cards-background
+                // border: 1px solid $color-icon-system
+                // color: $color-icon-system
+                .fa-icon
+                    font-size: $size-main-text - 0.07rem
+                    // margin-bottom: -0.1rem
+        .notif_elem__but
+            background-color: $color-icon-system

@@ -12,6 +12,7 @@ const ModeBut = () => {
         setIsDarkMode((prev) => !prev)
     }
 
+
     return ( 
         <button
             title='Сменить тему'

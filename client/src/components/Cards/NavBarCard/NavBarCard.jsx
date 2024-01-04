@@ -2,6 +2,7 @@ import LittleLogoImg from '../../../assets/logos/little_logo.png'
 import ButtonsCont from './../../ButtonsCont/ButtonsCont'
 import { AiOutlineHome } from "react-icons/ai"
 import { MdOutlineTaskAlt } from "react-icons/md"
+import { IoCalendarNumberOutline } from "react-icons/io5"
 import { TbTableShortcut } from "react-icons/tb"
 import { TbReportAnalytics } from "react-icons/tb"
 import { LuBuilding } from "react-icons/lu"
@@ -22,6 +23,12 @@ const NavBarCard = () => {
             key: 'tasks_page',
             label: 'Задачи',
             icon: <MdOutlineTaskAlt className='fa-icon'/>,
+            link:   '',
+        },
+        {
+            key: 'calendar_page',
+            label: 'Календарь',
+            icon: <IoCalendarNumberOutline className='fa-icon'/>,
             link:   '',
         },
         {
@@ -53,7 +60,7 @@ const NavBarCard = () => {
     return ( 
         <div className='nav_bar_card-cont cont card'>
             <button 
-                className='card_label-cont cont'
+                className='logo-cont card_label-cont cont'
                 title='Улыбнись, заяц)'
             >
                 <img src={LittleLogoImg} alt="" className='little_logo-img' />
