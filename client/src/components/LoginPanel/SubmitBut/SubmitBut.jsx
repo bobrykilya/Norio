@@ -1,22 +1,22 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 
 
 
 
-const SubmitBut = ({icon, onClick, notSaveUser}) => {
+const SubmitBut = ({icon, notSaveUser}) => {
 
-    const [load, setLoad] = useState(false)
+    // const [load, setLoad] = useState(false)
     
     return (
         <button
             className='submit-but cont'
             type={notSaveUser ? 'button' : 'submit'}
-            disabled={load}
-            onClick={() => {
-                setLoad(true)
-                onClick()
-                .then(() => setLoad(false))
-            }}
+            // disabled={load}
+            // onClick={() => {
+            //     setLoad(true)
+            //     // onClick()
+            //     .then(() => setLoad(false))
+            // }}
         >
             {icon}
         </button>

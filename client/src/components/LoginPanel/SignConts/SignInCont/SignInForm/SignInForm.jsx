@@ -50,12 +50,14 @@ const SignInForm = () => {
 
     return (
         <form id='sign_in-form' className='form cont' onSubmit={handleSubmit(onSubmit)}>
-            <NameInput />
-            <PasswordInput checkMethods={{...register()}}/>
-            <label id='checkbox-cont' className='cont'>
-                <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
-                <span>Не запоминать меня</span>
-            </label>
+            <div className='inputs-cont cont'>
+                {/* <NameInput /> */}
+                <PasswordInput checkMethods={{...register()}}/>
+                <label id='checkbox-cont' className='cont'>
+                    <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
+                    <span>Не запоминать меня</span>
+                </label>
+            </div>
             <SubmitBut 
                 icon={<BiLogInCircle className='fa-icon'/>}
                 onClick={handleClickSubmit}

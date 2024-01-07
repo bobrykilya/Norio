@@ -32,6 +32,7 @@ const CoverPanel = ({isOpenedSignUp, onToggleCoverPanel}) => {
                         <p>Выполни вход по<br/>регистрационным<br/>данным</p>
                         <button
                             id='open_sign_in-but'
+                            type='button'
                             onClick={handleToggleCoverPanel}
                             tabIndex={-1}
                         >

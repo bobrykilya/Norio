@@ -4,11 +4,10 @@ import { useClickOutside } from "../../../Hooks/useClickOutside"
 
 
 
-const StoresInput = () => {
+const StoresInput = ({store, setStore}) => {
     
     //! const user_name = document.querySelector('#sign_up-form .name_input')
     
-    const [store, setStore] = useState('Точка')
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const dropDownRef = useRef(null)
     const dropDownButtonRef = useRef(null)

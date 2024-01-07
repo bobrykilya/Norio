@@ -85,16 +85,16 @@ const NotificationCard = () => {
                                 Новых<br/>уведомлений<br/>нет
                             </div>
                          ) : 
-                        NOTIFICATIONS_LIST.slice(0, 10).map((elem) => {
-                            
-                            const notif_time = new Date(elem.time)
+                            NOTIFICATIONS_LIST.slice(0, 10).map((elem) => {
+                                
+                                const notif_time = new Date(elem.time)
 
-                            return <Notification 
-                                        key={elem.key} 
-                                        el={elem} 
-                                        timeAgo={timeAgoSinceNotifCounting(elem.time)}
-                                        timeExact={`${notif_time.toLocaleString()}`}
-                                    />
+                                return <Notification 
+                                            key={elem.key} 
+                                            el={elem} 
+                                            timeAgo={timeAgoSinceNotifCounting(elem.time)}
+                                            timeExact={`${notif_time.toLocaleString()}`}
+                                        />
                         })
                     }
                 </ul>

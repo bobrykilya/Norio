@@ -4,9 +4,9 @@ import { FaLock, FaUnlock } from "react-icons/fa6"
 
 
 
-const PasswordInput = () => {
+const PasswordInput = ({password, setPassword}) => {
     
-    const [password, setPassword] = useState('')
+    
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
     
