@@ -4,7 +4,7 @@ import NameInput from '../../../Inputs/NameInput/NameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import StoresInput from '../../../Inputs/StoresInput/StoresInput'
-import InputsCleaner from '../../InputsCleaner/InputsCleaner'
+import InputsCleaner from '../../../Inputs/InputsCleaner/InputsCleaner'
 import { FaArrowRightLong } from "react-icons/fa6"
 
 
@@ -44,7 +44,12 @@ const SignUpForm = () => {
             <div className='inputs-cont cont'>
                 {/* <input {{... register}} type="text" /> */}
                 {/* <StoresInput store={store} setStore={setStore}/> */}
-                <NameInput name={name} setName={setName} control={control} /> 
+                <NameInput 
+                    fieldname={'username'} 
+                    name={name} 
+                    setName={setName} 
+                    control={control} 
+                /> 
                 {/* <PasswordInput password={password} setPassword={setPassword}/>
                 <InputsCleaner opened={true} onClick={handleResetInputs}/> */}
             </div>

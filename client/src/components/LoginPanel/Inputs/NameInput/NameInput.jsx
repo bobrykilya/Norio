@@ -3,21 +3,19 @@ import { useController } from 'react-hook-form'
 
 
 
-const NameInput = ({name, setName, control}) => {
+const NameInput = ({fieldname, name, setName, control}) => {
 
     const {
-        field,
-        formState: {
-                errors
+        field: { ref, ...inputProps },
+        fieldState: {
+                error
             }
     } = useController({
-        name,
+        // 'username',
+        // fieldname,
         control,
         rules: { 
             required:true,
-            validate: {
-
-            }
         },
         defaultValue: "",
     })
@@ -31,12 +29,14 @@ const NameInput = ({name, setName, control}) => {
         <div className='name_input-cont input-cont cont'>
             <input
                 // name='username'
-                name='field.name'
+                {...inputProps}
+                inputRef={ref}
+                // name='field.name'
                 className='name_input'
                 type="text"
-                maxLength={13}
+                // maxLength={13}
                 placeholder='Логин'
-                value={name}
+                // value={name}
                 autoComplete='username'
                 onChange={handleChangeName}
             />
