@@ -3,7 +3,7 @@
 
 
 
-const SubmitBut = ({icon, notSaveUser}) => {
+const SubmitBut = ({icon, notSaveUser, disabled}) => {
 
     // const [load, setLoad] = useState(false)
     
@@ -11,6 +11,7 @@ const SubmitBut = ({icon, notSaveUser}) => {
         <button
             className='submit-but cont'
             type={notSaveUser ? 'button' : 'submit'}
+            // disabled={disabled}
             // disabled={load}
             // onClick={() => {
             //     setLoad(true)

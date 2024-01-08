@@ -1,20 +1,17 @@
-import { useRef, useState, useEffect, useLayoutEffect } from 'react'
+import { useRef, useState } from 'react'
 import { FaKey } from "react-icons/fa"
 import { FaLock, FaUnlock } from "react-icons/fa6"
+import InputsError from '../InputsError/InputsError'
 
 
 
-const PasswordInput = ({password, setPassword}) => {
+const PasswordInput = ({password, setPassword, register, error}) => {
     
-    
+    console.log(error)
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
     
     const inputRef = useRef(null)
-
-    // onCheckInput = (e) => {
-    //     if (e.value && e.value.length > 3) return true
-    // }
 
     const handleChangePassword = (e) => {
         e.target.value ? setIsLockVisible(true) : 
@@ -26,7 +23,7 @@ const PasswordInput = ({password, setPassword}) => {
         setIsLockOpened((prev) => !prev)
         inputRef.current.focus()
 
-        //* Moving cursor to the input end
+        //* Moving cursor to the input's end
         const length = inputRef.current.value.length
         setTimeout(() => {
             inputRef.current.setSelectionRange(length, length)
@@ -36,7 +33,14 @@ const PasswordInput = ({password, setPassword}) => {
     return (
         <div className='password_input-cont input-cont cont'>
             <input
-                name='password'
+                // name='password'
+                {... register('pass', {
+                    // required: 'Пароль обязателен к заполнению',
+                    // minLength: {
+                    //     value: 5,
+                    //     message: 'Длина пароля должна быть больше 4 символов'
+                    // }
+                })}
                 className='passw_input'
                 type={isLockOpened ? 'text' : 'password'}
                 maxLength={13}
@@ -44,10 +48,10 @@ const PasswordInput = ({password, setPassword}) => {
                 value={password}
                 autoComplete='current-password'
                 onChange={handleChangePassword}
-                // onFocus={handleInputFocus}
                 ref={inputRef}
             />
             <FaKey className='input-icon'/>
+            <InputsError error={error}/>
             <button 
                 className={`lock-but ${isLockVisible ? 'active' : ''}`}
                 type='button'

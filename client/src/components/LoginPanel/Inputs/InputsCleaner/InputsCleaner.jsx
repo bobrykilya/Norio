@@ -2,14 +2,14 @@ import { IoCloseCircleOutline } from "react-icons/io5"
 
 
 
-const InputsCleaner = ({opened, handleResetInputs}) => {
+const InputsCleaner = ({opened, onClick}) => {
 
     return ( 
         <button 
             className={`inputs_cleaner-but cont ${opened ? 'opened' : ''}`}
             title='Очистить все поля'
             type='button'
-            onClick={handleResetInputs}
+            onClick={onClick}
         >
             <IoCloseCircleOutline className='fa-icon'/>
         </button>

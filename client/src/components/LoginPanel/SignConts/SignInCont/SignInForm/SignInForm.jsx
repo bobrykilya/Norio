@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import NameInput from '../../../Inputs/NameInput/NameInput'
+import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import CheckBox from './CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
@@ -51,8 +51,8 @@ const SignInForm = () => {
     return (
         <form id='sign_in-form' className='form cont' onSubmit={handleSubmit(onSubmit)}>
             <div className='inputs-cont cont'>
-                {/* <NameInput /> */}
-                <PasswordInput checkMethods={{...register()}}/>
+                {/* <UserNameInput /> */}
+                {/* <PasswordInput checkMethods={{...register()}}/> */}
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
                     <span>Не запоминать меня</span>
