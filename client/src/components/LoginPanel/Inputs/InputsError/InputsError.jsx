@@ -1,34 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 
 
 const InputsError = ({error}) => {
 
-    const [errorMess, setErrorMess] = useState('');
-    const [isErrorOpened, setIsErrorOpened] = useState(false);
+    const [errorMess, setErrorMess] = useState('')
+    const [isErrorOpened, setIsErrorOpened] = useState(false)
 
-    // console.log(error)
     useEffect(() => {
+        // console.log('Message saved')
+        // console.log(error)
+        if (!error) {
+            setIsErrorOpened(false)
+            setTimeout(() => {
+                setErrorMess('')
+            }, 300)
+            return
+        }
         if (error?.message !== '' && error?.message !== errorMess) {
             // console.log('Message saved')
             setIsErrorOpened(false)
             setTimeout(() => {
                 setErrorMess(error?.message)
                 setIsErrorOpened(true)
-            }, 400)
+            }, 300)
+            return
         }
-        if (!error) {
-            setIsErrorOpened(false)
-        }
-        // console.log('Message saved')
-    }, [error]);
+    }, [error])
 
     return ( 
         <div className={`input_error-cont cont ${isErrorOpened ? 'opened' : ''}`}>
             {/* <span>{error?.message}</span> */}
             <span>{errorMess}</span>
         </div>
-     );
+     )
 }
  
-export default InputsError;
+export default InputsError

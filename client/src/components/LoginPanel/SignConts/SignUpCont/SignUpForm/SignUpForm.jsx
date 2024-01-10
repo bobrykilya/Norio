@@ -12,11 +12,8 @@ import { FaArrowRightLong } from "react-icons/fa6"
 const SignUpForm = () => {
 
     const [store, setStore] = useState('Точка')
-    const [username, setUserName] = useState('')
-    const [password, setPassword] = useState('')
+    const [isLockVisible, setIsLockVisible] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(true)
-
-    console.log(password)
 
     const {
         register,
@@ -31,8 +28,9 @@ const SignUpForm = () => {
     })
 
     const onSubmit = (data) => {
-        alert(data.pass)
-        console.log(data.password)
+        // alert(data.pass)
+        console.log(`Юзер: ${data.sign_up_username}`)
+        console.log(`Пароль: ${data.sign_up_password}`)
     }
     
     //     const REG_INFO = {
@@ -45,6 +43,7 @@ const SignUpForm = () => {
         // console.log('Cleaning')
         reset()
         clearErrors()
+        setIsLockVisible(false)
         // setIsCleanerOpened(false)
     }
 
@@ -53,19 +52,17 @@ const SignUpForm = () => {
             <div className='inputs-cont cont'>
                 {/* <input {{... register}} type="text" /> */}
                 {/* <StoresInput store={store} setStore={setStore}/> */}
-                {/* <UserNameInput 
-                    // fieldname={'username'} 
-                    username={username} 
-                    setUserName={setUserName}
+                <UserNameInput
+                    name='sign_up_username'
                     register={register}
-                    error={errors?.username} 
-                    // control={control}
-                />  */}
-                <PasswordInput 
-                    password={password} 
-                    setPassword={setPassword}
+                    error={errors?.sign_up_username} 
+                /> 
+                <PasswordInput
+                    name='sign_up_password'
                     register={register}
-                    error={errors?.password} 
+                    error={errors?.sign_up_password}
+                    isLockVisible={isLockVisible}
+                    setIsLockVisible={setIsLockVisible}
                 />
                 <InputsCleaner opened={isCleanerOpened} onClick={handleResetInputs}/>
             </div>

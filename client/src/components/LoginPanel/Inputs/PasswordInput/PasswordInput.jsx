@@ -5,18 +5,18 @@ import InputsError from '../InputsError/InputsError'
 
 
 
-const PasswordInput = ({password, setPassword, register, error}) => {
+const PasswordInput = ({ name, register, error, isLockVisible, setIsLockVisible }) => {
     
-    console.log(error)
-    const [isLockVisible, setIsLockVisible] = useState(false)
+    // console.log(error)
     const [isLockOpened, setIsLockOpened] = useState(false)
+
+    
     
     const inputRef = useRef(null)
-
+    
     const handleChangePassword = (e) => {
         e.target.value ? setIsLockVisible(true) : 
             setIsLockVisible(false) & setIsLockOpened(false)
-        setPassword(e.target.value)
     }
 
     const handleSwitchLockPosition = (e) => {
@@ -30,25 +30,29 @@ const PasswordInput = ({password, setPassword, register, error}) => {
         }, 1)
     }
 
+    const { ref, ... rest_register } = register(name, {
+            required: 'Пароль обязателен к заполнению',
+            minLength: {
+            value: 5,
+            message: 'Длина пароля должна быть больше 4 знаков'
+            }
+        })
+
     return (
         <div className='password_input-cont input-cont cont'>
             <input
-                // name='password'
-                {... register('pass', {
-                    // required: 'Пароль обязателен к заполнению',
-                    // minLength: {
-                    //     value: 5,
-                    //     message: 'Длина пароля должна быть больше 4 символов'
-                    // }
-                })}
+                {... rest_register}
+                ref={(e) => {
+                    ref(e)
+                    inputRef.current = e
+                }}
                 className='passw_input'
                 type={isLockOpened ? 'text' : 'password'}
                 maxLength={13}
                 placeholder='Пароль'
-                value={password}
                 autoComplete='current-password'
                 onChange={handleChangePassword}
-                ref={inputRef}
+                // ref={inputRef}
             />
             <FaKey className='input-icon'/>
             <InputsError error={error}/>
