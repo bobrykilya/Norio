@@ -8,9 +8,9 @@ const InputsError = ({error}) => {
     const [isErrorOpened, setIsErrorOpened] = useState(false)
 
     useEffect(() => {
-        // console.log('Message saved')
         // console.log(error)
-        if (!error) {
+        // console.log('Message saved')
+        if (!error?.message || !error) {
             setIsErrorOpened(false)
             setTimeout(() => {
                 setErrorMess('')

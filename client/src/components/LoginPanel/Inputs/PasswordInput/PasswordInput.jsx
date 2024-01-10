@@ -1,16 +1,17 @@
 import { useRef, useState } from 'react'
 import { FaKey } from "react-icons/fa"
 import { FaLock, FaUnlock } from "react-icons/fa6"
+// import InputsCleaner from '../../../Inputs/InputsCleaner/InputsCleaner'
 import InputsError from '../InputsError/InputsError'
 
 
 
-const PasswordInput = ({ name, register, error, isLockVisible, setIsLockVisible }) => {
+const PasswordInput = ({ name, register, error }) => {
     
     // console.log(error)
+    const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
 
-    
     
     const inputRef = useRef(null)
     
@@ -31,12 +32,17 @@ const PasswordInput = ({ name, register, error, isLockVisible, setIsLockVisible 
     }
 
     const { ref, ... rest_register } = register(name, {
-            required: 'Пароль обязателен к заполнению',
+            // required: 'Пароль обязателен к заполнению',
+            required: true,
             minLength: {
             value: 5,
             message: 'Длина пароля должна быть больше 4 знаков'
-            }
-        })
+            },
+            // pattern: {
+            //     value: /[a-zA-Zа-яА-Я0-9]/,
+            //     message: 'Пароль может состоять лишь из букв и цифр'
+            // }
+    })
 
     return (
         <div className='password_input-cont input-cont cont'>
@@ -65,6 +71,7 @@ const PasswordInput = ({ name, register, error, isLockVisible, setIsLockVisible 
                 {isLockOpened ? <FaUnlock className='fa-icon'/> : 
                 <FaLock className='fa-icon'/>}
             </button>
+            {/* <InputsCleaner /> */}
         </div>
     )
 }

@@ -1,4 +1,5 @@
-import { IoCloseCircleOutline } from "react-icons/io5"
+// import { IoCloseCircleOutline } from "react-icons/io5"
+import { FaXmark } from "react-icons/fa6"
 
 
 
@@ -11,9 +12,9 @@ const InputsCleaner = ({opened, onClick}) => {
             type='button'
             onClick={onClick}
         >
-            <IoCloseCircleOutline className='fa-icon'/>
+            <FaXmark className='fa-icon'/>
         </button>
-     );
+     )
 }
  
 export default InputsCleaner
