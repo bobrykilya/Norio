@@ -3,6 +3,7 @@ import ButtonsCont from './../../ButtonsCont/ButtonsCont'
 import { AiOutlineHome } from "react-icons/ai"
 import { MdOutlineTaskAlt } from "react-icons/md"
 import { IoCalendarNumberOutline } from "react-icons/io5"
+import { AiOutlineFileSearch } from "react-icons/ai";
 import { TbTableShortcut } from "react-icons/tb"
 import { TbReportAnalytics } from "react-icons/tb"
 import { LuBuilding } from "react-icons/lu"
@@ -14,43 +15,49 @@ const NavBarCard = () => {
 
     const NAV_BAR_LIST = [
         {
-            key: 'home_page',
+            id: 'home_page',
             label: 'Главная',
             icon: <AiOutlineHome className='fa-icon'/>,
             link:   '',
         },
         {
-            key: 'tasks_page',
+            id: 'tasks_page',
             label: 'Задачи',
             icon: <MdOutlineTaskAlt className='fa-icon'/>,
             link:   '',
         },
         {
-            key: 'calendar_page',
+            id: 'calendar_page',
             label: 'Календарь',
             icon: <IoCalendarNumberOutline className='fa-icon'/>,
             link:   '',
         },
         {
-            key: 'tables_page',
+            id: 'reporting_page',
+            label: 'Отчётность',
+            icon: <AiOutlineFileSearch className='fa-icon'/>,
+            link:   '',
+        },
+        {
+            id: 'tables_page',
             label: 'Таблицы',
             icon: <TbTableShortcut className='fa-icon'/>,
             link:   '',
         },
         {   
-            key: 'analytics_page',
+            id: 'analytics_page',
             label: 'Аналитика',
             icon: <TbReportAnalytics className='fa-icon'/>,
             link:   '',
         },
         {
-            key: 'company_page',
+            id: 'company_page',
             label: 'Компания',
             icon: <LuBuilding className='fa-icon'/>,
             link:   '',
         },
         {
-            key: 'settings_page',
+            id: 'settings_page',
             label: 'Настройки',
             icon: <FiSettings className='fa-icon'/>,
             link:   '',
@@ -71,7 +78,7 @@ const NavBarCard = () => {
                 {
                     NAV_BAR_LIST.map((el) => {
                         return (
-                            <a className='cont' key={el.key}>
+                            <a className='cont' key={el.id}>
                                 <div className='nav_bar__inner-cont cont'>
                                     {el.icon}
                                     <span className='cont'>{el.label}</span>

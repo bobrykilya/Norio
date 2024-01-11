@@ -10,33 +10,33 @@ const NotificationCard = () => {
     
     const NOTIFICATIONS_LIST = [
         {
-            key: 'guard_1',
+            id: 'guard_1',
             type: 'guard',
             time: 1704295745795,
             other: 'Вход с нового устройcтва',
             link: '',
         },
         {
-            key: 'certificate_1',
+            id: 'certificate_1',
             type: 'certificate',
             time: 1704295545795,
             other: 'Стройпродукт',
             link: '',
         },
         {
-            key: 'new_user_1',
+            id: 'new_user_1',
             type: 'new_user',
             time: 1703295745795,
             link: '',
         },
         {
-            key: 'system_1',
+            id: 'system_1',
             type: 'system',
             time: 1703295745795,
             link: '',
         },
         {
-            key: 'new_user_2',
+            id: 'new_user_2',
             type: 'new_user',
             time: 1703295745795,
             link: '',
@@ -90,7 +90,7 @@ const NotificationCard = () => {
                                 const notif_time = new Date(elem.time)
 
                                 return <Notification 
-                                            key={elem.key} 
+                                            key={elem.id} 
                                             el={elem} 
                                             timeAgo={timeAgoSinceNotifCounting(elem.time)}
                                             timeExact={`${notif_time.toLocaleString()}`}
