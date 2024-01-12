@@ -9,10 +9,12 @@
     height: calc($size-confirm-but / 2)
     background-color: $color-confirm-but
     // background-color: #016d11
-    &:hover, &:focus
+    &:hover
         transform: translateX(-$height-but-act-jump * 1.5)
         background-color: $color-confirm-but-act
-        // background-color: #047815
+    &:active
+        transform: translateX(-$height-but-act-jump * 4)
+        background-color: #062a63
     // &:disabled
     //     pointer-events: none
     //     background-color: #173b75b4

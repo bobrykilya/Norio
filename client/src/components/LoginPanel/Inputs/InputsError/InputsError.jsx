@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 
 
 
-const InputsError = ({error}) => {
+const InputsError = ({ error }) => {
 
     const [errorMess, setErrorMess] = useState('')
     const [isErrorOpened, setIsErrorOpened] = useState(false)
 
     useEffect(() => {
-        // console.log(error)
+        // console.log(`error: ${error}`)
         // console.log('Message saved')
         if (!error?.message || !error) {
             setIsErrorOpened(false)
@@ -18,7 +18,6 @@ const InputsError = ({error}) => {
             return
         }
         if (error?.message !== '' && error?.message !== errorMess) {
-            // console.log('Message saved')
             setIsErrorOpened(false)
             setTimeout(() => {
                 setErrorMess(error?.message)
@@ -30,7 +29,6 @@ const InputsError = ({error}) => {
 
     return ( 
         <div className={`input_error-cont cont ${isErrorOpened ? 'opened' : ''}`}>
-            {/* <span>{error?.message}</span> */}
             <span>{errorMess}</span>
         </div>
      )

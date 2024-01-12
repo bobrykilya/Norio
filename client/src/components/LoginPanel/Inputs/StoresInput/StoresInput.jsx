@@ -1,16 +1,21 @@
 import { useState, useRef, useEffect } from 'react'
 import { FaHouseChimneyUser } from "react-icons/fa6"
 import { useClickOutside } from "../../../Hooks/useClickOutside"
+import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 
 
 
-const StoresInput = ({store, setStore}) => {
+const StoresInput = ({ onFocusInput }) => {
     
     //! const user_name = document.querySelector('#sign_up-form .name_input')
     
+    const [store, setStore] = useState('Точка')
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
+    const [isCleanerOpened, setIsCleanerOpened] = useState(false)
+
     const dropDownRef = useRef(null)
     const dropDownButtonRef = useRef(null)
+
     const STORES_LIST = [
         {
             key: 'office',
@@ -55,6 +60,8 @@ const StoresInput = ({store, setStore}) => {
             // console.log(e.target.textContent)
             setStore(e.target.textContent)
             setIsDropDownOpened(false)
+            setIsCleanerOpened(true)
+            onFocusInput()
             //! user_name.focus()
         }
     }
@@ -62,6 +69,11 @@ const StoresInput = ({store, setStore}) => {
     useClickOutside(dropDownRef, dropDownButtonRef, () => {
         setIsDropDownOpened(setIsDropDownOpened(false))
     })
+
+    const clearInput = () => {
+        setStore('Точка')
+        setIsCleanerOpened(false)
+    }
 
     return ( 
         <div className="stores_input-cont input-cont cont">
@@ -81,6 +93,7 @@ const StoresInput = ({store, setStore}) => {
                 </span>
             </button>
             <FaHouseChimneyUser className='input-icon'/>
+            <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
             <ul
                 id='dropdown_stores-cont'
                 className={isDropDownOpened ? 'opened' : ''}

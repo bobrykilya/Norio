@@ -1,50 +1,36 @@
 import { useState, useRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { FaArrowRightLong } from "react-icons/fa6"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import StoresInput from '../../../Inputs/StoresInput/StoresInput'
-import InputsCleaner from '../../../Inputs/InputsCleaner/InputsCleaner'
-import { FaArrowRightLong } from "react-icons/fa6"
+import { useFocusInput } from "../../../../Hooks/useFocusInput"
 
 
 
 const SignUpForm = () => {
 
-    const [store, setStore] = useState('Точка')
-    
-    const [isCleanerOpened, setIsCleanerOpened] = useState(true)
     const inputUserNameRef = useRef(null)
 
     const {
         register,
         handleSubmit,
-        reset,
-        clearErrors,
+        resetField,
         // control,
         formState: { errors }
     } = useForm({
         mode: 'onBlur'
     })
 
-    // console.log(isDirty)
-    // useEffect(() => {
-    //     isDirty ? setIsCleanerOpened(true) : setIsCleanerOpened(false)
-    // }, [isDirty]);
-
-
-    const handleResetInputs = () => {
-        // console.log('Cleaning')
-        // setIsLockVisible(false)
-        // setIsLockOpened(false)
-        reset()
-        clearErrors()
-        // setIsCleanerOpened(false)
+    const handleFocusInput = () => {
+        useFocusInput(inputUserNameRef)
     }
     
     const onSubmit = (data) => {
         // alert(data.pass)
         data.device = navigator.userAgent
+        // reset(sign_up_password)
         console.log(`Юзер: ${data.sign_up_username}`)
         console.log(`Пароль: ${data.sign_up_password}`)
         console.log(`Устройство: ${data.device}`)
@@ -53,20 +39,23 @@ const SignUpForm = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} id='sign_up-form' className='form cont'>
             <div className='inputs-cont cont'>
-                {/* <input {{... register}} type="text" /> */}
-                <StoresInput store={store} setStore={setStore}/>
+                <StoresInput 
+                    onFocusInput={handleFocusInput}
+                />
                 <UserNameInput
                     name='sign_up_username'
                     register={register}
                     error={errors?.sign_up_username}
+                    reset={resetField}
                     inputRef={inputUserNameRef}
+                    
                 /> 
                 <PasswordInput
                     name='sign_up_password'
                     register={register}
                     error={errors?.sign_up_password}
+                    reset={resetField}
                 />
-                {/* <InputsCleaner opened={isCleanerOpened} onClick={handleResetInputs}/> */}
             </div>
             <SubmitBut 
                 icon={<FaArrowRightLong className='fa-icon'/>}

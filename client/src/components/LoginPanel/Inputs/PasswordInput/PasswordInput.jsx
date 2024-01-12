@@ -1,34 +1,41 @@
 import { useRef, useState } from 'react'
 import { FaKey } from "react-icons/fa"
 import { FaLock, FaUnlock } from "react-icons/fa6"
-// import InputsCleaner from '../../../Inputs/InputsCleaner/InputsCleaner'
 import InputsError from '../InputsError/InputsError'
+import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
+import { useFocusInput } from "../../../Hooks/useFocusInput"
 
 
 
-const PasswordInput = ({ name, register, error }) => {
+const PasswordInput = ({ name, register, error, reset }) => {
     
     // console.log(error)
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
+    const [isCleanerOpened, setIsCleanerOpened] = useState(false)
 
-    
     const inputRef = useRef(null)
     
     const handleChangePassword = (e) => {
-        e.target.value ? setIsLockVisible(true) : 
-            setIsLockVisible(false) & setIsLockOpened(false)
+        e.target.value ? ChangeInput() : clearInput()
+    }
+
+    const ChangeInput = () => {
+        setIsLockVisible(true)
+        setIsCleanerOpened(true)
+    }
+
+    const clearInput = () => {
+        reset(name)
+        setIsLockVisible(false)
+        setIsLockOpened(false)
+        setIsCleanerOpened(false)
+        useFocusInput(inputRef)
     }
 
     const handleSwitchLockPosition = (e) => {
         setIsLockOpened((prev) => !prev)
-        inputRef.current.focus()
-
-        //* Moving cursor to the input's end
-        const length = inputRef.current.value.length
-        setTimeout(() => {
-            inputRef.current.setSelectionRange(length, length)
-        }, 1)
+        useFocusInput(inputRef)
     }
 
     const { ref, ... rest_register } = register(name, {
@@ -58,20 +65,20 @@ const PasswordInput = ({ name, register, error }) => {
                 placeholder='Пароль'
                 autoComplete='current-password'
                 onChange={handleChangePassword}
-                // ref={inputRef}
             />
             <FaKey className='input-icon'/>
-            <InputsError error={error}/>
+            {isCleanerOpened ? <InputsError error={error} /> : null}
+            <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
             <button 
-                className={`lock-but ${isLockVisible ? 'active' : ''}`}
+                className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
+                title='Показать\Спрятать пароль'
                 type='button'
                 tabIndex={-1} 
                 onClick={(handleSwitchLockPosition)}
             >
-                {isLockOpened ? <FaUnlock className='fa-icon'/> : 
-                <FaLock className='fa-icon'/>}
+                {isLockOpened ? <FaUnlock className='fa-icon' /> : 
+                <FaLock className='fa-icon' />}
             </button>
-            {/* <InputsCleaner /> */}
         </div>
     )
 }
