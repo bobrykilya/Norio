@@ -1,15 +1,14 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { FaHouseChimneyUser } from "react-icons/fa6"
 import { useClickOutside } from "../../../Hooks/useClickOutside"
+import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 
 
 
-const StoresInput = ({ onFocusInput }) => {
-    
-    //! const user_name = document.querySelector('#sign_up-form .name_input')
-    
-    const [store, setStore] = useState('Точка')
+const StoresInput = ({ store, setStore, onFocusInput, error, setStoreError }) => {
+
+    // console.log(error)
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
 
@@ -61,8 +60,8 @@ const StoresInput = ({ onFocusInput }) => {
             setStore(e.target.textContent)
             setIsDropDownOpened(false)
             setIsCleanerOpened(true)
+            setStoreError(null)
             onFocusInput()
-            //! user_name.focus()
         }
     }
     
@@ -93,6 +92,7 @@ const StoresInput = ({ onFocusInput }) => {
                 </span>
             </button>
             <FaHouseChimneyUser className='input-icon'/>
+            <InputsError error={error} />
             <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
             <ul
                 id='dropdown_stores-cont'

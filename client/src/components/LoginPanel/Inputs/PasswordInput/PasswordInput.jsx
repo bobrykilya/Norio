@@ -13,16 +13,26 @@ const PasswordInput = ({ name, register, error, reset }) => {
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
+    const [isErrorHidden, setIsErrorHidden] = useState(false)
 
     const inputRef = useRef(null)
     
     const handleChangePassword = (e) => {
+        // console.log(e.target.value)
         e.target.value ? ChangeInput() : clearInput()
     }
 
+
     const ChangeInput = () => {
+        setIsErrorHidden(false)
         setIsLockVisible(true)
         setIsCleanerOpened(true)
+    }
+
+    const onClickCleaner = () => {
+        setIsErrorHidden(true)
+        clearInput()
+        useFocusInput(inputRef)
     }
 
     const clearInput = () => {
@@ -30,7 +40,6 @@ const PasswordInput = ({ name, register, error, reset }) => {
         setIsLockVisible(false)
         setIsLockOpened(false)
         setIsCleanerOpened(false)
-        useFocusInput(inputRef)
     }
 
     const handleSwitchLockPosition = (e) => {
@@ -61,14 +70,14 @@ const PasswordInput = ({ name, register, error, reset }) => {
                 }}
                 className='passw_input'
                 type={isLockOpened ? 'text' : 'password'}
-                maxLength={13}
+                maxLength={14}
                 placeholder='Пароль'
                 autoComplete='current-password'
                 onChange={handleChangePassword}
             />
             <FaKey className='input-icon'/>
-            {isCleanerOpened ? <InputsError error={error} /> : null}
-            <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
+            <InputsError error={error} isErrorHidden={isErrorHidden} />
+            <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
             <button 
                 className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
                 title='Показать\Спрятать пароль'

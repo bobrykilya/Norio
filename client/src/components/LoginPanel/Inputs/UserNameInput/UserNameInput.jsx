@@ -8,23 +8,29 @@ import { useFocusInput } from "../../../Hooks/useFocusInput"
 
 const NameInput = ({ name, register, error, reset, inputRef }) => {
 
-    // console.log('Name')
+    // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-
+    const [isErrorHidden, setIsErrorHidden] = useState(false)
     
     const handleChangeName = (e) => {
-        e.target.value ? ChangeInput(e.target.value) : clearInput()
+        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-Я]/, '')
+        e.target.value ? ChangeInput() : clearInput()
     }
     
-    const ChangeInput = (value) => {
-        value = value.replace(/[^a-zA-Zа-яА-Я]/, '')
+    const ChangeInput = () => {
+        setIsErrorHidden(false)
         setIsCleanerOpened(true)
+    }
+
+    const onClickCleaner = () => {
+        setIsErrorHidden(true)
+        clearInput()
+        useFocusInput(inputRef)
     }
 
     const clearInput = () => {
         reset(name)
         setIsCleanerOpened(false)
-        useFocusInput(inputRef)
     }
 
     const { ref, ... rest_register } = register(name, {
@@ -46,14 +52,15 @@ const NameInput = ({ name, register, error, reset, inputRef }) => {
                 }}
                 className='name_input'
                 type="text"
-                maxLength={13}
+                maxLength={12}
                 placeholder='Логин'
                 autoComplete='username'
                 onChange={handleChangeName}
             />
             <FaUser className='input-icon'/>
-            {isCleanerOpened ? <InputsError error={error} /> : null}
-            <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
+            {/* {isCleanerOpened ? <InputsError error={error} /> : null} */}
+            <InputsError error={error} isErrorHidden={isErrorHidden} />
+            <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
         </div>
     )
 }

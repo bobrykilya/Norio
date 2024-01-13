@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaArrowRightLong } from "react-icons/fa6"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
@@ -11,36 +11,53 @@ import { useFocusInput } from "../../../../Hooks/useFocusInput"
 
 const SignUpForm = () => {
 
+    const [store, setStore] = useState('Точка')
+    const [storeError, setStoreError] = useState(null)
     const inputUserNameRef = useRef(null)
 
     const {
         register,
         handleSubmit,
         resetField,
-        // control,
-        formState: { errors }
+        formState: { errors },
     } = useForm({
-        mode: 'onBlur'
+        mode: 'onBlur',
+        reValidateMode: "onBlur"
     })
 
     const handleFocusInput = () => {
         useFocusInput(inputUserNameRef)
     }
     
+    const checkStoresInput = (data) => {
+        // console.log(store)
+        store !== 'Точка' ? onSubmit(data) : openStoreError()
+    }
+
+    const openStoreError = () => {
+        // console.log(store)
+        setStoreError({message: 'Выберите точку'})
+    }
+
     const onSubmit = (data) => {
-        // alert(data.pass)
-        data.device = navigator.userAgent
-        // reset(sign_up_password)
-        console.log(`Юзер: ${data.sign_up_username}`)
-        console.log(`Пароль: ${data.sign_up_password}`)
-        console.log(`Устройство: ${data.device}`)
+        data.sign_up_store = store
+        data.sign_up_device = navigator.userAgent
+        alert(JSON.stringify(data))
+        // console.log(`Юзер: ${data.sign_up_username}`)
+        // console.log(`Пароль: ${data.sign_up_password}`)
+        // console.log(`Точка: ${data.sign_up_store}`)
+        // console.log(`Устройство: ${data.device}`)
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} id='sign_up-form' className='form cont'>
+        <form onSubmit={handleSubmit(checkStoresInput)} id='sign_up-form' className='form cont'>
             <div className='inputs-cont cont'>
-                <StoresInput 
+                <StoresInput
+                    store={store}
+                    setStore={setStore}
                     onFocusInput={handleFocusInput}
+                    error={storeError}
+                    setStoreError={setStoreError}
                 />
                 <UserNameInput
                     name='sign_up_username'
@@ -48,7 +65,6 @@ const SignUpForm = () => {
                     error={errors?.sign_up_username}
                     reset={resetField}
                     inputRef={inputUserNameRef}
-                    
                 /> 
                 <PasswordInput
                     name='sign_up_password'
