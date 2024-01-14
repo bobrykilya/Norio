@@ -19,6 +19,7 @@ const SignInForm = () => {
         register,
         handleSubmit,
         resetField,
+        getValues,
         // control,
     } = useForm({
         mode: 'onBlur',
@@ -29,7 +30,22 @@ const SignInForm = () => {
         setNotSaveUser((prev) => !prev)
     }
 
-    const onSubmit = (data) => {
+    const onSubmitNotSave = async () => {
+        // console.log()
+        const data = {
+            sign_in_username: getValues('sign_in_username'),
+            sign_in_password: getValues('sign_in_password'),
+            is_not_save: true,
+            sign_up_device: navigator.userAgent
+        }
+        alert(JSON.stringify(data))
+        // alert('Not Save')
+    }
+
+    const onSubmit = async (data) => {
+        data.is_not_save = false
+        data.sign_up_device = navigator.userAgent
+        // console.log(data)
         alert(JSON.stringify(data))
     }
 
@@ -48,6 +64,7 @@ const SignInForm = () => {
                     register={register}
                     error={null}
                     reset={resetField}
+                    isSignIn={true}
                 />
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
@@ -57,6 +74,7 @@ const SignInForm = () => {
             <SubmitBut 
                 icon={<BiLogInCircle className='fa-icon'/>}
                 notSaveUser={notSaveUser}
+                onClick={onSubmitNotSave}
             />
         </form>
     )  

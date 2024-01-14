@@ -1,24 +1,28 @@
 import { useRef, useState } from 'react'
 import { FaKey } from "react-icons/fa"
 import { FaLock, FaUnlock } from "react-icons/fa6"
+import { TbLetterCaseUpper } from "react-icons/tb";
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 import { useFocusInput } from "../../../Hooks/useFocusInput"
 
 
 
-const PasswordInput = ({ name, register, error, reset }) => {
+const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=false  }) => {
     
     // console.log(error)
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isErrorHidden, setIsErrorHidden] = useState(false)
+    const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
 
     const inputRef = useRef(null)
     
     const handleChangePassword = (e) => {
         // console.log(e.target.value)
+        //* Ban of entering Cyrillic and special characters
+        if (!isSignIn) e.target.value = e.target.value.replace(/[^a-zA-Z0-9.@_]/, '')
         e.target.value ? ChangeInput() : clearInput()
     }
 
@@ -40,6 +44,11 @@ const PasswordInput = ({ name, register, error, reset }) => {
         setIsLockVisible(false)
         setIsLockOpened(false)
         setIsCleanerOpened(false)
+        setIsCapsLockEnabled(false)
+    }
+    
+    const handleCheckCapsLockState = (e) => {
+        e.getModifierState('CapsLock') ? setIsCapsLockEnabled(true) : setIsCapsLockEnabled(false)
     }
 
     const handleSwitchLockPosition = (e) => {
@@ -48,16 +57,23 @@ const PasswordInput = ({ name, register, error, reset }) => {
     }
 
     const { ref, ... rest_register } = register(name, {
-            // required: 'Пароль обязателен к заполнению',
             required: true,
             minLength: {
-            value: 5,
-            message: 'Длина пароля должна быть больше 4 знаков'
+                value: 5,
+                message: 'Длина пароля должна быть от 4 до 14 знаков'
             },
-            // pattern: {
-            //     value: /[a-zA-Zа-яА-Я0-9]/,
-            //     message: 'Пароль может состоять лишь из букв и цифр'
-            // }
+            validate: {
+                // noCyrillic: (val) => /([^а-яА-ЯёЁ])/.test(val) || 
+                //     'Пароль не может содержать кириллицу',
+                // noSpecialChar: (val) => /[^!,#$%^&*()]/.test(val) || 
+                //     'Пароль не может содержать спецсимволы, кроме @_.',
+                isNumber: (val) => /(?=.*[0-9])/.test(val) || 
+                    'Пароль должен содержать цифру',
+                isLower: (val) => /(?=.*[a-z])/.test(val) || 
+                    'Пароль должен содержать строчную букву',
+                isUpper: (val) => /(?=.*[A-Z])/.test(val) ||
+                    'Пароль должен содержать заглавную букву',
+            },
     })
 
     return (
@@ -70,12 +86,21 @@ const PasswordInput = ({ name, register, error, reset }) => {
                 }}
                 className='passw_input'
                 type={isLockOpened ? 'text' : 'password'}
+                // inputMode='numeric'
                 maxLength={14}
                 placeholder='Пароль'
                 autoComplete='current-password'
                 onChange={handleChangePassword}
+                onKeyDown={handleCheckCapsLockState}
+                onBlur={() => setIsCapsLockEnabled(false)}
             />
             <FaKey className='input-icon'/>
+            <div 
+                className={`caps_lock-cont ${isCapsLockEnabled ? 'opened' : ''}`}
+                title='Включён Caps-Lock'
+            >
+                <TbLetterCaseUpper className='caps_lock-icon' />
+            </div>
             <InputsError error={error} isErrorHidden={isErrorHidden} />
             <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
             <button 

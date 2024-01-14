@@ -17,12 +17,14 @@
         font-size: $size-main-text
         border-bottom: 1px solid #1a3e3f7c
         transition-duration: 0.3s
-        text-transform: lowercase
+        // text-transform: lowercase
         background-color: transparent
         &:hover, &:focus
             border-color: $color-main-text-act
         &:focus ~ .input-icon
             color: $color-main-text-act
+    .name_input
+        text-transform: capitalize
     .input-icon
         // border: 2px solid black
         z-index: 3
@@ -31,4 +33,3 @@
         font-size: 0.65rem
         transition-duration: 0.5s
         color: $color-main-text
-        pointer-events: none

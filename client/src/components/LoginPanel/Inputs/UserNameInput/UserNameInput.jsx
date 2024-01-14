@@ -55,6 +55,7 @@ const NameInput = ({ name, register, error, reset, inputRef }) => {
                 maxLength={12}
                 placeholder='Логин'
                 autoComplete='username'
+                autoFocus
                 onChange={handleChangeName}
             />
             <FaUser className='input-icon'/>
