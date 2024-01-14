@@ -8,6 +8,7 @@ const SubmitBut = ({icon, notSaveUser, onClick, disabled}) => {
     const [load, setLoad] = useState(false)
 
     const handleClickButton = () => {
+        // console.log('onClick')
         setLoad(true)
         onClick().then(() => setLoad(false))
     }

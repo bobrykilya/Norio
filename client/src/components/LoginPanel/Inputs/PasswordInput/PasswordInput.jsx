@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { FaKey } from "react-icons/fa"
 import { FaLock, FaUnlock } from "react-icons/fa6"
 import { TbLetterCaseUpper } from "react-icons/tb";
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 import { useFocusInput } from "../../../Hooks/useFocusInput"
+import { useClickOutside } from "../../../Hooks/useClickOutside"
 
 
 
@@ -18,6 +19,7 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
 
     const inputRef = useRef(null)
+    const lockButtonRef = useRef(null)
     
     const handleChangePassword = (e) => {
         // console.log(e.target.value)
@@ -25,7 +27,6 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
         if (!isSignIn) e.target.value = e.target.value.replace(/[^a-zA-Z0-9.@_]/, '')
         e.target.value ? ChangeInput() : clearInput()
     }
-
 
     const ChangeInput = () => {
         setIsErrorHidden(false)
@@ -55,6 +56,12 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
         setIsLockOpened((prev) => !prev)
         useFocusInput(inputRef)
     }
+
+    //* CapsLock closing onBlur
+    useClickOutside(inputRef, () => {
+        setIsCapsLockEnabled(false)
+    }, lockButtonRef)
+
 
     const { ref, ... rest_register } = register(name, {
             required: true,
@@ -92,7 +99,6 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
                 autoComplete='current-password'
                 onChange={handleChangePassword}
                 onKeyDown={handleCheckCapsLockState}
-                onBlur={() => setIsCapsLockEnabled(false)}
             />
             <FaKey className='input-icon'/>
             <div 
@@ -109,6 +115,7 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
                 type='button'
                 tabIndex={-1} 
                 onClick={(handleSwitchLockPosition)}
+                ref={lockButtonRef}
             >
                 {isLockOpened ? <FaUnlock className='fa-icon' /> : 
                 <FaLock className='fa-icon' />}

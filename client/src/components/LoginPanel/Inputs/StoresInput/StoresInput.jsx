@@ -65,9 +65,9 @@ const StoresInput = ({ store, setStore, onFocusInput, error, setStoreError }) =>
         }
     }
     
-    useClickOutside(dropDownRef, dropDownButtonRef, () => {
-        setIsDropDownOpened(setIsDropDownOpened(false))
-    })
+    useClickOutside(dropDownRef, () => {
+        setIsDropDownOpened(false)
+    }, dropDownButtonRef)
 
     const clearInput = () => {
         setStore('Точка')
