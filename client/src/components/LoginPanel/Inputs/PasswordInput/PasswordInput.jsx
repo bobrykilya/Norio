@@ -9,11 +9,9 @@ import { useClickOutside } from "../../../Hooks/useClickOutside"
 
 
 
-const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=false  }) => {
+const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIsLockVisible, isSignIn=false, isLockOpened, setIsLockOpened, notSaveUser=false, isConfirmPass=false, watch=false  }) => {
     
     // console.log(error)
-    const [isLockVisible, setIsLockVisible] = useState(false)
-    const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isErrorHidden, setIsErrorHidden] = useState(false)
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
@@ -23,14 +21,15 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
     
     const handleChangePassword = (e) => {
         // console.log(e.target.value)
+        
         //* Ban of entering Cyrillic and special characters
-        if (!isSignIn) e.target.value = e.target.value.replace(/[^a-zA-Z0-9.@_]/, '')
+        e.target.value = e.target.value.replace(/[^a-zA-Z0-9.@_]/, '')
         e.target.value ? ChangeInput() : clearInput()
     }
 
     const ChangeInput = () => {
         setIsErrorHidden(false)
-        setIsLockVisible(true)
+        if (!isConfirmPass) setIsLockVisible(true)
         setIsCleanerOpened(true)
     }
 
@@ -42,8 +41,10 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
 
     const clearInput = () => {
         reset(name)
-        setIsLockVisible(false)
-        setIsLockOpened(false)
+        if (!isConfirmPass) {
+            setIsLockVisible(false)
+            setIsLockOpened(false)
+        }
         setIsCleanerOpened(false)
         setIsCapsLockEnabled(false)
     }
@@ -58,29 +59,52 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
     }
 
     //* CapsLock closing onBlur
-    useClickOutside(inputRef, () => {
-        setIsCapsLockEnabled(false)
-    }, lockButtonRef)
+    if (!isConfirmPass) { 
+        useClickOutside(inputRef, () => {
+            setIsCapsLockEnabled(false)
+        }, lockButtonRef)
+    }
 
 
-    const { ref, ... rest_register } = register(name, {
-            required: true,
-            minLength: {
-                value: 5,
-                message: 'Длина пароля должна быть от 4 до 14 знаков'
-            },
-            validate: {
-                // noCyrillic: (val) => /([^а-яА-ЯёЁ])/.test(val) || 
-                //     'Пароль не может содержать кириллицу',
-                // noSpecialChar: (val) => /[^!,#$%^&*()]/.test(val) || 
-                //     'Пароль не может содержать спецсимволы, кроме @_.',
-                isNumber: (val) => /(?=.*[0-9])/.test(val) || 
-                    'Пароль должен содержать цифру',
-                isLower: (val) => /(?=.*[a-z])/.test(val) || 
-                    'Пароль должен содержать строчную букву',
-                isUpper: (val) => /(?=.*[A-Z])/.test(val) ||
-                    'Пароль должен содержать заглавную букву',
-            },
+    const { ref, ... rest_register } = isSignIn ? register(name, { //**** SignIn
+        required: true,
+        onChange: (e) => {
+            handleChangePassword(e)
+        }
+    
+    }) : !isConfirmPass ? register(name, { //**** SignUp
+        required: true,
+        minLength: {
+            value: 5,
+            message: 'Длина пароля должна быть от 4 до 14 знаков'
+        },
+        validate: {
+            // noCyrillic: (val) => /([^а-яА-ЯёЁ])/.test(val) || 
+            //     'Пароль не может содержать кириллицу',
+            // noSpecialChar: (val) => /[^!,#$%^&*()]/.test(val) || 
+            //     'Пароль не может содержать спецсимволы, кроме @_.',
+            isNumber: (val) => /(?=.*[0-9])/.test(val) || 
+                'Пароль должен содержать цифру',
+            isLower: (val) => /(?=.*[a-z])/.test(val) || 
+                'Пароль должен содержать строчную букву',
+            isUpper: (val) => /(?=.*[A-Z])/.test(val) ||
+                'Пароль должен содержать заглавную букву',
+        },
+        onChange: (e) => {
+            handleChangePassword(e)
+        }
+    }) : register(name, {    //**** Confirm Password
+        required: true,
+        validate: {
+            passwordsMatching: (val) => {
+                if (watch('sign_up_password') != val) {
+                    return "Пароли не совпадают";
+                }
+            }
+        },
+        onChange: (e) => {
+            handleChangePassword(e)
+        },
     })
 
     return (
@@ -93,11 +117,9 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
                 }}
                 className='passw_input'
                 type={isLockOpened ? 'text' : 'password'}
-                // inputMode='numeric'
                 maxLength={14}
-                placeholder='Пароль'
-                autoComplete='current-password'
-                onChange={handleChangePassword}
+                placeholder={!isConfirmPass ? 'Пароль' : 'Повтор пароля'}
+                autoComplete={notSaveUser ? 'off' : 'current-password'}
                 onKeyDown={handleCheckCapsLockState}
             />
             <FaKey className='input-icon'/>
@@ -109,17 +131,18 @@ const PasswordInput = ({ name, register, error, reset, isSignIn=false, isRepeat=
             </div>
             <InputsError error={error} isErrorHidden={isErrorHidden} />
             <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
-            <button 
-                className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
-                title='Показать\Спрятать пароль'
-                type='button'
-                tabIndex={-1} 
-                onClick={(handleSwitchLockPosition)}
-                ref={lockButtonRef}
-            >
-                {isLockOpened ? <FaUnlock className='fa-icon' /> : 
-                <FaLock className='fa-icon' />}
-            </button>
+            {!isConfirmPass ? 
+                <button 
+                    className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
+                    title='Показать\Спрятать пароль'
+                    type='button'
+                    tabIndex={-1} 
+                    onClick={(handleSwitchLockPosition)}
+                    ref={lockButtonRef}
+                >
+                    {isLockOpened ? <FaUnlock className='fa-icon' /> : 
+                    <FaLock className='fa-icon' />}
+                </button> : null}
         </div>
     )
 }

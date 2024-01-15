@@ -13,16 +13,19 @@ const SignUpForm = () => {
 
     const [store, setStore] = useState('Точка')
     const [storeError, setStoreError] = useState(null)
+    const [isLockVisible, setIsLockVisible] = useState(false)
+    const [isLockOpened, setIsLockOpened] = useState(false)
     const inputUserNameRef = useRef(null)
 
     const {
         register,
         handleSubmit,
         resetField,
+        watch,
         formState: { errors },
     } = useForm({
-        mode: 'onBlur',
-        reValidateMode: "onBlur"
+        mode: 'onChange',
+        reValidateMode: "onChange"
     })
 
     const handleFocusInput = () => {
@@ -50,15 +53,15 @@ const SignUpForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(checkStoresInput)} id='sign_up-form' className='form cont'>
+        <form onSubmit={handleSubmit(onSubmit)} id='sign_up-form' className='form cont'>
             <div className='inputs-cont cont'>
-                <StoresInput
+                {/* <StoresInput
                     store={store}
                     setStore={setStore}
                     onFocusInput={handleFocusInput}
                     error={storeError}
                     setStoreError={setStoreError}
-                />
+                /> */}
                 <UserNameInput
                     name='sign_up_username'
                     register={register}
@@ -71,6 +74,22 @@ const SignUpForm = () => {
                     register={register}
                     error={errors?.sign_up_password}
                     reset={resetField}
+                    isLockVisible={isLockVisible}
+                    setIsLockVisible={setIsLockVisible}
+                    isLockOpened={isLockOpened}
+                    setIsLockOpened={setIsLockOpened}
+                />
+                <PasswordInput
+                    name='confirm_password'
+                    register={register}
+                    error={errors?.confirm_password}
+                    reset={resetField}
+                    isLockVisible={isLockVisible}
+                    setIsLockVisible={setIsLockVisible}
+                    isLockOpened={isLockOpened}
+                    setIsLockOpened={setIsLockOpened}
+                    isConfirmPass={true}
+                    watch={watch}
                 />
             </div>
             <SubmitBut 

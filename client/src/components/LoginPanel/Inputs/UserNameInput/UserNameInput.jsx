@@ -6,7 +6,7 @@ import { useFocusInput } from "../../../Hooks/useFocusInput"
 
 
 
-const NameInput = ({ name, register, error, reset, inputRef }) => {
+const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveUser=false, inputRef }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -33,12 +33,19 @@ const NameInput = ({ name, register, error, reset, inputRef }) => {
         setIsCleanerOpened(false)
     }
 
-    const { ref, ... rest_register } = register(name, {
-        // required: 'Логин обязателен к заполнению',
+    const { ref, ... rest_register } = !isSignIn ? register(name, {
         required: true,
         minLength: {
             value: 4,
-            message: 'Длина логина должна быть больше 3 букв'
+            message: 'Длина логина должна быть от 3 до 13 знаков'
+        },
+        onChange: (e) => {
+            handleChangeName(e)
+        }
+    }) : register(name, {
+        required: true,
+        onChange: (e) => {
+            handleChangeName(e)
         }
     })
 
@@ -52,14 +59,12 @@ const NameInput = ({ name, register, error, reset, inputRef }) => {
                 }}
                 className='name_input'
                 type="text"
-                maxLength={12}
+                maxLength={13}
                 placeholder='Логин'
-                autoComplete='username'
+                autoComplete={notSaveUser ? 'off' : 'username'}
                 autoFocus
-                onChange={handleChangeName}
             />
             <FaUser className='input-icon'/>
-            {/* {isCleanerOpened ? <InputsError error={error} /> : null} */}
             <InputsError error={error} isErrorHidden={isErrorHidden} />
             <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
         </div>

@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRef } from 'react'
@@ -19,8 +18,6 @@ const SignInForm = () => {
         register,
         handleSubmit,
         resetField,
-        getValues,
-        // control,
     } = useForm({
         mode: 'onBlur',
         reValidateMode: "onBlur"
@@ -30,16 +27,11 @@ const SignInForm = () => {
         setNotSaveUser((prev) => !prev)
     }
 
-    const onSubmitNotSave = async () => {
-        // console.log()
-        const data = {
-            sign_in_username: getValues('sign_in_username'),
-            sign_in_password: getValues('sign_in_password'),
-            is_not_save: true,
-            sign_up_device: navigator.userAgent
-        }
+    const onSubmitNotSave = async (data) => {
+        data.is_not_save = true,
+        data.sign_up_device = navigator.userAgent
+        // console.log(data)
         alert(JSON.stringify(data))
-        // alert('Not Save')
     }
 
     const onSubmit = async (data) => {
@@ -55,16 +47,19 @@ const SignInForm = () => {
                 <UserNameInput
                     name='sign_in_username'
                     register={register}
-                    error={null}
+                    // error={null}
                     reset={resetField}
+                    isSignIn={true}
+                    notSaveUser={notSaveUser}
                     inputRef={inputUserNameRef}
                 /> 
                 <PasswordInput
                     name='sign_in_password'
                     register={register}
-                    error={null}
+                    // error={null}
                     reset={resetField}
                     isSignIn={true}
+                    notSaveUser={notSaveUser}
                 />
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
@@ -74,7 +69,7 @@ const SignInForm = () => {
             <SubmitBut 
                 icon={<BiLogInCircle className='fa-icon'/>}
                 notSaveUser={notSaveUser}
-                onClick={onSubmitNotSave}
+                onClick={handleSubmit(onSubmitNotSave)}
             />
         </form>
     )  
