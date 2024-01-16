@@ -11,6 +11,8 @@ import { BiLogInCircle } from "react-icons/bi"
 
 const SignInForm = () => {
 
+    const [isLockVisible, setIsLockVisible] = useState(false)
+    const [isLockOpened, setIsLockOpened] = useState(false)
     const [notSaveUser, setNotSaveUser] = useState(false)
     const inputUserNameRef = useRef(null)
 
@@ -18,6 +20,7 @@ const SignInForm = () => {
         register,
         handleSubmit,
         resetField,
+        formState: { isLoading, dirtyFields, isDirty },
     } = useForm({
         mode: 'onBlur',
         reValidateMode: "onBlur"
@@ -60,6 +63,11 @@ const SignInForm = () => {
                     reset={resetField}
                     isSignIn={true}
                     notSaveUser={notSaveUser}
+                    isLockVisible={isLockVisible}
+                    setIsLockVisible={setIsLockVisible}
+                    isLockOpened={isLockOpened}
+                    setIsLockOpened={setIsLockOpened}
+
                 />
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
@@ -70,6 +78,7 @@ const SignInForm = () => {
                 icon={<BiLogInCircle className='fa-icon'/>}
                 notSaveUser={notSaveUser}
                 onClick={handleSubmit(onSubmitNotSave)}
+                isLoading={isLoading}
             />
         </form>
     )  

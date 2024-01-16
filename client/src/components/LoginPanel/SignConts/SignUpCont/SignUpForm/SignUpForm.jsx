@@ -22,7 +22,7 @@ const SignUpForm = () => {
         handleSubmit,
         resetField,
         watch,
-        formState: { errors },
+        formState: { errors, isLoading } 
     } = useForm({
         mode: 'onChange',
         reValidateMode: "onChange"
@@ -78,6 +78,7 @@ const SignUpForm = () => {
                     setIsLockVisible={setIsLockVisible}
                     isLockOpened={isLockOpened}
                     setIsLockOpened={setIsLockOpened}
+                    watch={watch}
                 />
                 <PasswordInput
                     name='confirm_password'
@@ -96,6 +97,7 @@ const SignUpForm = () => {
                 icon={<FaArrowRightLong className='fa-icon'/>}
                 notSaveUser={false}
                 disabled={false}
+                isLoading={isLoading}
             />
         </form>
     )  

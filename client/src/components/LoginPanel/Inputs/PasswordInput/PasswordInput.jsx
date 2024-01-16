@@ -9,9 +9,9 @@ import { useClickOutside } from "../../../Hooks/useClickOutside"
 
 
 
-const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIsLockVisible, isSignIn=false, isLockOpened, setIsLockOpened, notSaveUser=false, isConfirmPass=false, watch=false  }) => {
+const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIsLockVisible, isLockOpened, setIsLockOpened, isSignIn=false, notSaveUser=false, isConfirmPass=false, watch=false }) => {
     
-    // console.log(error)
+    // console.log(watch)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isErrorHidden, setIsErrorHidden] = useState(false)
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
@@ -23,14 +23,21 @@ const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIs
         // console.log(e.target.value)
         
         //* Ban of entering Cyrillic and special characters
+        if (isConfirmPass && !watch('sign_up_password')) {
+            e.target.value = e.target.value.slice(0, -1)
+            return
+        }
         e.target.value = e.target.value.replace(/[^a-zA-Z0-9.@_]/, '')
-        e.target.value ? ChangeInput() : clearInput()
+        e.target.value ? changeInput() : clearInput()
     }
 
-    const ChangeInput = () => {
+    const changeInput = () => {
         setIsErrorHidden(false)
-        if (!isConfirmPass) setIsLockVisible(true)
-        setIsCleanerOpened(true)
+        // console.log(watch('confirm_password'))
+        if (watch('sign_up_password') || watch('confirm_password')) {
+            setIsLockVisible(true)
+            setIsCleanerOpened(true)
+        }
     }
 
     const onClickCleaner = () => {
@@ -41,10 +48,13 @@ const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIs
 
     const clearInput = () => {
         reset(name)
-        if (!isConfirmPass) {
-            setIsLockVisible(false)
-            setIsLockOpened(false)
-        }
+        // if (!isConfirmPass) {
+            // console.log(dirtyFields.confirm_password)
+            if (!watch('sign_up_password') && !watch('confirm_password')) {
+                setIsLockVisible(false)
+                setIsLockOpened(false)
+            }
+        // }
         setIsCleanerOpened(false)
         setIsCapsLockEnabled(false)
     }
