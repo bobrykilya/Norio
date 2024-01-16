@@ -1,6 +1,10 @@
 import { useRef, useState, useEffect } from 'react'
 import { FaKey } from "react-icons/fa"
-import { FaLock, FaUnlock } from "react-icons/fa6"
+import { VscEye } from "react-icons/vsc";
+import { VscEyeClosed } from "react-icons/vsc";
+// import { AiFillEye } from "react-icons/ai";
+// import { AiFillEyeInvisible } from "react-icons/ai";
+// import { FaLock, FaUnlock } from "react-icons/fa6"
 import { TbLetterCaseUpper } from "react-icons/tb";
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
@@ -9,9 +13,11 @@ import { useClickOutside } from "../../../Hooks/useClickOutside"
 
 
 
-const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIsLockVisible, isLockOpened, setIsLockOpened, isSignIn=false, notSaveUser=false, isConfirmPass=false, watch=false }) => {
+const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isConfirmPass=false, watch=false, notSaveUser=false }) => {
     
-    // console.log(watch)
+    // console.log('watch')
+    const [isLockVisible, setIsLockVisible] = useState(false)
+    const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isErrorHidden, setIsErrorHidden] = useState(false)
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
@@ -20,24 +26,17 @@ const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIs
     const lockButtonRef = useRef(null)
     
     const handleChangePassword = (e) => {
-        // console.log(e.target.value)
         
-        //* Ban of entering Cyrillic and special characters
-        if (isConfirmPass && !watch('sign_up_password')) {
-            e.target.value = e.target.value.slice(0, -1)
-            return
-        }
-        e.target.value = e.target.value.replace(/[^a-zA-Z0-9.@_]/, '')
+        //* Ban of entering Special characters
+        e.target.value = e.target.value.replace(/[^а-яА-ЯёЁa-zA-Z0-9.@_]/, '')
+
         e.target.value ? changeInput() : clearInput()
     }
 
     const changeInput = () => {
         setIsErrorHidden(false)
-        // console.log(watch('confirm_password'))
-        if (watch('sign_up_password') || watch('confirm_password')) {
-            setIsLockVisible(true)
-            setIsCleanerOpened(true)
-        }
+        setIsLockVisible(true)
+        setIsCleanerOpened(true)
     }
 
     const onClickCleaner = () => {
@@ -48,19 +47,16 @@ const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIs
 
     const clearInput = () => {
         reset(name)
-        // if (!isConfirmPass) {
-            // console.log(dirtyFields.confirm_password)
-            if (!watch('sign_up_password') && !watch('confirm_password')) {
-                setIsLockVisible(false)
-                setIsLockOpened(false)
-            }
-        // }
+        setIsLockVisible(false)
+        // setIsLockOpened(false)
         setIsCleanerOpened(false)
         setIsCapsLockEnabled(false)
     }
     
     const handleCheckCapsLockState = (e) => {
-        e.getModifierState('CapsLock') ? setIsCapsLockEnabled(true) : setIsCapsLockEnabled(false)
+        e.getModifierState('CapsLock') ? 
+            setIsCapsLockEnabled(true) : 
+            setIsCapsLockEnabled(false)
     }
 
     const handleSwitchLockPosition = (e) => {
@@ -69,59 +65,56 @@ const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIs
     }
 
     //* CapsLock closing onBlur
-    if (!isConfirmPass) { 
-        useClickOutside(inputRef, () => {
-            setIsCapsLockEnabled(false)
-        }, lockButtonRef)
-    }
+    useClickOutside(inputRef, () => {
+        setIsCapsLockEnabled(false)
+    }, lockButtonRef)
 
 
-    const { ref, ... rest_register } = isSignIn ? register(name, { //**** SignIn
-        required: true,
-        onChange: (e) => {
-            handleChangePassword(e)
+    const { ref, ... rest_register } = isSignIn ? 
+        register(name, { //**** SignIn
+            required: true,
+            onChange: (e) => {
+                handleChangePassword(e)
         }
     
-    }) : !isConfirmPass ? register(name, { //**** SignUp
-        required: true,
-        minLength: {
-            value: 5,
-            message: 'Длина пароля должна быть от 4 до 14 знаков'
-        },
-        validate: {
-            // noCyrillic: (val) => /([^а-яА-ЯёЁ])/.test(val) || 
-            //     'Пароль не может содержать кириллицу',
-            // noSpecialChar: (val) => /[^!,#$%^&*()]/.test(val) || 
-            //     'Пароль не может содержать спецсимволы, кроме @_.',
-            isNumber: (val) => /(?=.*[0-9])/.test(val) || 
-                'Пароль должен содержать цифру',
-            isLower: (val) => /(?=.*[a-z])/.test(val) || 
-                'Пароль должен содержать строчную букву',
-            isUpper: (val) => /(?=.*[A-Z])/.test(val) ||
-                'Пароль должен содержать заглавную букву',
-        },
-        onChange: (e) => {
-            handleChangePassword(e)
-        }
-    }) : register(name, {    //**** Confirm Password
-        required: true,
-        validate: {
-            passwordsMatching: (val) => {
-                if (watch('sign_up_password') != val) {
-                    return "Пароли не совпадают";
-                }
+        }) : !isConfirmPass ? register(name, { //**** SignUp
+            required: true,
+            minLength: {
+                value: 4,
+                message: 'Длина пароля должна быть от 4 до 14 знаков'
+            },
+            validate: {
+                noCyrillic: (val) => !/[^a-zA-Z0-9.@_]/.test(val) || 
+                    'Пароль не может содержать кириллицу',
+                isNumber: (val) => /(?=.*[0-9])/.test(val) || 
+                    'Пароль должен содержать цифру',
+                isLower: (val) => /(?=.*[a-z])/.test(val) || 
+                    'Пароль должен содержать строчную букву',
+                isUpper: (val) => /(?=.*[A-Z])/.test(val) ||
+                    'Пароль должен содержать заглавную букву',
+            },
+            onChange: (e) => {
+                handleChangePassword(e)
             }
-        },
-        onChange: (e) => {
-            handleChangePassword(e)
-        },
-    })
+        }) : register(name, {    //**** Confirm Password
+            required: true,
+            validate: {
+                passwordsMatching: (val) => {
+                    if (watch('sign_up_password') != watch('confirm_password')) {
+                        return 'Пароли не совпадают'
+                    }
+                }
+            },
+            onChange: (e) => {
+                handleChangePassword(e)
+            },
+        })
 
     return (
         <div className='password_input-cont input-cont cont'>
             <input
                 {... rest_register}
-                ref={(e) => {
+                ref={(e) => {2
                     ref(e)
                     inputRef.current = e
                 }}
@@ -141,18 +134,17 @@ const PasswordInput = ({ name, register, error=null, reset, isLockVisible, setIs
             </div>
             <InputsError error={error} isErrorHidden={isErrorHidden} />
             <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
-            {!isConfirmPass ? 
-                <button 
-                    className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
-                    title='Показать\Спрятать пароль'
-                    type='button'
-                    tabIndex={-1} 
-                    onClick={(handleSwitchLockPosition)}
-                    ref={lockButtonRef}
-                >
-                    {isLockOpened ? <FaUnlock className='fa-icon' /> : 
-                    <FaLock className='fa-icon' />}
-                </button> : null}
+            <button 
+                className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
+                title='Показать\Спрятать пароль'
+                type='button'
+                tabIndex={-1} 
+                onClick={(handleSwitchLockPosition)}
+                ref={lockButtonRef}
+            >
+                {isLockOpened ? <VscEye className='fa-icon' /> :
+                <VscEyeClosed className='fa-icon' />}
+            </button> 
         </div>
     )
 }

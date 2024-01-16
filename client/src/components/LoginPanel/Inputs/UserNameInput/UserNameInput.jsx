@@ -37,7 +37,7 @@ const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveU
         required: true,
         minLength: {
             value: 4,
-            message: 'Длина логина должна быть от 3 до 13 знаков'
+            message: 'Длина логина должна быть от 4 до 13 знаков'
         },
         onChange: (e) => {
             handleChangeName(e)

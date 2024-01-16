@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaArrowRightLong } from "react-icons/fa6"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
@@ -13,8 +13,6 @@ const SignUpForm = () => {
 
     const [store, setStore] = useState('Точка')
     const [storeError, setStoreError] = useState(null)
-    const [isLockVisible, setIsLockVisible] = useState(false)
-    const [isLockOpened, setIsLockOpened] = useState(false)
     const inputUserNameRef = useRef(null)
 
     const {
@@ -22,11 +20,23 @@ const SignUpForm = () => {
         handleSubmit,
         resetField,
         watch,
+        setError,
         formState: { errors, isLoading } 
     } = useForm({
         mode: 'onChange',
         reValidateMode: "onChange"
     })
+
+    //* Confirm_password's error react validation
+    useEffect(() => {
+        const pass = watch('sign_up_password')
+        const confirm = watch('confirm_password')
+        if (pass && confirm) {
+            pass !== confirm ? 
+            setError('confirm_password', {message: 'Пароли не совпадают'}) : 
+            setError('confirm_password', {})
+        }
+    }, [watch('sign_up_password'), watch('confirm_password')])
 
     const handleFocusInput = () => {
         useFocusInput(inputUserNameRef)
@@ -74,21 +84,12 @@ const SignUpForm = () => {
                     register={register}
                     error={errors?.sign_up_password}
                     reset={resetField}
-                    isLockVisible={isLockVisible}
-                    setIsLockVisible={setIsLockVisible}
-                    isLockOpened={isLockOpened}
-                    setIsLockOpened={setIsLockOpened}
-                    watch={watch}
                 />
                 <PasswordInput
                     name='confirm_password'
                     register={register}
                     error={errors?.confirm_password}
                     reset={resetField}
-                    isLockVisible={isLockVisible}
-                    setIsLockVisible={setIsLockVisible}
-                    isLockOpened={isLockOpened}
-                    setIsLockOpened={setIsLockOpened}
                     isConfirmPass={true}
                     watch={watch}
                 />
