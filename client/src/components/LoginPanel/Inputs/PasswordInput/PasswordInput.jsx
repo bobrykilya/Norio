@@ -1,11 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import { FaKey } from "react-icons/fa"
-import { VscEye } from "react-icons/vsc";
-import { VscEyeClosed } from "react-icons/vsc";
-// import { AiFillEye } from "react-icons/ai";
-// import { AiFillEyeInvisible } from "react-icons/ai";
-// import { FaLock, FaUnlock } from "react-icons/fa6"
-import { TbLetterCaseUpper } from "react-icons/tb";
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 import { useFocusInput } from "../../../Hooks/useFocusInput"
@@ -124,13 +119,14 @@ const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isCo
                 placeholder={!isConfirmPass ? 'Пароль' : 'Повтор пароля'}
                 autoComplete={notSaveUser ? 'off' : 'current-password'}
                 onKeyDown={handleCheckCapsLockState}
+                onBlur={() => {setIsCapsLockEnabled(false)}}
             />
             <FaKey className='input-icon'/>
             <div 
                 className={`caps_lock-cont ${isCapsLockEnabled ? 'opened' : ''}`}
                 title='Включён Caps-Lock'
             >
-                <TbLetterCaseUpper className='caps_lock-icon' />
+                <span>CAPS</span>
             </div>
             <InputsError error={error} isErrorHidden={isErrorHidden} />
             <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />

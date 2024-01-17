@@ -53,8 +53,10 @@ const SignUpForm = () => {
     }
 
     const onSubmit = (data) => {
-        data.sign_up_store = store
+        // data.sign_up_store = store
         data.sign_up_device = navigator.userAgent
+        data.sign_up_username = data.sign_up_username.toLowerCase()
+        delete data.confirm_password
         alert(JSON.stringify(data))
         // console.log(`Юзер: ${data.sign_up_username}`)
         // console.log(`Пароль: ${data.sign_up_password}`)

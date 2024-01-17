@@ -41,7 +41,11 @@ const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveU
         },
         onChange: (e) => {
             handleChangeName(e)
-        }
+        },
+        validate: {
+            isTwoLanguages: (val) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) || 
+                'Логин должен быть лишь на одном языке',
+        },
     }) : register(name, {
         required: true,
         onChange: (e) => {
