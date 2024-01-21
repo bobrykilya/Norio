@@ -1,16 +1,17 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { FaUser } from "react-icons/fa"
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
-import { useFocusInput } from "../../../Hooks/useFocusInput"
+import { useFocusInput } from "../../../../Hooks/useFocusInput"
 
 
 
-const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveUser=false, inputRef }) => {
+const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveUser=false }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isErrorHidden, setIsErrorHidden] = useState(false)
+    const inputRef = useRef(null)
     
     const handleChangeName = (e) => {
         e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-Я]/, '')
@@ -37,13 +38,13 @@ const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveU
         required: true,
         minLength: {
             value: 4,
-            message: 'Длина логина должна быть от 4 до 13 знаков'
+            message: 'Длина логина должна быть от 4 до 15 знаков'
         },
         onChange: (e) => {
             handleChangeName(e)
         },
         validate: {
-            isTwoLanguages: (val) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) || 
+            isOneLanguage: (val) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) || 
                 'Логин должен быть лишь на одном языке',
         },
     }) : register(name, {
@@ -63,7 +64,7 @@ const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveU
                 }}
                 className='name_input'
                 type="text"
-                maxLength={13}
+                maxLength={15}
                 placeholder='Логин'
                 autoComplete={notSaveUser ? 'off' : 'username'}
                 autoFocus

@@ -28,7 +28,7 @@ const App = () => {
 
     return (
         <div id='main_body-cont' className="cont">
-            <LoginPanel />
+                <LoginPanel />
             {/* <HomePage /> */}
         </div>
     )

@@ -1,14 +1,17 @@
+import { useSelector } from 'react-redux'
 import SignInForm from './SignInForm/SignInForm'
 import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
 
 
 
-const SignInCont = ({isOpenedSignUp}) => {
+const SignInCont = () => {
+
+    const coverPanelState = useSelector(state => state.coverPanel.coverPanel)
 
     return ( 
         <section 
             id='sign_in-cont'
-            className={`sign-cont cont ${!isOpenedSignUp ? 'active' : ''}`}
+            className={`sign-cont cont ${coverPanelState === 'opened_sign_in' ? 'active' : ''}`}
         >
             <div className='enter_text-cont cont'>
                 {/* <i className="fa-solid fa-door-open"></i> */}

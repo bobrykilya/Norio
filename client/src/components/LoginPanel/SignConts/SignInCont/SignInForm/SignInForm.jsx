@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useRef } from 'react'
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import CheckBox from './CheckBox/CheckBox'
@@ -12,13 +11,13 @@ import { BiLogInCircle } from "react-icons/bi"
 const SignInForm = () => {
 
     const [notSaveUser, setNotSaveUser] = useState(false)
-    const inputUserNameRef = useRef(null)
+    // const inputUserNameRef = useRef(null)
 
     const {
         register,
         handleSubmit,
         resetField,
-        formState: { isLoading, dirtyFields, isDirty },
+        formState: { isLoading },
     } = useForm({
         mode: 'onBlur',
         reValidateMode: "onBlur"
@@ -51,7 +50,7 @@ const SignInForm = () => {
                     reset={resetField}
                     isSignIn={true}
                     notSaveUser={notSaveUser}
-                    inputRef={inputUserNameRef}
+                    // inputRef={inputUserNameRef}
                 /> 
                 <PasswordInput
                     name='sign_in_password'

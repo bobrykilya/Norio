@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { FaHouseChimneyUser } from "react-icons/fa6"
-import { useClickOutside } from "../../../Hooks/useClickOutside"
+import { useClickOutside } from "../../../../Hooks/useClickOutside"
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 

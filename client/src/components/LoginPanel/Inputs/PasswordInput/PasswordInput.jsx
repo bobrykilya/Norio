@@ -1,10 +1,10 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { FaKey } from "react-icons/fa"
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
-import { useFocusInput } from "../../../Hooks/useFocusInput"
-import { useClickOutside } from "../../../Hooks/useClickOutside"
+import { useFocusInput } from "../../../../Hooks/useFocusInput"
+import { useClickOutside } from "../../../../Hooks/useClickOutside"
 
 
 
@@ -22,8 +22,8 @@ const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isCo
     
     const handleChangePassword = (e) => {
         
-        //* Ban of entering Special characters
-        e.target.value = e.target.value.replace(/[^а-яА-ЯёЁa-zA-Z0-9.@_]/, '')
+        //* Ban of entering "space"
+        e.target.value = e.target.value.trim()
 
         e.target.value ? changeInput() : clearInput()
     }
@@ -76,16 +76,20 @@ const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isCo
             required: true,
             minLength: {
                 value: 4,
-                message: 'Длина пароля должна быть от 4 до 14 знаков'
+                message: 'Длина пароля должна быть от 4 до 15 знаков'
             },
             validate: {
-                noCyrillic: (val) => !/[^a-zA-Z0-9.@_]/.test(val) || 
-                    'Пароль не может содержать кириллицу',
+                // noCyrillic: (val) => !/[^a-zA-Z0-9.@_]/.test(val) || 
+                //     'Пароль не может содержать кириллицу',
+                isOneLanguage: (val) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) || 
+                    'Пароль должен быть лишь на одном языке',
+                isNoSpecChars: (val) => !/[^а-яА-ЯёЁa-zA-Z0-9.@_ ]/.test(val) || 
+                    'Пароль не может содержать спецсимволы, кроме .@_',
                 isNumber: (val) => /(?=.*[0-9])/.test(val) || 
                     'Пароль должен содержать цифру',
-                isLower: (val) => /(?=.*[a-z])/.test(val) || 
+                isLower: (val) => /(?=.*[a-zа-яё])/.test(val) || 
                     'Пароль должен содержать строчную букву',
-                isUpper: (val) => /(?=.*[A-Z])/.test(val) ||
+                isUpper: (val) => /(?=.*[A-ZА-ЯЁ])/.test(val) ||
                     'Пароль должен содержать заглавную букву',
             },
             onChange: (e) => {
@@ -115,7 +119,7 @@ const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isCo
                 }}
                 className='passw_input'
                 type={isLockOpened ? 'text' : 'password'}
-                maxLength={14}
+                maxLength={15}
                 placeholder={!isConfirmPass ? 'Пароль' : 'Повтор пароля'}
                 autoComplete={notSaveUser ? 'off' : 'current-password'}
                 onKeyDown={handleCheckCapsLockState}

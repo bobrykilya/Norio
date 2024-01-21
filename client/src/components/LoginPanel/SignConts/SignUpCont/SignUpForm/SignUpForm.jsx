@@ -1,19 +1,22 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaArrowRightLong } from "react-icons/fa6"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import StoresInput from '../../../Inputs/StoresInput/StoresInput'
-import { useFocusInput } from "../../../../Hooks/useFocusInput"
+import { useFocusInput } from "../../../../../Hooks/useFocusInput"
+import { useActions } from '../../../../../Hooks/useActions'
 
 
 
-const SignUpForm = () => {
+const SignUpForm = ({ formBlur }) => {
 
     const [store, setStore] = useState('Точка')
     const [storeError, setStoreError] = useState(null)
-    const inputUserNameRef = useRef(null)
+    const { toggleCoverPanel } = useActions()
+
+    // console.log(formBlur)
 
     const {
         register,
@@ -57,11 +60,13 @@ const SignUpForm = () => {
         data.sign_up_device = navigator.userAgent
         data.sign_up_username = data.sign_up_username.toLowerCase()
         delete data.confirm_password
-        alert(JSON.stringify(data))
+        // alert(JSON.stringify(data))
         // console.log(`Юзер: ${data.sign_up_username}`)
         // console.log(`Пароль: ${data.sign_up_password}`)
         // console.log(`Точка: ${data.sign_up_store}`)
         // console.log(`Устройство: ${data.device}`)
+
+        toggleCoverPanel('sign_up_2')
     }
 
     return (
@@ -79,7 +84,7 @@ const SignUpForm = () => {
                     register={register}
                     error={errors?.sign_up_username}
                     reset={resetField}
-                    inputRef={inputUserNameRef}
+                    // inputRef={inputUserNameRef}
                 /> 
                 <PasswordInput
                     name='sign_up_password'
@@ -99,7 +104,7 @@ const SignUpForm = () => {
             <SubmitBut 
                 icon={<FaArrowRightLong className='fa-icon'/>}
                 notSaveUser={false}
-                disabled={false}
+                disabled={formBlur}
                 isLoading={isLoading}
             />
         </form>
