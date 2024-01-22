@@ -86,19 +86,19 @@
         #close_sign_up_2-button
             // border: 1px solid red
             position: absolute
-            bottom: 3.3rem
-            right: 2.5rem
+            bottom: 3.4rem
+            right: 2.6rem
             width: auto
             height: auto
             border-radius: 50%
-            transition: all 0.2s ease
-            transform: translate(-2rem, -3rem)
+            transition: all 0.25s ease
+            transform: translate(-2rem, -2rem) + scale(0)
             pointer-events: none
             opacity: 0
             .fa-icon
                 transition: all 0.2s ease
                 color: $color-backgr
-                font-size: $size-small-but + 0.2rem
+                font-size: $size-small-but + 0.1rem
     #img-cont
         // border: 2px solid black
         position: absolute
@@ -194,7 +194,7 @@
                     pointer-events: none
             #close_sign_up_2-button
                 transition: all 0.3s 0.4s ease
-                transform: translate(0)
+                transform: translate(0) + scale(1)
                 pointer-events: auto
                 opacity: 1
                 &:hover

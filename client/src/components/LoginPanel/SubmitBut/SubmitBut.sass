@@ -14,10 +14,15 @@
         background-color: $color-confirm-but-act
     &:active
         transform: translateX(-$height-but-act-jump * 4)
-        background-color: #062a63
     &:disabled
+        border: 1px solid $color-but-border
+        background-color: $color-backgr
         pointer-events: none
-        background-color: #173b75b4
+        background-color: color
+        .fa-icon
+            color: $color-but-icon
+        // background-color: #173b7594
+        // opacity: 0
     .fa-icon
         margin-top: -0.07rem
         color: $color-backgr

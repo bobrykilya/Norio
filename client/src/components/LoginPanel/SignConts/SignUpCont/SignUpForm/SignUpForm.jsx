@@ -1,19 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaArrowRightLong } from "react-icons/fa6"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
-import StoresInput from '../../../Inputs/StoresInput/StoresInput'
-import { useFocusInput } from "../../../../../Hooks/useFocusInput"
 import { useActions } from '../../../../../Hooks/useActions'
+import { BsFillCloudCheckFill } from "react-icons/bs"
+import { LuCheckCircle } from "react-icons/lu"
+import { BsFillPatchCheckFill } from "react-icons/bs"
+import { BsShieldFillCheck } from "react-icons/bs"
 
 
 
 const SignUpForm = ({ formBlur }) => {
 
-    const [store, setStore] = useState('Точка')
-    const [storeError, setStoreError] = useState(null)
+    
     const { toggleCoverPanel } = useActions()
 
     // console.log(formBlur)
@@ -41,20 +42,6 @@ const SignUpForm = ({ formBlur }) => {
         }
     }, [watch('sign_up_password'), watch('confirm_password')])
 
-    const handleFocusInput = () => {
-        useFocusInput(inputUserNameRef)
-    }
-    
-    const checkStoresInput = (data) => {
-        // console.log(store)
-        store !== 'Точка' ? onSubmit(data) : openStoreError()
-    }
-
-    const openStoreError = () => {
-        // console.log(store)
-        setStoreError({message: 'Выберите точку'})
-    }
-
     const onSubmit = (data) => {
         // data.sign_up_store = store
         data.sign_up_device = navigator.userAgent
@@ -71,14 +58,7 @@ const SignUpForm = ({ formBlur }) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} id='sign_up-form' className='form cont'>
-            <div className='inputs-cont cont'>
-                {/* <StoresInput
-                    store={store}
-                    setStore={setStore}
-                    onFocusInput={handleFocusInput}
-                    error={storeError}
-                    setStoreError={setStoreError}
-                /> */}
+            <div className={`inputs-cont cont ${formBlur ? 'blur' : ''}`}>
                 <UserNameInput
                     name='sign_up_username'
                     register={register}
@@ -100,6 +80,9 @@ const SignUpForm = ({ formBlur }) => {
                     isConfirmPass={true}
                     watch={watch}
                 />
+            </div>
+            <div className={`blur_icon-cont cont ${formBlur ? 'active' : ''}`}>
+                <BsShieldFillCheck className='fa-icon'/>
             </div>
             <SubmitBut 
                 icon={<FaArrowRightLong className='fa-icon'/>}

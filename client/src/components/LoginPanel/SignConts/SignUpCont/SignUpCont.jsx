@@ -1,12 +1,9 @@
-import { useSelector } from 'react-redux'
 import SignUpForm from './SignUpForm/SignUpForm'
 import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
 
 
 
-const SignUpCont = () => {
-
-    const coverPanelState = useSelector(state => state.coverPanel.coverPanel)
+const SignUpCont = ({ coverPanelState }) => {
 
     return (  
         <section 
