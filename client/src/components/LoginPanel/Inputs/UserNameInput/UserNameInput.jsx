@@ -6,7 +6,7 @@ import { useFocusInput } from "../../../../Hooks/useFocusInput"
 
 
 
-const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveUser=false }) => {
+const NameInput = ({ name, register, error=null, reset, isValidate=false, notSaveUser=false, placeholder, inputMaxLength=15 }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -34,11 +34,11 @@ const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveU
         setIsCleanerOpened(false)
     }
 
-    const { ref, ... rest_register } = !isSignIn ? register(name, {
+    const { ref, ... rest_register } = isValidate ? register(name, {
         required: true,
         minLength: {
             value: 4,
-            message: 'Длина логина должна быть от 4 до 15 знаков'
+            message: `Длина логина должна быть от 4 до ${inputMaxLength} знаков`
         },
         onChange: (e) => {
             handleChangeName(e)
@@ -64,8 +64,8 @@ const NameInput = ({ name, register, error=null, reset, isSignIn=false, notSaveU
                 }}
                 className='name_input'
                 type="text"
-                maxLength={15}
-                placeholder='Логин'
+                maxLength={inputMaxLength}
+                placeholder={placeholder}
                 autoComplete={notSaveUser ? 'off' : 'username'}
                 autoFocus
             />

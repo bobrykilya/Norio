@@ -5,8 +5,8 @@ import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { useActions } from '../../../../../Hooks/useActions'
-import { BsFillCloudCheckFill } from "react-icons/bs"
 import { LuCheckCircle } from "react-icons/lu"
+import { BsFillCloudCheckFill } from "react-icons/bs"
 import { BsFillPatchCheckFill } from "react-icons/bs"
 import { BsShieldFillCheck } from "react-icons/bs"
 
@@ -61,7 +61,9 @@ const SignUpForm = ({ formBlur }) => {
             <div className={`inputs-cont cont ${formBlur ? 'blur' : ''}`}>
                 <UserNameInput
                     name='sign_up_username'
+                    placeholder='Логин'
                     register={register}
+                    isValidate={true}
                     error={errors?.sign_up_username}
                     reset={resetField}
                     // inputRef={inputUserNameRef}
@@ -82,7 +84,7 @@ const SignUpForm = ({ formBlur }) => {
                 />
             </div>
             <div className={`blur_icon-cont cont ${formBlur ? 'active' : ''}`}>
-                <BsShieldFillCheck className='fa-icon'/>
+                <LuCheckCircle className='fa-icon'/>
             </div>
             <SubmitBut 
                 icon={<FaArrowRightLong className='fa-icon'/>}

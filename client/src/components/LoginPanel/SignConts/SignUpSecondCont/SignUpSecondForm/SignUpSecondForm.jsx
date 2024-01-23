@@ -59,9 +59,24 @@ const SignUpSecondForm = () => {
                     setStoreError={setStoreError}
                 />
                 <UserNameInput
-                    name='sign_up_username'
+                    name='sign_up_surname'
+                    placeholder='Фамилия'
                     register={register}
-                    error={errors?.sign_up_username}
+                    reset={resetField}
+                    inputMaxLength={20}
+                    // inputRef={inputUserNameRef}
+                />
+                <UserNameInput
+                    name='sign_up_name'
+                    placeholder='Имя'
+                    register={register}
+                    reset={resetField}
+                    // inputRef={inputUserNameRef}
+                />
+                <UserNameInput
+                    name='sign_up_phone'
+                    placeholder='Телефон'
+                    register={register}
                     reset={resetField}
                     // inputRef={inputUserNameRef}
                 />

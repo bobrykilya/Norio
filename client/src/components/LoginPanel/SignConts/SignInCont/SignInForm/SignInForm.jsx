@@ -46,16 +46,16 @@ const SignInForm = () => {
             <div className='inputs-cont cont'>
                 <UserNameInput
                     name='sign_in_username'
+                    placeholder='Логин'
                     register={register}
-                    reset={resetField}
-                    isSignIn={true}
+                    reset={resetField}                 
                     notSaveUser={notSaveUser}
                     // inputRef={inputUserNameRef}
                 /> 
                 <PasswordInput
                     name='sign_in_password'
                     register={register}
-                    isSignIn={true}
+                    isValidate={true}
                     reset={resetField}
                     notSaveUser={notSaveUser}
                 />

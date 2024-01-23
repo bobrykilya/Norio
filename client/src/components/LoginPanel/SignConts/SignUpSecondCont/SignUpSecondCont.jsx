@@ -13,7 +13,7 @@ const SignUpSecondCont = ({ coverPanelState }) => {
             className={`sign-cont cont ${coverPanelState === 'opened_sign_up_2' ? 'active' : ''}`}
         >
             <div className='enter_text-cont cont'>
-                <h1>Ещё немного<br/>информации...</h1>
+                <h1>Ещё немного<br/>данных...</h1>
             </div>
             < SignUpSecondForm />
         </section>
