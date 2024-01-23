@@ -70,8 +70,7 @@ const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isCo
             required: true,
             onChange: (e) => {
                 handleChangePassword(e)
-        }
-    
+            }
         }) : !isConfirmPass ? register(name, { //**** SignUp
             required: true,
             minLength: {

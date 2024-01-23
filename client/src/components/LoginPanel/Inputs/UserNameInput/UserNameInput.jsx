@@ -6,7 +6,7 @@ import { useFocusInput } from "../../../../Hooks/useFocusInput"
 
 
 
-const NameInput = ({ name, register, error=null, reset, isValidate=false, notSaveUser=false, placeholder, inputMaxLength=15 }) => {
+const NameInput = ({ name, register, error=null, reset, isValidate=false, notSaveUser=false, placeholder, inputMaxLength=15, notLatin=false }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -14,7 +14,7 @@ const NameInput = ({ name, register, error=null, reset, isValidate=false, notSav
     const inputRef = useRef(null)
     
     const handleChangeName = (e) => {
-        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-Я]/, '')
+        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, '')
         e.target.value ? ChangeInput() : clearInput()
     }
     
@@ -34,7 +34,8 @@ const NameInput = ({ name, register, error=null, reset, isValidate=false, notSav
         setIsCleanerOpened(false)
     }
 
-    const { ref, ... rest_register } = isValidate ? register(name, {
+    const { ref, ... rest_register } = isValidate ? 
+    (!notLatin ? register(name, {    //* SignUp
         required: true,
         minLength: {
             value: 4,
@@ -47,7 +48,18 @@ const NameInput = ({ name, register, error=null, reset, isValidate=false, notSav
             isOneLanguage: (val) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) || 
                 'Логин должен быть лишь на одном языке',
         },
-    }) : register(name, {
+    }): 
+    register(name, {  //* SignUp_2
+        required: true,
+        validate: {
+            isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 
+                'Поле должно содержать лишь кириллицу',
+        },
+        onChange: (e) => {
+            handleChangeName(e)
+        }
+    })
+    ) : register(name, {    //* SignIn
         required: true,
         onChange: (e) => {
             handleChangeName(e)

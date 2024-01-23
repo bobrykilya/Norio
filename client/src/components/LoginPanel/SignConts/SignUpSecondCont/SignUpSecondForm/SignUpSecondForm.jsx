@@ -5,6 +5,7 @@ import SubmitBut from '../../../SubmitBut/SubmitBut'
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import { useFocusInput } from "../../../../../Hooks/useFocusInput"
 import { TiArrowRightOutline } from "react-icons/ti"
+import JobsInput from '../../../Inputs/JobsInput/JobsInput'
 
 
 
@@ -20,6 +21,7 @@ const SignUpSecondForm = () => {
         resetField,
         watch,
         setError,
+        setValue,
         formState: { errors, isLoading } 
     } = useForm({
         mode: 'onChange',
@@ -58,19 +60,34 @@ const SignUpSecondForm = () => {
                     error={storeError}
                     setStoreError={setStoreError}
                 />
+                <JobsInput 
+                    name='jobs_input'
+                    register={register}
+                    error={errors?.jobs_input}
+                    reset={resetField}
+                    setValue={setValue}
+                    setError={setError}
+                    watch={watch}
+                />
                 <UserNameInput
                     name='sign_up_surname'
                     placeholder='Фамилия'
                     register={register}
-                    reset={resetField}
                     inputMaxLength={20}
+                    isValidate={true}
+                    error={errors?.sign_up_surname}
+                    reset={resetField}
+                    notLatin={true}
                     // inputRef={inputUserNameRef}
                 />
                 <UserNameInput
                     name='sign_up_name'
                     placeholder='Имя'
                     register={register}
+                    isValidate={true}
+                    error={errors?.sign_up_name}
                     reset={resetField}
+                    notLatin={true}
                     // inputRef={inputUserNameRef}
                 />
                 <UserNameInput

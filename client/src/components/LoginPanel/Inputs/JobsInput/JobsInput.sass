@@ -2,32 +2,13 @@
 
 
 
-.stores_input-cont
-    // border: 2px solid black
-    flex-direction: row
-    overflow: visible
-    // label
-    //     margin-right: 0.5rem 
-    #stores_input
-        cursor: pointer
-        color: $color-main-text
+.jobs_input-cont
+    .jobs_input
         text-transform: capitalize
-        align-items: flex-start
-        // overflow: visible
-        &:hover
-            transform: none
-        &:active
-            transform: none
-        span
-            // border: 2px solid red
-            color: $color-place-holder
-            font-size: $size-main-text
-            margin-top: 1px
-            &.selected
-                color: $color-input
+        padding-right: 7px
     .input-icon
-        font-size: 0.75rem
-    #dropdown_stores-cont
+        // font-size: 0.75rem
+    #dropdown_jobs-cont
         // display: none
         position: absolute
         overflow: visible
@@ -42,8 +23,8 @@
         text-align: center
         pointer-events: none
         opacity: 0
-        transform: scale(0.9) translateY(-1rem)
-        transition: all 0.2s ease
+        transform: scale(0.9) translateY(-0.5rem)
+        transition: all 0.3s ease
         &.opened
             border-radius: $rad-but-border
             pointer-events: auto
@@ -66,5 +47,3 @@
                 // border: 1px solid #9c9a9a9b
             &:active
                 transform: scale(0.9)
-                
-

@@ -38,7 +38,7 @@ const SignUpForm = ({ formBlur }) => {
         if (pass && confirm) {
             pass !== confirm ? 
             setError('confirm_password', {message: 'Пароли не совпадают'}) : 
-            setError('confirm_password', {})
+            setError('confirm_password', null)
         }
     }, [watch('sign_up_password'), watch('confirm_password')])
 

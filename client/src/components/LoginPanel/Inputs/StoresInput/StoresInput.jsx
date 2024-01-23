@@ -1,12 +1,13 @@
 import { useState, useRef } from 'react'
-import { FaHouseChimneyUser } from "react-icons/fa6"
+// import { FaHouseChimneyUser } from "react-icons/fa6"
+import { HiOutlineHome } from "react-icons/hi"
 import { useClickOutside } from "../../../../Hooks/useClickOutside"
 import InputsError from '../InputsError/InputsError'
-import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
+import InputsCleaner from '../InputsCleaner/InputsCleaner'
 
 
 
-const StoresInput = ({ store, setStore, onFocusInput, error, setStoreError }) => {
+const StoresInput = ({ store, setStore, onFocusInput, error=null, setStoreError }) => {
 
     // console.log(error)
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
@@ -17,39 +18,39 @@ const StoresInput = ({ store, setStore, onFocusInput, error, setStoreError }) =>
 
     const STORES_LIST = [
         {
-            key: 'office',
-            text: 'Офис'
+            id: '1',
+            title: 'Офис'
         },
         {
-            key: 'krasnoe',
-            text: 'Красное'
+            id: '2',
+            title: 'Красное'
         },
         {
-            key: 'polock',
-            text: 'Полоцк'
+            id: '3',
+            title: 'Полоцк'
         },
         {
-            key: 'belmash',
-            text: 'БелМаш'
+            id: '4',
+            title: 'БелМаш'
         },
         {
-            key: 'turly',
-            text: 'Тюрли'
+            id: '5',
+            title: 'Тюрли'
         },
         {
-            key: 'glubokoe',
-            text: 'Глубокое'
+            id: '6',
+            title: 'Глубокое'
         },
         {
-            key: 'radoshk',
-            text: 'Радошковичи'
+            id: '7',
+            title: 'Радошковичи'
         },
         {
-            key: 'sputnik',
-            text: 'Спутник'
+            id: '8',
+            title: 'Спутник'
         },
         {
-            key: 'libava',
+            id: '9',
             text: 'Либава'
         },
     ]
@@ -91,7 +92,7 @@ const StoresInput = ({ store, setStore, onFocusInput, error, setStoreError }) =>
                     {store}
                 </span>
             </button>
-            <FaHouseChimneyUser className='input-icon'/>
+            <HiOutlineHome className='input-icon'/>
             <InputsError error={error} />
             <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
             <ul
@@ -104,7 +105,7 @@ const StoresInput = ({ store, setStore, onFocusInput, error, setStoreError }) =>
                     STORES_LIST.map((el) => {
                         // console.log(el)
                         return (
-                            <li key={el.key}>{el.text}</li>
+                            <li key={el.id}>{el.title}</li>
                         )
                     })
                 }
