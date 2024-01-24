@@ -4,6 +4,7 @@ import StoresInput from '../../../Inputs/StoresInput/StoresInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import { useFocusInput } from "../../../../../Hooks/useFocusInput"
+import { useCapitalize } from './../../../../../Hooks/useCapitalize';
 import { TiArrowRightOutline } from "react-icons/ti"
 import JobsInput from '../../../Inputs/JobsInput/JobsInput'
 
@@ -43,15 +44,18 @@ const SignUpSecondForm = () => {
     }
 
     const onSubmit = (data) => {
-        alert(JSON.stringify(data))
-        // console.log(`Юзер: ${data.sign_up_username}`)
+        data.jobs_input = useCapitalize(data.jobs_input)
+        data.sign_up_surname = useCapitalize(data.sign_up_surname)
+        // data.sign_up_name = useCapitalize(data.sign_up_name)
+        // alert(JSON.stringify(data))
+        console.log(`Юзер: ${data.sign_up_surname}`)
         // console.log(`Пароль: ${data.sign_up_password}`)
         // console.log(`Точка: ${data.sign_up_store}`)
         // console.log(`Устройство: ${data.device}`)
     }
 
     return ( 
-        <form onSubmit={handleSubmit(onSubmit)} id='sign_up_2-form' className='form cont'>
+        <form onSubmit={handleSubmit(checkStoresInput)} id='sign_up_2-form' className='form cont'>
             <div className='inputs-cont cont'>
                 <StoresInput
                     store={store}

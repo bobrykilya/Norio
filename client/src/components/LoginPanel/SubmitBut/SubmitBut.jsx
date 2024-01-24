@@ -18,6 +18,7 @@ const SubmitBut = ({icon, notSaveUser, onClick, disabled=false, isLoading}) => {
             className='submit-but cont'
             type={notSaveUser ? 'button' : 'submit'}
             // disabled={disabled}
+            tabIndex={-1}
             disabled={disabled ? true : (notSaveUser ? load : isLoading)}
             onClick={notSaveUser ? handleClickButton : null}
         >

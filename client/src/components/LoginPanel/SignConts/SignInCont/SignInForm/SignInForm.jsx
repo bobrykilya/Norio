@@ -8,7 +8,7 @@ import { BiLogInCircle } from "react-icons/bi"
 
 
 
-const SignInForm = () => {
+const SignInForm = ({  formBlur=false}) => {
 
     const [notSaveUser, setNotSaveUser] = useState(false)
     // const inputUserNameRef = useRef(null)
@@ -50,6 +50,7 @@ const SignInForm = () => {
                     register={register}
                     reset={resetField}                 
                     notSaveUser={notSaveUser}
+                    disabled={formBlur ? true : false}
                     // inputRef={inputUserNameRef}
                 /> 
                 <PasswordInput
@@ -58,6 +59,7 @@ const SignInForm = () => {
                     isValidate={true}
                     reset={resetField}
                     notSaveUser={notSaveUser}
+                    disabled={formBlur ? true : false}
                 />
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>

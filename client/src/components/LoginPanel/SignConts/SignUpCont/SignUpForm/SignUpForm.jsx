@@ -66,6 +66,7 @@ const SignUpForm = ({ formBlur }) => {
                     isValidate={true}
                     error={errors?.sign_up_username}
                     reset={resetField}
+                    disabled={formBlur ? true : false}
                     // inputRef={inputUserNameRef}
                 /> 
                 <PasswordInput
@@ -73,6 +74,7 @@ const SignUpForm = ({ formBlur }) => {
                     register={register}
                     error={errors?.sign_up_password}
                     reset={resetField}
+                    disabled={formBlur ? true : false}
                 />
                 <PasswordInput
                     name='confirm_password'
@@ -81,6 +83,7 @@ const SignUpForm = ({ formBlur }) => {
                     reset={resetField}
                     isConfirmPass={true}
                     watch={watch}
+                    disabled={formBlur ? true : false}
                 />
             </div>
             <div className={`blur_icon-cont cont ${formBlur ? 'active' : ''}`}>

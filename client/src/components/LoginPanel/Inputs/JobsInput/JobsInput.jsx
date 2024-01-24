@@ -11,7 +11,8 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
 
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    const [isValid, setIsValid] = useState(false)
+    const [isErrorOn, setIsErrorOn] = useState(true)
+    // const [isValid, setIsValid] = useState(false)
     
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
@@ -112,9 +113,12 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
     
     const handleChangeJobsInput = (e) => {
         // console.log(e.target.value)
-        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, '');
-        if (/[^а-яА-ЯёЁ]/.test(e.target.value)) {
+        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/, '');
+        if (/[^а-яА-ЯёЁ ]/.test(e.target.value)) {
             // console.log('close')
+            setIsDropDownOpened(false)
+        }else if (isValueInList(e.target.value)) {
+            isErrorOn && isDropDownOpened ? setIsErrorOn(false) : null
             setIsDropDownOpened(false)
         }else {
             // console.log('open')
@@ -124,6 +128,7 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
     }
 
     const changeInput = (e) => {
+        !isErrorOn ? setIsErrorOn(true) : null
         setIsCleanerOpened(true)
     }
 
@@ -132,6 +137,7 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
             setValue(name, e.target.textContent)
             setIsDropDownOpened(false)
             setIsCleanerOpened(true)
+            isErrorOn ? setIsErrorOn(false) : null
             setError(name, null)
             //! useFocusInput(inputRef)
         }
@@ -146,7 +152,12 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
         reset(name)
         setIsCleanerOpened(false)
         useFocusInput(inputRef)
+        isErrorOn && isDropDownOpened ? setIsErrorOn(false) : null
         setError(name, null)
+    }
+
+    const isValueInList = (val, list=JOBS_LIST) =>{
+        return list.some(el => el.title.toLowerCase() === val.toLowerCase())
     }
 
     const { ref, ... rest_register } = register(name, { 
@@ -154,7 +165,7 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
         validate: {
             isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 
                 'Поле должно содержать лишь кириллицу',
-            isInList: (val) => JOBS_LIST.some(el => el.title === val) ||
+            isInList: (val) => isValueInList(val) ||
                 'Такой должности нет в списке'
         },
         onChange: (e) => {
@@ -174,15 +185,17 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
                 className='jobs_input'
                 placeholder='Должность'
                 onFocus={ () => {
-                    (watch(name) && error?.type !== 'isNotLatin') ? setIsDropDownOpened(true) : null
+                    (watch(name) && 
+                    error?.type !== 'isNotLatin' &&
+                    !isValueInList(watch(name))) ? setIsDropDownOpened(true) : null
                 }}
             />
             <GrUserWorker className='input-icon'/>
-            <InputsError error={error} />
+            {isErrorOn ? <InputsError error={error} /> : null}
             <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
             <ul
                 id='dropdown_jobs-cont'
-                className={isDropDownOpened ? 'opened' : ''}
+                className={`${isDropDownOpened ? 'opened' : ''}`}
                 onClick={handleSetJobName}
                 ref={dropDownRef}
             >

@@ -4,27 +4,36 @@
 
 .jobs_input-cont
     .jobs_input
-        text-transform: capitalize
         padding-right: 7px
+        text-transform: capitalize
     .input-icon
         // font-size: 0.75rem
     #dropdown_jobs-cont
         // display: none
         position: absolute
-        overflow: visible
+        // justify-content: flex-start
+        // align-items: flex-start
         top: $height-input + 0.1rem
         padding: 0.5rem
-        background-color: $color-backgr
         box-shadow: 2px 10px 30px #0000002a
+        background-color: $color-backgr
         height: auto
-        width: 125%
+        max-height: 7rem
+        width: 110%
+        text-align: center
+        overflow-y: scroll
         border-radius: $rad-but-border + 80px
         z-index: 10
-        text-align: center
+        scroll-behavior: smooth
+        scroll-snap-type: y mandatory
+        -ms-overflow-style: none
+        scrollbar-width: none
         pointer-events: none
         opacity: 0
         transform: scale(0.9) translateY(-0.5rem)
         transition: all 0.3s ease
+        &::-webkit-scrollbar 
+            display: none   
         &.opened
             border-radius: $rad-but-border
             pointer-events: auto

@@ -6,7 +6,7 @@ import { useFocusInput } from "../../../../Hooks/useFocusInput"
 
 
 
-const NameInput = ({ name, register, error=null, reset, isValidate=false, notSaveUser=false, placeholder, inputMaxLength=15, notLatin=false }) => {
+const NameInput = ({ name, register, error=null, reset, isValidate=false, notSaveUser=false, placeholder, inputMaxLength=15, notLatin=false, disabled=false }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -79,6 +79,7 @@ const NameInput = ({ name, register, error=null, reset, isValidate=false, notSav
                 maxLength={inputMaxLength}
                 placeholder={placeholder}
                 autoComplete={notSaveUser ? 'off' : 'username'}
+                disabled={disabled}
                 autoFocus
             />
             <FaUser className='input-icon'/>

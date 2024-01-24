@@ -51,7 +51,7 @@ const StoresInput = ({ store, setStore, onFocusInput, error=null, setStoreError 
         },
         {
             id: '9',
-            text: 'Либава'
+            title: 'Либава'
         },
     ]
 

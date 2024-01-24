@@ -8,7 +8,7 @@ import { useClickOutside } from "../../../../Hooks/useClickOutside"
 
 
 
-const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isConfirmPass=false, watch=false, notSaveUser=false }) => {
+const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isConfirmPass=false, watch=false, notSaveUser=false, disabled=false }) => {
     
     // console.log('watch')
     const [isLockVisible, setIsLockVisible] = useState(false)
@@ -123,6 +123,7 @@ const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isCo
                 autoComplete={notSaveUser ? 'off' : 'current-password'}
                 onKeyDown={handleCheckCapsLockState}
                 onBlur={() => {setIsCapsLockEnabled(false)}}
+                disabled={disabled}
             />
             <FaKey className='input-icon'/>
             <div 
