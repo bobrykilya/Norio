@@ -97,7 +97,7 @@ const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isCo
         }) : register(name, {    //**** Confirm Password
             required: true,
             validate: {
-                passwordsMatching: (val) => {
+                passwordsMatch: () => {
                     if (watch('sign_up_password') != watch('confirm_password')) {
                         return 'Пароли не совпадают'
                     }

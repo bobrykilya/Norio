@@ -5,7 +5,7 @@
 .jobs_input-cont
     .jobs_input
         padding-right: 7px
-        text-transform: capitalize
+        // text-transform: capitalize
     .input-icon
         // font-size: 0.75rem
     #dropdown_jobs-cont
@@ -39,7 +39,7 @@
             pointer-events: auto
             opacity: 1
             transform: scale(1) translateY(0)
-        li
+        button
             // border: 1px solid #acabab
             display: inline-block
             border-radius: 15px
@@ -51,7 +51,8 @@
             width: auto
             cursor: pointer
             transition: all 0.2s ease
-            &:hover
+            &:hover, &:focus
+                transform: none
                 background-color: #d3d3d35f
                 // border: 1px solid #9c9a9a9b
             &:active

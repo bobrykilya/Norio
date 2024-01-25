@@ -44,8 +44,6 @@ const SignUpSecondForm = () => {
     }
 
     const onSubmit = (data) => {
-        data.jobs_input = useCapitalize(data.jobs_input)
-        data.sign_up_surname = useCapitalize(data.sign_up_surname)
         // data.sign_up_name = useCapitalize(data.sign_up_name)
         // alert(JSON.stringify(data))
         console.log(`Юзер: ${data.sign_up_surname}`)

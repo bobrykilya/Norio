@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { GrUserWorker } from "react-icons/gr"
 import { useFocusInput } from "../../../../Hooks/useFocusInput"
 import { useClickOutside } from "../../../../Hooks/useClickOutside"
+import { useCapitalize } from './../../../../Hooks/useCapitalize';
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
 
@@ -12,7 +13,7 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isErrorOn, setIsErrorOn] = useState(true)
-    // const [isValid, setIsValid] = useState(false)
+    const [focusJobNum, setFocusJobNum] = useState(false)
     
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
@@ -113,7 +114,8 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
     
     const handleChangeJobsInput = (e) => {
         // console.log(e.target.value)
-        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/, '');
+        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/, '')
+        e.target.value = useCapitalize(e.target.value)
         if (/[^а-яА-ЯёЁ ]/.test(e.target.value)) {
             // console.log('close')
             setIsDropDownOpened(false)
@@ -133,7 +135,7 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
     }
 
     const handleSetJobName = (e) => {
-        if (e.target.tagName === 'LI') {
+        if (e.target.tagName === 'BUTTON') {
             setValue(name, e.target.textContent)
             setIsDropDownOpened(false)
             setIsCleanerOpened(true)
@@ -158,6 +160,30 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
 
     const isValueInList = (val, list=JOBS_LIST) =>{
         return list.some(el => el.title.toLowerCase() === val.toLowerCase())
+    }
+    
+    const handleTabClick = (e) => {
+        // console.log(e)
+        if (e.code === 'Tab') {
+            isDropDownOpened ? setIsDropDownOpened(false) : null
+        }
+    }
+
+    const handleArrowsClick = (e) => {
+        // console.log(e)
+        const dropdown_jobs_list = document.querySelectorAll('#dropdown_jobs-cont button')
+        console.log(dropdown_jobs_list[0])
+        if (e.code === 'ArrowDown') {
+            let job_num = focusJobNum
+            if (job_num) {
+                setFocusJobNum((prev) => Number(prev) + 1)
+                job_num = Number(Number(job_num) + 1)
+            } else {
+                setFocusJobNum(0)
+                job_num = 0
+            }
+            dropdown_jobs_list[job_num].focus()
+        }
     }
 
     const { ref, ... rest_register } = register(name, { 
@@ -184,6 +210,9 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
                 maxLength={20}
                 className='jobs_input'
                 placeholder='Должность'
+                autoComplete='none'
+                onKeyDown={handleTabClick}
+                onKeyUp={handleArrowsClick}
                 onFocus={ () => {
                     (watch(name) && 
                     error?.type !== 'isNotLatin' &&
@@ -203,7 +232,8 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
                     !JOBS_LIST_FILTERED[0] ?
                         <span className='cont'>Такой должности нет</span> :
                         JOBS_LIST_FILTERED.map((el) => {
-                            return <li key={el.id}>{el.title}</li>
+                            // console.log(JOBS_LIST_FILTERED.indexOf(el))
+                            return <button key={el.id} tabIndex={-1}>{el.title}</button>
                         })
                 }
             </ul>

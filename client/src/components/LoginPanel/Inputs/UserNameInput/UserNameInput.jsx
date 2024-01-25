@@ -3,6 +3,7 @@ import { FaUser } from "react-icons/fa"
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 import { useFocusInput } from "../../../../Hooks/useFocusInput"
+import { useCapitalize } from './../../../../Hooks/useCapitalize';
 
 
 
@@ -15,6 +16,7 @@ const NameInput = ({ name, register, error=null, reset, isValidate=false, notSav
     
     const handleChangeName = (e) => {
         e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, '')
+        notLatin ? e.target.value = useCapitalize(e.target.value) : null
         e.target.value ? ChangeInput() : clearInput()
     }
     
