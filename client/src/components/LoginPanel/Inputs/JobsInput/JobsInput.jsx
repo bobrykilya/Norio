@@ -13,7 +13,8 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isErrorOn, setIsErrorOn] = useState(true)
-    const [focusJobNum, setFocusJobNum] = useState(false)
+    const [focusJobNum, setFocusJobNum] = useState(0)
+    const [stop, setStop] = useState(false)
     
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
@@ -141,7 +142,6 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
             setIsCleanerOpened(true)
             isErrorOn ? setIsErrorOn(false) : null
             setError(name, null)
-            //! useFocusInput(inputRef)
         }
     }
     
@@ -162,28 +162,67 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
         return list.some(el => el.title.toLowerCase() === val.toLowerCase())
     }
     
-    const handleTabClick = (e) => {
+    const handleInputClick = (e) => {
         // console.log(e)
-        if (e.code === 'Tab') {
-            isDropDownOpened ? setIsDropDownOpened(false) : null
+        switch(e.code) {
+            case 'Tab': {
+                isDropDownOpened ? setIsDropDownOpened(false) : null
+            }
+            case 'ArrowDown': {
+                if (isDropDownOpened) {
+                    // setFocusJobNum(0)
+                    arrowsClick('down', true)
+                    // document.activeElement.nextElement.focus()
+                }
+            }
         }
     }
 
-    const handleArrowsClick = (e) => {
+    const handleJobClick = (e) => {
         // console.log(e)
-        const dropdown_jobs_list = document.querySelectorAll('#dropdown_jobs-cont button')
-        console.log(dropdown_jobs_list[0])
-        if (e.code === 'ArrowDown') {
-            let job_num = focusJobNum
-            if (job_num) {
-                setFocusJobNum((prev) => Number(prev) + 1)
-                job_num = Number(Number(job_num) + 1)
-            } else {
-                setFocusJobNum(0)
-                job_num = 0
-            }
-            dropdown_jobs_list[job_num].focus()
+        switch(e.code) {
+            case 'ArrowUp': document.activeElement.parentElement.previousElementSibling.focus()
+            case 'ArrowDown': document.activeElement.nextElementSibling.focus()
+            // case 'ArrowDown': arrowsClick('down')
+            // case 'ArrowLeft': arrowsClick('left')
+            // case 'ArrowRight': arrowsClick('right')
         }
+        console.log(document.activeElement)
+    }
+
+    const arrowsClick = (arrow, reset=false) => {
+        const dropdown_jobs_list = document.querySelectorAll('#dropdown_jobs-cont button')
+        if (!dropdown_jobs_list[0]) return
+        // console.log(dropdown_jobs_list[0])
+        let job_num = reset ? 0 : focusJobNum
+        // console.log(job_num)
+        switch(arrow) {
+            case 'up': {
+                // console.log('up')
+                if (job_num !== 1) {
+                    setFocusJobNum((prev) => prev - 1)
+                    job_num = job_num - 1
+                }else {
+                    // console.log('up')
+                    useFocusInput(inputRef)
+                    setStop(true)
+                }
+                break
+            }
+            case 'down': {
+                if (job_num) {
+                    if (!dropdown_jobs_list[job_num + 1]) return
+                    setFocusJobNum((prev) => prev + 1)
+                    job_num = job_num + 1
+                }else {
+                    setFocusJobNum(1)
+                    job_num = 1
+                }
+                break
+            }
+        }   
+        // console.log(stop)
+        dropdown_jobs_list[job_num - 1]?.focus()
     }
 
     const { ref, ... rest_register } = register(name, { 
@@ -211,8 +250,7 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
                 className='jobs_input'
                 placeholder='Должность'
                 autoComplete='none'
-                onKeyDown={handleTabClick}
-                onKeyUp={handleArrowsClick}
+                onKeyDown={handleInputClick}
                 onFocus={ () => {
                     (watch(name) && 
                     error?.type !== 'isNotLatin' &&
@@ -233,7 +271,7 @@ const JobsInput = ({ name, register, error=null, reset, setValue, setError, watc
                         <span className='cont'>Такой должности нет</span> :
                         JOBS_LIST_FILTERED.map((el) => {
                             // console.log(JOBS_LIST_FILTERED.indexOf(el))
-                            return <button key={el.id} tabIndex={-1}>{el.title}</button>
+                            return <button key={el.id} tabIndex={-1} onKeyDown={handleJobClick}>{el.title}</button>
                         })
                 }
             </ul>
