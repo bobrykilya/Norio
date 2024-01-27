@@ -5,6 +5,7 @@ import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import CheckBox from './CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { BiLogInCircle } from "react-icons/bi"
+import { FaUser } from "react-icons/fa"
 
 
 
@@ -47,6 +48,7 @@ const SignInForm = ({  formBlur=false}) => {
                 <UserNameInput
                     name='sign_in_username'
                     placeholder='Логин'
+                    icon={<FaUser className='input-icon'/>}
                     register={register}
                     reset={resetField}                 
                     notSaveUser={notSaveUser}

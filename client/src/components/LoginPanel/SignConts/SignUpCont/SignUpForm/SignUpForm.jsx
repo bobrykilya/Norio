@@ -9,7 +9,7 @@ import { LuCheckCircle } from "react-icons/lu"
 import { BsFillCloudCheckFill } from "react-icons/bs"
 import { BsFillPatchCheckFill } from "react-icons/bs"
 import { BsShieldFillCheck } from "react-icons/bs"
-
+import { FaUser } from "react-icons/fa"
 
 
 const SignUpForm = ({ formBlur }) => {
@@ -62,6 +62,7 @@ const SignUpForm = ({ formBlur }) => {
                 <UserNameInput
                     name='sign_up_username'
                     placeholder='Логин'
+                    icon={<FaUser className='input-icon'/>}
                     register={register}
                     isValidate={true}
                     error={errors?.sign_up_username}
