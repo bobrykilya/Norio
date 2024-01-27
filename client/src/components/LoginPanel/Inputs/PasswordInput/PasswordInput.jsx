@@ -8,7 +8,7 @@ import { useClickOutside } from "../../../../Hooks/useClickOutside"
 
 
 
-const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isConfirmPass=false, watch=false, notSaveUser=false, disabled=false }) => {
+const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watch=false, notSaveUser=false, disabled=false }) => {
     
     // console.log('watch')
     const [isLockVisible, setIsLockVisible] = useState(false)
@@ -65,48 +65,58 @@ const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isCo
     }, lockButtonRef)
 
 
-    const { ref, ... rest_register } = isSignIn ? 
-        register(name, { //**** SignIn
-            required: true,
-            onChange: (e) => {
-                handleChangePassword(e)
-            }
-        }) : !isConfirmPass ? register(name, { //**** SignUp
-            required: true,
-            minLength: {
-                value: 4,
-                message: 'Длина пароля должна быть от 4 до 15 знаков'
-            },
-            validate: {
-                // noCyrillic: (val) => !/[^a-zA-Z0-9.@_]/.test(val) || 
-                //     'Пароль не может содержать кириллицу',
-                isOneLanguage: (val) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) || 
-                    'Пароль должен быть лишь на одном языке',
-                isNoSpecChars: (val) => !/[^а-яА-ЯёЁa-zA-Z0-9.@_ ]/.test(val) || 
-                    'Пароль не может содержать спецсимволы, кроме .@_',
-                isNumber: (val) => /(?=.*[0-9])/.test(val) || 
-                    'Пароль должен содержать цифру',
-                isLower: (val) => /(?=.*[a-zа-яё])/.test(val) || 
-                    'Пароль должен содержать строчную букву',
-                isUpper: (val) => /(?=.*[A-ZА-ЯЁ])/.test(val) ||
-                    'Пароль должен содержать заглавную букву',
-            },
-            onChange: (e) => {
-                handleChangePassword(e)
-            }
-        }) : register(name, {    //**** Confirm Password
-            required: true,
-            validate: {
-                passwordsMatch: () => {
-                    if (watch('sign_up_password') != watch('confirm_password')) {
-                        return 'Пароли не совпадают'
+    const getRegister = (type) => {
+        switch(type) {
+            case 'sign_in':  //**** SignIn
+                return register(name, { 
+                    required: true,
+                    onChange: (e) => {
+                        handleChangePassword(e)
                     }
-                }
-            },
-            onChange: (e) => {
-                handleChangePassword(e)
-            },
-        })
+                })
+            case 'sign_up':  //**** SignUp
+                return register(name, { 
+                    required: true,
+                    minLength: {
+                        value: 4,
+                        message: 'Длина пароля должна быть от 4 до 15 знаков'
+                    },
+                    validate: {
+                        // noCyrillic: (val) => !/[^a-zA-Z0-9.@_]/.test(val) || 
+                        //     'Пароль не может содержать кириллицу',
+                        isOneLanguage: (val) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) || 
+                            'Пароль должен быть лишь на одном языке',
+                        isNoSpecChars: (val) => !/[^а-яА-ЯёЁa-zA-Z0-9.@_ ]/.test(val) || 
+                            'Пароль не может содержать спецсимволы, кроме .@_',
+                        isNumber: (val) => /(?=.*[0-9])/.test(val) || 
+                            'Пароль должен содержать цифру',
+                        isLower: (val) => /(?=.*[a-zа-яё])/.test(val) || 
+                            'Пароль должен содержать строчную букву',
+                        isUpper: (val) => /(?=.*[A-ZА-ЯЁ])/.test(val) ||
+                            'Пароль должен содержать заглавную букву',
+                    },
+                    onChange: (e) => {
+                        handleChangePassword(e)
+                    }
+                })
+            case 'confirm':  //**** Confirm Password
+                return register(name, {    
+                    required: true,
+                    validate: {
+                        passwordsMatch: () => {
+                            if (watch('sign_up_password') != watch('confirm_password')) {
+                                return 'Пароли не совпадают'
+                            }
+                        }
+                    },
+                    onChange: (e) => {
+                        handleChangePassword(e)
+                    },
+                })
+        }
+    }
+    
+    const { ref, ... rest_register } = getRegister(type)
 
     return (
         <div className='password_input-cont input-cont cont'>
@@ -119,7 +129,7 @@ const PasswordInput = ({ name, register, error=null, isSignIn=false, reset, isCo
                 className='passw_input'
                 type={isLockOpened ? 'text' : 'password'}
                 maxLength={15}
-                placeholder={!isConfirmPass ? 'Пароль' : 'Повтор пароля'}
+                placeholder={type !== 'confirm' ? 'Пароль' : 'Повтор пароля'}
                 autoComplete={notSaveUser ? 'off' : 'current-password'}
                 onKeyDown={handleCheckCapsLockState}
                 onBlur={() => {setIsCapsLockEnabled(false)}}

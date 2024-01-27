@@ -5,7 +5,6 @@ import SignUpSecondForm from './SignUpSecondForm/SignUpSecondForm'
 
 const SignUpSecondCont = ({ act_form }) => {
 
-    // console.log(act_form)
     // console.log('Form updated')
     const STORES_LIST = [
         {
@@ -141,7 +140,7 @@ const SignUpSecondCont = ({ act_form }) => {
             <div className='enter_text-cont cont'>
                 <h1>Личные данные:</h1>
             </div>
-            < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} />
+            < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} formBlur={act_form !== 'opened_sign_up_2'} />
         </section>
      )
 }

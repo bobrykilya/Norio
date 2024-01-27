@@ -3,9 +3,6 @@
 
 
 .dropdown_input-cont
-    .dropdown_input
-        padding-right: 7px
-        // text-transform: capitalize
     .input-icon
         // font-size: 0.75rem
     #dropdown-cont
@@ -21,6 +18,7 @@
         max-height: 7rem
         width: 110%
         text-align: center
+        // vertical-align: top
         overflow-y: scroll
         border-radius: $rad-but-border + 80px
         z-index: 10
@@ -41,7 +39,7 @@
             transform: scale(1) translateY(0)
         button
             // border: 1px solid #acabab
-            scroll-snap-align: center
+            scroll-snap-align: top
             display: inline-block
             border-radius: 15px
             box-shadow: 1px 2px 5px #0000001c

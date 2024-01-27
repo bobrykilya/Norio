@@ -10,6 +10,7 @@ import { FaUser } from "react-icons/fa"
 
 
 const SignInForm = ({  formBlur=false}) => {
+    // console.log('SignIn')
 
     const [notSaveUser, setNotSaveUser] = useState(false)
     // const inputUserNameRef = useRef(null)
@@ -53,12 +54,11 @@ const SignInForm = ({  formBlur=false}) => {
                     reset={resetField}                 
                     notSaveUser={notSaveUser}
                     disabled={formBlur ? true : false}
-                    // inputRef={inputUserNameRef}
                 /> 
                 <PasswordInput
                     name='sign_in_password'
+                    type='sign_in'
                     register={register}
-                    isValidate={true}
                     reset={resetField}
                     notSaveUser={notSaveUser}
                     disabled={formBlur ? true : false}

@@ -7,9 +7,11 @@ import { HiOutlineHome } from "react-icons/hi"
 import { GrUserWorker } from "react-icons/gr"
 import { GrUserSettings } from "react-icons/gr"
 import { TiArrowRightOutline } from "react-icons/ti"
+import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
 
 
-const SignUpSecondForm = ({ STORES_LIST ,JOBS_LIST }) => {
+const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
+    // console.log('SignUp_2')
 
     const {
         register,
@@ -46,6 +48,7 @@ const SignUpSecondForm = ({ STORES_LIST ,JOBS_LIST }) => {
                     setValue={setValue}
                     setError={setError}
                     watch={watch}
+                    disabled={formBlur ? true : false}
                 />
                 <DropDownSearchInput 
                     LIST={JOBS_LIST}
@@ -58,34 +61,47 @@ const SignUpSecondForm = ({ STORES_LIST ,JOBS_LIST }) => {
                     setValue={setValue}
                     setError={setError}
                     watch={watch}
+                    disabled={formBlur ? true : false}
                 />
                 <UserNameInput
                     name='sign_up_surname'
                     placeholder='Фамилия'
                     icon={<GrUserSettings className='input-icon'/>}
+                    type='name'
                     register={register}
-                    inputMaxLength={20}
-                    isValidate={true}
                     error={errors?.sign_up_surname}
                     reset={resetField}
-                    notLatin={true}
+                    inputMaxLength={20}
+                    disabled={formBlur ? true : false}
                 />
                 <UserNameInput
                     name='sign_up_name'
                     placeholder='Имя'
                     icon={<GrUserSettings className='input-icon'/>}
+                    type='name'
                     register={register}
-                    isValidate={true}
                     error={errors?.sign_up_name}
                     reset={resetField}
-                    notLatin={true}
+                    inputMaxLength={20}
+                    disabled={formBlur ? true : false}
                 />
-                <UserNameInput
+                <PhoneInput 
                     name='sign_up_phone'
-                    placeholder='Телефон'
                     register={register}
+                    error={errors?.sign_up_phone}
                     reset={resetField}
+                    disabled={formBlur ? true : false}
                 />
+                {/* <UserNameInput
+                    name='sign_up_phone'
+                    placeholder='(88) 005-55-35'
+                    icon={<FiPhoneCall className='input-icon'/>}
+                    type='phone'
+                    register={register}
+                    error={errors?.sign_up_phone}
+                    reset={resetField}
+                    inputMaxLength={14}
+                    /> */}
             </div>
             <SubmitBut 
                 icon={<TiArrowRightOutline className='fa-icon'/>}

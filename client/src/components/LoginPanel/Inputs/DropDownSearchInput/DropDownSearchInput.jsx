@@ -16,10 +16,18 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
     
-    const LIST_FILTERED = watch(name) ? 
-        LIST.filter(el => el.title.toLowerCase().includes(watch(name)?.toLowerCase())) : 
-        LIST
-
+    
+    const filterAndSortList = (list) => {
+        const val = watch(name)?.toLowerCase()
+        const filtered_list = list.filter(el => el.title.toLowerCase().includes(val))
+        const filtered_sorted_list = filtered_list.sort(
+            (el_1, el_2) => el_1.title.toLowerCase().indexOf(val) > el_2.title.toLowerCase().indexOf(val) ? 1 : -1
+        )
+        // console.log(filtered_sorted_list)
+        return filtered_sorted_list
+    }
+        
+    const LIST_FILTERED = watch(name) ? filterAndSortList(LIST) : LIST
     // console.log(error)
     
     const handleChangeInput = (e) => {
@@ -28,15 +36,22 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         e.target.value = useCapitalize(e.target.value)
         if (/[^а-яА-ЯёЁ ]/.test(e.target.value)) {
             // console.log('close')
-            setIsDropDownOpened(false)
+            toggleDropDown(false)
         }else if (isValueInList(e.target.value)) {
             isErrorOn && isDropDownOpened ? setIsErrorOn(false) : null
-            setIsDropDownOpened(false)
+            toggleDropDown(false)
         }else {
             // console.log('open')
-            !isDropDownOpened && e.target.value ? setIsDropDownOpened(true) : null
+            !isDropDownOpened && e.target.value ? toggleDropDown(true) : null
         }
         e.target.value ? changeInput(e) : clearInput()
+    }
+    const toggleDropDown = (pos) => {
+        if (pos) {
+            setIsDropDownOpened(true)
+            dropDownRef.current.scrollTo({ top: 0, behavior: 'smooth'})
+        }else
+            setIsDropDownOpened(false)
     }
 
     const changeInput = (e) => {
@@ -47,7 +62,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     const handleSetElemName = (e) => {
         if (e.target.tagName === 'BUTTON') {
             setValue(name, e.target.textContent)
-            setIsDropDownOpened(false)
+            toggleDropDown(false)
             setIsCleanerOpened(true)
             isErrorOn ? setIsErrorOn(false) : null
             setError(name, null)
@@ -55,7 +70,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
     
     useClickOutside(dropDownRef, () => {
-        setIsDropDownOpened(false)
+        toggleDropDown(false)
     }, inputRef)
 
     const clearInput = () => {
@@ -72,23 +87,29 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
     
     const handleInputClick = (e) => {
+        if (!isDropDownOpened) return
         switch(e.code) {
-            case 'Tab': {
-                isDropDownOpened ? setIsDropDownOpened(false) : null
-            }
-            case 'ArrowDown': {
+            case 'Tab': 
+                toggleDropDown(false)
+                break
+            case 'ArrowDown':
                 e.preventDefault()
-                if (isDropDownOpened) {
-                    focusJumping('next')
-                }
-            }
+                focusJumping('next')
+                break
+            case 'Enter':
+                focusJumping('next')
+                break
+            case 'Escape':
+                toggleDropDown(false)
+                break
         }
     }
 
     const handleElemClick = (e) => {
+        // console.log(e.code)
         if (e.code.includes('Arrow'))  
             e.preventDefault() 
-        else return
+        // else return
 
         switch(e.code) {
             case 'ArrowUp': 
@@ -102,6 +123,14 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 break
             case 'ArrowRight': 
                 focusJumping('next')
+                break
+            case 'Escape':
+                useFocusInput(inputRef)
+                toggleDropDown(false)
+                break
+            default:
+                useFocusInput(inputRef)
+                setTimeout(() => (useFocusInput(inputRef)), 10)
                 break
         }
     }
@@ -152,7 +181,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 onFocus={ () => {
                     (watch(name) && 
                     error?.type !== 'isNotLatin' &&
-                    !isValueInList(watch(name))) ? setIsDropDownOpened(true) : null
+                    !isValueInList(watch(name))) ? toggleDropDown(true) : null
                 }}
             />
             {icon}

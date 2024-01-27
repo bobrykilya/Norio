@@ -6,14 +6,14 @@ import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { useActions } from '../../../../../Hooks/useActions'
 import { LuCheckCircle } from "react-icons/lu"
-import { BsFillCloudCheckFill } from "react-icons/bs"
-import { BsFillPatchCheckFill } from "react-icons/bs"
-import { BsShieldFillCheck } from "react-icons/bs"
+// import { BsFillCloudCheckFill } from "react-icons/bs"
+// import { BsFillPatchCheckFill } from "react-icons/bs"
+// import { BsShieldFillCheck } from "react-icons/bs"
 import { FaUser } from "react-icons/fa"
 
 
 const SignUpForm = ({ formBlur }) => {
-
+    // console.log('SignUp')
     
     const { toggleCoverPanel } = useActions()
 
@@ -63,15 +63,15 @@ const SignUpForm = ({ formBlur }) => {
                     name='sign_up_username'
                     placeholder='Логин'
                     icon={<FaUser className='input-icon'/>}
+                    type='sign_up'
                     register={register}
-                    isValidate={true}
                     error={errors?.sign_up_username}
                     reset={resetField}
                     disabled={formBlur ? true : false}
-                    // inputRef={inputUserNameRef}
                 /> 
                 <PasswordInput
                     name='sign_up_password'
+                    type='sign_up'
                     register={register}
                     error={errors?.sign_up_password}
                     reset={resetField}
@@ -79,10 +79,10 @@ const SignUpForm = ({ formBlur }) => {
                 />
                 <PasswordInput
                     name='confirm_password'
+                    type='confirm'
                     register={register}
                     error={errors?.confirm_password}
                     reset={resetField}
-                    isConfirmPass={true}
                     watch={watch}
                     disabled={formBlur ? true : false}
                 />

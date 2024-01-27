@@ -2,11 +2,11 @@ import { useState, useRef } from 'react'
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 import { useFocusInput } from "../../../../Hooks/useFocusInput"
-import { useCapitalize } from './../../../../Hooks/useCapitalize';
+import { useCapitalize } from './../../../../Hooks/useCapitalize'
 
 
 
-const NameInput = ({ name, placeholder, icon, register, error=null, reset, isValidate=false, notSaveUser=false, inputMaxLength=15, notLatin=false, disabled=false }) => {
+const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=15, disabled=false }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -35,38 +35,50 @@ const NameInput = ({ name, placeholder, icon, register, error=null, reset, isVal
         setIsCleanerOpened(false)
     }
 
-    const { ref, ... rest_register } = isValidate ? 
-    (!notLatin ? register(name, {    //* SignUp
-        required: true,
-        minLength: {
-            value: 4,
-            message: `Длина логина должна быть от 4 до ${inputMaxLength} знаков`
-        },
-        onChange: (e) => {
-            handleChangeName(e)
-        },
-        validate: {
-            isOneLanguage: (val) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) || 
-                'Логин должен быть лишь на одном языке',
-        },
-    }): 
-    register(name, {  //* SignUp_2
-        required: true,
-        validate: {
-            isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 
-                'Поле должно содержать лишь кириллицу',
-        },
-        onChange: (e) => {
-            handleChangeName(e)
+    const getRegister = (type) => {
+        switch(type) {
+            case 'sign_in':  //**** SignIn
+                return register(name, {
+                    required: true,
+                    onChange: (e) => {
+                        handleChangeName(e)
+                    }
+                })
+            case 'sign_up':  //**** SignUp
+                return register(name, {
+                    required: true,
+                    minLength: {
+                        value: 4,
+                        message: `Длина логина должна быть от 4 до ${inputMaxLength} знаков`
+                    },
+                    onChange: (e) => {
+                        handleChangeName(e)
+                    },
+                    validate: {
+                        isOneLanguage: (val) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) || 
+                            'Логин должен быть лишь на одном языке',
+                    },
+                })
+            case 'name':
+                return register(name, {
+                    required: true,
+                    minLength: {
+                        value: 3,
+                        message: `Длина поля должна быть от 3 букв`
+                    },
+                    validate: {
+                        isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 
+                            'Поле должно содержать лишь кириллицу',
+                    },
+                    onChange: (e) => {
+                        handleChangeName(e)
+                    }
+                })
         }
-    })
-    ) : register(name, {    //* SignIn
-        required: true,
-        onChange: (e) => {
-            handleChangeName(e)
-        }
-    })
+    }
 
+    const { ref, ... rest_register } = getRegister(type)
+    
     return (
         <div className='user_name_input-cont input-cont cont'>
             <input
@@ -76,12 +88,12 @@ const NameInput = ({ name, placeholder, icon, register, error=null, reset, isVal
                     inputRef.current = e
                 }}
                 className='name_input'
-                type="text"
+                type='text'
                 maxLength={inputMaxLength}
                 placeholder={placeholder}
-                autoComplete={notSaveUser ? 'off' : 'username'}
+                autoComplete={type !== 'sign_up_2' ? (notSaveUser ? 'off' : 'username') : 'auto'}
                 disabled={disabled}
-                autoFocus
+                // autoFocus
             />
             {icon}
             <InputsError error={error} isErrorHidden={isErrorHidden} />
