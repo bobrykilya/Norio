@@ -5,7 +5,7 @@ import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { HiOutlineHome } from "react-icons/hi"
 import { GrUserWorker } from "react-icons/gr"
-import { GrUserSettings } from "react-icons/gr"
+import { GrUserExpert } from "react-icons/gr";
 import { TiArrowRightOutline } from "react-icons/ti"
 import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
 
@@ -27,8 +27,9 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
     })
 
     const onSubmit = (data) => {
-        // alert(JSON.stringify(data))
-        console.log(`Юзер: ${data.sign_up_surname}`)
+        data.sign_up_phone = '+375' + data.sign_up_phone
+        alert(JSON.stringify(data))
+        // console.log(`Юзер: ${data.sign_up_surname}`)
         // console.log(`Пароль: ${data.sign_up_password}`)
         // console.log(`Точка: ${data.sign_up_store}`)
         // console.log(`Устройство: ${data.device}`)
@@ -37,6 +38,13 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
     return ( 
         <form onSubmit={handleSubmit(onSubmit)} id='sign_up_2-form' className='form cont'>
             <div className='inputs-cont cont'>
+                <PhoneInput 
+                    name='sign_up_phone'
+                    register={register}
+                    error={errors?.sign_up_phone}
+                    reset={resetField}
+                    disabled={formBlur ? true : false}
+                />
                 <DropDownSearchInput 
                     LIST={STORES_LIST}
                     name='stores_input'
@@ -66,7 +74,7 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
                 <UserNameInput
                     name='sign_up_surname'
                     placeholder='Фамилия'
-                    icon={<GrUserSettings className='input-icon'/>}
+                    icon={<GrUserExpert className='input-icon'/>}
                     type='name'
                     register={register}
                     error={errors?.sign_up_surname}
@@ -77,19 +85,12 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
                 <UserNameInput
                     name='sign_up_name'
                     placeholder='Имя'
-                    icon={<GrUserSettings className='input-icon'/>}
+                    icon={<GrUserExpert className='input-icon'/>}
                     type='name'
                     register={register}
                     error={errors?.sign_up_name}
                     reset={resetField}
                     inputMaxLength={20}
-                    disabled={formBlur ? true : false}
-                />
-                <PhoneInput 
-                    name='sign_up_phone'
-                    register={register}
-                    error={errors?.sign_up_phone}
-                    reset={resetField}
                     disabled={formBlur ? true : false}
                 />
             </div>

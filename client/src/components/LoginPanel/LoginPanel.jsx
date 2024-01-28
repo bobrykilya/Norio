@@ -17,7 +17,10 @@ const LoginPanel = () => {
     return ( 
         <div id='login_panel-cont' className='cont'>
             <div id='signs-cont' className='cont'>
-                {act_form !== 'opened_sign_up_2' ? <SignInCont act_form={act_form}/> : <SignUpSecondCont act_form={act_form} />}
+                {act_form !== 'opened_sign_up_2' ? 
+                    <SignInCont act_form={act_form}/> :
+                    <SignUpSecondCont act_form={act_form} />
+                }
                 <SignUpCont act_form={act_form} />
             </div>
             <CoverPanel />

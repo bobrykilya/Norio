@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 import { FiPhoneCall } from "react-icons/fi";
@@ -11,40 +11,11 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isErrorHidden, setIsErrorHidden] = useState(false)
+    const [number, setNumber] = useState(false)
     const inputRef = useRef(null)
 
     const handleChangePhone = (e) => {
-        e.target.value = e.target.value.replace(/[^1-9]/g, '')
-        e.target.value = e.target.value.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4')
-        // e.target.value = e.target.value.replace(/\s/g, '').match(/.{1,2}/g)?.join(' ').substr(0, 12) || null
-        // const new_value = []
-        // new_value.push(e.target.value?.substr(0, 2)?.replace(/(\d{2})/, '($1)'))
-        // new_value.push(e.target.value?.substr(2, 4))
-        // const match_3 = e.target.value.substr(5, 5)?.replace(/(\d{3})/, '$1 ')
-        // console.log(new_value)
-        // e.target.value = new_value?.join(' ') || null
-        // new_value = e.target.value.match(/.{1,2}/g)?.join(' ').substr(0, 12) || null
-        // e.target.value = e.target.value.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4')
-        // const val = e.target.value
-        // let new_val = false
-        // console.log(val)
-        // switch(val?.length) {
-        //     case 1:
-        //         new_val = `(${val}`
-        //         break
-        //     case 3:
-        //         new_val = `(${val.substring(1, 3)}) ${val.substring(4)}`
-        //         break
-        //     case 8:
-        //         new_val = `${val.substring(1-7)}-${val.substring(8)}`
-        //         break
-        //     case 11:
-        //         new_val = `${val.substring(1-10)}-${val.substring(11)}`
-        //         break
-        // }
-        // console.log(val.length)
-        // if (new_val) e.target.value = new_val
-        // e.target.value = `(${val.substring(0, 2)}) ${val.substring(3, 5)}-${val.substring(5, val.length)}`
+        e.target.value = e.target.value.replace(/[^0-9]/g, '')
         e.target.value ? ChangeInput() : clearInput()
     }
 
@@ -53,10 +24,19 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
         setIsCleanerOpened(true)
     }
 
+    const handleBlurPhone = (e) => {
+        setNumber(e.target.value)
+        e.target.value = e.target.value.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4')
+    }
+    const handleFocusPhone = (e) => {
+        number ? e.target.value = number : null
+    }
+
     const onClickCleaner = () => {
+        setNumber(false)
         setIsErrorHidden(true)
-        clearInput()
         useFocusInput(inputRef)
+        clearInput()
     }
 
     const clearInput = () => {
@@ -69,14 +49,27 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
         // mask: '{(}00{)}000-00-00',
         minLength: {
             value: 9,
-            message: `Номер должен содержать 7 цифр`
+            message: `Номер должен содержать код и 7 цифр`
         },
-        // validate: {
-        //     isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 
-        //         'Поле должно содержать лишь кириллицу',
-        // },
+        validate: {
+            isCorrectCode: (val) => {
+                // console.log(val.length)
+                const code_list = ['29', '33', '44', '25']
+                const message = 'Неизвестный код оператора связи'
+                if (val.length >= 10) {
+                    // console.log(val.substr(1,2))
+                    return (code_list.includes(val.substr(1,2)) || message)
+                }else if (val.length === 9){
+                    // console.log(val.substr(0,2))
+                    return (code_list.includes(val.substr(0,2)) || message)
+                }else return true
+            },
+        },
         onChange: (e) => {
             handleChangePhone(e)
+        },
+        onBlur: (e) => {
+            handleBlurPhone(e)
         }
     })
 
@@ -91,10 +84,12 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
                 className='phone_input'
                 type='tel'
                 inputMode='number'
-                maxLength={11}
+                maxLength={9}
                 placeholder='(29) 555-35-35'
                 disabled={disabled}
                 // autoComplete='cc-number'
+                // autoComplete='off'
+                onFocus={handleFocusPhone}
             />
             <span className='phone_mask'>+375</span>
             <FiPhoneCall className='input-icon'/>
