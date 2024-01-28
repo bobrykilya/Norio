@@ -14,7 +14,17 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
     const inputRef = useRef(null)
 
     const handleChangePhone = (e) => {
-        e.target.value = e.target.value.replace(/[^1-9]/, '')
+        e.target.value = e.target.value.replace(/[^1-9]/g, '')
+        e.target.value = e.target.value.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4')
+        // e.target.value = e.target.value.replace(/\s/g, '').match(/.{1,2}/g)?.join(' ').substr(0, 12) || null
+        // const new_value = []
+        // new_value.push(e.target.value?.substr(0, 2)?.replace(/(\d{2})/, '($1)'))
+        // new_value.push(e.target.value?.substr(2, 4))
+        // const match_3 = e.target.value.substr(5, 5)?.replace(/(\d{3})/, '$1 ')
+        // console.log(new_value)
+        // e.target.value = new_value?.join(' ') || null
+        // new_value = e.target.value.match(/.{1,2}/g)?.join(' ').substr(0, 12) || null
+        // e.target.value = e.target.value.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4')
         // const val = e.target.value
         // let new_val = false
         // console.log(val)
@@ -56,11 +66,11 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
 
     const { ref, ... rest_register } = register(name, {
         required: true,
-        mask: '{(}00{)}000-00-00',
-        // minLength: {
-        //     value: 14,
-        //     message: `Номер должен содержать 7 цифр`
-        // },
+        // mask: '{(}00{)}000-00-00',
+        minLength: {
+            value: 9,
+            message: `Номер должен содержать 7 цифр`
+        },
         // validate: {
         //     isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 
         //         'Поле должно содержать лишь кириллицу',
@@ -79,11 +89,12 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
                     inputRef.current = e
                 }}
                 className='phone_input'
-                type='text'
+                type='tel'
                 inputMode='number'
                 maxLength={11}
-                placeholder='(88) 005-55-35'
+                placeholder='(29) 555-35-35'
                 disabled={disabled}
+                // autoComplete='cc-number'
             />
             <span className='phone_mask'>+375</span>
             <FiPhoneCall className='input-icon'/>

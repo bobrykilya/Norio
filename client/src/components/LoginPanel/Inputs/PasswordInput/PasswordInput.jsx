@@ -14,7 +14,6 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    const [isErrorHidden, setIsErrorHidden] = useState(false)
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
 
     const inputRef = useRef(null)
@@ -29,13 +28,11 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
     }
 
     const changeInput = () => {
-        setIsErrorHidden(false)
         setIsLockVisible(true)
         setIsCleanerOpened(true)
     }
 
     const onClickCleaner = () => {
-        setIsErrorHidden(true)
         clearInput()
         useFocusInput(inputRef)
     }
@@ -142,7 +139,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
             >
                 <span>CAPS</span>
             </div>
-            <InputsError error={error} isErrorHidden={isErrorHidden} />
+            <InputsError error={error} />
             <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
             <button 
                 className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}

@@ -92,16 +92,6 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
                     reset={resetField}
                     disabled={formBlur ? true : false}
                 />
-                {/* <UserNameInput
-                    name='sign_up_phone'
-                    placeholder='(88) 005-55-35'
-                    icon={<FiPhoneCall className='input-icon'/>}
-                    type='phone'
-                    register={register}
-                    error={errors?.sign_up_phone}
-                    reset={resetField}
-                    inputMaxLength={14}
-                    /> */}
             </div>
             <SubmitBut 
                 icon={<TiArrowRightOutline className='fa-icon'/>}

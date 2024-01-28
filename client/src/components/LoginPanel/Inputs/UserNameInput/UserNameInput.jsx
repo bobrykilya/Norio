@@ -10,7 +10,6 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    const [isErrorHidden, setIsErrorHidden] = useState(false)
     const inputRef = useRef(null)
     
     const handleChangeName = (e) => {
@@ -20,12 +19,10 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
     }
     
     const ChangeInput = () => {
-        setIsErrorHidden(false)
         setIsCleanerOpened(true)
     }
 
     const onClickCleaner = () => {
-        setIsErrorHidden(true)
         clearInput()
         useFocusInput(inputRef)
     }
@@ -91,12 +88,12 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
                 type='text'
                 maxLength={inputMaxLength}
                 placeholder={placeholder}
-                autoComplete={type !== 'sign_up_2' ? (notSaveUser ? 'off' : 'username') : 'auto'}
+                autoComplete={(type === 'name' || notSaveUser) ? 'off' : 'username'}
                 disabled={disabled}
                 // autoFocus
             />
             {icon}
-            <InputsError error={error} isErrorHidden={isErrorHidden} />
+            <InputsError error={error} />
             <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
         </div>
     )

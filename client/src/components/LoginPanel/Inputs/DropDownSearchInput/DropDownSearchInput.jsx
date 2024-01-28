@@ -7,7 +7,7 @@ import InputsCleaner from '../InputsCleaner/InputsCleaner'
 
 
 
-const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=null, reset, setValue, setError, watch }) => {
+const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=null, reset, setValue, setError, watch, disabled=false }) => {
 
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -60,7 +60,8 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
 
     const handleSetElemName = (e) => {
-        if (e.target.tagName === 'BUTTON') {
+        // console.log(e.target)
+        if (e.target.tagName === 'BUTTON' && isDropDownOpened) {
             setValue(name, e.target.textContent)
             toggleDropDown(false)
             setIsCleanerOpened(true)
@@ -87,22 +88,37 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
     
     const handleInputClick = (e) => {
-        if (!isDropDownOpened) return
-        switch(e.code) {
-            case 'Tab': 
-                toggleDropDown(false)
-                break
-            case 'ArrowDown':
-                e.preventDefault()
-                focusJumping('next')
-                break
-            case 'Enter':
-                focusJumping('next')
-                break
-            case 'Escape':
-                toggleDropDown(false)
-                break
+
+        if (!isDropDownOpened) {
+            switch(e.code) {
+                case 'ArrowDown':
+                    e.preventDefault()
+                    toggleDropDown(true)
+                    break
+                case 'Enter':
+                    e.preventDefault()
+                    break
+                default:
+                    return
+            }
+        }else {
+            switch(e.code) {
+                case 'Tab': 
+                    toggleDropDown(false)
+                    break
+                case 'ArrowDown':
+                    e.preventDefault()
+                    focusJumping('next')
+                    break
+                case 'Enter':
+                    focusJumping('next')
+                    break
+                case 'Escape':
+                    toggleDropDown(false)
+                    break
+            }
         }
+
     }
 
     const handleElemClick = (e) => {
@@ -127,6 +143,8 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             case 'Escape':
                 useFocusInput(inputRef)
                 toggleDropDown(false)
+                break
+            case 'Enter':
                 break
             default:
                 useFocusInput(inputRef)
@@ -183,6 +201,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                     error?.type !== 'isNotLatin' &&
                     !isValueInList(watch(name))) ? toggleDropDown(true) : null
                 }}
+                disabled={disabled}
             />
             {icon}
             {isErrorOn ? <InputsError error={error} /> : null}
@@ -191,6 +210,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 id='dropdown-cont'
                 className={`${isDropDownOpened ? 'opened' : ''}`}
                 onClick={handleSetElemName}
+                tabIndex={-1}
                 ref={dropDownRef}
             >
                 {
@@ -198,7 +218,14 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                         <span className='cont'>Такого значения нет в базе</span> :
                         LIST_FILTERED.map((el) => {
                             // console.log(LIST_FILTERED.indexOf(el))
-                            return <button key={el.id} tabIndex={-1} onKeyDown={handleElemClick}>{el.title}</button>
+                            return <button 
+                                        key={el.id} 
+                                        tabIndex={-1} 
+                                        onKeyDown={handleElemClick}
+                                        disabled={disabled}
+                                    >
+                                        {el.title}
+                                    </button>
                         })
                 }
             </ul>
