@@ -28,7 +28,12 @@ const SignUpForm = ({ formBlur }) => {
         formState: { errors, isLoading } 
     } = useForm({
         mode: 'onChange',
-        reValidateMode: "onChange"
+        reValidateMode: "onChange",
+        defaultValues: {
+            sign_up_username: 'admin',
+            sign_up_password: '1234Admin',
+            confirm_password: '1234Admin'
+        }
     })
 
     //* Confirm_password's error react validation

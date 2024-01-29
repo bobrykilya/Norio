@@ -138,7 +138,7 @@ const SignUpSecondCont = ({ act_form }) => {
             className={`sign-cont cont ${act_form === 'opened_sign_up_2' ? 'active' : ''}`}
         >
             <div className='enter_text-cont cont'>
-                <h1>Личные данные:</h1>
+                <h1>Личные данные</h1>
             </div>
             < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} formBlur={act_form !== 'opened_sign_up_2'} />
         </section>
