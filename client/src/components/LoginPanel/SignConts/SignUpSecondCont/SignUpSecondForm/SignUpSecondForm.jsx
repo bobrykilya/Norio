@@ -8,6 +8,7 @@ import { GrUserWorker } from "react-icons/gr"
 import { GrUserExpert } from "react-icons/gr";
 import { TiArrowRightOutline } from "react-icons/ti"
 import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
+import AvatarInput from '../../../Inputs/AvatarInput/AvatarInput'
 
 
 const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
@@ -94,9 +95,12 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
                     disabled={formBlur ? true : false}
                 />
             </div>
-            <SubmitBut 
-                icon={<TiArrowRightOutline className='fa-icon'/>}
-            />
+            <div className='avatar_and_submit_buts-cont cont'>
+                <AvatarInput />
+                <SubmitBut
+                    icon={<TiArrowRightOutline className='fa-icon'/>}
+                />
+            </div>
         </form>
      )
 }
