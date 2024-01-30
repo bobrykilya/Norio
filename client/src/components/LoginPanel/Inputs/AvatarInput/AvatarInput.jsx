@@ -1,5 +1,5 @@
 import { useState } from 'react'
-// import Avatar_list from '../../../assets/avatars/Белый медведь малыш.jpg'
+import Avatar from '../../../../assets/avatars/Белка.jpg'
 import InputsCleaner from './../InputsCleaner/InputsCleaner'
 import InputsError from './../InputsError/InputsError'
 
@@ -7,7 +7,7 @@ import InputsError from './../InputsError/InputsError'
 const AvatarInput = ({ error=null }) => {
 
     const [avatar, setAvatar] = useState('')
-    const [isCleanerOpened, setIsCleanerOpened] = useState(false)
+    const [isCleanerOpened, setIsCleanerOpened] = useState(true)
     const [isErrorOn, setIsErrorOn] = useState(true)
 
     const clearInput = () => {
@@ -15,12 +15,12 @@ const AvatarInput = ({ error=null }) => {
     }
 
     return (
-        <div className='avatar-cont cont'>
+        <div className='avatar-cont'>
             <button
-                className='avatar-but cont'
+                className='avatar-but'
                 title='Выбрать аватар пользователя'
             >
-                <img src='../../../assets/avatars/Белый медведь малыш.jpg' alt="" />
+                <img src={Avatar} alt="" />
             </button>
             <InputsError error={error} />
             <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
