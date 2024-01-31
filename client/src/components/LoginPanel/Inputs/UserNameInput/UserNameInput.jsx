@@ -22,7 +22,7 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
         setIsCleanerOpened(true)
     }
 
-    const onClickCleaner = () => {
+    const handleClickCleaner = () => {
         clearInput()
         useFocusInput(inputRef)
     }
@@ -90,11 +90,11 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
                 placeholder={placeholder}
                 autoComplete={(type === 'name' || notSaveUser) ? 'off' : 'username'}
                 disabled={disabled}
-                // autoFocus
+                autoFocus
             />
             {icon}
             <InputsError error={error} />
-            <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
+            <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
     )
 }

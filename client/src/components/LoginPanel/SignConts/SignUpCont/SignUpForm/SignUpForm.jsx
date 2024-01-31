@@ -30,32 +30,30 @@ const SignUpForm = ({ formBlur }) => {
         mode: 'onChange',
         reValidateMode: "onChange",
         defaultValues: {
-            sign_up_username: 'admin',
-            sign_up_password: '1234Admin',
+            username: 'admin',
+            password: '1234Admin',
             confirm_password: '1234Admin'
         }
     })
 
     //* Confirm_password's error react validation
     useEffect(() => {
-        const pass = watch('sign_up_password')
+        // console.log(watch('password'), watch('confirm_password'))
+        const pass = watch('password')
         const confirm = watch('confirm_password')
         if (pass && confirm) {
             pass !== confirm ? 
             setError('confirm_password', {message: 'Пароли не совпадают'}) : 
             setError('confirm_password', null)
         }
-    }, [watch('sign_up_password'), watch('confirm_password')])
+    }, [watch('password'), watch('confirm_password')])
 
     const onSubmit = (data) => {
-        // data.sign_up_store = store
-        data.sign_up_device = navigator.userAgent
-        data.sign_up_username = data.sign_up_username.toLowerCase()
+        data.username = data.username.toLowerCase()
         delete data.confirm_password
         // alert(JSON.stringify(data))
-        // console.log(`Юзер: ${data.sign_up_username}`)
-        // console.log(`Пароль: ${data.sign_up_password}`)
-        // console.log(`Точка: ${data.sign_up_store}`)
+        // console.log(`Юзер: ${data.username}`)
+        // console.log(`Пароль: ${data.password}`)
         // console.log(`Устройство: ${data.device}`)
 
         toggleCoverPanel('sign_up_2')
@@ -65,20 +63,20 @@ const SignUpForm = ({ formBlur }) => {
         <form onSubmit={handleSubmit(onSubmit)} id='sign_up-form' className='form cont'>
             <div className={`inputs-cont cont ${formBlur ? 'blur' : ''}`}>
                 <UserNameInput
-                    name='sign_up_username'
+                    name='username'
                     placeholder='Логин'
                     icon={<FaUser className='input-icon'/>}
                     type='sign_up'
                     register={register}
-                    error={errors?.sign_up_username}
+                    error={errors?.username}
                     reset={resetField}
                     disabled={formBlur ? true : false}
                 /> 
                 <PasswordInput
-                    name='sign_up_password'
+                    name='password'
                     type='sign_up'
                     register={register}
-                    error={errors?.sign_up_password}
+                    error={errors?.password}
                     reset={resetField}
                     disabled={formBlur ? true : false}
                 />

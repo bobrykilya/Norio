@@ -6,13 +6,16 @@ import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { HiOutlineHome } from "react-icons/hi"
 import { GrUserWorker } from "react-icons/gr"
 import { GrUserExpert } from "react-icons/gr";
-import { TiArrowRightOutline } from "react-icons/ti"
+// import { TiArrowRightOutline } from "react-icons/ti"
+import { BiLogInCircle } from "react-icons/bi"
 import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
 import AvatarInput from '../../../Inputs/AvatarInput/AvatarInput'
 
 
 const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
     // console.log('SignUp_2')
+
+    const name_input_icon = <GrUserExpert className='input-icon'/>
 
     const {
         register,
@@ -21,18 +24,18 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
         watch,
         setError,
         setValue,
-        formState: { errors, isLoading } 
+        formState: { errors, isLoading }
     } = useForm({
         mode: 'onChange',
         reValidateMode: "onChange"
     })
 
     const onSubmit = (data) => {
-        data.sign_up_phone = '+375' + data.sign_up_phone
+        data.phone = '+375' + data.phone
+        data.device = navigator.userAgent
         alert(JSON.stringify(data))
-        // console.log(`Юзер: ${data.sign_up_surname}`)
-        // console.log(`Пароль: ${data.sign_up_password}`)
-        // console.log(`Точка: ${data.sign_up_store}`)
+        // console.log(`Юзер: ${data.first_name}`)
+        // console.log(`Точка: ${data.store}`)
         // console.log(`Устройство: ${data.device}`)
     }
 
@@ -40,19 +43,19 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
         <form onSubmit={handleSubmit(onSubmit)} id='sign_up_2-form' className='form cont'>
             <div className='inputs-cont cont'>
                 <PhoneInput 
-                    name='sign_up_phone'
+                    name='phone'
                     register={register}
-                    error={errors?.sign_up_phone}
+                    error={errors?.phone}
                     reset={resetField}
                     disabled={formBlur ? true : false}
                 />
                 <DropDownSearchInput 
                     LIST={STORES_LIST}
-                    name='stores_input'
+                    name='store'
                     placeholder='Точка'
                     icon={<HiOutlineHome className='input-icon'/>}
                     register={register}
-                    error={errors?.stores_input}
+                    error={errors?.store}
                     reset={resetField}
                     setValue={setValue}
                     setError={setError}
@@ -61,11 +64,11 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
                 />
                 <DropDownSearchInput 
                     LIST={JOBS_LIST}
-                    name='jobs_input'
+                    name='job'
                     placeholder='Должность'
                     icon={<GrUserWorker className='input-icon'/>}
                     register={register}
-                    error={errors?.jobs_input}
+                    error={errors?.job}
                     reset={resetField}
                     setValue={setValue}
                     setError={setError}
@@ -73,23 +76,34 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
                     disabled={formBlur ? true : false}
                 />
                 <UserNameInput
-                    name='sign_up_surname'
+                    name='last_name'
                     placeholder='Фамилия'
-                    icon={<GrUserExpert className='input-icon'/>}
+                    icon={name_input_icon}
                     type='name'
                     register={register}
-                    error={errors?.sign_up_surname}
+                    error={errors?.last_name}
                     reset={resetField}
                     inputMaxLength={20}
                     disabled={formBlur ? true : false}
                 />
                 <UserNameInput
-                    name='sign_up_name'
+                    name='first_name'
                     placeholder='Имя'
-                    icon={<GrUserExpert className='input-icon'/>}
+                    icon={name_input_icon}
                     type='name'
                     register={register}
-                    error={errors?.sign_up_name}
+                    error={errors?.first_name}
+                    reset={resetField}
+                    inputMaxLength={20}
+                    disabled={formBlur ? true : false}
+                />
+                <UserNameInput
+                    name='middle_name'
+                    placeholder='Отчество'
+                    icon={name_input_icon}
+                    type='name'
+                    register={register}
+                    error={errors?.middle_name}
                     reset={resetField}
                     inputMaxLength={20}
                     disabled={formBlur ? true : false}
@@ -98,7 +112,7 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, formBlur }) => {
             <div className='avatar_and_submit_buts-cont cont'>
                 <AvatarInput />
                 <SubmitBut
-                    icon={<TiArrowRightOutline className='fa-icon'/>}
+                    icon={<BiLogInCircle className='fa-icon'/>}
                 />
             </div>
         </form>

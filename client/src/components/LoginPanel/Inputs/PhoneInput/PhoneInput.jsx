@@ -10,7 +10,6 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    const [isErrorHidden, setIsErrorHidden] = useState(false)
     const [number, setNumber] = useState(false)
     const inputRef = useRef(null)
 
@@ -20,7 +19,6 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
     }
 
     const ChangeInput = () => {
-        setIsErrorHidden(false)
         setIsCleanerOpened(true)
     }
 
@@ -32,9 +30,8 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
         number ? e.target.value = number : null
     }
 
-    const onClickCleaner = () => {
+    const handleClickCleaner = () => {
         setNumber(false)
-        setIsErrorHidden(true)
         useFocusInput(inputRef)
         clearInput()
     }
@@ -93,8 +90,8 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
             />
             <span className='phone_mask'>+375</span>
             <FiPhoneCall className='input-icon'/>
-            <InputsError error={error} isErrorHidden={isErrorHidden} />
-            <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
+            <InputsError error={error} />
+            <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
      )
 }

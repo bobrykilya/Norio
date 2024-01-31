@@ -30,7 +30,7 @@ const SignInForm = ({  formBlur=false}) => {
     }
 
     const onSubmitNotSave = async (data) => {
-        data.is_not_save = true,
+        data.is_not_save = true
         data.sign_up_device = navigator.userAgent
         // console.log(data)
         alert(JSON.stringify(data))
@@ -47,7 +47,7 @@ const SignInForm = ({  formBlur=false}) => {
         <form onSubmit={handleSubmit(onSubmit)} id='sign_in-form' className='form cont' >
             <div className='inputs-cont cont'>
                 <UserNameInput
-                    name='sign_in_username'
+                    name='username'
                     placeholder='Логин'
                     icon={<FaUser className='input-icon'/>}
                     register={register}
@@ -56,7 +56,7 @@ const SignInForm = ({  formBlur=false}) => {
                     disabled={formBlur ? true : false}
                 /> 
                 <PasswordInput
-                    name='sign_in_password'
+                    name='password'
                     type='sign_in'
                     register={register}
                     reset={resetField}

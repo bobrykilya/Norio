@@ -32,7 +32,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
         setIsCleanerOpened(true)
     }
 
-    const onClickCleaner = () => {
+    const handleClickCleaner = () => {
         clearInput()
         useFocusInput(inputRef)
     }
@@ -101,7 +101,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
                     required: true,
                     validate: {
                         passwordsMatch: () => {
-                            if (watch('sign_up_password') != watch('confirm_password')) {
+                            if (watch('password') != watch('confirm_password')) {
                                 return 'Пароли не совпадают'
                             }
                         }
@@ -140,7 +140,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
                 <span>CAPS</span>
             </div>
             <InputsError error={error} />
-            <InputsCleaner opened={isCleanerOpened} onClick={onClickCleaner} />
+            <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
             <button 
                 className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
                 title='Показать\Спрятать пароль'
