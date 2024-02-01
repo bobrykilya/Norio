@@ -11,8 +11,11 @@
         // border: 2px solid orange
         z-index: 3
         width: 50%
+        // width: 55%
+        // height: 104%
         // transform: translateX(50%)
         // border-radius: $rad-up-cover-panel 0 0 $rad-down-cover-panel
+        // transition: all $trans-dur $trans-wave-bounce-style
         transition: all $trans-dur $trans-style
         background: linear-gradient(80deg,$color-cover-gradient, 40% , $color-confirm-but-act)
         pointer-events: auto
@@ -86,8 +89,10 @@
         #close_sign_up_2-button
             // border: 1px solid red
             position: absolute
-            bottom: 3rem
-            right: 2.1rem
+            // bottom: 3.8rem
+            // right: 2.2rem
+            bottom: 3.1rem
+            right: 2.8rem
             width: auto
             height: auto
             border-radius: 50%
@@ -179,7 +184,7 @@
     &.opened_sign_up_2
         #cover-cont
             border-radius: 0 $rad-up-cover-panel calc($rad-down-cover-panel - 100px) 0
-            transform: translate(-120%, -70%)
+            transform: translate(-117%, -70%)
             &::after
                 opacity: 0
             #cover-content

@@ -1,4 +1,4 @@
-
+@import '../../../LoginPanel_variables'
 
 
 
@@ -9,6 +9,7 @@
         pointer-events: auto
         &.blur
             transition: all 0.4s ease
+            -webkit-filter: blur(5px)
             filter: blur(5px)
             pointer-events: none
             button
@@ -19,7 +20,7 @@
         z-index: 4
         pointer-events: none
         .fa-icon
-            transform: scale(0.8)
+            transform: scale(0.5)
             margin-top: -3rem
             color: #173b75e3
             // color: #009c58ca
@@ -29,7 +30,7 @@
             // box-shadow: 2px 10px 30px #00000040
         &.active
             .fa-icon
-                transition: all 0.3s 0.3s ease
+                transition: all 0.3s 0.3s cubic-bezier(.32,1.91,.85,.82)
                 transform: scale(1) + translateY(0)
                 opacity: 1
     .submit-but
