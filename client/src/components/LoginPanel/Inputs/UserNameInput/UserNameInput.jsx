@@ -15,10 +15,10 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
     const handleChangeName = (e) => {
         e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, '')
         e.target.value = useCapitalize(e.target.value)
-        e.target.value ? ChangeInput() : clearInput()
+        e.target.value ? changeInput() : clearInput()
     }
     
-    const ChangeInput = () => {
+    const changeInput = () => {
         setIsCleanerOpened(true)
     }
 

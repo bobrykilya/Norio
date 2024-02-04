@@ -15,7 +15,7 @@ const SignInCont = ({ act_form }) => {
                 <h1>Авторизация</h1>
             </div>
             <ButtonsCont />
-            <SignInForm formBlur={act_form !== 'opened_sign_in'} />
+            <SignInForm isFormBlur={act_form !== 'opened_sign_in'} />
             <h3 className='name_tag'>bobrykilya</h3>
         </section>
      )

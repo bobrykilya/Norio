@@ -132,6 +132,77 @@ const SignUpSecondCont = ({ act_form }) => {
         },
     ]
 
+    const AVATARS_LIST = [
+        {
+            id: 'squirrel',
+            title: 'Белка',
+        },
+        {
+            id: 'wolf',
+            title: 'Волк',
+        },
+        {
+            id: 'wolf_2',
+            title: 'Белый волк',
+        },
+        {
+            id: 'hippopotamus',
+            title: 'Бегемот',
+        },
+        {
+            id: 'lion_2',
+            title: 'Лев альбинос',
+        },
+        {
+            id: 'bear',
+            title: 'Бурый медведь',
+        },
+        {
+            id: 'bear_2',
+            title: 'Белый медведь',
+        },
+        {
+            id: 'bear_3',
+            title: 'Белый мишка',
+        },
+        {
+            id: 'bear_4',
+            title: 'Бурый мишка',
+        },
+        {
+            id: 'dog',
+            title: 'Пёс "Бигль"',
+        },
+        {
+            id: 'dog_2',
+            title: 'Пёс "Бульдог"',
+        },
+        {
+            id: 'beaver',
+            title: 'Бобр',
+        },
+        {
+            id: 'antelope',
+            title: 'Антилопа',
+        },
+        {
+            id: 'buffalo',
+            title: 'Буйвол',
+        },
+        {
+            id: 'bull',
+            title: 'Бык',
+        },
+        {
+            id: 'otter',
+            title: 'Выдра',
+        },
+        {
+            id: 'cheetah',
+            title: 'Гепардесса ',
+        },
+    ]
+
     return ( 
         <section
             id='sign_up_2-cont'
@@ -140,7 +211,7 @@ const SignUpSecondCont = ({ act_form }) => {
             <div className='enter_text-cont cont'>
                 <h1>Личные данные</h1>
             </div>
-            < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} formBlur={act_form !== 'opened_sign_up_2'} />
+            < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} AVATARS_LIST={AVATARS_LIST} isFormBlur={act_form !== 'opened_sign_up_2'} />
         </section>
      )
 }

@@ -4,21 +4,50 @@
 
 .avatar-cont
     // border: 2px solid orange
-    width: calc($size-confirm-but / 1.7)
-    height: calc($size-confirm-but / 1.7)
+    width: auto
     overflow: visible    
-    // border-radius: 50%
-    // background-color: #fff
     .avatar-but
         // border: 2px solid black
-        width: 100%
-        height: 100%
+        width: calc($size-confirm-but / 1.7)
+        height: calc($size-confirm-but / 1.7)
         border-radius: 50%
         overflow: hidden
         &:hover
             border-radius: 40%
         &:active
             transform: translateY($height-but-act-jump) scale(0.9)
+        .no_avatar-cont
+            position: absolute
+            top: 0
+            left: 0
+            z-index: 0
+            $color-no-avatar: #6b6b6b
+            border: 1.5px solid $color-no-avatar
+            border-radius: 50%
+            transition: all 0.3s ease
+            opacity: 0
+            &::after
+                content: ''
+                position: absolute
+                top: 0
+                left: 0
+                width: 100%
+                height: 100%
+                z-index: -1
+                border-radius: 50%
+                background-color: $color-backgr
+                transition: all 0.3s ease
+                opacity: 0
+                transform: scale(0)
+            &.opened
+                opacity: 1
+                &::after
+                    opacity: 1
+                    transform: scale(1)
+            .fa-icon
+                color: $color-no-avatar
+                font-size: 1.5rem
+                width: 100%
         img
             width: 100%
             height: 100%
@@ -52,14 +81,65 @@
             // display: none
             position: absolute
             left: 50%
-            bottom: -4rem
+            bottom: -5rem
+            padding-bottom: 5rem
             width: 700px
-            height: 90vh
+            height: 95vh
+            justify-content: flex-start
             z-index: 12
             background-color: $color-backgr
             box-shadow: 2px 10px 30px #00000040
             border-radius: 200px
             transition: all 0.6s $trans-bounce-style
-            // animation-timing-function: cubic-bezier(0.1, -0.6, 0.2, 0)
             transform: translateX(-50%) translateY(100%)
             .avatar-list
+                // border: 2px solid red
+                flex-direction: row
+                padding: 1.5rem
+                padding-bottom: 2rem
+                align-items: flex-start
+                flex-wrap: wrap
+                overflow-y: scroll
+                scroll-behavior: smooth
+                scroll-snap-type: y mandatory
+                -ms-overflow-style: none
+                scrollbar-width: none
+                &::-webkit-scrollbar 
+                    display: none 
+                li
+                    // border: 2px solid orange
+                    margin: 0.8rem
+                    margin-bottom: 0.7rem
+                    // scroll-snap-align: center
+                    $size-avatar-elem: 6rem
+                    width: $size-avatar-elem
+                    height: $size-avatar-elem + 1.4rem
+                    justify-content: flex-start
+                    overflow: visible
+                    button
+                        // border: 1px solid black
+                        height: $size-avatar-elem
+                        width: $size-avatar-elem
+                        border-radius: 50%
+                        overflow: hidden
+                        box-shadow: 2px 3px 10px #0000003a
+                        &:hover
+                            border-radius: 45%
+                            transform: translateY(calc($height-but-act-jump * 3))
+                            box-shadow: 2px 5px 10px #00000048
+                        &:active
+                            transform: translateY(calc($height-but-act-jump * 3)) scale(0.95)
+                        img
+                            width: 100%
+                            height: 100%
+                            object-fit: cover
+                            z-index: -2
+                    label
+                        // border: 1px solid black
+                        margin-top: -0.4rem
+                        padding-top: 1rem
+                        text-align: center
+                .error-message
+                    line-height: 1.7rem
+                    font-size: 1rem
+                    text-align: center

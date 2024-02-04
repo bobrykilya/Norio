@@ -12,12 +12,11 @@ import { LuCheckCircle } from "react-icons/lu"
 import { FaUser } from "react-icons/fa"
 
 
-const SignUpForm = ({ formBlur }) => {
+const SignUpForm = ({ isFormBlur }) => {
     // console.log('SignUp')
+    // console.log(isFormBlur)
     
     const { toggleCoverPanel } = useActions()
-
-    // console.log(formBlur)
 
     const {
         register,
@@ -61,7 +60,7 @@ const SignUpForm = ({ formBlur }) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} id='sign_up-form' className='form cont'>
-            <div className={`inputs-cont cont ${formBlur ? 'blur' : ''}`}>
+            <div className={`inputs-cont cont ${isFormBlur ? 'blur' : ''}`}>
                 <UserNameInput
                     name='username'
                     placeholder='Логин'
@@ -70,15 +69,15 @@ const SignUpForm = ({ formBlur }) => {
                     register={register}
                     error={errors?.username}
                     reset={resetField}
-                    disabled={formBlur ? true : false}
-                /> 
+                    disabled={isFormBlur}
+                />
                 <PasswordInput
                     name='password'
                     type='sign_up'
                     register={register}
                     error={errors?.password}
                     reset={resetField}
-                    disabled={formBlur ? true : false}
+                    disabled={isFormBlur}
                 />
                 <PasswordInput
                     name='confirm_password'
@@ -87,16 +86,16 @@ const SignUpForm = ({ formBlur }) => {
                     error={errors?.confirm_password}
                     reset={resetField}
                     watch={watch}
-                    disabled={formBlur ? true : false}
+                    disabled={isFormBlur}
                 />
             </div>
-            <div className={`blur_icon-cont cont ${formBlur ? 'active' : ''}`}>
+            <div className={`blur_icon-cont cont ${isFormBlur ? 'active' : ''}`}>
                 <LuCheckCircle className='fa-icon'/>
             </div>
             <SubmitBut 
                 icon={<FaArrowRightLong className='fa-icon'/>}
                 notSaveUser={false}
-                disabled={formBlur}
+                disabled={isFormBlur}
                 isLoading={isLoading}
             />
         </form>

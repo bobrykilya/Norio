@@ -15,10 +15,10 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
 
     const handleChangePhone = (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '')
-        e.target.value ? ChangeInput() : clearInput()
+        e.target.value ? changeInput() : clearInput()
     }
 
-    const ChangeInput = () => {
+    const changeInput = () => {
         setIsCleanerOpened(true)
     }
 
@@ -85,7 +85,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
                 placeholder='(29) 555-35-35'
                 disabled={disabled}
                 // autoComplete='cc-number'
-                // autoComplete='off'
+                autoComplete='off'
                 onFocus={handleFocusPhone}
             />
             <span className='phone_mask'>+375</span>

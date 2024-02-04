@@ -9,7 +9,7 @@ import { FaUser } from "react-icons/fa"
 
 
 
-const SignInForm = ({  formBlur=false}) => {
+const SignInForm = ({  isFormBlur=false}) => {
     // console.log('SignIn')
 
     const [notSaveUser, setNotSaveUser] = useState(false)
@@ -53,7 +53,7 @@ const SignInForm = ({  formBlur=false}) => {
                     register={register}
                     reset={resetField}                 
                     notSaveUser={notSaveUser}
-                    disabled={formBlur ? true : false}
+                    disabled={isFormBlur}
                 /> 
                 <PasswordInput
                     name='password'
@@ -61,17 +61,18 @@ const SignInForm = ({  formBlur=false}) => {
                     register={register}
                     reset={resetField}
                     notSaveUser={notSaveUser}
-                    disabled={formBlur ? true : false}
+                    disabled={isFormBlur}
                 />
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
                     <span>Не запоминать меня</span>
                 </label>
             </div>
-            <SubmitBut 
+            <SubmitBut
                 icon={<BiLogInCircle className='fa-icon'/>}
                 notSaveUser={notSaveUser}
                 onClick={handleSubmit(onSubmitNotSave)}
+                disabled={isFormBlur}
                 isLoading={isLoading}
             />
         </form>

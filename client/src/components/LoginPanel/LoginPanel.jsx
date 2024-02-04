@@ -12,7 +12,7 @@ import './LoginPanel.sass'
 const LoginPanel = () => {
 
     // const [user, setUser] = useState(null)
-    const act_form   = useSelector(state => state.coverPanel.coverPanel)
+    const act_form = useSelector(state => state.coverPanel.coverPanel)
 
     return ( 
         <div id='login_panel-cont' className='cont'>

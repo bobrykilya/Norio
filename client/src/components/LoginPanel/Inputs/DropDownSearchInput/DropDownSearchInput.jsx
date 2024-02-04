@@ -48,6 +48,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
     const toggleDropDown = (pos) => {
         if (pos) {
+            if (error?.type === 'isNotLatin') return
             setIsDropDownOpened(true)
             dropDownRef.current.scrollTo({ top: 0, behavior: 'smooth'})
         }else
@@ -87,7 +88,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         return list.some(el => el.title.toLowerCase() === val.toLowerCase())
     }
     
-    const handleInputClick = (e) => {
+    const handleClickInput = (e) => {
 
         if (!isDropDownOpened) {
             switch(e.code) {
@@ -121,7 +122,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
     }
 
-    const handleElemClick = (e) => {
+    const handleClickElem = (e) => {
         // console.log(e.code)
         if (e.code.includes('Arrow'))  
             e.preventDefault() 
@@ -195,11 +196,10 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 className='dropdown_input'
                 placeholder={placeholder}
                 autoComplete='none'
-                onKeyDown={handleInputClick}
+                onKeyDown={handleClickInput}
                 onFocus={ () => {
-                    (watch(name) && 
-                    error?.type !== 'isNotLatin' &&
-                    !isValueInList(watch(name))) ? toggleDropDown(true) : null
+                    if (watch(name) && !isValueInList(watch(name)))
+                        toggleDropDown(true)
                 }}
                 disabled={disabled}
             />
@@ -221,7 +221,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                             return <button 
                                         key={el.id} 
                                         tabIndex={-1} 
-                                        onKeyDown={handleElemClick}
+                                        onKeyDown={handleClickElem}
                                         disabled={disabled}
                                     >
                                         {el.title}

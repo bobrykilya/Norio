@@ -14,7 +14,7 @@ const SignUpCont = ({ act_form }) => {
                 <h1>Регистрация</h1>
             </div>
             <ButtonsCont />
-            <SignUpForm formBlur={act_form === 'opened_sign_up_2'}/>
+            <SignUpForm isFormBlur={act_form !== 'opened_sign_up'}/>
             <h3 className='name_tag'>bobrykilya</h3>
         </section>
     )
