@@ -206,12 +206,12 @@ const SignUpSecondCont = ({ act_form }) => {
     return ( 
         <section
             id='sign_up_2-cont'
-            className={`sign-cont cont ${act_form === 'opened_sign_up_2' ? 'active' : ''}`}
+            className={`sign-cont cont ${act_form === 'sign_up_2' ? 'active' : ''}`}
         >
             <div className='enter_text-cont cont'>
                 <h1>Личные данные</h1>
             </div>
-            < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} AVATARS_LIST={AVATARS_LIST} isFormBlur={act_form !== 'opened_sign_up_2'} />
+            < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} AVATARS_LIST={AVATARS_LIST} isFormBlur={act_form !== 'sign_up_2'} />
         </section>
      )
 }

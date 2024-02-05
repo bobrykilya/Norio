@@ -13,13 +13,14 @@ const LoginPanel = () => {
 
     // const [user, setUser] = useState(null)
     const act_form = useSelector(state => state.coverPanel.coverPanel)
+    // console.log(act_form)
 
     return ( 
         <div id='login_panel-cont' className='cont'>
             <div id='signs-cont' className='cont'>
                 <SignInCont act_form={act_form}/>
-                <SignUpSecondCont act_form={act_form} />
                 <SignUpCont act_form={act_form} />
+                <SignUpSecondCont act_form={act_form} />
             </div>
             <CoverPanel />
         </div>

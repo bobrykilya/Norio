@@ -72,7 +72,6 @@ const SignInForm = ({  isFormBlur=false}) => {
                 icon={<BiLogInCircle className='fa-icon'/>}
                 notSaveUser={notSaveUser}
                 onClick={handleSubmit(onSubmitNotSave)}
-                disabled={isFormBlur}
                 isLoading={isLoading}
             />
         </form>

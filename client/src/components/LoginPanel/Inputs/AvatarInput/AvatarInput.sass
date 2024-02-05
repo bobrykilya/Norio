@@ -12,8 +12,12 @@
         height: calc($size-confirm-but / 1.7)
         border-radius: 50%
         overflow: hidden
-        &:hover
+        &:hover, &:focus
+            transform: translateY($height-but-act-jump)
             border-radius: 40%
+            .no_avatar-cont
+                transition: all 0.2s ease
+                border: 1.5px solid $color-main-text-act
         &:active
             transform: translateY($height-but-act-jump) scale(0.9)
         .no_avatar-cont
@@ -70,6 +74,7 @@
         transition: all 0.4s ease
         opacity: 0
         pointer-events: none
+        background-color: #00000019
         &.opened
             opacity: 1
             pointer-events: auto
@@ -89,6 +94,7 @@
             z-index: 12
             background-color: $color-backgr
             box-shadow: 2px 10px 30px #00000040
+            overflow: visible
             border-radius: 200px
             transition: all 0.6s $trans-bounce-style
             transform: translateX(-50%) translateY(100%)
@@ -129,6 +135,8 @@
                             box-shadow: 2px 5px 10px #00000048
                         &:active
                             transform: translateY(calc($height-but-act-jump * 3)) scale(0.95)
+                        &.active
+                            border: 2px solid #ffffff
                         img
                             width: 100%
                             height: 100%
@@ -143,3 +151,42 @@
                     line-height: 1.7rem
                     font-size: 1rem
                     text-align: center
+            .arrow_buts-cont
+                // border: 1px solid black
+                position: absolute
+                right: -4rem
+                top: 30vh
+                width: auto
+                justify-content: space-between
+                overflow: visible
+                $size-arrow-but: 2.8rem
+                height: calc($size-arrow-but * 2)
+                button
+                    width: $size-arrow-but
+                    height: $size-arrow-but
+                    border-radius: 50%
+                    &::after
+                        content: ''
+                        position: absolute
+                        top: 0
+                        left: 0
+                        width: 100%
+                        height: 100%
+                        z-index: -1
+                        border-radius: 50%
+                        background-color: #00000036
+                        transition: all 0.2s ease
+                        opacity: 0
+                        transform: scale(0)
+                    &:hover
+                        transform: none
+                        &::after
+                            opacity: 1
+                            transform: scale(1)
+                    &:active
+                        transform: scale(0.9)
+                    .fa-icon
+                        color: $color-backgr
+                        font-size: $size-arrow-but - 0.8rem
+                    .avatar_list_up-but
+                    .avatar_list_down-but

@@ -122,7 +122,6 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
                     setAvatar={setAvatar}
                     error={errorAvatar}
                     setError={setErrorAvatar}
-                    disabled={isFormBlur}
                 />
                 <SubmitBut
                     icon={<BiLogInCircle className='fa-icon'/>}

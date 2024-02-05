@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import InputsCleaner from './../InputsCleaner/InputsCleaner'
 import InputsError from './../InputsError/InputsError'
 import { PiUserThin } from "react-icons/pi"
+import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from "react-icons/io"
 
 
 
@@ -10,6 +11,8 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
     const [isNoAvatarOpened, setIsNoAvatarOpened] = useState(true)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isAvatarListOpened, setIsAvatarListOpened] = useState(false)
+    // const [isArrowButsOpened, setIsArrowButsOpened] = useState(false)
+    const listRef = useRef(null)
 
     const createPathToAvatars = (name) => {
         return `../../../../../public/avatars/${name}.jpg`
@@ -48,7 +51,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                 className='avatar-but'
                 type='button'
                 title='Выбрать аватар пользователя'
-                tabIndex={10}
+                // tabIndex={15}
                 onClick={handleClickAvatarInput}
             >
                 <div className={`no_avatar-cont cont ${isNoAvatarOpened ? 'opened' : ''}`}>
@@ -63,7 +66,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                 onClick={handleClickOutside}
             >
                 <div className='avatar_list-cont cont'>
-                    <ul className='avatar-list cont'>
+                    <ul className='avatar-list cont' ref={listRef}>
                         {
                             !LIST[0] ?
                                 <span className='error-message cont'>Иконки закончились ( <br/>Обратитесь к разработчику</span> :
@@ -71,7 +74,8 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                                     const key_but = `${el.id}-but`
                                     return <li key={el.id} className='cont'>
                                                 <button 
-                                                    id={key_but} 
+                                                    id={key_but}
+                                                    className={avatar === el.id ? 'active' : ''}
                                                     type='button'
                                                     tabIndex={-1} 
                                                     onClick={handleClickElem}
@@ -80,10 +84,30 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                                                     <img src={createPathToAvatars(el.id)} alt="Ошибка изображения" />
                                                 </button>
                                                 <label htmlFor={key_but}>{el.title}</label>
-                                            </li>
+                                           </li>
                                 })
                         }
                     </ul>
+                    <div className='arrow_buts-cont cont'>
+                        <button
+                            className='avatar_list_up-but cont'
+                            type='button'
+                            tabIndex={-1}
+                            onClick={() => listRef.current.scrollTo({ top: 0, behavior: 'smooth'})}
+                            disabled={disabled}
+                        >
+                            <IoMdArrowDropupCircle className='fa-icon' />
+                        </button>
+                        <button
+                            className={`avatar_list_down-but cont opened`}
+                            type='button'
+                            tabIndex={-1}
+                            onClick={() => listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth'})}
+                            disabled={disabled}
+                        >
+                            <IoMdArrowDropdownCircle className='fa-icon' />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
