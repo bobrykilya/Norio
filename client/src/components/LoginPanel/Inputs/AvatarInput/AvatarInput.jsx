@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import InputsCleaner from './../InputsCleaner/InputsCleaner'
 import InputsError from './../InputsError/InputsError'
 import { PiUserThin } from "react-icons/pi"
-import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from "react-icons/io"
+import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5";
 
 
 
@@ -67,9 +67,12 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
             >
                 <div className='avatar_list-cont cont'>
                     <ul className='avatar-list cont' ref={listRef}>
+                        {/* <span className='choose_avatar-text'>
+                            Выбери аватар
+                        </span> */}
                         {
                             !LIST[0] ?
-                                <span className='error-message cont'>Иконки закончились ( <br/>Обратитесь к разработчику</span> :
+                                <span className='empty_list-message cont'>Иконки закончились ( <br/>Обратитесь к разработчику</span> :
                                 LIST.map((el) => {
                                     const key_but = `${el.id}-but`
                                     return <li key={el.id} className='cont'>
@@ -88,26 +91,26 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                                 })
                         }
                     </ul>
-                    <div className='arrow_buts-cont cont'>
-                        <button
-                            className='avatar_list_up-but cont'
-                            type='button'
-                            tabIndex={-1}
-                            onClick={() => listRef.current.scrollTo({ top: 0, behavior: 'smooth'})}
-                            disabled={disabled}
-                        >
-                            <IoMdArrowDropupCircle className='fa-icon' />
-                        </button>
-                        <button
-                            className={`avatar_list_down-but cont opened`}
-                            type='button'
-                            tabIndex={-1}
-                            onClick={() => listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth'})}
-                            disabled={disabled}
-                        >
-                            <IoMdArrowDropdownCircle className='fa-icon' />
-                        </button>
-                    </div>
+                </div>
+                <div className={`arrow_buts-cont cont ${isAvatarListOpened ? 'opened' : ''}`}>
+                    <button
+                        className='avatar_list_up-but cont'
+                        type='button'
+                        tabIndex={-1}
+                        onClick={() => listRef.current.scrollTo({ top: 0, behavior: 'smooth'})}
+                        disabled={disabled}
+                    >
+                        <IoArrowUpCircle className='fa-icon' />
+                    </button>
+                    <button
+                        className={`avatar_list_down-but cont opened`}
+                        type='button'
+                        tabIndex={-1}
+                        onClick={() => listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth'})}
+                        disabled={disabled}
+                    >
+                        <IoArrowDownCircle className='fa-icon' />
+                    </button>
                 </div>
             </div>
         </div>

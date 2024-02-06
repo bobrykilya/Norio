@@ -167,7 +167,7 @@ const SignUpSecondCont = ({ act_form }) => {
         },
         {
             id: 'bear_4',
-            title: 'Бурый мишка',
+            title: 'Чёрный мишка',
         },
         {
             id: 'dog',
