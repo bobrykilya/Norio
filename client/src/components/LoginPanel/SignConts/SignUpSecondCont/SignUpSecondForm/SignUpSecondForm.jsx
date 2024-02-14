@@ -37,12 +37,14 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
     }
     
     const onSubmit = (data) => {
-        data.phone = '+375' + data.phone
-        data.device = navigator.userAgent
-        alert(JSON.stringify(data))
-        // console.log(`Юзер: ${data.first_name}`)
-        // console.log(`Точка: ${data.store}`)
-        // console.log(`Устройство: ${data.device}`)
+        setTimeout(() => {
+            data.phone = '+375' + data.phone
+            data.device = navigator.userAgent
+            alert(JSON.stringify(data))
+            // console.log(`Юзер: ${data.first_name}`)
+            // console.log(`Точка: ${data.store}`)
+            // console.log(`Устройство: ${data.device}`)
+        }, 100)
     }
 
     return ( 

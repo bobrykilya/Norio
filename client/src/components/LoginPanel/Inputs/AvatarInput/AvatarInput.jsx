@@ -2,8 +2,9 @@ import { useState, useRef } from 'react'
 import InputsCleaner from './../InputsCleaner/InputsCleaner'
 import InputsError from './../InputsError/InputsError'
 import { PiUserThin } from "react-icons/pi"
-import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5";
-import { delay } from '@reduxjs/toolkit/dist/utils'
+// import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5"
+import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
+// import { LuArrowUpToLine, LuArrowDownToLine } from "react-icons/lu"
 
 
 
@@ -12,17 +13,17 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
     const [isNoAvatarOpened, setIsNoAvatarOpened] = useState(true)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isAvatarListOpened, setIsAvatarListOpened] = useState(false)
-    // const [isArrowButsOpened, setIsArrowButsOpened] = useState(false)
+    const [isArrowButsActive, setIsArrowButsActive] = useState(false)
     const listRef = useRef(null)
-    let elem_num = 0
 
     const createPathToAvatars = (name) => {
-        return `../../../../../public/avatars/${name}.jpg`
+        return `/avatars/${name}.jpg`
     }
 
     const handleClickAvatarInput = () => {
         if (error) setError(null)
         setIsAvatarListOpened(true)
+        setTimeout(() => {setIsArrowButsActive(true)}, 1100)
     }
 
     const handleClickCleaner = () => {
@@ -37,6 +38,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
         setAvatar(e.target.id.split('-')[0])
         setIsCleanerOpened(true)
         setIsAvatarListOpened(false)
+        setIsArrowButsActive(false)
         if (isNoAvatarOpened) {
             setTimeout(() => {setIsNoAvatarOpened(false)}, 100)
         }
@@ -44,7 +46,10 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
 
     const handleClickOutside = (e) => {
         // console.log(e.target.className)
-        if (e.target.className.includes('avatar_list_cover-cont')) setIsAvatarListOpened(false)
+        if (e.target.className.includes('avatar_list_cover-cont')) {
+            setIsAvatarListOpened(false)
+            setIsArrowButsActive(false)
+        }
     }
 
     return (
@@ -74,15 +79,12 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                         </span> */}
                         {
                             !LIST[0] ?
-                                <span className='empty_list-message cont'>Иконки закончились ( <br/>Обратитесь к разработчику</span> :
+                                <span className='empty_list-message cont'>Аватары закончились ( <br/>Обратитесь к разработчику</span> :
                                 LIST.map((el) => {
                                     const key_but = `${el.id}-but`
-                                    // elem_num ++
-                                    // console.log(elem_num)
                                     return <li key={el.id} className='cont'>
                                                 <button 
                                                     id={key_but}
-                                                    // style={{transitionDelay: `0.${elem_num}s`}}
                                                     className={avatar === el.id ? 'active' : ''}
                                                     type='button'
                                                     tabIndex={-1} 
@@ -103,18 +105,22 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                         type='button'
                         tabIndex={-1}
                         onClick={() => listRef.current.scrollTo({ top: 0, behavior: 'smooth'})}
-                        disabled={disabled}
+                        disabled={disabled ? true : !isArrowButsActive}
                     >
-                        <IoArrowUpCircle className='fa-icon' />
+                        <div className='arrow_but-cont cont'>
+                            <IoMdArrowRoundUp className='fa-icon' />
+                        </div>
                     </button>
                     <button
                         className={`avatar_list_down-but cont opened`}
                         type='button'
                         tabIndex={-1}
                         onClick={() => listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth'})}
-                        disabled={disabled}
+                        disabled={disabled ? true : !isArrowButsActive}
                     >
-                        <IoArrowDownCircle className='fa-icon' />
+                        <div className='arrow_but-cont cont'>
+                            <IoMdArrowRoundDown className='fa-icon' />
+                        </div>
                     </button>
                 </div>
             </div>
