@@ -3,6 +3,7 @@ import InputsCleaner from './../InputsCleaner/InputsCleaner'
 import InputsError from './../InputsError/InputsError'
 import { PiUserThin } from "react-icons/pi"
 import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5";
+import { delay } from '@reduxjs/toolkit/dist/utils'
 
 
 
@@ -13,6 +14,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
     const [isAvatarListOpened, setIsAvatarListOpened] = useState(false)
     // const [isArrowButsOpened, setIsArrowButsOpened] = useState(false)
     const listRef = useRef(null)
+    let elem_num = 0
 
     const createPathToAvatars = (name) => {
         return `../../../../../public/avatars/${name}.jpg`
@@ -75,9 +77,12 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                                 <span className='empty_list-message cont'>Иконки закончились ( <br/>Обратитесь к разработчику</span> :
                                 LIST.map((el) => {
                                     const key_but = `${el.id}-but`
+                                    // elem_num ++
+                                    // console.log(elem_num)
                                     return <li key={el.id} className='cont'>
                                                 <button 
                                                     id={key_but}
+                                                    // style={{transitionDelay: `0.${elem_num}s`}}
                                                     className={avatar === el.id ? 'active' : ''}
                                                     type='button'
                                                     tabIndex={-1} 
