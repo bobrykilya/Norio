@@ -1,5 +1,6 @@
 import { MdInstallDesktop } from "react-icons/md"
 import { FaInfo } from "react-icons/fa6"
+import ToolTip from '../ToolTip/ToolTip'
 
 
 
@@ -13,20 +14,20 @@ const ButtonsCont = () => {
                 className='cont'>
                     <i className="fa-regular fa-address-card"></i>
             </button> */}
-            <button 
-                title='Создать ярлык на рабочем столе'
-                className='pwa-but'
-                tabIndex={-1}
-                >
-                    <MdInstallDesktop className='fa-icon'/>
-            </button>
-            <button
-                title='Описание приложения и инструкция'
-                className='info-but'
-                tabIndex={-1}
-                >
-                    <FaInfo className='fa-icon'/>
-            </button>
+                <button 
+                    className='pwa-but cont'
+                    tabIndex={-1}
+                    >
+                        <MdInstallDesktop className='fa-icon'/>
+                        <ToolTip text={'Создать ярлык на рабочем столе'} />
+                </button>
+                <button
+                    className='info-but cont'
+                    tabIndex={-1}
+                    >
+                        <FaInfo className='fa-icon'/>
+                        <ToolTip text={'Описание приложения и инструкция'} />
+                </button>
         </div>
     )
 }

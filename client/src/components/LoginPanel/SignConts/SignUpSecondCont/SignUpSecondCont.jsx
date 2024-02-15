@@ -215,11 +215,15 @@ const SignUpSecondCont = ({ act_form }) => {
         },
         {
             id: 'dog_8',
-            title: 'Пёс "Чихуахуа"',
+            title: 'Псина "Чихуахуа"',
+        },
+        {
+            id: 'dog_9',
+            title: 'Соня Светлановна',
         },
         {
             id: 'beaver',
-            title: 'Бобр',
+            title: 'Бобрик',
         },
         {
             id: 'antelope',
@@ -448,6 +452,10 @@ const SignUpSecondCont = ({ act_form }) => {
         {
             id: 'lamb_2',
             title: 'Ягнёнок зуммер',
+        },
+        {
+            id: 'lamb_3',
+            title: 'Ягнёнок девочка',
         },
         {
             id: 'jaguar',

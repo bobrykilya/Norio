@@ -10,6 +10,7 @@
     width: $size-small-but * 2.6
     overflow: visible
     button
+        overflow: visible
         width: $size-small-but
         height: $size-small-but
         border-radius: 50%
@@ -20,12 +21,17 @@
         &:hover
             border: 1px solid $color-but-icon
         &:active
-            transform: translateY($height-but-act-jump) + scale(0.9)
+            .fa-icon
+                transform: scale(0.7)
+        .fa-icon
+            // border: 2px solid red
+            transition-duration: 0.2s
     .pwa-but
         .fa-icon
             font-size: $size-small-but - 0.8rem
-            margin-top: 0.18rem
+            // margin-top: 0.18rem
     .info-but
         .fa-icon
-            font-size: $size-small-but - 0.93rem
-            margin-top: 0.1rem
+            margin-right: -0.03rem
+            margin-bottom: 0.1rem
+            font-size: $size-small-but - 0.92rem

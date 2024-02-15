@@ -11,7 +11,9 @@
         width: calc($size-confirm-but / 1.7)
         height: calc($size-confirm-but / 1.7)
         border-radius: 50%
-        overflow: hidden
+        // overflow: hidden
+        overflow: visible
+        z-index: 3
         &:hover, &:focus
             transform: translateY($height-but-act-jump)
             border-radius: 40%
@@ -21,12 +23,14 @@
             img
                 border-radius: 40%
         &:active
-            transform: translateY($height-but-act-jump) scale(0.9)
+            .no_avatar-cont, img
+                transform: scale(0.9)
         .no_avatar-cont
+            // border: 2px solid black
             position: absolute
             top: 0
             left: 0
-            z-index: 0
+            z-index: 1
             $color-no-avatar: #6b6b6b
             border: 1.5px solid $color-no-avatar
             border-radius: 50%
@@ -55,10 +59,10 @@
                 font-size: 1.5rem
                 width: 100%
         img
+            // border: 2px solid black
             width: 100%
             height: 100%
             object-fit: cover
-            z-index: -2
             transition: all 0.2s ease
             border-radius: 50%
     .inputs_cleaner-but
@@ -194,6 +198,10 @@
                     transition: all 0.7s 0.2s $trans-bounce-style
                 .avatar_list_down-but
                     transition: all 0.7s 0.4s $trans-bounce-style
+            .tool_tip
+                background-color: #443b7d86
+                margin-left: 90%
+                margin-bottom: 110%
             button
                 width: $size-arrow-but
                 height: $size-arrow-but
@@ -226,6 +234,8 @@
                         transform: scale(0.9)
                 &:disabled
                     pointer-events: none
+                    // .arrow_but-cont
+                    //     background-color: red
                 .arrow_but-cont
                     border-radius: 50%
                     background-color: $color-backgr

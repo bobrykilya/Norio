@@ -5,6 +5,7 @@ import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 import { useFocusInput } from "../../../../Hooks/useFocusInput"
 import { useClickOutside } from "../../../../Hooks/useClickOutside"
+import ToolTip from '../../../ToolTip/ToolTip'
 
 
 
@@ -134,24 +135,25 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
             />
             <FaKey className='input-icon'/>
             <div 
-                className={`caps_lock-cont ${isCapsLockEnabled ? 'opened' : ''}`}
-                title='Включён Caps-Lock'
+                className={`caps_lock-cont cont ${isCapsLockEnabled ? 'opened' : ''}`}
+                // title='Включён Caps-Lock'
             >
                 <span>CAPS</span>
+                <ToolTip text={<p>Включён<br/>Caps-Lock</p>} />
             </div>
             <InputsError error={error} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
-            <button 
-                className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
-                title='Показать\Спрятать пароль'
-                type='button'
-                tabIndex={-1} 
-                onClick={(handleSwitchLockPosition)}
-                ref={lockButtonRef}
-            >
-                {isLockOpened ? <VscEye className='fa-icon' /> :
-                <VscEyeClosed className='fa-icon' />}
-            </button> 
+                <button 
+                    className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
+                    type='button'
+                    tabIndex={-1} 
+                    onClick={(handleSwitchLockPosition)}
+                    ref={lockButtonRef}
+                >
+                    {!isLockOpened ? <VscEye className='fa-icon' /> :
+                    <VscEyeClosed className='fa-icon' />}
+                    <ToolTip text='Показать \ Спрятать пароль' />
+                </button>
         </div>
     )
 }

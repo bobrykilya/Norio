@@ -1,0 +1,41 @@
+@import '../../_variables'
+
+
+
+.tool_tip-cont
+    // border: 2px solid red
+    position: absolute
+    overflow: visible
+    border-radius: 50%
+    z-index: 10
+    .tool_tip
+        // border: 2px solid black
+        position: absolute
+        bottom: 0
+        left: 0
+        margin-left: 70%
+        margin-bottom: 105%
+        z-index: 10
+        pointer-events: none
+        width: auto
+        min-width: 6rem
+        height: auto
+        // max-height: 2rem
+        text-align: center
+        background-color: #0b005186
+        color: $color-backgr
+        font-size: $size-main-text
+        font-weight: normal
+        line-height: $size-main-text
+        box-shadow: 2px 2px 10px #00000040
+        backdrop-filter: blur(7px)
+        border-radius: 15px
+        border-bottom-left-radius: 0px
+        padding: 10px
+        transition: all 0.2s ease
+        opacity: 0
+        transform: translate(-1rem, 1rem) scale(0.6)
+        &.active
+            opacity: 1
+            transform: translate(0) scale(1)
+                

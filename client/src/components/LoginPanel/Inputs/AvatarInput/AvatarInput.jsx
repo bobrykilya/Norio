@@ -3,8 +3,9 @@ import InputsCleaner from './../InputsCleaner/InputsCleaner'
 import InputsError from './../InputsError/InputsError'
 import { PiUserThin } from "react-icons/pi"
 // import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5"
-import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
 // import { LuArrowUpToLine, LuArrowDownToLine } from "react-icons/lu"
+import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
+import ToolTip from '../../../ToolTip/ToolTip'
 
 
 
@@ -15,6 +16,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
     const [isAvatarListOpened, setIsAvatarListOpened] = useState(false)
     const [isArrowButsActive, setIsArrowButsActive] = useState(false)
     const listRef = useRef(null)
+    const refSetTimeout = useRef(null)
 
     const createPathToAvatars = (name) => {
         return `/avatars/${name}.jpg`
@@ -23,7 +25,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
     const handleClickAvatarInput = () => {
         if (error) setError(null)
         setIsAvatarListOpened(true)
-        setTimeout(() => {setIsArrowButsActive(true)}, 1100)
+        refSetTimeout.current = setTimeout(() => {setIsArrowButsActive(true)}, 1100)
     }
 
     const handleClickCleaner = () => {
@@ -52,6 +54,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
 
     const closeAvatarList = () => {
         setIsAvatarListOpened(false)
+        clearTimeout(refSetTimeout.current)
         setIsArrowButsActive(false)
         listRef.current.scrollTo({ top: 0})
     }
@@ -72,15 +75,15 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
     return (
         <div className='avatar-cont cont'>
             <button
-                className='avatar-but'
+                className='avatar-but cont'
                 type='button'
-                title='Выбрать аватар пользователя'
                 onClick={handleClickAvatarInput}
             >
                 <div className={`no_avatar-cont cont ${isNoAvatarOpened ? 'opened' : ''}`}>
                     <PiUserThin className='fa-icon' />
                 </div>
-                {avatar ? <img src={createPathToAvatars(avatar)} alt="" /> : null}
+                {avatar && <img src={createPathToAvatars(avatar)} alt="" />}
+                <ToolTip text='Выбрать аватар пользователя' />
             </button>
             <InputsError error={error} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
@@ -118,22 +121,24 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                         type='button'
                         tabIndex={-1}
                         onClick={() => listRef.current.scrollTo({ top: 0, behavior: 'smooth'})}
-                        disabled={disabled ? true : !isArrowButsActive}
+                        disabled={!isArrowButsActive}
                     >
                         <div className='arrow_but-cont cont'>
                             <IoMdArrowRoundUp className='fa-icon' />
                         </div>
+                        <ToolTip text='Пролистать список вверх' />
                     </button>
                     <button
-                        className={`avatar_list_down-but cont opened`}
+                        className='avatar_list_down-but cont opened'
                         type='button'
                         tabIndex={-1}
                         onClick={() => listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth'})}
-                        disabled={disabled ? true : !isArrowButsActive}
+                        disabled={!isArrowButsActive}
                     >
                         <div className='arrow_but-cont cont'>
                             <IoMdArrowRoundDown className='fa-icon' />
                         </div>
+                        <ToolTip text='Пролистать список вниз' />
                     </button>
                 </div>
             </div>

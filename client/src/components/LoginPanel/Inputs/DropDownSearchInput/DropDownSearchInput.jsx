@@ -204,7 +204,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 disabled={disabled}
             />
             {icon}
-            {isErrorOn ? <InputsError error={error} /> : null}
+            {isErrorOn && <InputsError error={error} />}
             <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
             <ul
                 id='dropdown-cont'
