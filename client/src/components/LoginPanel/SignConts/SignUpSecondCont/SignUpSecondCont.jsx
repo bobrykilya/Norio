@@ -150,6 +150,14 @@ const SignUpSecondCont = ({ act_form }) => {
             title: 'Бегемот',
         },
         {
+            id: 'hippopotamus_2',
+            title: 'Бегемотик',
+        },
+        {
+            id: 'lion',
+            title: 'Лев',
+        },
+        {
             id: 'lion_2',
             title: 'Лев альбинос',
         },
@@ -170,12 +178,44 @@ const SignUpSecondCont = ({ act_form }) => {
             title: 'Чёрный мишка',
         },
         {
+            id: 'bear_5',
+            title: 'Красный мишка',
+        },
+        {
+            id: 'panda',
+            title: 'Панда',
+        },
+        {
             id: 'dog',
             title: 'Пёс "Бигль"',
         },
         {
             id: 'dog_2',
             title: 'Пёс "Бульдог"',
+        },
+        {
+            id: 'dog_3',
+            title: 'Пёс "Колли"',
+        },
+        {
+            id: 'dog_4',
+            title: 'Пёс "Мопс"',
+        },
+        {
+            id: 'dog_5',
+            title: 'Собака "Боксёр"',
+        },
+        {
+            id: 'dog_6',
+            title: 'Пёс "Ретривер"',
+        },
+        {
+            id: 'dog_7',
+            title: 'Пёс "Болонка"',
+        },
+        {
+            id: 'dog_8',
+            title: 'Пёс "Чихуахуа"',
         },
         {
             id: 'beaver',
@@ -198,8 +238,248 @@ const SignUpSecondCont = ({ act_form }) => {
             title: 'Выдра',
         },
         {
+            id: 'weasel',
+            title: 'Хорёк',
+        },
+        {
             id: 'cheetah',
-            title: 'Гепардесса ',
+            title: 'Гепардесса',
+        },
+        {
+            id: 'hyena',
+            title: 'Гиена',
+        },
+        {
+            id: 'pigeon',
+            title: 'Голубь',
+        },
+        {
+            id: 'dolphin',
+            title: 'Дельфин',
+        },
+        {
+            id: 'raccoon',
+            title: 'Енот',
+        },
+        {
+            id: 'giraffe',
+            title: 'Жираф',
+        },
+        {
+            id: 'zebra',
+            title: 'Зебра',
+        },
+        {
+            id: 'monkey',
+            title: 'Обезьянка "Игрунка"',
+        },
+        {
+            id: 'monkey_2',
+            title: 'Обезьянка "Лари"',
+        },
+        {
+            id: 'monkey_3',
+            title: 'Обезьяна "Макака"',
+        },
+        {
+            id: 'monkey_4',
+            title: 'Обезьяна "Шимпанзе"',
+        },
+        {
+            id: 'kangaroo',
+            title: 'Кенгуру',
+        },
+        {
+            id: 'koala',
+            title: 'Коала',
+        },
+        {
+            id: 'horse',
+            title: 'Конь в пальто',
+        },
+        {
+            id: 'cat',
+            title: 'Кошка "Экзотическая"',
+        },
+        {
+            id: 'cat_2',
+            title: 'Кошка "Русская голубая"',
+        },
+        {
+            id: 'cat_4',
+            title: 'Кот "Лысый"',
+        },
+        {
+            id: 'cat_3',
+            title: 'Котёнок',
+        },
+        {
+            id: 'cat_5',
+            title: 'Кот "Шартрез"',
+        },
+        {
+            id: 'rabbit',
+            title: 'Кролик',
+        },
+        {
+            id: 'lama',
+            title: 'Лама',
+        },
+        {
+            id: 'lemur',
+            title: 'Лемур',
+        },
+        {
+            id: 'sloth',
+            title: 'Ленивец',
+        },
+        {
+            id: 'sloth_2',
+            title: 'Ленивец упоротый',
+        },
+        {
+            id: 'fox',
+            title: 'Лиса',
+        },
+        {
+            id: 'fox_2',
+            title: 'Лисичка "Фенек"',
+        },
+        {
+            id: 'frog',
+            title: 'Лягушка',
+        },
+        {
+            id: 'walrus',
+            title: 'Морж',
+        },
+        {
+            id: 'muntjac',
+            title: 'Мунтжак',
+        },
+        {
+            id: 'deer',
+            title: 'Олень',
+        },
+        {
+            id: 'owl',
+            title: 'Сова',
+        },
+        {
+            id: 'tawny_owl',
+            title: 'Неясыть',
+        },
+        {
+            id: 'rhinoceros',
+            title: 'Носорог',
+        },
+        {
+            id: 'sheep',
+            title: 'Овец',
+        },
+        {
+            id: 'eagle',
+            title: 'Орёл',
+        },
+        {
+            id: 'panther',
+            title: 'Пантера',
+        },
+        {
+            id: 'penguin',
+            title: 'Пингвин',
+        },
+        {
+            id: 'penguin_2',
+            title: 'Пингвин дикий',
+        },
+        {
+            id: 'parrot',
+            title: 'Попугай "Ара"',
+        },
+        {
+            id: 'parrot_2',
+            title: 'Попугай "Неразлучник"',
+        },
+        {
+            id: 'parrot_3',
+            title: 'Попугай "Какаду"',
+        },
+        {
+            id: 'lynx',
+            title: 'Рысь',
+        },
+        {
+            id: 'skunk',
+            title: 'Скунс',
+        },
+        {
+            id: 'elephant',
+            title: 'Слон',
+        },
+        {
+            id: 'ostrich',
+            title: 'Страус',
+        },
+        {
+            id: 'tasmanian_devil',
+            title: 'Тасманский дьяволёнок',
+        },
+        {
+            id: 'tiger',
+            title: 'Тигр (Ауф)',
+        },
+        {
+            id: 'chameleon',
+            title: 'Хамелеон',
+        },
+        {
+            id: 'chameleon_2',
+            title: 'Хамелеон улыбака',
+        },
+        {
+            id: 'hamster',
+            title: 'Хомяк',
+        },
+        {
+            id: 'lamb',
+            title: 'Ягнёнок поварёнок',
+        },
+        {
+            id: 'lamb_2',
+            title: 'Ягнёнок зуммер',
+        },
+        {
+            id: 'jaguar',
+            title: 'Ягуарёнок',
+        },
+        {
+            id: 'ram',
+            title: 'Баран',
+        },
+        {
+            id: 'binturong',
+            title: 'Бинтуронг',
+        },
+        {
+            id: 'hedgehog',
+            title: 'Ёжик',
+        },
+        {
+            id: 'kinkajou',
+            title: 'Кинкажу',
+        },
+        {
+            id: 'kookaburra',
+            title: 'Кукабара',
+        },
+        {
+            id: 'mouse',
+            title: 'Мышь',
+        },
+        {
+            id: 'seal',
+            title: 'Тюлень',
         },
     ]
 

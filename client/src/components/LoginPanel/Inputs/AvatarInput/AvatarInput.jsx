@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import InputsCleaner from './../InputsCleaner/InputsCleaner'
 import InputsError from './../InputsError/InputsError'
 import { PiUserThin } from "react-icons/pi"
@@ -37,8 +37,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
         // console.log(e.target.id.split('-')[0])
         setAvatar(e.target.id.split('-')[0])
         setIsCleanerOpened(true)
-        setIsAvatarListOpened(false)
-        setIsArrowButsActive(false)
+        closeAvatarList()
         if (isNoAvatarOpened) {
             setTimeout(() => {setIsNoAvatarOpened(false)}, 100)
         }
@@ -47,10 +46,28 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
     const handleClickOutside = (e) => {
         // console.log(e.target.className)
         if (e.target.className.includes('avatar_list_cover-cont')) {
-            setIsAvatarListOpened(false)
-            setIsArrowButsActive(false)
+            closeAvatarList()
         }
     }
+
+    const closeAvatarList = () => {
+        setIsAvatarListOpened(false)
+        setIsArrowButsActive(false)
+        listRef.current.scrollTo({ top: 0})
+    }
+
+    useEffect(() => {
+        const handleEscapePress = (e) => {
+            if (!isAvatarListOpened) return
+            if (e.key === 'Escape') {
+                closeAvatarList()
+            }
+        }
+        window.addEventListener('keydown', handleEscapePress)
+        return () => {
+            window.removeEventListener('keydown', handleEscapePress)
+        }
+    })
 
     return (
         <div className='avatar-cont cont'>
@@ -58,7 +75,6 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
                 className='avatar-but'
                 type='button'
                 title='Выбрать аватар пользователя'
-                // tabIndex={15}
                 onClick={handleClickAvatarInput}
             >
                 <div className={`no_avatar-cont cont ${isNoAvatarOpened ? 'opened' : ''}`}>
@@ -74,9 +90,6 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
             >
                 <div className='avatar_list-cont cont'>
                     <ul className='avatar-list cont' ref={listRef}>
-                        {/* <span className='choose_avatar-text'>
-                            Выбери аватар
-                        </span> */}
                         {
                             !LIST[0] ?
                                 <span className='empty_list-message cont'>Аватары закончились ( <br/>Обратитесь к разработчику</span> :
