@@ -46,8 +46,6 @@
                     // border: 2px solid red
                     // text-align: center
                     width: 100%
-                    font-weight: 600
-                    font-size: $size-h1
                     color: $color-backgr
                 p
                     // border: 2px solid red
@@ -64,6 +62,8 @@
                     width: $size-confirm-but + 0.5rem
                     height: calc($size-confirm-but / 2)
                     border-radius: $rad-but-border
+                    overflow: visible
+                    position: relative
                     &:hover
                         border-radius: $rad-but-border + 10px
                     &:active
@@ -72,6 +72,8 @@
                         font-size: 0.6rem
                         color: $color-backgr
                         pointer-events: none
+                    .tool_tip-cont
+                        border-radius: $rad-but-border
             #sign_up_info-cont
                 align-items: flex-end
                 text-align: end
@@ -87,11 +89,12 @@
                 pointer-events: none
                 align-items: flex-start
         #close_sign_up_2-button
+            z-index: 12
             // border: 1px solid red
             position: absolute
             // bottom: 3.8rem
             // right: 2.2rem
-            bottom: 2.6rem
+            bottom: 2.3rem
             right: 2.3rem
             width: auto
             height: auto

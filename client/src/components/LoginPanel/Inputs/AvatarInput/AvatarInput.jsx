@@ -75,7 +75,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false 
     return (
         <div className='avatar-cont cont'>
             <button
-                className='avatar-but cont'
+                className='avatar-but'
                 type='button'
                 onClick={handleClickAvatarInput}
             >

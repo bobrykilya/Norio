@@ -97,6 +97,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
                 notSaveUser={false}
                 disabled={isSubmitButBlur}
                 isLoading={isLoading}
+                title='Продолжить регистрацию'
             />
         </form>
     )  

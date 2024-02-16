@@ -219,7 +219,7 @@ const SignUpSecondCont = ({ act_form }) => {
         },
         {
             id: 'dog_9',
-            title: 'Соня Светлановна',
+            title: 'Софья Светлановна',
         },
         {
             id: 'beaver',
@@ -311,15 +311,15 @@ const SignUpSecondCont = ({ act_form }) => {
         },
         {
             id: 'cat_4',
-            title: 'Кот "Лысый"',
-        },
-        {
-            id: 'cat_3',
-            title: 'Котёнок',
+            title: 'Кошка "Лысая"',
         },
         {
             id: 'cat_5',
             title: 'Кот "Шартрез"',
+        },
+        {
+            id: 'cat_3',
+            title: 'Котёнок',
         },
         {
             id: 'rabbit',

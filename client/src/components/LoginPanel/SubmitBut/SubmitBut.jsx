@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import ToolTip from '../../ToolTip/ToolTip'
 
 
 
 
-const SubmitBut = ({icon, notSaveUser, onClick, disabled=false, isLoading}) => {
+const SubmitBut = ({icon, notSaveUser, onClick, disabled=false, isLoading, title}) => {
 
     const [load, setLoad] = useState(false)
 
@@ -23,6 +24,7 @@ const SubmitBut = ({icon, notSaveUser, onClick, disabled=false, isLoading}) => {
             onClick={notSaveUser ? handleClickButton : null}
         >
             {icon}
+            <ToolTip text={title} />
         </button>
     )
 }

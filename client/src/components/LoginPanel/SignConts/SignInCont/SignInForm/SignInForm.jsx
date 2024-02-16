@@ -73,6 +73,7 @@ const SignInForm = ({  isFormBlur=false}) => {
                 notSaveUser={notSaveUser}
                 onClick={handleSubmit(onSubmitNotSave)}
                 isLoading={isLoading}
+                title='Выполнить вход'
             />
         </form>
     )  

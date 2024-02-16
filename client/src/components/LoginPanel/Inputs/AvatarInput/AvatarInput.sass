@@ -11,8 +11,6 @@
         width: calc($size-confirm-but / 1.7)
         height: calc($size-confirm-but / 1.7)
         border-radius: 50%
-        // overflow: hidden
-        overflow: visible
         z-index: 3
         &:hover, &:focus
             transform: translateY($height-but-act-jump)
@@ -199,9 +197,11 @@
                 .avatar_list_down-but
                     transition: all 0.7s 0.4s $trans-bounce-style
             .tool_tip
-                background-color: #443b7d86
-                margin-left: 90%
-                margin-bottom: 110%
+                bottom: calc(50% - 1.1rem)
+                left: calc(100% + 1.1rem)
+                transform: translateX(-2rem) scale(0.6)
+                &.active
+                    transform: translateX(0) scale(1)
             button
                 width: $size-arrow-but
                 height: $size-arrow-but

@@ -127,6 +127,7 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
                 />
                 <SubmitBut
                     icon={<BiLogInCircle className='fa-icon'/>}
+                    title='Завершить регистрацию и выполнить вход'
                 />
             </div>
         </form>

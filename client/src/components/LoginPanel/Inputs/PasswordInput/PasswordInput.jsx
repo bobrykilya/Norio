@@ -135,11 +135,10 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
             />
             <FaKey className='input-icon'/>
             <div 
-                className={`caps_lock-cont cont ${isCapsLockEnabled ? 'opened' : ''}`}
-                // title='Включён Caps-Lock'
+                className={`caps_lock-cont ${isCapsLockEnabled ? 'opened' : ''}`}
             >
                 <span>CAPS</span>
-                <ToolTip text={<p>Включён<br/>Caps-Lock</p>} />
+                <ToolTip text='Включён Caps-Lock' />
             </div>
             <InputsError error={error} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
@@ -152,7 +151,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
                 >
                     {!isLockOpened ? <VscEye className='fa-icon' /> :
                     <VscEyeClosed className='fa-icon' />}
-                    <ToolTip text='Показать \ Спрятать пароль' />
+                    <ToolTip text={!isLockOpened ? 'Показать пароль' : 'Скрыть пароль'} />
                 </button>
         </div>
     )

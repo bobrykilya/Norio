@@ -15,14 +15,14 @@ const ButtonsCont = () => {
                     <i className="fa-regular fa-address-card"></i>
             </button> */}
                 <button 
-                    className='pwa-but cont'
+                    className='pwa-but'
                     tabIndex={-1}
                     >
                         <MdInstallDesktop className='fa-icon'/>
                         <ToolTip text={'Создать ярлык на рабочем столе'} />
                 </button>
                 <button
-                    className='info-but cont'
+                    className='info-but'
                     tabIndex={-1}
                     >
                         <FaInfo className='fa-icon'/>

@@ -9,7 +9,7 @@ const ToolTip = ({ text }) => {
     const handleEnterMouse = () => {
         refSetTimeout.current = setTimeout(() => {
             setIsToolTipVisible(true)
-        }, 1000)
+        }, 1100)
       }
     
       const handleLeaveMouse = () => {
@@ -19,11 +19,11 @@ const ToolTip = ({ text }) => {
 
     return ( 
         <div 
-            className='tool_tip-cont cont'
+            className='tool_tip-cont'
             onMouseEnter={handleEnterMouse}
             onMouseLeave={handleLeaveMouse}
         >
-            <div className={`tool_tip cont ${isToolTipVisible ? 'active' : ''}`} >{text}</div>
+            <div className={`tool_tip ${isToolTipVisible ? 'active' : ''}`} >{text}</div>
         </div>
      )
 }
