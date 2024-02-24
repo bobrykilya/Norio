@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useForm } from 'react-hook-form'
+import { AuthContext } from "../../../../../context/AuthContext"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import CheckBox from './CheckBox/CheckBox'
@@ -11,7 +12,7 @@ import { FaUser } from "react-icons/fa"
 
 const SignInForm = ({  isFormBlur=false}) => {
     // console.log('SignIn')
-
+    const { handleSignIn } = useContext(AuthContext)
     const [notSaveUser, setNotSaveUser] = useState(false)
     // const inputUserNameRef = useRef(null)
 
@@ -40,7 +41,8 @@ const SignInForm = ({  isFormBlur=false}) => {
         data.is_not_save = false
         data.sign_up_device = navigator.userAgent
         // console.log(data)
-        alert(JSON.stringify(data))
+        // alert(JSON.stringify(data))
+        handleSignIn(data)
     }
 
     return (
