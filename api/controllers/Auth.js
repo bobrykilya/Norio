@@ -4,10 +4,10 @@ import { COOKIE_SETTINGS } from "../constants.js"
 
 class AuthController {
   static async signIn(req, res) {
-    const { userName, password } = req.body
+    const { username, password } = req.body
     const { fingerprint } = req
     try {
-      const { accessToken, refreshToken, accessTokenExpiration } = await AuthService.signIn({ userName, password, fingerprint })
+      const { accessToken, refreshToken, accessTokenExpiration } = await AuthService.signIn({ username, password, fingerprint })
 
       res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
@@ -17,11 +17,24 @@ class AuthController {
     }
   }
 
-  static async signUp(req, res) {
-    const { userName, password, role } = req.body
-    const { fingerprint } = req
+  static async checkUser(req, res) {
+    const { username, password } = req.body
+
     try {
-      const { accessToken, refreshToken, accessTokenExpiration } = await AuthService.signUp({ userName, password, role, fingerprint })
+      const { userName, userPassword } = await AuthService.checkUser({ username, password })
+
+      return res.status(200).json({ userName, userPassword })
+    } catch (err) {
+      return ErrorsUtils.catchError(res, err)
+    }
+  }
+
+  static async signUp(req, res) {
+    const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar } = req.body
+    const { fingerprint } = req
+
+    try {
+      const { accessToken, refreshToken, accessTokenExpiration } = await AuthService.signUp({ username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, fingerprint })
 
       res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 

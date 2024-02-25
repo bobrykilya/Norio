@@ -5,6 +5,7 @@ import AuthController from "../controllers/Auth.js"
 const router = Router()
 
 router.post("/sign-in", AuthController.signIn)
+router.post("/check-user", AuthController.checkUser)
 router.post("/sign-up", AuthController.signUp)
 router.post("/logout", AuthController.logOut)
 router.post("/refresh", AuthController.refresh)

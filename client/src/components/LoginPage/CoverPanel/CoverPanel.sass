@@ -1,0 +1,224 @@
+@import '../LoginPage_variables'
+
+
+#cover_and_img-cont
+    // border: 2px solid red
+    position: absolute
+    // right: 0
+    overflow: visible
+    pointer-events: none
+    #cover-cont
+        // border: 2px solid orange
+        z-index: 3
+        width: 50%
+        // width: 55%
+        // height: 104%
+        // transform: translateX(50%)
+        // border-radius: $rad-up-cover-panel 0 0 $rad-down-cover-panel
+        // transition: all $trans-dur $trans-wave-bounce-style
+        transition: all $trans-dur $trans-style
+        background: linear-gradient(80deg,$color-cover-gradient, 40% , $color-confirm-but-act)
+        pointer-events: auto
+        // overflow: visible
+        &::after //* Smooth gradient toggle
+            background: linear-gradient(-80deg, $color-cover-gradient, 40% , $color-confirm-but-act)
+            content: ''
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            z-index: -1
+            transition: opacity $trans-dur + 0.5s
+            // opacity: 0
+        #cover-content
+            // border: 2px solid orange
+            overflow: visible
+            flex-direction: row
+            // transform: translateX(50%)
+            transition: all $trans-dur + 0.1s $trans-style
+            section
+                // border: 2px solid red
+                // padding: 1.5rem
+                padding: 2rem
+                transition: all $trans-dur + 0.25s $trans-style
+                h1
+                    // border: 2px solid red
+                    // text-align: center
+                    width: 100%
+                    color: $color-backgr
+                p
+                    // border: 2px solid red
+                    margin: 18% 0
+                    display: block
+                    padding: 0 0.5rem
+                    // text-align: center
+                    font-size: $size-main-text
+                    line-height: $size-main-text + 0.2rem
+                    // color: $color-backgr
+                    color: #d9d8d8e4
+                button
+                    border: 1px solid $color-backgr
+                    width: $size-confirm-but + 0.5rem
+                    height: calc($size-confirm-but / 2)
+                    border-radius: $rad-but-border
+                    overflow: visible
+                    position: relative
+                    &:hover
+                        border-radius: $rad-but-border + 10px
+                    &:active
+                        transform: translateY($height-but-act-jump) + scale(0.95)
+                    label
+                        font-size: 0.6rem
+                        color: $color-backgr
+                        pointer-events: none
+                    .tool_tip-cont
+                        border-radius: $rad-but-border
+            #sign_up_info-cont
+                align-items: flex-end
+                text-align: end
+                // transform: none
+                // opacity: 1
+                // pointer-events: auto
+                pointer-events: none
+                h1
+                    text-align: end
+            #sign_in_info-cont
+                // transform: scale(1 + $trans-content-scale)
+                // opacity: 0
+                pointer-events: none
+                align-items: flex-start
+        #close_sign_up_2-button
+            z-index: 12
+            // border: 1px solid red
+            position: absolute
+            // bottom: 3.8rem
+            // right: 2.2rem
+            bottom: 2.3rem
+            right: 2.3rem
+            width: auto
+            height: auto
+            border-radius: 50%
+            transition: all 0.25s ease
+            transform: translate(-2rem, -2rem) + scale(0)
+            pointer-events: none
+            opacity: 0
+            .fa-icon
+                transition: all 0.2s ease
+                color: $color-backgr
+                font-size: $size-small-but
+    #img-cont
+        // border: 2px solid black
+        position: absolute
+        flex-direction: row
+        bottom: 0.2rem
+        z-index: 5
+        align-items: flex-end
+        // transform: translateX(-3.7rem)
+        transition: all $trans-dur + 0.3s $trans-style
+        pointer-events: none
+        img
+            // border: 2px solid red
+        .sign_up-img
+            // transition: all $trans-dur - 0.2s $trans-style
+            // transform: translateY(1rem) scale(1.2 - $trans-content-scale)
+            // opacity: 0
+            height: 8.2rem
+        .sign_in-img
+            // transition: all $trans-dur - 0.1s $trans-style
+            // transform: none
+            // opacity: 1
+            height: 9.4rem
+
+    //* CoverPanel toggles
+    &.opened_sign_in
+        #cover-cont
+            border-radius: $rad-up-cover-panel 0 0 $rad-down-cover-panel
+            transform: translateX(50%)
+            &::after
+                opacity: 0
+            #cover-content
+                transform: translateX(50%)
+                #sign_up_info-cont
+                    transform: none
+                    opacity: 1
+                    pointer-events: auto
+                #sign_in_info-cont
+                    transform: scale(1 + $trans-content-scale)
+                    opacity: 0
+                    pointer-events: none
+        #img-cont
+            transform: translateX(-3.7rem) 
+            .sign_up-img
+                transition: all $trans-dur - 0.2s $trans-style
+                transform: translateY(1rem) scale(1.2 - $trans-content-scale)
+                opacity: 0
+            .sign_in-img
+                transition: all $trans-dur - 0.1s $trans-style
+                transform: none
+                opacity: 1
+    &.opened_sign_up
+        #cover-cont
+            border-radius: 0 $rad-up-cover-panel $rad-down-cover-panel 0
+            transform: translateX(-50%)
+            &::after
+                opacity: 1
+            #cover-content
+                transform: translateX(-50%)
+                #sign_up_info-cont
+                    transform: scale(1 + $trans-content-scale)
+                    opacity: 0
+                    pointer-events: none
+                #sign_in_info-cont
+                    transform: none
+                    opacity: 1
+                    pointer-events: auto
+        #img-cont
+            transform: translateX(2.7rem) 
+            .sign_up-img
+                transition: all $trans-dur - 0.1s $trans-style
+                transform: none
+                opacity: 1
+            .sign_in-img
+                transition: all $trans-dur - 0.2s $trans-style
+                transform: translateY(1rem) scale(1.2 - $trans-content-scale)
+                opacity: 0
+
+    &.opened_sign_up_2
+        #cover-cont
+            border-radius: 0 $rad-up-cover-panel calc($rad-down-cover-panel - 100px) 0
+            transform: translate(-120%, -73%)
+            &::after
+                opacity: 0
+            #cover-content
+                transform: translateX(-150%)
+                #sign_in_info-cont
+                    transform: scale(1 + $trans-content-scale)
+                    opacity: 0
+                    pointer-events: none
+                #sign_up_info-cont
+                    transform: scale(1 + $trans-content-scale)
+                    opacity: 0
+                    pointer-events: none
+            #close_sign_up_2-button
+                transition: all 0.3s 0.4s ease
+                transform: translate(0) + scale(1)
+                pointer-events: auto
+                opacity: 1
+                &:hover
+                    .fa-icon
+                        transform: translateY($height-but-act-jump)
+                        color: #ffffffce
+                &:active
+                    .fa-icon
+                        transform: translateY($height-but-act-jump) + scale(0.9)
+        #img-cont
+            transform: translateX(1rem) 
+            .sign_in-img
+                opacity: 0
+            .sign_up-img
+                transition: all $trans-dur - 0.2s $trans-style
+                transform: translateY(1rem) scale(1.2 - $trans-content-scale)
+                opacity: 0
+            
+        

@@ -4,11 +4,12 @@ import TokenService from "./Token.js"
 import { NotFound, Forbidden, Conflict, Unauthorized } from "../utils/Errors.js"
 import RefreshSessionsRepository from "../repositories/RefreshSession.js"
 import UserRepository from "../repositories/User.js"
+import UserInfoRepository from '../repositories/UserInfo.js'
 import { ACCESS_TOKEN_EXPIRATION } from "../constants.js"
 
 class AuthService {
-  static async signIn({ userName, password, fingerprint }) {
-    const userData = await UserRepository.getUserData(userName)
+  static async signIn({ username, password, fingerprint }) {
+    const userData = await UserRepository.getUserData(username)
 
     if (!userData) {
       throw new NotFound("Пользователь не найден")
@@ -38,8 +39,8 @@ class AuthService {
 
     const payload = { 
       id: userData.id,
-      role: userData.role,
-      userName,
+      access_lvl: userData.access_lvl,
+      username,
     }
 
     const accessToken = await TokenService.generateAccessToken(payload)
@@ -58,22 +59,49 @@ class AuthService {
     }
   }
 
-  static async signUp({ userName, password, fingerprint, role }) {
-    const userData = await UserRepository.getUserData(userName)
-
+  static async checkUser({ username, password }) {
+    const userData = await UserRepository.getUserData(username)
     if (userData) {
       throw new Conflict("Пользователь с таким именем уже существует")
     }
 
     const hashedPassword = bcrypt.hashSync(password, 8)
 
+    return { 
+      userName: username, 
+      userPassword: hashedPassword,
+    }
+  }
+
+  static async signUp({ username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, fingerprint }) {
+    // const userData = await UserRepository.getUserData(username)
+    // if (userData) {
+    //   throw new Conflict("Пользователь с таким именем уже существует")
+    // }
+
+    // const hashedPassword = bcrypt.hashSync(password, 8)
+
+    //! Change
+    const access_lvl = 1
+    
     const { id } = await UserRepository.createUser({ 
-      userName,
+      username,
       hashedPassword,
-      role, 
+      access_lvl,
     })
 
-    const payload = { id, userName, role }
+    await UserInfoRepository.createUserInfo({ 
+      user_id: id,
+      phone, 
+      store, 
+      job, 
+      last_name, 
+      first_name, 
+      middle_name, 
+      avatar,
+    })
+
+    const payload = { id, username, access_lvl }
 
     const accessToken = await TokenService.generateAccessToken(payload)
     const refreshToken = await TokenService.generateRefreshToken(payload)
@@ -108,7 +136,7 @@ class AuthService {
 
     if (refreshSession.finger_print !== fingerprint.hash) {
       console.log("Попытка несанкционированного обновления токенов!")
-      throw new Forbidden()
+      throw new Forbidden("Попытка несанкционированного обновления токенов!")
     }
 
     await RefreshSessionsRepository.deleteRefreshSession(currentRefreshToken)
@@ -122,11 +150,11 @@ class AuthService {
 
     const { 
       id,
-      role, 
-      name: userName, 
-    } = await UserRepository.getUserData(payload.userName)
+      access_lvl, 
+      name: username, 
+    } = await UserRepository.getUserData(payload.username)
 
-    const actualPayload = { id, userName, role }
+    const actualPayload = { id, username, access_lvl }
 
     const accessToken = await TokenService.generateAccessToken(actualPayload)
     const refreshToken = await TokenService.generateRefreshToken(actualPayload)

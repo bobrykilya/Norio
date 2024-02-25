@@ -1,36 +1,33 @@
-// import { useState, useEffect } from 'react'
-import LoginPage from './Pages/LoginPage/LoginPage';
-import HomePage from './Pages/HomePage/HomePage'
+import { useContext } from "react"
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom"
+import { SnackbarProvider } from "notistack"
+import { AuthContext } from "./context/AuthContext"
+import AuthProvider from "./context/AuthContext"
+import LoginPage from './pages/LoginPage/LoginPage';
+import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
 
 
 
 const App = () => {
 
-    // const [state, setState] = useState(null)
-
-    // const callBackendAPI = async () => {
-    //     const response = await fetch('/api')
-    //     const body = await response.json()
-
-    //     if (response.status !== 200) {
-    //         throw Error(body.message)
-    //     }
-    //     return body
-    // }
-
-    //* получение GET маршрута с сервера Express, который соответствует GET из server.js 
-    // useEffect(() => {
-    //     callBackendAPI()
-    //         .then(res => setState(res.express))
-    //         .catch(err => console.log(err))
-    // }, [])
+    const { isUserLogged } = useContext(AuthContext)
 
     return (
         <div id='main_body-cont' className="cont">
-            {/* <LoginPanel /> */}
-            <LoginPage />
-            {/* <HomePage /> */}
+            <AuthProvider>
+                <SnackbarProvider />
+                <BrowserRouter>
+                    <Routes>
+                        {isUserLogged ? (
+                            <Route path="home-page" element={<HomePage />} />
+                        ) : (
+                            <Route path="login" element={<LoginPage />} />
+                        )}
+                        <Route path="*" element={<Navigate to={isUserLogged ? "home-page" : "login"} />} />
+                    </Routes>
+                </BrowserRouter>
+            </AuthProvider>
         </div>
     )
 }

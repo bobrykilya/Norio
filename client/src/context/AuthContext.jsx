@@ -1,10 +1,11 @@
 import { createContext, useState, useEffect } from "react"
 import axios from "axios"
 import { Circle } from "react-preloaders"
+import { useActions } from '../hooks/useActions'
 import config from "../config"
-// import style from "../app.module.scss"
 import showErrorMessage from "../utils/showErrorMessage.js"
 import inMemoryJWT from '../../services/inMemoryJWT'
+
 
 
 
@@ -25,7 +26,7 @@ ResourceClient.interceptors.request.use((config) => {
   }
 
   return config
-  }, 
+}, 
   (error) => {
     Promise.reject(error)
   }
@@ -37,9 +38,12 @@ const AuthProvider = ({ children }) => {
   const [data, setData] = useState()
   const [isAppReady, setIsAppReady] = useState(false)
   const [isUserLogged, setIsUserLogged] = useState(false)
+  const [signUpUserName, setSignUpUserName] = useState(false)
+  const [signUpUserPassword, setSignUpUserPassword] = useState(false)
+  const [listOfUsedAvatars, setListOfUsedAvatars] = useState([]);
+  const { toggleCoverPanel } = useActions()
 
   const handleSignIn = (data) => {
-    // location.reload(true)
     AuthClient.post("/sign-in", data)
     .then((res) => {
       const { accessToken, accessTokenExpiration } = res.data
@@ -50,11 +54,43 @@ const AuthProvider = ({ children }) => {
     .catch(showErrorMessage)
   }
   
+  const handleCheckUser = (data) => {
+    AuthClient.post("/check-user", data)
+    .then((res) => {
+      const { userName, userPassword } = res.data
+      // const { userName, userPassword, avatarsList } = res.data
+
+      setSignUpUserName(userName)
+      setSignUpUserPassword(userPassword)
+      // setListOfUsedAvatars([avatarsList])
+
+      toggleCoverPanel('sign_up_2')
+    })
+    .catch(showErrorMessage)
+  }
+
+  const resetSignUpVariables = () => {
+    setSignUpUserName(false)
+    setSignUpUserPassword(false)
+    setListOfUsedAvatars([])
+  }
+
+  const handleReturnToSignUp = () => {
+    resetSignUpVariables()
+
+    toggleCoverPanel('sign_up')
+  }
+
   const handleSignUp = (data) => {
+    data.username = signUpUserName
+    data.hashedPassword = signUpUserPassword
+
     AuthClient.post("/sign-up", data)
     .then((res) => {
       const { accessToken, accessTokenExpiration } = res.data
       inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+
+      resetSignUpVariables()
       
       setIsUserLogged(true)
     })
@@ -95,6 +131,8 @@ const AuthProvider = ({ children }) => {
       })
   }, [])
 
+
+  //* Exiting from all tabs when log out
   useEffect(() => {
     const handlePersistedLogOut = (event) => {
       // console.log(event.key)
@@ -115,6 +153,8 @@ const AuthProvider = ({ children }) => {
       value={{
         data,
         handleFetchProtected,
+        handleCheckUser,
+        handleReturnToSignUp,
         handleSignUp,
         handleSignIn,
         handleLogOut,
@@ -125,7 +165,7 @@ const AuthProvider = ({ children }) => {
       {isAppReady ? (
         children
       ) : (
-        <div>
+        <div className='cont'>
           <Circle />
         </div>
       )}
