@@ -28,11 +28,11 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
     } = useForm({
         mode: 'onChange',
         reValidateMode: "onChange",
-        defaultValues: {
-            username: 'User',
-            password: '1234User',
-            confirm_password: '1234User'
-        }
+        // defaultValues: {
+        //     username: 'User',
+        //     password: '1234User',
+        //     confirm_password: '1234User'
+        // }
     })
 
     //* Confirm_password's error react validation
@@ -47,7 +47,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
         }
     }, [watch('password'), watch('confirm_password')])
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         data.username = data.username.toLowerCase()
         delete data.confirm_password
         // alert(JSON.stringify(data))

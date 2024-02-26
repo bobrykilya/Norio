@@ -20,6 +20,7 @@ const SignInForm = ({  isFormBlur=false}) => {
         register,
         handleSubmit,
         resetField,
+        watch,
         formState: { isLoading },
     } = useForm({
         mode: 'onBlur',
@@ -30,15 +31,22 @@ const SignInForm = ({  isFormBlur=false}) => {
         setNotSaveUser((prev) => !prev)
     }
 
-    const onSubmitNotSave = async (data) => {
-        data.is_not_save = true
-        data.sign_up_device = navigator.userAgent
+    const onSubmitNotSave = async () => {
+        const data = {
+            username: watch('username').toLowerCase(),
+            password: watch('password'),
+            is_not_save: true,
+        }
+        // data.username = data.username.toLowerCase()
+        // data.is_not_save = true
+        // data.sign_up_device = navigator.userAgent
         // console.log(data)
-        alert(JSON.stringify(data))
+        handleSignIn(data)
+        // alert(JSON.stringify(data))
     }
 
     const onSubmit = async (data) => {
-        data.is_not_save = false
+        data.username = data.username.toLowerCase()
         // data.sign_up_device = navigator.userAgent
         // console.log(data)
         // alert(JSON.stringify(data))
@@ -73,7 +81,7 @@ const SignInForm = ({  isFormBlur=false}) => {
             <SubmitBut
                 icon={<BiLogInCircle className='fa-icon'/>}
                 notSaveUser={notSaveUser}
-                onClick={handleSubmit(onSubmitNotSave)}
+                onClick={onSubmitNotSave}
                 isLoading={isLoading}
                 title='Выполнить вход'
             />

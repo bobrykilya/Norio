@@ -38,7 +38,7 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
         avatar ? onSubmit(data) : setErrorAvatar({message: 'Выберите аватар пользователя'})
     }
     
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         setTimeout(() => {
             data.phone = '+375' + data.phone
             data.avatar = avatar
@@ -132,6 +132,8 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
                 />
                 <SubmitBut
                     icon={<BiLogInCircle className='fa-icon'/>}
+                    disabled={isFormBlur}
+                    isLoading={isLoading}
                     title='Завершить регистрацию и выполнить вход'
                 />
             </div>

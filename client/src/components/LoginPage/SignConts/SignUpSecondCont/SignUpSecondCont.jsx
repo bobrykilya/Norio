@@ -219,7 +219,7 @@ const SignUpSecondCont = ({ act_form }) => {
         },
         {
             id: 'dog_9',
-            title: 'Софья Светлановна',
+            title: 'Соня Светлановна',
         },
         {
             id: 'beaver',

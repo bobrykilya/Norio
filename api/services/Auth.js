@@ -28,7 +28,6 @@ class AuthService {
     }
     // console.log(isSessionDouble)
 
-
     const sessionsQuantity = await RefreshSessionsRepository.getRefreshSessionsQuantity(userData.id)
 
     if (sessionsQuantity >= 5) {
