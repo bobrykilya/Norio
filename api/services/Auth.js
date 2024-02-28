@@ -61,14 +61,16 @@ class AuthService {
   static async checkUser({ username, password }) {
     const userData = await UserRepository.getUserData(username)
     if (userData) {
-      throw new Conflict("Пользователь с таким именем уже существует")
+      throw new Conflict("Пользователь с таким логином уже существует")
     }
 
     const hashedPassword = bcrypt.hashSync(password, 8)
+    const avatarsList = await UserInfoRepository.getUsedAvatarsList()
 
     return { 
       userName: username, 
       userPassword: hashedPassword,
+      avatarsList,
     }
   }
 

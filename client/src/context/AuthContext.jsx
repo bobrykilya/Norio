@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react"
+import { createContext, useState, useEffect, useRef } from "react"
 import axios from "axios"
 import { Circle } from "react-preloaders"
 import { useActions } from '../hooks/useActions'
@@ -40,10 +40,21 @@ const AuthProvider = ({ children }) => {
   const [isUserLogged, setIsUserLogged] = useState(false)
   const [signUpUserName, setSignUpUserName] = useState(false)
   const [signUpUserPassword, setSignUpUserPassword] = useState(false)
-  const [listOfUsedAvatars, setListOfUsedAvatars] = useState([]);
+  const [listOfUsedAvatars, setListOfUsedAvatars] = useState([])
   const { toggleCoverPanel } = useActions()
+  const refSetTimeout = useRef(null)
 
   const handleSignIn = (data) => {
+    if (data.is_not_save) {
+      refSetTimeout.current  = setTimeout(() => {
+        AuthClient.post("/logout")
+          .then(() => {
+            inMemoryJWT.deleteToken()
+          })
+          .catch(showErrorMessage)
+      }, 60000) // 10 минут
+    }
+
     AuthClient.post("/sign-in", data)
     .then((res) => {
       const { accessToken, accessTokenExpiration } = res.data
@@ -57,12 +68,12 @@ const AuthProvider = ({ children }) => {
   const handleCheckUser = (data) => {
     AuthClient.post("/check-user", data)
     .then((res) => {
-      const { userName, userPassword } = res.data
-      // const { userName, userPassword, avatarsList } = res.data
+      // const { userName, userPassword } = res.data
+      const { userName, userPassword, avatarsList } = res.data
 
       setSignUpUserName(userName)
       setSignUpUserPassword(userPassword)
-      // setListOfUsedAvatars([avatarsList])
+      setListOfUsedAvatars(avatarsList)
 
       toggleCoverPanel('sign_up_2')
     })
@@ -99,6 +110,8 @@ const AuthProvider = ({ children }) => {
     
   
   const handleLogOut = () => {
+    clearTimeout(refSetTimeout.current)
+
     AuthClient.post("/logout")
     .then(() => {
       inMemoryJWT.deleteToken()
@@ -160,6 +173,7 @@ const AuthProvider = ({ children }) => {
         handleLogOut,
         isUserLogged,
         isAppReady,
+        listOfUsedAvatars,
       }}
     >
       {isAppReady ? (

@@ -17,6 +17,13 @@ class UserInfoRepository {
 //   static async createUserInfo(id) {
 //     const response = await pool.query("SELECT * FROM users WHERE user_id=$1", [id])
 //   }
+
+  static async getUsedAvatarsList() {
+    const response = await pool.query("SELECT * FROM users_info")
+
+    return response.rows.map(row => row.avatar)
+  }
+
 }
 
 export default UserInfoRepository

@@ -1,9 +1,13 @@
+import { useContext } from 'react'
+import { AuthContext } from '../../../../context/AuthContext'
 import SignUpSecondForm from './SignUpSecondForm/SignUpSecondForm'
 
 
 
-
 const SignUpSecondCont = ({ act_form }) => {
+
+    const { listOfUsedAvatars } = useContext(AuthContext)
+    let FILTERED_LIST = []
 
     // console.log('Form updated')
     const STORES_LIST = [
@@ -491,6 +495,11 @@ const SignUpSecondCont = ({ act_form }) => {
         },
     ]
 
+    if (listOfUsedAvatars[0]) {
+        FILTERED_LIST = AVATARS_LIST.filter(avatar => !listOfUsedAvatars.includes(avatar.id))
+        // console.log(FILTERED_LIST)
+    }
+
     return ( 
         <section
             id='sign_up_2-cont'
@@ -499,7 +508,7 @@ const SignUpSecondCont = ({ act_form }) => {
             <div className='enter_text-cont cont'>
                 <h1>Личные данные</h1>
             </div>
-            < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} AVATARS_LIST={AVATARS_LIST} isFormBlur={act_form !== 'sign_up_2'} />
+            < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} AVATARS_LIST={!listOfUsedAvatars[0] ? AVATARS_LIST : FILTERED_LIST} isFormBlur={act_form !== 'sign_up_2'} />
         </section>
      )
 }

@@ -4,7 +4,7 @@ import { COOKIE_SETTINGS } from "../constants.js"
 
 class AuthController {
   static async signIn(req, res) {
-    const { username, password, is_not_save } = req.body
+    const { username, password } = req.body
     const { fingerprint } = req
     try {
       const { accessToken, refreshToken, accessTokenExpiration } = await AuthService.signIn({ username, password, fingerprint })
@@ -21,9 +21,9 @@ class AuthController {
     const { username, password } = req.body
 
     try {
-      const { userName, userPassword } = await AuthService.checkUser({ username, password })
+      const { userName, userPassword, avatarsList } = await AuthService.checkUser({ username, password })
 
-      return res.status(200).json({ userName, userPassword })
+      return res.status(200).json({ userName, userPassword, avatarsList })
     } catch (err) {
       return ErrorsUtils.catchError(res, err)
     }

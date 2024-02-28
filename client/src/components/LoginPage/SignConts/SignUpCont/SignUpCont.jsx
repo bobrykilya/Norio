@@ -3,7 +3,7 @@ import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
 
 
 
-const SignUpCont = ({ act_form }) => {
+const SignUpCont = ({ act_form }) => { 
 
     return (  
         <section 

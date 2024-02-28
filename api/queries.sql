@@ -10,7 +10,7 @@ CREATE TABLE users_info(
     last_name VARCHAR(25) NOT NULL,
     first_name VARCHAR(20) NOT NULL,
     middle_name VARCHAR(20) NOT NULL,
-    job VARCHAR(20) NOT NULL,
+    job VARCHAR(25) NOT NULL,
     store VARCHAR(12) NOT NULL,
     phone VARCHAR(13) NOT NULL,
     avatar VARCHAR(16) NOT NULL

@@ -120,7 +120,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
         <div className='password_input-cont input-cont cont'>
             <input
                 {... rest_register}
-                ref={(e) => {2
+                ref={(e) => {
                     ref(e)
                     inputRef.current = e
                 }}

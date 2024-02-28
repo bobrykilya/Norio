@@ -31,14 +31,14 @@ const SignInForm = ({  isFormBlur=false}) => {
         setNotSaveUser((prev) => !prev)
     }
 
-    const onSubmitNotSave = async () => {
-        const data = {
-            username: watch('username').toLowerCase(),
-            password: watch('password'),
-            is_not_save: true,
-        }
-        // data.username = data.username.toLowerCase()
-        // data.is_not_save = true
+    const onSubmitNotSave = async (data) => {
+        // const data = {
+        //     username: watch('username').toLowerCase(),
+        //     password: watch('password'),
+        //     is_not_save: true,
+        // }
+        data.username = data.username.toLowerCase()
+        data.is_not_save = true
         // data.sign_up_device = navigator.userAgent
         // console.log(data)
         handleSignIn(data)
@@ -81,7 +81,7 @@ const SignInForm = ({  isFormBlur=false}) => {
             <SubmitBut
                 icon={<BiLogInCircle className='fa-icon'/>}
                 notSaveUser={notSaveUser}
-                onClick={onSubmitNotSave}
+                onClick={handleSubmit(onSubmitNotSave)}
                 isLoading={isLoading}
                 title='Выполнить вход'
             />

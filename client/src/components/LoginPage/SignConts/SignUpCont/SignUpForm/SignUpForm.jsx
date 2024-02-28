@@ -29,7 +29,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
         mode: 'onChange',
         reValidateMode: "onChange",
         // defaultValues: {
-        //     username: 'User',
+        //     username: 'Userqwe',
         //     password: '1234User',
         //     confirm_password: '1234User'
         // }
