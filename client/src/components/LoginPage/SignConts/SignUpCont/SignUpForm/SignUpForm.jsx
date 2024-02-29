@@ -28,11 +28,11 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
     } = useForm({
         mode: 'onChange',
         reValidateMode: "onChange",
-        // defaultValues: {
-        //     username: 'Userqwe',
-        //     password: '1234User',
-        //     confirm_password: '1234User'
-        // }
+        defaultValues: {
+            username: 'Userqwerq',
+            password: '1234User',
+            confirm_password: '1234User'
+        }
     })
 
     //* Confirm_password's error react validation

@@ -192,7 +192,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                     ref(e)
                     inputRef.current = e
                 }}
-                maxLength={20}
+                maxLength={23}
                 className='dropdown_input'
                 placeholder={placeholder}
                 autoComplete='none'

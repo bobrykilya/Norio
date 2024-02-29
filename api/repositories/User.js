@@ -5,7 +5,7 @@ class UserRepository {
     const response = await pool.query("INSERT INTO users (name, password, access_lvl) VALUES ($1, $2, $3) RETURNING *", 
     [username, hashedPassword, access_lvl])
 
-    return response.rows[0]
+    return response.rows[0].id
   }
 
   static async getUserData(username) {

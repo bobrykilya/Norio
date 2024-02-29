@@ -155,6 +155,7 @@ __metadata:
     express-fingerprint: "npm:^1.2.2"
     jsonwebtoken: "npm:^9.0.2"
     nodemon: "npm:^3.1.0"
+    os: "npm:^0.1.2"
     pg: "npm:^8.11.3"
   languageName: unknown
   linkType: soft
@@ -1787,6 +1788,13 @@ __metadata:
   version: 1.0.2
   resolution: "os-tmpdir@npm:1.0.2"
   checksum: f438450224f8e2687605a8dd318f0db694b6293c5d835ae509a69e97c8de38b6994645337e5577f5001115470414638978cc49da1cdcc25106dad8738dc69990
+  languageName: node
+  linkType: hard
+
+"os@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "os@npm:0.1.2"
+  checksum: 90f0db78a19a43cd26bc7497640eaee566043209e93d7e99570f542370f55d7107487f0bffdff01666b6ba48c88b6da8a6ed3811d745b57de93ab1cf7d3591a4
   languageName: node
   linkType: hard
 

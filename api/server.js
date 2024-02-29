@@ -28,5 +28,5 @@ app.use("/resource/protected", TokenService.checkAccess, (_, res) => {
 })
 
 app.listen(PORT, (err) => {
-    err ? console.log(err) : console.log(`Server listening on ${PORT}`)
+  err ? console.log(err) : console.log(`Server listening on ${PORT}`)
 })

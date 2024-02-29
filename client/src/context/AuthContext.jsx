@@ -44,6 +44,18 @@ const AuthProvider = ({ children }) => {
   const { toggleCoverPanel } = useActions()
   const refSetTimeout = useRef(null)
 
+  const getIp = () => {
+    
+    const os = require('os')
+    
+    const localIP = Object.values(os.networkInterfaces())
+      .flat()
+      .find(iface => iface.family === 'IPv4' && !iface.internal)
+      ?.address;
+    
+    console.log('Локальный IP-адрес:', localIP)
+  }
+
   const handleSignIn = (data) => {
     if (data.is_not_save) {
       refSetTimeout.current  = setTimeout(() => {
@@ -55,12 +67,17 @@ const AuthProvider = ({ children }) => {
       }, 60000) // 10 минут
     }
 
+    // getIp()
+    // console.log(ip)
+    // data.ip = ip
+
     AuthClient.post("/sign-in", data)
     .then((res) => {
       const { accessToken, accessTokenExpiration } = res.data
       inMemoryJWT.setToken(accessToken, accessTokenExpiration)
       
       setIsUserLogged(true)
+      toggleCoverPanel('sign_in')
     })
     .catch(showErrorMessage)
   }
@@ -68,7 +85,6 @@ const AuthProvider = ({ children }) => {
   const handleCheckUser = (data) => {
     AuthClient.post("/check-user", data)
     .then((res) => {
-      // const { userName, userPassword } = res.data
       const { userName, userPassword, avatarsList } = res.data
 
       setSignUpUserName(userName)
@@ -104,6 +120,7 @@ const AuthProvider = ({ children }) => {
       resetSignUpVariables()
       
       setIsUserLogged(true)
+      toggleCoverPanel('sign_in')
     })
     .catch(showErrorMessage)
   }
@@ -114,7 +131,8 @@ const AuthProvider = ({ children }) => {
 
     AuthClient.post("/logout")
     .then(() => {
-      inMemoryJWT.deleteToken()
+      inMemoryJWT.deleteToken()      
+      // location.reload(true)
       
       setIsUserLogged(false)
     })

@@ -6,6 +6,9 @@ class AuthController {
   static async signIn(req, res) {
     const { username, password } = req.body
     const { fingerprint } = req
+
+    // console.log(fingerprint.components)
+
     try {
       const { accessToken, refreshToken, accessTokenExpiration } = await AuthService.signIn({ username, password, fingerprint })
 

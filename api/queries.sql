@@ -10,17 +10,24 @@ CREATE TABLE users_info(
     last_name VARCHAR(25) NOT NULL,
     first_name VARCHAR(20) NOT NULL,
     middle_name VARCHAR(20) NOT NULL,
-    job VARCHAR(25) NOT NULL,
+    job VARCHAR(23) NOT NULL,
     store VARCHAR(12) NOT NULL,
     phone VARCHAR(13) NOT NULL,
     avatar VARCHAR(16) NOT NULL
+)
+
+CREATE TABLE login_devices(
+    id SERIAL PRIMARY KEY,
+    finger_print VARCHAR(32) NOT NULL,
+    user_agent VARCHAR(120) NOT NULL,
+    local_ip VARCHAR(50) NOT NULL
 )
 
 CREATE TABLE refresh_sessions(
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     refresh_token VARCHAR(400) NOT NULL,
-    finger_print VARCHAR(32) NOT NULL,
+    device_id INT NOT NULL REFERENCES login_devices(id) ON DELETE CASCADE,
     time_log_in VARCHAR(15) NOT NULL
 )
 

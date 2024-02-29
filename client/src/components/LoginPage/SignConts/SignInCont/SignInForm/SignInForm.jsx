@@ -20,11 +20,14 @@ const SignInForm = ({  isFormBlur=false}) => {
         register,
         handleSubmit,
         resetField,
-        watch,
         formState: { isLoading },
     } = useForm({
         mode: 'onBlur',
-        reValidateMode: "onBlur"
+        reValidateMode: "onBlur",
+        defaultValues: {
+            username: 'Admin',
+            password: 'Qwe123',
+        }
     })
 
     const handleChangeCheckBox = () => {
