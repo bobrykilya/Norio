@@ -4,10 +4,11 @@ import pool from "../db.js"
 
 class LoginDeviceRepository {
   static async createDevice(fingerprint, localIp) {
-    delete fingerprint.components.useragent['device'] 
+    const browser = fingerprint.components.useragent.browser.family + ' v.' + fingerprint.components.useragent.browser.version
+    const windows_v = fingerprint.components.useragent.os.major
     
-    const response = await pool.query("INSERT INTO login_devices (finger_print, user_agent, local_ip) VALUES ($1, $2, $3) RETURNING id", 
-    [fingerprint.hash, JSON.stringify(fingerprint.components.useragent), localIp])
+    const response = await pool.query("INSERT INTO login_devices (finger_print, browser, windows_v, local_ip) VALUES ($1, $2, $3, $4) RETURNING id", 
+    [fingerprint.hash, browser, windows_v, localIp])
 
     return response.rows[0]?.id
   }

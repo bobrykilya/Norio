@@ -13,11 +13,11 @@ class RefreshSessionRepository {
   }
 
   static async createRefreshSession({ id, refreshToken, deviceId }) {
-    await pool.query("INSERT INTO refresh_sessions (user_id, refresh_token, device_id, time_log_in) VALUES ($1, $2, $3, $4)", [
+    await pool.query("INSERT INTO refresh_sessions (user_id, refresh_token, device_id, login_time) VALUES ($1, $2, $3, $4)", [
       id,
       refreshToken,
       deviceId,
-      Date.now().toString(),
+      new Date(),
     ])
   }
 
@@ -32,7 +32,7 @@ class RefreshSessionRepository {
   }
 
   static async getOldestRefreshSessions(userId) {
-    const response = await pool.query("SELECT * FROM refresh_sessions WHERE user_id=$1 ORDER BY time_log_in LIMIT 1", [userId])
+    const response = await pool.query("SELECT * FROM refresh_sessions WHERE user_id=$1 ORDER BY login_time LIMIT 1", [userId])
 
     return response.rows[0].id
   }

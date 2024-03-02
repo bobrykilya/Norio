@@ -106,7 +106,6 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
                     register={register}
                     error={errors?.first_name}
                     reset={resetField}
-                    inputMaxLength={20}
                     disabled={isFormBlur}
                 />
                 <UserNameInput
@@ -117,7 +116,6 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
                     register={register}
                     error={errors?.middle_name}
                     reset={resetField}
-                    inputMaxLength={20}
                     disabled={isFormBlur}
                 />
             </div>

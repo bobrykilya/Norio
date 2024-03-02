@@ -6,7 +6,7 @@ import { useCapitalize } from '../../../../hooks/useCapitalize'
 
 
 
-const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=15, disabled=false }) => {
+const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=20, disabled=false }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)

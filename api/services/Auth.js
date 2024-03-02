@@ -15,24 +15,22 @@ const getAllIPv4Addresses = () => {
   for (const network of Object.keys(networks)) {
     for (const net of networks[network]) {
       if (net.family === 'IPv4' && !net.internal) {
-        allAddresses.push({network, address: net.address})
+        // allAddresses.push({network, address: net.address})
+        allAddresses.push(net.address)
       }
     }
   }
-  if (allAddresses.length === 1) {
-    return allAddresses[0].address
-  }else {
-    return JSON.stringify(allAddresses)
-  }
+  return JSON.stringify(allAddresses)
 }
 
 class AuthService {
 
   static async signIn({ username, password, fingerprint }) {
     const userData = await UserRepository.getUserData(username)
+
     const localIp = getAllIPv4Addresses()
     let deviceId = await LoginDeviceRepository.getDeviceId(fingerprint.hash, localIp)
-
+    
     if (deviceId) {
       const isSessionDouble = await RefreshSessionsRepository.isRefreshSessionDouble(deviceId)
       if (isSessionDouble) {
@@ -50,9 +48,9 @@ class AuthService {
     }
     
 
-    //* Control of max 5 sessions for every user
+    //* Control of max sessions for every user
     const sessionsQuantity = await RefreshSessionsRepository.getRefreshSessionsQuantity(userData.id)
-    if (sessionsQuantity >= 5) {
+    if (sessionsQuantity >= 7) {
       const oldestSessionId = await RefreshSessionsRepository.getOldestRefreshSessions(userData.id)
       await RefreshSessionsRepository.deleteRefreshSessionById(oldestSessionId)
     }
@@ -100,10 +98,18 @@ class AuthService {
   }
 
   static async signUp({ username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, fingerprint }) {
-
     //! Change
     const access_lvl = 1
     let id
+    const localIp = getAllIPv4Addresses()
+    let deviceId = await LoginDeviceRepository.getDeviceId(fingerprint.hash, localIp)
+
+    if (deviceId) {
+      const isSessionDouble = await RefreshSessionsRepository.isRefreshSessionDouble(deviceId)
+      if (isSessionDouble) {
+        throw new Conflict("На устройстве уже выполнен вход. Обновите страницу")
+      }
+    }
 
     try {
       id  = await UserRepository.createUser({ 
@@ -126,7 +132,10 @@ class AuthService {
       // console.log(error)
       throw new Forbidden(error.detail)
     }
-    
+
+    if (!deviceId) {
+      deviceId = await LoginDeviceRepository.createDevice(fingerprint, localIp)
+    }
 
     const payload = { id, username, access_lvl }
 
@@ -136,13 +145,8 @@ class AuthService {
     await RefreshSessionsRepository.createRefreshSession({
       id,
       refreshToken,
-      fingerprint,
+      deviceId,
     })
-
-    const isOldDevice = await LoginDeviceRepository.createDevice(fingerprint)
-    if (!isOldDevice) {
-      await LoginDeviceRepository.createDevice(fingerprint)
-    }
 
     return { 
       accessToken, 
