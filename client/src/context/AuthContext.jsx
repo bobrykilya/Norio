@@ -8,7 +8,6 @@ import inMemoryJWT from '../../services/inMemoryJWT'
 
 
 
-
 export const AuthClient = axios.create({
   baseURL: `${config.API_URL}/auth`,
   withCredentials: true,
@@ -44,18 +43,6 @@ const AuthProvider = ({ children }) => {
   const { toggleCoverPanel } = useActions()
   const refSetTimeout = useRef(null)
 
-  const getIp = () => {
-    
-    const os = require('os')
-    
-    const localIP = Object.values(os.networkInterfaces())
-      .flat()
-      .find(iface => iface.family === 'IPv4' && !iface.internal)
-      ?.address;
-    
-    console.log('Локальный IP-адрес:', localIP)
-  }
-
   const handleSignIn = (data) => {
     if (data.is_not_save) {
       refSetTimeout.current  = setTimeout(() => {
@@ -66,10 +53,6 @@ const AuthProvider = ({ children }) => {
           .catch(showErrorMessage)
       }, 60000) // 10 минут
     }
-
-    // getIp()
-    // console.log(ip)
-    // data.ip = ip
 
     AuthClient.post("/sign-in", data)
     .then((res) => {

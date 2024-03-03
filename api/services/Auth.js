@@ -1,213 +1,218 @@
 import bcrypt from "bcryptjs"
-import os from "os"
 import TokenService from "./Token.js"
 import { NotFound, Forbidden, Conflict, Unauthorized } from "../utils/Errors.js"
-import RefreshSessionsRepository from "../repositories/RefreshSession.js"
-import UserRepository from "../repositories/User.js"
-import UserInfoRepository from '../repositories/UserInfo.js'
 import { ACCESS_TOKEN_EXPIRATION } from "../constants.js"
-import LoginDeviceRepository from '../repositories/LoginDevice.js'
+import RefreshSessionsRepository from "../database/repositories/RefreshSession.js"
+import UserRepository from "../database/repositories/User.js"
+import UserInfoRepository from '../database/repositories/UserInfo.js'
+import AuthDeviceRepository from '../database/repositories/AuthDevice.js'
+import _logAttentionRepository from '../database/repositories/_LogAttention.js'
+import _logAuthRepository from '../database/repositories/_LogAuth.js'
 
 
-const getAllIPv4Addresses = () => {
-  const networks = os.networkInterfaces()
-  const allAddresses = []
-  for (const network of Object.keys(networks)) {
-    for (const net of networks[network]) {
-      if (net.family === 'IPv4' && !net.internal) {
-        // allAddresses.push({network, address: net.address})
-        allAddresses.push(net.address)
-      }
-    }
-  }
-  return JSON.stringify(allAddresses)
+
+const checkSessionDouble = async (deviceId) => {
+	if (deviceId) {
+		const isSessionDouble = await RefreshSessionsRepository.isRefreshSessionDouble(deviceId)
+		if (isSessionDouble) {
+			throw new Conflict("На устройстве уже выполнен вход. Обновите страницу")
+		}
+	}
 }
 
 class AuthService {
 
-  static async signIn({ username, password, fingerprint }) {
-    const userData = await UserRepository.getUserData(username)
+	static async signIn({ username, password, fingerprint, is_not_save }) {
+		const userData = await UserRepository.getUserData(username)
+		let deviceId = await AuthDeviceRepository.getDeviceData(fingerprint.hash)
+		const enterCode = !is_not_save ? 201 : 202
 
-    const localIp = getAllIPv4Addresses()
-    let deviceId = await LoginDeviceRepository.getDeviceId(fingerprint.hash, localIp)
-    
-    if (deviceId) {
-      const isSessionDouble = await RefreshSessionsRepository.isRefreshSessionDouble(deviceId)
-      if (isSessionDouble) {
-        throw new Conflict("На устройстве уже выполнен вход. Обновите страницу")
-      }
-    }
+		await checkSessionDouble(deviceId)
 
-    if (!userData) {
-      throw new NotFound("Пользователь не найден")
-    }
+		if (!userData) {
+			throw new NotFound("Пользователь не найден")
+		}
 
-    const isPasswordValid = bcrypt.compareSync(password, userData.password)
-    if (!isPasswordValid) {
-      throw new Unauthorized("Неверный логин или пароль")
-    }
-    
+		const isPasswordValid = bcrypt.compareSync(password, userData.password)
+		if (!isPasswordValid) {
+			throw new Unauthorized("Неверный логин или пароль")
+		}
 
-    //* Control of max sessions for every user
-    const sessionsQuantity = await RefreshSessionsRepository.getRefreshSessionsQuantity(userData.id)
-    if (sessionsQuantity >= 7) {
-      const oldestSessionId = await RefreshSessionsRepository.getOldestRefreshSessions(userData.id)
-      await RefreshSessionsRepository.deleteRefreshSessionById(oldestSessionId)
-    }
-    
-    if (!deviceId) {
-      deviceId = await LoginDeviceRepository.createDevice(fingerprint, localIp)
-    }
+		//* Control of max sessions for every user
+		const sessionsQuantity = await RefreshSessionsRepository.getRefreshSessionsQuantity(userData.id)
+		if (sessionsQuantity >= 7) {
+			const oldestSessionId = await RefreshSessionsRepository.getOldestRefreshSessions(userData.id)
+			await RefreshSessionsRepository.deleteRefreshSessionById(oldestSessionId)
+		}
+		
+		if (userData.role === 1 && deviceId) {
+			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId: userData.id, deviceId })
+		}
+		if (!deviceId) {
+			deviceId = await AuthDeviceRepository.createDevice(fingerprint)
+			await _logAttentionRepository.createLogAttention({ typeCode: 101, userId: userData.id, deviceId })
+		}
+		if (userData.role !== 1) {
+			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId: userData.id, deviceId })
+		}
 
-    const payload = { 
-      id: userData.id,
-      access_lvl: userData.access_lvl,
-      username,
-    }
+		await _logAuthRepository.createLogAuth({ typeCode: enterCode, userId: userData.id, deviceId })
 
-    const accessToken = await TokenService.generateAccessToken(payload)
-    const refreshToken = await TokenService.generateRefreshToken(payload)
+		const payload = {
+			id: userData.id,
+			role: userData.role,
+			username,
+		}
 
-    await RefreshSessionsRepository.createRefreshSession({
-      id: userData.id, 
-      refreshToken,
-      deviceId,
-    })
+		const accessToken = await TokenService.generateAccessToken(payload)
+		const refreshToken = await TokenService.generateRefreshToken(payload)
 
-    return {
-      accessToken,
-      refreshToken,
-      accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
-    }
-  }
+		await RefreshSessionsRepository.createRefreshSession({
+			refreshToken,
+			userId: userData.id,
+			deviceId,
+		})
 
-  static async checkUser({ username, password }) {
-    const userData = await UserRepository.getUserData(username)
-    if (userData) {
-      throw new Conflict("Пользователь с таким логином уже существует")
-    }
+		return {
+			accessToken,
+			refreshToken,
+			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
+		}
+	}
 
-    const hashedPassword = bcrypt.hashSync(password, 8)
-    const avatarsList = await UserInfoRepository.getUsedAvatarsList()
+	static async checkUser({ username, password }) {
+		const userData = await UserRepository.getUserData(username)
+		if (userData) {
+			throw new Conflict("Пользователь с таким логином уже существует")
+		}
 
-    return { 
-      userName: username, 
-      userPassword: hashedPassword,
-      avatarsList,
-    }
-  }
+		const hashedPassword = bcrypt.hashSync(password, 8)
+		const avatarsList = await UserInfoRepository.getUsedAvatarsList()
 
-  static async signUp({ username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, fingerprint }) {
-    //! Change
-    const access_lvl = 1
-    let id
-    const localIp = getAllIPv4Addresses()
-    let deviceId = await LoginDeviceRepository.getDeviceId(fingerprint.hash, localIp)
+		return {
+			userName: username,
+			userPassword: hashedPassword,
+			avatarsList,
+		}
+	}
 
-    if (deviceId) {
-      const isSessionDouble = await RefreshSessionsRepository.isRefreshSessionDouble(deviceId)
-      if (isSessionDouble) {
-        throw new Conflict("На устройстве уже выполнен вход. Обновите страницу")
-      }
-    }
+	static async signUp({ username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, fingerprint }) {
+		//! Change
+		const role = 1
+		let id
+		let deviceId = await AuthDeviceRepository.getDeviceData(fingerprint.hash)
 
-    try {
-      id  = await UserRepository.createUser({ 
-        username,
-        hashedPassword,
-        access_lvl,
-      })
-  
-      await UserInfoRepository.createUserInfo({ 
-        user_id: id,
-        phone, 
-        store, 
-        job, 
-        last_name, 
-        first_name, 
-        middle_name, 
-        avatar,
-      })
-    } catch (error) {
-      // console.log(error)
-      throw new Forbidden(error.detail)
-    }
+		await checkSessionDouble(deviceId)
 
-    if (!deviceId) {
-      deviceId = await LoginDeviceRepository.createDevice(fingerprint, localIp)
-    }
+		try {
+			id = await UserRepository.createUser({
+				username,
+				hashedPassword,
+				role,
+			})
 
-    const payload = { id, username, access_lvl }
+			await UserInfoRepository.createUserInfo({
+				user_id: id,
+				phone,
+				store,
+				job,
+				last_name,
+				first_name,
+				middle_name,
+				avatar,
+			})
+		} catch (error) {
+			throw new Forbidden(error)
+		}
 
-    const accessToken = await TokenService.generateAccessToken(payload)
-    const refreshToken = await TokenService.generateRefreshToken(payload)
+		if (!deviceId) {
+			deviceId = await AuthDeviceRepository.createDevice(fingerprint)
+			await _logAttentionRepository.createLogAttention({ typeCode: 205, userId: id, deviceId })
+		}
 
-    await RefreshSessionsRepository.createRefreshSession({
-      id,
-      refreshToken,
-      deviceId,
-    })
+		await _logAuthRepository.createLogAuth({ typeCode: 205, userId: id, deviceId })
 
-    return { 
-      accessToken, 
-      refreshToken, 
-      accessTokenExpiration: ACCESS_TOKEN_EXPIRATION, 
-    }
-  }
+		const payload = { id, username, role }
 
-  static async logOut(refreshToken) {
-    await RefreshSessionsRepository.deleteRefreshSession(refreshToken)
-  }
+		const accessToken = await TokenService.generateAccessToken(payload)
+		const refreshToken = await TokenService.generateRefreshToken(payload)
 
-  static async refresh({ fingerprint, currentRefreshToken }) {
-    if  (!currentRefreshToken) {
-      throw new Unauthorized()
-    }
+		await RefreshSessionsRepository.createRefreshSession({
+			refreshToken,
+			userId: id,
+			deviceId,
+		})
 
-    const refreshSession = await RefreshSessionsRepository.getRefreshSession(currentRefreshToken)
+		return {
+			accessToken,
+			refreshToken,
+			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
+		}
+	}
 
-    if (!refreshSession) {
-      throw new Unauthorized()
-    }
+	static async logOut(refreshToken) {
+		const refreshSession = await RefreshSessionsRepository.getRefreshSession(refreshToken)
 
-    const deviceId = await LoginDeviceRepository.getDeviceId(fingerprint.hash, getAllIPv4Addresses())
-    if (refreshSession.device_id !== deviceId) {
-      console.log("Попытка несанкционированного обновления токенов!")
-      throw new Forbidden("Попытка несанкционированного обновления токенов!")
-    }
+		if (refreshSession){
+			await _logAuthRepository.createLogAuth({ typeCode: 203, userId: refreshSession.user_id, deviceId: refreshSession.device_id })
+		}
 
-    await RefreshSessionsRepository.deleteRefreshSession(currentRefreshToken)
+		await RefreshSessionsRepository.deleteRefreshSession(refreshToken)
+	}
 
-    let payload
-    try {
-      payload = await TokenService.verifyRefreshToken(currentRefreshToken)
-    } catch (error) {
-      throw new Forbidden(error.detail)
-    }
+	static async refresh({ fingerprint, currentRefreshToken }) {
+		if (!currentRefreshToken) {
+			throw new Unauthorized()
+		}
 
-    const { 
-      id,
-      access_lvl, 
-      name: username, 
-    } = await UserRepository.getUserData(payload.username)
+		const refreshSession = await RefreshSessionsRepository.getRefreshSession(currentRefreshToken)
 
-    const actualPayload = { id, username, access_lvl }
+		if (!refreshSession) {
+			throw new Unauthorized()
+		}
 
-    const accessToken = await TokenService.generateAccessToken(actualPayload)
-    const refreshToken = await TokenService.generateRefreshToken(actualPayload)
+		const deviceId = await AuthDeviceRepository.getDeviceData(fingerprint.hash)
+		if (refreshSession.device_id !== deviceId) {
+			if (!deviceId) {
+				deviceId = await AuthDeviceRepository.createDevice(fingerprint)
+			}
+			await _logAttentionRepository.createLogAttention({ typeCode: 801, userId: id, deviceId })
 
-    await RefreshSessionsRepository.createRefreshSession({
-      id, 
-      refreshToken,
-      deviceId,
-    })
+			throw new Forbidden("Попытка несанкционированного обновления токенов!")
+		}
 
-    return { 
-      accessToken, 
-      refreshToken, 
-      accessTokenExpiration: ACCESS_TOKEN_EXPIRATION, 
-    }
-  }
+		await RefreshSessionsRepository.deleteRefreshSession(currentRefreshToken)
+
+		let payload
+		try {
+			payload = await TokenService.verifyRefreshToken(currentRefreshToken)
+		} catch (error) {
+			throw new Forbidden(error.detail)
+		}
+
+		const {
+			id,
+			role,
+			name: username,
+		} = await UserRepository.getUserData(payload.username)
+
+		const actualPayload = { id, username, role }
+
+		const accessToken = await TokenService.generateAccessToken(actualPayload)
+		const refreshToken = await TokenService.generateRefreshToken(actualPayload)
+
+		await RefreshSessionsRepository.createRefreshSession({
+			refreshToken,
+			userId: id,
+			deviceId,
+		})
+
+		return {
+			accessToken,
+			refreshToken,
+			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
+		}
+	}
 }
 
 export default AuthService

@@ -14,8 +14,9 @@
     color: $color-main-text
     font-family: "Nunito"
     font-size: $size-main-text
-    background: radial-gradient(circle, #6281a7, #1a293f)
-    .background-img
+    &.active_bg
+        background: radial-gradient(circle, #6281a7, #1a293f)
+    .main_bg-img
         opacity: 0.9
         background-size: cover
         z-index: -10
@@ -23,3 +24,7 @@
         position: absolute
         width: 100vw
         height: 100vh
+
+@media (max-width: 900px)
+    #main_body-cont
+        display: none

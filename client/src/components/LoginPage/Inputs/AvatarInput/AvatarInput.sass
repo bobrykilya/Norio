@@ -89,12 +89,13 @@
                 border-top-right-radius: 120px
                 transform: translateX(-50%)
                 .avatar-list
+                    //* Avatars flying out animation delay
                     li
                         opacity: 1
                         transform: none
                         @for $i from 1 through 100
                             &:nth-child(#{$i}n)
-                                transition-delay: #{$i * 0.02}s
+                                transition-delay: #{$i * 0.025}s
         .avatar_list-cont
             // border: 2px solid black
             // display: none

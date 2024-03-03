@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ToolTip from '../../ToolTip/ToolTip'
-
+import ConfirmButBgImg from '../../../assets/confirm_but_bg.jpg'
 
 
 
@@ -23,6 +23,7 @@ const SubmitBut = ({icon, notSaveUser, onClick, disabled=false, isLoading, title
             disabled={disabled ? true : (notSaveUser ? load : isLoading)}
             onClick={notSaveUser ? handleClickButton : null}
         >
+            <img src={ConfirmButBgImg} className='confirm_but_bg-img' alt="" />
             {icon}
             <ToolTip text={title} />
         </button>

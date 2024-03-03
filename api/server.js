@@ -16,17 +16,17 @@ app.use(express.json())
 app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }))
 
 app.use(
-  Fingerprint({
-    parameters: [Fingerprint.useragent, Fingerprint.acceptHeaders],
-  })
+	Fingerprint({
+		parameters: [Fingerprint.useragent, Fingerprint.acceptHeaders],
+	})
 )
 
 app.use("/auth", AuthRootRouter)
 
 app.use("/resource/protected", TokenService.checkAccess, (_, res) => {
-  return res.status(200).json("Привет " + Date.now())
+	return res.status(200).json("Привет " + Date.now())
 })
 
 app.listen(PORT, (err) => {
-  err ? console.log(err) : console.log(`Server listening on ${PORT}`)
+	err ? console.log(err) : console.log(`Server listening on ${PORT}`)
 })

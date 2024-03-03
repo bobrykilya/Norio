@@ -3,14 +3,20 @@
 
 
 .submit-but
+    .confirm_but_bg-img
+        position: absolute
+        // width: 100%
+        background-size: cover
+        opacity: 0.06
     // border: 2px solid red
     border-radius: $rad-but-border
     width: $size-confirm-but
     height: calc($size-confirm-but / 2)
     background-color: $color-confirm-but
     // background-color: #016d11
-    overflow: visible
+    // overflow: visible
     z-index: 2
+    position: relative
     &:hover
         transform: translateX(-$height-but-act-jump * 1.5)
         background-color: $color-confirm-but-act
@@ -23,6 +29,8 @@
         background-color: color
         .fa-icon
             color: $color-but-icon
+        .confirm_but_bg-img
+            opacity: 0
         // background-color: #173b7594
         // opacity: 0
     .fa-icon

@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom"
 import { SnackbarProvider } from "notistack"
 import { AuthContext } from "./context/AuthContext"
-// import background from '../public/background.jpg'
+import BgImg from '../src/assets/main_bg.jpg'
 import LoginPage from './pages/LoginPage/LoginPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
@@ -14,7 +14,7 @@ const App = () => {
     const { isUserLogged } = useContext(AuthContext)
 
     return (
-        <div id='main_body-cont' className="cont">
+        <div id='main_body-cont' className={`cont ${isUserLogged ? 'active_bg' : ''}`}>
             <SnackbarProvider />
             <BrowserRouter>
                 <Routes>
@@ -26,7 +26,7 @@ const App = () => {
                     <Route path="*" element={<Navigate to={isUserLogged ? "home" : "login"} />} />
                 </Routes>
             </BrowserRouter>
-            {/* <img className='background-img' src={background} alt="" /> */}
+            {!isUserLogged && <img className='main_bg-img' src={BgImg} alt="" />}
         </div>
     )
 }
