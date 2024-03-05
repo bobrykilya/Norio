@@ -19,14 +19,14 @@ const getInsertData = ({ typeCode, userId }) => {
 }
 
 class LogAttentionRepository {
-	static async createLogAttention({ typeCode, userId, deviceId }) {
+	static async createLogAttention({ typeCode, userId, deviceId, logTime }) {
 		const { receiver_user_id, receiver_user_role } = getInsertData({ typeCode, userId })
 
 		await pool.query("INSERT INTO _log_Attention (type_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
 			typeCode, 
 			userId, 
 			deviceId, 
-			new Date(), 
+			logTime, 
 			receiver_user_id, 
 			receiver_user_role
 		])

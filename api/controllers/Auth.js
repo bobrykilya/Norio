@@ -8,11 +8,11 @@ class AuthController {
 		const { fingerprint } = req
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration } = await AuthService.signIn({ username, password, fingerprint, is_not_save })
+			const { accessToken, refreshToken, accessTokenExpiration, logOutTime } = await AuthService.signIn({ username, password, fingerprint, is_not_save })
 
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
-			return res.status(200).json({ accessToken, accessTokenExpiration })
+			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime })
 		} catch (err) {
 			return ErrorsUtils.catchError(res, err)
 		}
@@ -64,7 +64,7 @@ class AuthController {
 		const currentRefreshToken = req.cookies.refreshToken
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration } =
+			const { accessToken, refreshToken, accessTokenExpiration, logOutTime } =
 				await AuthService.refresh({
 					currentRefreshToken,
 					fingerprint,
@@ -72,7 +72,7 @@ class AuthController {
 
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
-			return res.status(200).json({ accessToken, accessTokenExpiration })
+			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime })
 		} catch (err) {
 			return ErrorsUtils.catchError(res, err)
 		}

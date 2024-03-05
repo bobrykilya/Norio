@@ -8,6 +8,7 @@ import UserInfoRepository from '../database/repositories/UserInfo.js'
 import AuthDeviceRepository from '../database/repositories/AuthDevice.js'
 import _logAttentionRepository from '../database/repositories/_LogAttention.js'
 import _logAuthRepository from '../database/repositories/_LogAuth.js'
+// import TimerOnServer from '../utils/Timer.js'
 
 
 
@@ -24,8 +25,11 @@ class AuthService {
 
 	static async signIn({ username, password, fingerprint, is_not_save }) {
 		const userData = await UserRepository.getUserData(username)
-		let deviceId = await AuthDeviceRepository.getDeviceData(fingerprint.hash)
+		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
 		const enterCode = !is_not_save ? 201 : 202
+		const queryTime = new Date()
+		const queryTimeUTC = queryTime.toUTCString()
+
 
 		await checkSessionDouble(deviceId)
 
@@ -41,22 +45,22 @@ class AuthService {
 		//* Control of max sessions for every user
 		const sessionsQuantity = await RefreshSessionsRepository.getRefreshSessionsQuantity(userData.id)
 		if (sessionsQuantity >= 7) {
-			const oldestSessionId = await RefreshSessionsRepository.getOldestRefreshSessions(userData.id)
-			await RefreshSessionsRepository.deleteRefreshSessionById(oldestSessionId)
+			const oldestSessionLogInTime = await RefreshSessionsRepository.getOldestRefreshSession(userData.id)
+			await RefreshSessionsRepository.deleteRefreshSessionByLogInTime(oldestSessionLogInTime)
 		}
 		
 		if (userData.role === 1 && deviceId) {
-			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId: userData.id, deviceId })
+			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId: userData.id, deviceId, logTime: queryTimeUTC })
 		}
 		if (!deviceId) {
-			deviceId = await AuthDeviceRepository.createDevice(fingerprint)
-			await _logAttentionRepository.createLogAttention({ typeCode: 101, userId: userData.id, deviceId })
+			deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeUTC })
+			await _logAttentionRepository.createLogAttention({ typeCode: 101, userId: userData.id, deviceId, logTime: queryTimeUTC })
 		}
 		if (userData.role !== 1) {
-			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId: userData.id, deviceId })
+			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId: userData.id, deviceId, logTime: queryTimeUTC })
 		}
 
-		await _logAuthRepository.createLogAuth({ typeCode: enterCode, userId: userData.id, deviceId })
+		await _logAuthRepository.createLogAuth({ typeCode: enterCode, userId: userData.id, deviceId, logTime: queryTimeUTC })
 
 		const payload = {
 			id: userData.id,
@@ -67,16 +71,33 @@ class AuthService {
 		const accessToken = await TokenService.generateAccessToken(payload)
 		const refreshToken = await TokenService.generateRefreshToken(payload)
 
+		const timeOutInSec = 600
+		const logOutTime = is_not_save ? new Date(queryTime.getTime() + timeOutInSec * 1000) : null
+
 		await RefreshSessionsRepository.createRefreshSession({
 			refreshToken,
 			userId: userData.id,
 			deviceId,
+			logInTime: queryTime,
+			logOutTime,
 		})
+		
+		// Auto logOut timer
+		if (is_not_save) {
+			setTimeout(async () => {
+				const successDeleting = await RefreshSessionsRepository.deleteRefreshSessionByLogInTime(queryTime)
+
+				if (successDeleting) {
+					await _logAuthRepository.createLogAuth({ typeCode: 204, userId: userData.id, deviceId, logTime: logOutTime.toUTCString() })
+				}
+			}, timeOutInSec * 1000)
+		}
 
 		return {
 			accessToken,
 			refreshToken,
 			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
+			logOutTime,
 		}
 	}
 
@@ -100,7 +121,9 @@ class AuthService {
 		//! Change
 		const role = 1
 		let id
-		let deviceId = await AuthDeviceRepository.getDeviceData(fingerprint.hash)
+		const queryTime = new Date()
+		const queryTimeUTC = queryTime.toUTCString()
+		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
 
 		await checkSessionDouble(deviceId)
 
@@ -126,11 +149,11 @@ class AuthService {
 		}
 
 		if (!deviceId) {
-			deviceId = await AuthDeviceRepository.createDevice(fingerprint)
-			await _logAttentionRepository.createLogAttention({ typeCode: 205, userId: id, deviceId })
+			deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeUTC })
+			await _logAttentionRepository.createLogAttention({ typeCode: 205, userId: id, deviceId, logTime: queryTimeUTC })
 		}
 
-		await _logAuthRepository.createLogAuth({ typeCode: 205, userId: id, deviceId })
+		await _logAuthRepository.createLogAuth({ typeCode: 205, userId: id, deviceId, logTime: queryTimeUTC })
 
 		const payload = { id, username, role }
 
@@ -141,6 +164,7 @@ class AuthService {
 			refreshToken,
 			userId: id,
 			deviceId,
+			logInTime: queryTime,
 		})
 
 		return {
@@ -151,16 +175,20 @@ class AuthService {
 	}
 
 	static async logOut(refreshToken) {
+		const queryTimeUTC = new Date().toUTCString()
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(refreshToken)
 
 		if (refreshSession){
-			await _logAuthRepository.createLogAuth({ typeCode: 203, userId: refreshSession.user_id, deviceId: refreshSession.device_id })
+			await _logAuthRepository.createLogAuth({ typeCode: 203, userId: refreshSession.user_id, deviceId: refreshSession.device_id, logTime: queryTimeUTC })
 		}
 
-		await RefreshSessionsRepository.deleteRefreshSession(refreshToken)
+		await RefreshSessionsRepository.deleteRefreshSessionByToken(refreshToken)
 	}
 
 	static async refresh({ fingerprint, currentRefreshToken }) {
+		const queryTime = new Date()
+		const queryTimeUTC = queryTime.toUTCString()
+		
 		if (!currentRefreshToken) {
 			throw new Unauthorized()
 		}
@@ -170,18 +198,19 @@ class AuthService {
 		if (!refreshSession) {
 			throw new Unauthorized()
 		}
+		// console.log(refreshSession)
 
-		const deviceId = await AuthDeviceRepository.getDeviceData(fingerprint.hash)
+		const deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
 		if (refreshSession.device_id !== deviceId) {
 			if (!deviceId) {
-				deviceId = await AuthDeviceRepository.createDevice(fingerprint)
+				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeUTC })
 			}
-			await _logAttentionRepository.createLogAttention({ typeCode: 801, userId: id, deviceId })
+			await _logAttentionRepository.createLogAttention({ typeCode: 801, userId: id, deviceId, logTime: queryTimeUTC })
 
 			throw new Forbidden("Попытка несанкционированного обновления токенов!")
 		}
 
-		await RefreshSessionsRepository.deleteRefreshSession(currentRefreshToken)
+		await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
 
 		let payload
 		try {
@@ -192,8 +221,8 @@ class AuthService {
 
 		const {
 			id,
-			role,
 			name: username,
+			role,
 		} = await UserRepository.getUserData(payload.username)
 
 		const actualPayload = { id, username, role }
@@ -205,12 +234,15 @@ class AuthService {
 			refreshToken,
 			userId: id,
 			deviceId,
+			logInTime: refreshSession.log_in_time,
+			logOutTime: refreshSession.log_out_time,
 		})
 
 		return {
 			accessToken,
 			refreshToken,
 			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
+			logOutTime: refreshSession.log_out_time,
 		}
 	}
 }

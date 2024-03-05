@@ -3,7 +3,7 @@ import pool from "../db.js"
 
 
 class AuthDeviceRepository {
-	static async createDevice(fingerprint) {
+	static async createDevice({ fingerprint, regTime }) {
 		const browser = fingerprint.components.useragent.browser.family + ' v.' + fingerprint.components.useragent.browser.version
 		const os = fingerprint.components.useragent.os.family + ' v.' + fingerprint.components.useragent.os.major
 
@@ -12,13 +12,13 @@ class AuthDeviceRepository {
 				fingerprint.hash,
 				browser,
 				os,
-				new Date(),
+				regTime,
 			])
 
 		return response.rows[0]?.id
 	}
 
-	static async getDeviceData(fingerprintHash) {
+	static async getDeviceId(fingerprintHash) {
 		const response = await pool.query("SELECT * FROM auth_devices WHERE finger_print=$1", [fingerprintHash])
 
 		return response.rows[0]?.id

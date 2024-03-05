@@ -26,11 +26,13 @@ CREATE TABLE auth_devices(
 )
 
 CREATE TABLE refresh_sessions(
-    id SMALLSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     refresh_token VARCHAR(400) UNIQUE NOT NULL,
     user_id SMALLINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     device_id SMALLINT NOT NULL REFERENCES auth_devices(id) ON DELETE CASCADE,
-    auth_time TIMESTAMP NOT NULL
+    auth_time TIMESTAMP NOT NULL,
+    log_in_time TIMESTAMP NOT NULL,
+    log_out_time TIMESTAMP
 )
 
 CREATE TABLE _log_Attention(
@@ -64,22 +66,27 @@ DROP TABLE refresh_sessions
     {
         type_code: 201,
         type_name: 'Sign-in to user account',
-        type_description: 'Вход в пользователя (Уведомление для пользователя)',
+        type_description: 'Вход в аккаунт (Уведомление для пользователя)',
     },
     {
         type_code: 202,
         type_name: 'Sign-in to user account (don`t forget mode)',
-        type_description: 'Вход в пользователя под "Не запоминать меня" (Уведомление для пользователя)',
+        type_description: 'Вход в аккаунт под "Не запоминать меня" (Уведомление для пользователя)',
     },
     {
         type_code: 203,
         type_name: 'Log-out user',
-        type_description: 'Выход из аккаунта пользователя',
+        type_description: 'Выход из аккаунта пользователем',
+    },
+    {
+        type_code: 204,
+        type_name: 'Auto log-out user',
+        type_description: 'Автоматический выход из аккаунта после "Не запоминать меня"',
     },
     {
         type_code: 205,
         type_name: 'Sign-up user',
-        type_description: 'Регистрация пользователя (Уведомление для админов)',
+        type_description: 'Регистрация аккаунта пользователя (Уведомление для админов)',
     },
     {
         type_code: 210,
