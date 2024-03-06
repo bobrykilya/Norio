@@ -8,7 +8,6 @@ import UserInfoRepository from '../database/repositories/UserInfo.js'
 import AuthDeviceRepository from '../database/repositories/AuthDevice.js'
 import _logAttentionRepository from '../database/repositories/_LogAttention.js'
 import _logAuthRepository from '../database/repositories/_LogAuth.js'
-// import TimerOnServer from '../utils/Timer.js'
 
 
 
@@ -147,10 +146,12 @@ class AuthService {
 		} catch (error) {
 			throw new Forbidden(error)
 		}
+		
+		await _logAttentionRepository.createLogAttention({ typeCode: 205, userId: id, deviceId, logTime: queryTimeUTC })
 
 		if (!deviceId) {
 			deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeUTC })
-			await _logAttentionRepository.createLogAttention({ typeCode: 205, userId: id, deviceId, logTime: queryTimeUTC })
+			await _logAttentionRepository.createLogAttention({ typeCode: 101, userId: id, deviceId, logTime: queryTimeUTC })
 		}
 
 		await _logAuthRepository.createLogAuth({ typeCode: 205, userId: id, deviceId, logTime: queryTimeUTC })

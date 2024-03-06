@@ -7,6 +7,7 @@ import CheckBox from './CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { BiLogInCircle } from "react-icons/bi"
 import { FaUser } from "react-icons/fa"
+import ToolTip from './../../../../ToolTip/ToolTip';
 
 
 
@@ -20,6 +21,8 @@ const SignInForm = ({  isFormBlur=false}) => {
         register,
         handleSubmit,
         resetField,
+        watch,
+        setValue,
         formState: { isLoading },
     } = useForm({
         mode: 'onBlur',
@@ -35,25 +38,22 @@ const SignInForm = ({  isFormBlur=false}) => {
     }
 
     const onSubmitNotSave = async (data) => {
-        // const data = {
-        //     username: watch('username').toLowerCase(),
-        //     password: watch('password'),
-        //     is_not_save: true,
-        // }
+        setValue('username', '')
+        setValue('password', '')
+
         data.username = data.username.toLowerCase()
         data.is_not_save = true
-        // data.sign_up_device = navigator.userAgent
-        // console.log(data)
+
         handleSignIn(data)
         // alert(JSON.stringify(data))
     }
 
     const onSubmit = async (data) => {
         data.username = data.username.toLowerCase()
-        // data.sign_up_device = navigator.userAgent
+
+        handleSignIn(data)
         // console.log(data)
         // alert(JSON.stringify(data))
-        handleSignIn(data)
     }
 
     return (
@@ -73,12 +73,15 @@ const SignInForm = ({  isFormBlur=false}) => {
                     type='sign_in'
                     register={register}
                     reset={resetField}
+                    setValue={setValue}
+                    watch={watch}
                     notSaveUser={notSaveUser}
                     disabled={isFormBlur}
                 />
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
-                    <span>Не запоминать меня</span>
+                    <span>Быстрая сессия</span>
+                    <ToolTip text='Длительность сессии - 10мин. Пароль не сохраняется автоматически' />
                 </label>
             </div>
             <SubmitBut

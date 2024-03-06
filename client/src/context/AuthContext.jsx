@@ -46,7 +46,6 @@ const AuthProvider = ({ children }) => {
 
 	const setTimer = (logOutTime) => {
 		const timeOutTime = new Date(logOutTime).getTime() - new Date().getTime()
-		// console.log(timeOutTime)
 		if (!timeOutTime) return
 
 		refSetTimeout.current = setTimeout(() => {
