@@ -8,7 +8,7 @@ class RefreshSessionRepository {
 			refreshToken,
 			userId,
 			deviceId,
-			new Date().toUTCString(),
+			new Date().toLocaleString(),
 			logInTime,
 			logOutTime,
 		])

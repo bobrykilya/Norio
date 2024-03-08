@@ -54,6 +54,16 @@ CREATE TABLE _log_Auth(
     log_time TIMESTAMP NOT NULL
 )
 
+-- CREATE TABLE _log_Error(
+--     id SERIAL PRIMARY KEY,
+--     req VARCHAR(400), 
+--     res VARCHAR(400), 
+--     err VARCHAR(400), 
+--     user_id SMALLINT REFERENCES users(id) ON DELETE CASCADE, 
+--     device_id SMALLINT REFERENCES auth_devices(id) ON DELETE CASCADE, 
+--     log_time TIMESTAMP NOT NULL
+-- )
+
 SELECT * FROM users
 SELECT * FROM refresh_sessions
 DROP TABLE refresh_sessions

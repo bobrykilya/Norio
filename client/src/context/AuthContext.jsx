@@ -55,7 +55,7 @@ const AuthProvider = ({ children }) => {
 	}
 
 	const handleSignIn = (data) => {
-		// console.log(data.is_not_save)
+		// console.log(data.fastSession)
 
 		AuthClient.post("/sign-in", data)
 			.then((res) => {

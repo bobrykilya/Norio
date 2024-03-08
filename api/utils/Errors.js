@@ -1,7 +1,14 @@
+// import _logErrorRepository from '../database/repositories/_logError.js'
+// import UserRepository from '../database/repositories/User.js'
+// import AuthDeviceRepository from '../database/repositories/AuthDevice.js'
+
+
+
 class WebError {
 	constructor(status, error) {
 		this.status = status
 		this.error = error
+		// console.log(this.status)
 	}
 }
 
@@ -42,9 +49,12 @@ export class BadRequest extends WebError {
 }
 
 class ErrorUtils {
-	static catchError(res, error) {
-		console.log(error)
-		return res.status(error.status || 500).json(error)
+	static async catchError({ req, res, err, username, fingerprint, queryTimeString }) {
+		// const userId = username ? await UserRepository.getUserData(username).id : null
+		// const deviceId = fingerprint ? await AuthDeviceRepository.getDeviceId(fingerprint.hash) : null
+		// await _logErrorRepository.createLogError({ req, res, err, userId, deviceId, queryTimeString })
+		console.log(err)
+		return res.status(err.status || 500).json(err)
 	}
 }
 

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { AuthContext } from "../../../../../context/AuthContext"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
-import CheckBox from './CheckBox/CheckBox'
+import CheckBox from '../../../../Inputs/CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { BiLogInCircle } from "react-icons/bi"
 import { FaUser } from "react-icons/fa"
@@ -42,7 +42,7 @@ const SignInForm = ({  isFormBlur=false}) => {
         setValue('password', '')
 
         data.username = data.username.toLowerCase()
-        data.is_not_save = true
+        data.fastSession = true
 
         handleSignIn(data)
         // alert(JSON.stringify(data))
