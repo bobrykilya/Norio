@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import SignInCont from '../../components/LoginPage/SignConts/SignInCont/SignInCont'
 import SignUpCont from '../../components/LoginPage/SignConts/SignUpCont/SignUpCont'
-import SignUpSecondCont from '../../components/LoginPage/SignConts/SignUpSecondCont/SignUpSecondCont'
+import SignUpInfoCont from '../../components/LoginPage/SignConts/SignUpInfoCont/SignUpInfoCont'
 import CoverPanel from '../../components/LoginPage/CoverPanel/CoverPanel'
 import './LoginPage.sass'
 
@@ -15,9 +15,9 @@ const LoginPage = () => {
     return ( 
         <div id='login_panel-cont' className='cont'>
             <div id='signs-cont' className='cont'>
-                <SignInCont act_form={act_form}/>
-                <SignUpCont act_form={act_form} />
-                <SignUpSecondCont act_form={act_form} />
+                <SignInCont act_form={ act_form }/>
+                <SignUpCont act_form={ act_form } />
+                {act_form !== 'sign_in' && <SignUpInfoCont act_form={ act_form } />}
             </div>
             <CoverPanel />
         </div>

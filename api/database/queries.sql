@@ -23,7 +23,8 @@ CREATE TABLE auth_devices(
     finger_print VARCHAR(32) UNIQUE NOT NULL,
     browser VARCHAR(15) NOT NULL,
     os VARCHAR(15) NOT NULL,
-    reg_time TIMESTAMP NOT NULL
+    reg_time TIMESTAMP NOT NULL,
+    block BOOLEAN NOT NULL
 )
 
 CREATE TABLE refresh_sessions(
@@ -70,7 +71,7 @@ DROP TABLE refresh_sessions
 
 [
     {
-        type_code: 101,
+        type_code: 102,
         type_name: 'Sign-in from new device',
         type_description: 'Вход в пользователя с нового устройства (Уведомление для админов)',
     },
@@ -108,6 +109,11 @@ DROP TABLE refresh_sessions
         type_code: 801,
         type_name: 'Hacking attempt',
         type_description: 'Попытка несанкционированного обновления токенов (Уведомление для админов)',
+    },
+    {
+        type_code: 802,
+        type_name: 'Hacking attempt & block',
+        type_description: 'Попытка несанкционированного обновления токенов с нового устройства. Блокировка нового девайса (Уведомление для админов)',
     },
 
 ]

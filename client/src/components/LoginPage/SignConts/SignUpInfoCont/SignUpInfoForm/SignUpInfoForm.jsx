@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AuthContext } from '../../../../../context/AuthContext'
-import DropDownSearchInput from './../../../Inputs/DropDownSearchInput/DropDownSearchInput'
+import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { HiOutlineHome } from "react-icons/hi"
@@ -13,13 +13,13 @@ import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
 import AvatarInput from '../../../Inputs/AvatarInput/AvatarInput'
 
 
-const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) => {
-    // console.log('SignUp_2')
+const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) => {
+    // console.log('SignUpInfoForm')
 
     const { handleSignUp } = useContext(AuthContext)
     const [avatar, setAvatar] = useState('')
     const [errorAvatar, setErrorAvatar] = useState(null)
-    const name_input_icon = <GrUserExpert className='input-icon'/>
+    const name_input_icon = <GrUserExpert className='input-icon' />
 
     const {
         register,
@@ -35,7 +35,7 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
     })
 
     const checkAvatar = (data) => {
-        avatar ? onSubmit(data) : setErrorAvatar({message: 'Выберите аватар пользователя'})
+        avatar ? onSubmit(data) : setErrorAvatar({ message: 'Выберите аватар пользователя' })
     }
     
     const onSubmit = async (data) => {
@@ -52,7 +52,7 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
     }
 
     return ( 
-        <form onSubmit={handleSubmit(checkAvatar)} id='sign_up_2-form' className='form cont'>
+        <form onSubmit={handleSubmit(checkAvatar)} id='sign_up_info-form' className='form cont'>
             <div className='inputs-cont cont'>
                 <PhoneInput 
                     name='phone'
@@ -139,4 +139,4 @@ const SignUpSecondForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur })
      )
 }
  
-export default SignUpSecondForm
+export default SignUpInfoForm

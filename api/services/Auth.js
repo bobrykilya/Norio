@@ -52,7 +52,7 @@ class AuthService {
 		}
 		if (!deviceId) {
 			deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString })
-			await _logAttentionRepository.createLogAttention({ typeCode: 101, userId, deviceId, logTime: queryTimeString })
+			await _logAttentionRepository.createLogAttention({ typeCode: 102, userId, deviceId, logTime: queryTimeString })
 		}
 		if (userData.role !== 1) {
 			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId, deviceId, logTime: queryTimeString })
@@ -69,7 +69,7 @@ class AuthService {
 		const accessToken = await TokenService.generateAccessToken(payload)
 		const refreshToken = await TokenService.generateRefreshToken(payload)
 
-		const timeOutInSec = 600
+		const timeOutInSec = 10
 		const logOutTime = fastSession ? new Date(queryTime.getTime() + timeOutInSec * 1000) : null
 
 		await RefreshSessionsRepository.createRefreshSession({
@@ -127,7 +127,7 @@ class AuthService {
 
 		if (!deviceId) {
 			deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString })
-			await _logAttentionRepository.createLogAttention({ typeCode: 101, userId, deviceId, logTime: queryTimeString })
+			await _logAttentionRepository.createLogAttention({ typeCode: 102, userId, deviceId, logTime: queryTimeString })
 		}
 
 		await _logAuthRepository.createLogAuth({ typeCode: 205, userId, deviceId, logTime: queryTimeString })
@@ -175,10 +175,13 @@ class AuthService {
 
 		const deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
 		if (refreshSession.device_id !== deviceId) {
+			let typeCodeAttention = 801
 			if (!deviceId) {
 				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString })
+				await AuthDeviceRepository.setBlockStatusForDevice({ deviceId, status: true })
+				typeCodeAttention = 802
 			}
-			await _logAttentionRepository.createLogAttention({ typeCode: 801, userId: id, deviceId, logTime: queryTimeString })
+			await _logAttentionRepository.createLogAttention({ typeCode: typeCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTimeString })
 
 			throw new Forbidden("Попытка несанкционированного обновления токенов!")
 		}
@@ -220,12 +223,14 @@ class AuthService {
 	}
 
 	static async checkUser({ username, password }) {
+		const salt = bcrypt.genSaltSync(10)
+
 		const userData = await UserRepository.getUserData(username)
 		if (userData) {
 			throw new Conflict("Пользователь с таким логином уже существует")
 		}
 
-		const hashedPassword = bcrypt.hashSync(password, 8)
+		const hashedPassword = bcrypt.hashSync(password, salt)
 		const avatarsList = await UserInfoRepository.getUsedAvatarsList()
 
 		return {

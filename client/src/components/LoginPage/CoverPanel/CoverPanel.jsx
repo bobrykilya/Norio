@@ -55,7 +55,7 @@ const CoverPanel = () => {
                     </section>
                 </div>
                 <button 
-                    id='close_sign_up_2-button'
+                    id='close_sign_up_info-button'
                     type='button'
                     tabIndex={-1}
                     onClick={() => handleReturnToSignUp()}

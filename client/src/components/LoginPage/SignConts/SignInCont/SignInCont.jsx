@@ -1,5 +1,6 @@
 import SignInForm from './SignInForm/SignInForm'
 import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
+import NameTag from './../../NameTag/NameTag'
 
 
 
@@ -15,7 +16,7 @@ const SignInCont = ({ act_form }) => {
             </div>
             <ButtonsCont />
             <SignInForm isFormBlur={act_form !== 'sign_in'} />
-            <h3 className='name_tag'>bobrykilya</h3>
+            <NameTag />
         </section>
      )
 }

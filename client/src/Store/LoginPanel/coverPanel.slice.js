@@ -6,6 +6,7 @@ const coverPanelSlice = createSlice({
     name: 'coverPanel',
     initialState: 'sign_in',
     // initialState: 'sign_up',
+    // initialState: 'sign_up_info',
     reducers: {
         toggleCoverPanel: (state, {payload: opened_form}) => {
             return opened_form

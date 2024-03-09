@@ -4,7 +4,7 @@ import pool from "../db.js"
 
 const getInsertData = ({ typeCode, userId }) => {
 	switch (typeCode) {
-		case 101:	//* Sign-in to userAccount from new device
+		case 102:	//* Sign-in to userAccount from new device
 			return { receiver_user_id: null, receiver_user_role: 1 }
 		case 201:	//* Sign-in to user
 			return { receiver_user_id: userId, receiver_user_role: null }
@@ -13,6 +13,8 @@ const getInsertData = ({ typeCode, userId }) => {
 		case 205:	//* Sign-up user
 			return { receiver_user_id: null, receiver_user_role: 1 }
 		case 801:	//* Hacking attempt
+			return { receiver_user_id: null, receiver_user_role: 1 }
+		case 802:	//* Hacking attempt from new device & block him
 			return { receiver_user_id: null, receiver_user_role: 1 }
 	}
 

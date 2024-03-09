@@ -1,10 +1,10 @@
 import { useContext } from 'react'
 import { AuthContext } from '../../../../context/AuthContext'
-import SignUpSecondForm from './SignUpSecondForm/SignUpSecondForm'
+import SignUpInfoForm from './SignUpInfoForm/SignUpInfoForm'
 
 
 
-const SignUpSecondCont = ({ act_form }) => {
+const SignUpInfoCont = ({ act_form }) => {
 
     const { listOfUsedAvatars } = useContext(AuthContext)
     let FILTERED_LIST = []
@@ -500,15 +500,15 @@ const SignUpSecondCont = ({ act_form }) => {
 
     return ( 
         <section
-            id='sign_up_2-cont'
-            className={`sign-cont cont ${act_form === 'sign_up_2' ? 'active' : ''}`}
+            id='sign_up_info-cont'
+            className={`sign-cont cont ${act_form === 'sign_up_info' ? 'active' : ''}`}
         >
             <div className='enter_text-cont cont'>
                 <h1>Личные данные</h1>
             </div>
-            < SignUpSecondForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} AVATARS_LIST={FILTERED_LIST} isFormBlur={act_form !== 'sign_up_2'} />
+            < SignUpInfoForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} AVATARS_LIST={FILTERED_LIST} isFormBlur={act_form !== 'sign_up_info'} />
         </section>
      )
 }
  
-export default SignUpSecondCont
+export default SignUpInfoCont

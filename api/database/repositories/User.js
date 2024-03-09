@@ -22,7 +22,7 @@ class UserRepository {
 		return response.rows[0]
 	}
 
-	static async activateUserAccount(userId) {
+	static async setActivateStatusForUser(userId) {
 		const response = await pool.query("UPDATE users SET status=true", [userId])
 
 		return response.rows[0].id

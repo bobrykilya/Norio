@@ -82,7 +82,7 @@ const AuthProvider = ({ children }) => {
 				setSignUpUserPassword(userPassword)
 				setListOfUsedAvatars(avatarsList)
 
-				toggleCoverPanel('sign_up_2')
+				toggleCoverPanel('sign_up_info')
 			})
 			.catch(showErrorMessage)
 	}
