@@ -3,8 +3,8 @@ import cors from "cors"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import Fingerprint from "express-fingerprint"
-import AuthRootRouter from "./routers/Auth.js"
-import TokenService from "./services/Token.js"
+import AuthRootRouter from "./routers/Auth-router.js"
+import TokenService from "./services/Token-service.js"
 
 dotenv.config()
 

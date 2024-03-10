@@ -54,32 +54,59 @@ const AuthProvider = ({ children }) => {
 		}, timeOutTime)
 	}
 
-	const handleSignIn = (data) => {
-		// console.log(data.fastSession)
+	const getDeviceType = () => {
+		const ua = navigator.userAgent
+		const tabletRegex = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i
+		const mobRegex = /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/
+		
+		if (tabletRegex.test(ua)) return "Tablet"
+		if (mobRegex.test(ua)) return "Mobile"
+		return "Desktop"
+	}
 
-		AuthClient.post("/sign-in", data)
-			.then((res) => {
-				const { accessToken, accessTokenExpiration, logOutTime } = res.data
-				inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+	const getCountryCode = async () => {
+		return await axios.get('https://ipapi.co/json/').then((res) => {
+			return res.data.country_code
+		})
+		.catch(showErrorMessage)
+	}
 
-				setIsUserLogged(true)
-				toggleCoverPanel('sign_in')
+	const assignDeviceOtherData = async (data) => {
+		const countryCode = await getCountryCode()
+		const deviceType = getDeviceType()
+		
+		// console.log(countryCode)
+		return Object.assign(data, { countryCode, deviceType })
+	}
 
-				// console.log(logOutTime)
-				if (logOutTime) {
-					setTimer(logOutTime)
-				}
-			})
-			.catch(showErrorMessage)
+	const handleSignIn = async (data) => {
+		await assignDeviceOtherData(data).then((newData) => {
+			// console.log(newData)
+			AuthClient.post("/sign-in", newData)
+				.then((res) => {
+					const { accessToken, accessTokenExpiration, logOutTime } = res.data
+					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+	
+					setIsUserLogged(true)
+					toggleCoverPanel('sign_in')
+	
+					// console.log(logOutTime)
+					if (logOutTime) {
+						setTimer(logOutTime)
+					}
+				})
+				.catch(showErrorMessage)
+		})
+		.catch(showErrorMessage)
 	}
 
 	const handleCheckUser = (data) => {
 		AuthClient.post("/check-user", data)
 			.then((res) => {
-				const { userName, userPassword, avatarsList } = res.data
+				const { userName, hashedPassword, avatarsList } = res.data
 
 				setSignUpUserName(userName)
-				setSignUpUserPassword(userPassword)
+				setSignUpUserPassword(hashedPassword)
 				setListOfUsedAvatars(avatarsList)
 
 				toggleCoverPanel('sign_up_info')
@@ -99,21 +126,26 @@ const AuthProvider = ({ children }) => {
 		toggleCoverPanel('sign_up')
 	}
 
-	const handleSignUp = (data) => {
+	const handleSignUp = async (data) => {
 		data.username = signUpUserName
 		data.hashedPassword = signUpUserPassword
+		data.deviceType = getDeviceType()
 
-		AuthClient.post("/sign-up", data)
-			.then((res) => {
-				const { accessToken, accessTokenExpiration } = res.data
-				inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+		await assignDeviceOtherData(data).then((newData) => {
+			// console.log(newData)
+			AuthClient.post("/sign-up", newData)
+				.then((res) => {
+					const { accessToken, accessTokenExpiration } = res.data
+					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 
-				resetSignUpVariables()
+					resetSignUpVariables()
 
-				setIsUserLogged(true)
-				toggleCoverPanel('sign_in')
-			})
-			.catch(showErrorMessage)
+					setIsUserLogged(true)
+					toggleCoverPanel('sign_in')
+				})
+				.catch(showErrorMessage)
+		})
+		.catch(showErrorMessage)
 	}
 
 

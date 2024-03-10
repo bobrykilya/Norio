@@ -1,6 +1,6 @@
-// import _logErrorRepository from '../database/repositories/_logError.js'
-// import UserRepository from '../database/repositories/User.js'
-// import AuthDeviceRepository from '../database/repositories/AuthDevice.js'
+import _logErrorRepository from '../database/repositories/_logError.js'
+import UserRepository from '../database/repositories/User.js'
+import AuthDeviceRepository from '../database/repositories/AuthDevice.js'
 
 
 
@@ -49,10 +49,12 @@ export class BadRequest extends WebError {
 }
 
 class ErrorUtils {
-	static async catchError({ req, res, err, username, fingerprint, queryTimeString }) {
-		// const userId = username ? await UserRepository.getUserData(username).id : null
+	static async catchError({ typeCode, req, res, err, username, fingerprint, queryTimeString }) {
+		// const userData = username ? await UserRepository.getUserData(username) : null
 		// const deviceId = fingerprint ? await AuthDeviceRepository.getDeviceId(fingerprint.hash) : null
-		// await _logErrorRepository.createLogError({ req, res, err, userId, deviceId, queryTimeString })
+		// const errorId = await _logErrorRepository.createLogError({ typeCode, err, userId: userData?.id, deviceId, queryTimeString })
+		// console.log(errorId)
+		// throw new BadRequest(`Что-то пошло не так! Обратитесь к админу. Ошибка: ${errorId} , Время: ${queryTimeString}`)
 		console.log(err)
 		return res.status(err.status || 500).json(err)
 	}

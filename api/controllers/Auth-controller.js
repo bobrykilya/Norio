@@ -1,13 +1,16 @@
-import AuthService from "../services/Auth.js"
+import AuthService from "../services/Auth-service.js"
 import ErrorsUtils from "../utils/Errors.js"
 import { COOKIE_SETTINGS } from "../constants.js"
 
+
+
 class AuthController {
 	static async signIn(req, res) {
-		const { username, password, fastSession } = req.body
+		const { username, password, fastSession, deviceType, countryCode } = req.body
 		const { fingerprint } = req
 		const queryTime = new Date()
 		const queryTimeString = queryTime.toLocaleString()
+
 
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration, logOutTime } = await AuthService.signIn({ 
@@ -16,22 +19,25 @@ class AuthController {
 				fingerprint, 
 				fastSession, 
 				queryTime, 
-				queryTimeString, 
+				queryTimeString,
+				deviceType,
+				countryCode, 
 			})
 
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime })
 		} catch (err) {
-			return ErrorsUtils.catchError({ req, res, err, username, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ typeCode: !fastSession ? 201 : 202, req, res, err, username, fingerprint, queryTimeString })
 		}
 	}
 
 	static async signUp(req, res) {
-		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar } = req.body
+		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, deviceType, countryCode } = req.body
 		const { fingerprint } = req
 		const queryTime = new Date()
 		const queryTimeString = queryTime.toLocaleString()
+
 		
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration } = await AuthService.signUp({ 
@@ -46,14 +52,16 @@ class AuthController {
 				avatar, 
 				fingerprint, 
 				queryTime,
-				queryTimeString, 
+				queryTimeString,
+				deviceType,
+				countryCode, 
 			})
 			
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration })
 		} catch (err) {
-			return ErrorsUtils.catchError({ req, res, err, username, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ typeCode: 205,req, res, err, username, fingerprint, queryTimeString })
 		}
 	}
 
@@ -70,7 +78,7 @@ class AuthController {
 
 			return res.sendStatus(200)
 		} catch (err) {
-			return ErrorsUtils.catchError({ req, res, err, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ typeCode: 203, req, res, err, fingerprint, queryTimeString })
 		}
 	}
 
@@ -92,7 +100,7 @@ class AuthController {
 
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime })
 		} catch (err) {
-			return ErrorsUtils.catchError({ req, res, err, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ typeCode: 701, req, res, err, fingerprint, queryTimeString })
 		}
 	}
 
@@ -103,11 +111,11 @@ class AuthController {
 		const queryTimeString = queryTime.toLocaleString()
 
 		try {
-			const { userName, userPassword, avatarsList } = await AuthService.checkUser({ username, password, queryTime, queryTimeString })
+			const { userName, hashedPassword, avatarsList } = await AuthService.checkUser({ username, password, queryTime, queryTimeString })
 
-			return res.status(200).json({ userName, userPassword, avatarsList })
+			return res.status(200).json({ userName, hashedPassword, avatarsList })
 		} catch (err) {
-			return ErrorsUtils.catchError({ req, res, err, username, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ typeCode: 711, req, res, err, username, fingerprint, queryTimeString })
 		}
 	}
 }

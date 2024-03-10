@@ -17,7 +17,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
     // console.log('SignUpInfoForm')
 
     const { handleSignUp } = useContext(AuthContext)
-    const [avatar, setAvatar] = useState('')
+    const [avatar, setAvatar] = useState('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState(null)
     const name_input_icon = <GrUserExpert className='input-icon' />
 
@@ -31,7 +31,15 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
         formState: { errors, isLoading }
     } = useForm({
         mode: 'onChange',
-        reValidateMode: "onChange"
+        reValidateMode: "onChange",
+        defaultValues: {
+            phone: '295697982',
+            store: 'Офис',
+            job: 'Управляющий',
+            last_name: 'Бобрик',
+            first_name: 'Илья', 
+            middle_name: 'Юрьевич',
+        }
     })
 
     const checkAvatar = (data) => {

@@ -4,13 +4,13 @@ import pool from "../db.js"
 
 class RefreshSessionRepository {
 	static async createRefreshSession({ refreshToken, userId, deviceId, logInTime, logOutTime=null }) {
-		await pool.query("INSERT INTO refresh_sessions (refresh_token, user_id, device_id, auth_time, log_in_time, log_out_time) VALUES ($1, $2, $3, $4, $5, $6)", [
-			refreshToken,
+		await pool.query("INSERT INTO refresh_sessions (user_id, device_id, auth_time, log_in_time, log_out_time, refresh_token) VALUES ($1, $2, $3, $4, $5, $6)", [
 			userId,
 			deviceId,
 			new Date().toLocaleString(),
 			logInTime,
 			logOutTime,
+			refreshToken,
 		])
 	}
 
