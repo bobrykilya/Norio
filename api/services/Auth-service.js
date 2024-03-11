@@ -81,11 +81,11 @@ class AuthService {
 		const logOutTime = fastSession ? new Date(queryTime.getTime() + timeOutInSec * 1000) : null
 
 		await RefreshSessionsRepository.createRefreshSession({
-			refreshToken,
 			userId,
 			deviceId,
 			logInTime: queryTime,
 			logOutTime,
+			refreshToken,
 		})
 		
 		// Auto logOut timer
@@ -158,10 +158,10 @@ class AuthService {
 		const refreshToken = await TokenService.generateRefreshToken(payload)
 
 		await RefreshSessionsRepository.createRefreshSession({
-			refreshToken,
 			userId,
 			deviceId,
 			logInTime: queryTime,
+			refreshToken,
 		})
 
 		return {
@@ -216,22 +216,22 @@ class AuthService {
 		}
 
 		const {
-			id,
-			username,
-			isActivated,
+			id: userId,
+			name: username,
+			is_activated: isActivated,
 		} = await UserRepository.getUserData(payload.username)
 
-		const actualPayload = { id, username, isActivated }
+		const actualPayload = { userId, username, isActivated }
 
 		const accessToken = await TokenService.generateAccessToken(actualPayload)
 		const refreshToken = await TokenService.generateRefreshToken(actualPayload)
 
 		await RefreshSessionsRepository.createRefreshSession({
-			refreshToken,
-			userId: id,
+			userId,
 			deviceId,
 			logInTime: refreshSession.log_in_time,
 			logOutTime: refreshSession.log_out_time,
+			refreshToken,
 		})
 
 		return {

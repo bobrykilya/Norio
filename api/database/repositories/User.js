@@ -15,21 +15,15 @@ class UserRepository {
 	static async getUserData(username) {
 		const response = await pool.query("SELECT * FROM users WHERE name=$1", [username])
 
-		if (!response.rows.length) {
-			return null
-		}
-
-		return response.rows[0]
+		return response?.rows[0]
 	}
 
 	static async deleteUserById(userId) {
 		await pool.query("DELETE FROM users WHERE id=$1", [userId])
 	}
 
-	static async setActivateStatusForUser(userId) {
-		const response = await pool.query("UPDATE users SET is_activated=true", [userId])
-
-		return response.rows[0].id
+	static async setActivateStatusForUser({ userId, status }) {
+		await pool.query("UPDATE users SET is_activated=$1 WHERE user_id=$2", [status, userId])
 	}
 }
 
