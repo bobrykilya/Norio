@@ -1,4 +1,4 @@
-import { AuthClient } from '../src/context/AuthContext'
+import { AuthClient } from '../src/context/Auth-context'
 import config from "../src/config"
 
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 
 
-const InputsError = ({ error }) => {
+const InputsError = ({ error, onClick }) => {
 
     const [errorMess, setErrorMess] = useState('')
     const [isErrorOpened, setIsErrorOpened] = useState(false)
@@ -30,7 +30,7 @@ const InputsError = ({ error }) => {
     }, [error])
 
     return ( 
-        <div className={`input_error-cont cont ${isErrorOpened ? 'opened' : ''}`}>
+        <div className={`input_error-cont cont ${isErrorOpened ? 'opened' : ''}`} onClick={onClick}>
             <span>{errorMess}</span>
         </div>
      )

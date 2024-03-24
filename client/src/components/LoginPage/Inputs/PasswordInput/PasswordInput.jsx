@@ -117,7 +117,13 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
     const { ref, ... rest_register } = getRegister(type)
 
     return (
-        <div className='password_input-cont input-cont cont'>
+        <div className={`password_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
+            <span 
+                className='input-label'
+                onClick={() => useFocusInput(inputRef)}
+            >
+                {type !== 'confirm' ? 'Пароль' : 'Повтор пароля'}
+            </span>
             <input
                 {... rest_register}
                 ref={(e) => {
@@ -140,7 +146,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
                 <span>CAPS</span>
                 <ToolTip text='Включён Caps-Lock' />
             </div>
-            <InputsError error={error} />
+            <InputsError error={error} onClick={() => useFocusInput(inputRef)} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
                 <button 
                     className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}

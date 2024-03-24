@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { reducer as coverPanelReducer } from './LoginPanel/coverPanel.slice'
+import { reducer as coverPanelReducer } from './LoginPage/coverPanel.slice'
 
 const reducers = combineReducers({
     coverPanel: coverPanelReducer

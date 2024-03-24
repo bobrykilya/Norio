@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { AuthContext } from "../../../../../context/AuthContext"
+import { AuthContext } from "../../../../../context/Auth-context"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import CheckBox from '../../../../Inputs/CheckBox/CheckBox'

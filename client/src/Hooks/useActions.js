@@ -1,7 +1,7 @@
 import { bindActionCreators } from '@reduxjs/toolkit'
 import { useMemo } from 'react'
 import { useDispatch } from 'react-redux'
-import { actions } from '../Store/LoginPanel/coverPanel.slice'
+import { actions } from '../store/LoginPage/coverPanel.slice'
 
 const rootActions = {
     ...actions

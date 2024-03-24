@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { AuthContext } from '../../../../../context/AuthContext'
+import { AuthContext } from '../../../../../context/Auth-context'
 import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'

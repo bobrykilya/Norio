@@ -61,11 +61,11 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
                     required: true,
                     minLength: {
                         value: 3,
-                        message: `Длина поля должна быть от 3 букв`
+                        message: `Длина поля "${placeholder}" должна быть от 3 букв`
                     },
                     validate: {
                         isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 
-                            'Поле должно содержать лишь кириллицу',
+                            `Поле "${placeholder}" должно содержать лишь кириллицу`,
                     },
                     onChange: (e) => {
                         handleChangeName(e)
@@ -75,9 +75,15 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
     }
 
     const { ref, ... rest_register } = getRegister(type)
-    
+
     return (
-        <div className='user_name_input-cont input-cont cont'>
+        <div className={`user_name_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
+            <span 
+                className='input-label'
+                onClick={() => useFocusInput(inputRef)}
+            >
+                {placeholder}
+            </span>
             <input
                 {... rest_register}
                 ref={(e) => {
@@ -93,7 +99,7 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
                 autoFocus
             />
             {icon}
-            <InputsError error={error} />
+            <InputsError error={error} onClick={() => useFocusInput(inputRef)} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
     )

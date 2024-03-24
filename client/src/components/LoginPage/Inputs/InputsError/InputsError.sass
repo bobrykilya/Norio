@@ -5,20 +5,24 @@
 .input_error-cont
     // border: 2px solid black
     position: absolute
-    bottom: -$size-main-text + 0.13rem
+    // bottom: -$size-main-text + 0.13rem
+    top: $size-main-text - 0.63rem
+    // right: -2rem
     height: auto
-    width: 130%
+    width: auto
     transition: all 0.3s ease
     pointer-events: none
+    cursor: text
     transform: translateX(1rem)
     opacity: 0
     overflow: visible
     // margin-right: -1rem
     &.opened
+        pointer-events: auto
         transform: translateX(0)
         opacity: 1
     span
         // border: 2px solid black
-        color: #c12d00
+        color: $color-error
         font-size: $size-main-text - 0.2rem
         white-space: nowrap

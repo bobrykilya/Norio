@@ -11,7 +11,6 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    const [isErrorOn, setIsErrorOn] = useState(true)
     
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
@@ -38,13 +37,12 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             // console.log('close')
             toggleDropDown(false)
         }else if (isValueInList(e.target.value)) {
-            isErrorOn && isDropDownOpened ? setIsErrorOn(false) : null
             toggleDropDown(false)
         }else {
             // console.log('open')
             !isDropDownOpened && e.target.value ? toggleDropDown(true) : null
         }
-        e.target.value ? changeInput(e) : clearInput()
+        e.target.value ? changeInput() : clearInput()
     }
     const toggleDropDown = (pos) => {
         if (pos) {
@@ -55,8 +53,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             setIsDropDownOpened(false)
     }
 
-    const changeInput = (e) => {
-        !isErrorOn ? setIsErrorOn(true) : null
+    const changeInput = () => {
         setIsCleanerOpened(true)
     }
 
@@ -66,7 +63,6 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             setValue(name, e.target.textContent)
             toggleDropDown(false)
             setIsCleanerOpened(true)
-            isErrorOn ? setIsErrorOn(false) : null
             setError(name, null)
         }
     }
@@ -80,7 +76,6 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         reset(name)
         setIsCleanerOpened(false)
         useFocusInput(inputRef)
-        isErrorOn && isDropDownOpened ? setIsErrorOn(false) : null
         setError(name, null)
     }
 
@@ -175,17 +170,24 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         required: true,
         validate: {
             isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 
-                'Поле должно содержать лишь кириллицу',
+                `Поле "${placeholder}" должно содержать лишь кириллицу`,
             isInList: (val) => isValueInList(val) ||
-                'Такого значения нет в базе'
+                `Введена неизвестная ${placeholder.toLowerCase()}`
         },
         onChange: (e) => {
             handleChangeInput(e)
         },
     })
 
+    // console.log(error)
     return ( 
-        <div className="dropdown_input-cont input-cont cont">
+        <div className={`dropdown_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
+            <span 
+                className='input-label'
+                onClick={() => useFocusInput(inputRef)}
+            >
+                {placeholder}
+            </span>
             <input
                 {... rest_register}
                 ref={(e) => {
@@ -204,7 +206,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 disabled={disabled}
             />
             {icon}
-            {isErrorOn && <InputsError error={error} />}
+            <InputsError error={error} onClick={() => useFocusInput(inputRef)} />
             <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
             <ul
                 id='dropdown-cont'

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useSelector } from 'react-redux'
-import { AuthContext } from '../../../context/AuthContext'
+import { AuthContext } from '../../../context/Auth-context'
 import SignUpImg from '../../../assets/login/sign_up.png'
 import SignInImg from '../../../assets/login/sign_in.png' 
 import { IoArrowBackCircleOutline } from "react-icons/io5"

@@ -71,7 +71,13 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
     })
 
     return ( 
-        <div className='phone_input-cont input-cont cont'>
+        <div className={`phone_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
+            <span 
+                className='input-label'
+                onClick={() => useFocusInput(inputRef)}
+            >
+                Номер телефона
+            </span>
             <input
                 {... rest_register}
                 ref={(e) => {
@@ -90,7 +96,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
             />
             <span className='phone_mask'>+375</span>
             <FiPhoneCall className='input-icon'/>
-            <InputsError error={error} />
+            <InputsError error={error} onClick={() => useFocusInput(inputRef)} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
      )

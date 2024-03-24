@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom"
 import { SnackbarProvider } from "notistack"
-import { AuthContext } from "./context/AuthContext"
+import { AuthContext } from "./context/Auth-context"
 import BgImg from '../src/assets/main_bg.jpg'
 import LoginPage from './pages/LoginPage/LoginPage'
 import HomePage from './pages/HomePage/HomePage'
