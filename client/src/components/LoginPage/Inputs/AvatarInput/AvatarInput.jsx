@@ -75,7 +75,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
     return (
         <div className='avatar-cont cont'>
             <button
-                className='avatar-but'
+                className={`avatar-but ${error?.message ? 'error' : ''}`}
                 type='button'
                 onClick={handleClickAvatarInput}
             >
@@ -85,7 +85,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
                 {avatar && <img src={createPathToAvatars(avatar)} alt="" />}
                 <ToolTip text='Выбрать аватар пользователя' />
             </button>
-            <InputsError error={error} />
+            <InputsError error={error} onClick={handleClickAvatarInput} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
             {!isFormBlur && 
                 <div 

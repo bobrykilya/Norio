@@ -53,6 +53,7 @@
                     opacity: 1
                     transform: scale(1)
             .fa-icon
+                transition: all 0.3s ease
                 color: $color-no-avatar
                 font-size: 1.5rem
                 width: 100%
@@ -63,6 +64,15 @@
             object-fit: cover
             transition: all 0.2s ease
             border-radius: 50%
+        &.error
+            .no_avatar-cont
+                border: 1.5px solid $color-error
+                .fa-icon
+                    color: $color-error
+    .input_error-cont
+        top: $size-main-text - 1.5rem
+        // margin-right: -1rem
+        cursor: pointer
     .inputs_cleaner-but
         // border: 2px solid black
         left: -1.7rem

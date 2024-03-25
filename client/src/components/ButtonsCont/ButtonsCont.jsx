@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { MdInstallDesktop } from "react-icons/md"
 import { FaInfo } from "react-icons/fa6"
 import ToolTip from '../ToolTip/ToolTip'
@@ -5,6 +6,16 @@ import ToolTip from '../ToolTip/ToolTip'
 
 
 const ButtonsCont = () => {
+    const [deferredPrompt, setDeferredPrompt] = useState(false);
+
+    const askAppInstall = async () => {
+        await deferredPrompt.prompt()
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault()
+        setDeferredPrompt(e)
+      })
 
     return (
         <div className='buts-cont cont'>
@@ -17,6 +28,7 @@ const ButtonsCont = () => {
                 <button 
                     className='pwa-but'
                     tabIndex={-1}
+                    onClick={askAppInstall}
                     >
                         <MdInstallDesktop className='fa-icon'/>
                         <ToolTip text={'Создать ярлык на рабочем столе'} />

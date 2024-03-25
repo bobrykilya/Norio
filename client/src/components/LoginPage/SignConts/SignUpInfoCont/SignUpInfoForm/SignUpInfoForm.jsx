@@ -33,7 +33,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
         mode: 'onChange',
         reValidateMode: "onChange",
         defaultValues: {
-            phone: '295697982',
+            phone: '295697981',
             store: 'Офис',
             job: 'Управляющий',
             last_name: 'Бобрик',
