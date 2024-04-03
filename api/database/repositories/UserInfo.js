@@ -16,9 +16,11 @@ class UserInfoRepository {
 			[userId, phone, store, job, lastName, firstName, middleName, avatar, isStore])
 	}
 
-	//   static async createUserInfo(userId) {
-	//     const response = await pool.query("SELECT * FROM users WHERE user_id=$1", [userId])
-	//   }
+	static async getUserInfo(userId) {
+		const response = await pool.query("SELECT * FROM users_info WHERE user_id=$1", [userId])
+
+		return response.rows[0]
+	}
 
 	static async getUsedAvatarsList() {
 		const response = await pool.query("SELECT * FROM users_info")

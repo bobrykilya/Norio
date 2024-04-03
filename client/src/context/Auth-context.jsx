@@ -84,12 +84,14 @@ const AuthProvider = ({ children }) => {
 			// console.log(newData)
 			AuthClient.post("/sign-in", newData)
 				.then((res) => {
-					const { accessToken, accessTokenExpiration, logOutTime } = res.data
+					const { accessToken, accessTokenExpiration, logOutTime, userInfo } = res.data
 					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 	
 					setIsUserLogged(true)
 					toggleCoverPanel('sign_in')
 	
+					localStorage.setItem('userInfo', JSON.stringify(userInfo))
+
 					// console.log(logOutTime)
 					if (logOutTime) {
 						setTimer(logOutTime)
@@ -135,8 +137,10 @@ const AuthProvider = ({ children }) => {
 			// console.log(newData)
 			AuthClient.post("/sign-up", newData)
 				.then((res) => {
-					const { accessToken, accessTokenExpiration } = res.data
+					const { accessToken, accessTokenExpiration, userInfo } = res.data
 					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+
+					localStorage.setItem('userInfo', JSON.stringify(userInfo))
 
 					resetSignUpVariables()
 
@@ -151,6 +155,7 @@ const AuthProvider = ({ children }) => {
 
 	const handleLogOut = () => {
 		clearTimeout(refSetTimeout.current)
+		localStorage.removeItem('userInfo')
 
 		AuthClient.post("/logout")
 			.then(() => {
@@ -187,6 +192,7 @@ const AuthProvider = ({ children }) => {
 				setIsAppReady(true)
 				setIsUserLogged(false)
 				clearTimeout(refSetTimeout.current)
+				localStorage.removeItem('userInfo')
 			})
 	}, [])
 

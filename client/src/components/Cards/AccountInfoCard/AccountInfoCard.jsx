@@ -6,8 +6,9 @@ import ModeBut from './ModeBut/ModeBut'
 
 
 const AccountInfoCard = () => {
-
     const { handleLogOut } = useContext(AuthContext)
+    const { avatar } = JSON.parse(localStorage.getItem('userInfo'))
+
 
     return ( 
         <div className='account_info_card-cont card_content-cont cont card'>
@@ -23,7 +24,7 @@ const AccountInfoCard = () => {
                 className='account-img'
                 onClick={handleLogOut}
             >
-                <img src={Me} alt="" />
+                <img src={`/avatars/${avatar}.jpg`} alt="" />
             </button>
         </div>
      )

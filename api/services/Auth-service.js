@@ -87,6 +87,9 @@ class AuthService {
 			logOutTime,
 			refreshToken,
 		})
+
+		const userInfo = await UserInfoRepository.getUserInfo(userId)
+		userInfo.username = username
 		
 		// Auto logOut timer
 		if (fastSession) {
@@ -104,6 +107,7 @@ class AuthService {
 			refreshToken,
 			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
 			logOutTime,
+			userInfo,
 		}
 	}
 
@@ -116,16 +120,17 @@ class AuthService {
 		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
 
 		await checkSessionDouble(deviceId)
-		//! let userId
+		let userId
+		let userInfo
 
-		//! try {
-			const userId = await UserRepository.createUser({
+		try {
+			userId = await UserRepository.createUser({
 				username,
 				hashedPassword,
 				role,
 			})
 
-			await UserInfoRepository.createUserInfo({
+			userInfo = {
 				userId,
 				phone,
 				store,
@@ -134,10 +139,14 @@ class AuthService {
 				firstName,
 				middleName,
 				avatar,
-			})
-		// }catch {
-		 	// await UserRepository.deleteUserById(userId)
-		// }
+			}
+
+			await UserInfoRepository.createUserInfo(userInfo)
+			userInfo.username = username
+		}catch {
+		 	await UserRepository.deleteUserById(userId)
+			throw new Unauthorized("Данный номер телефона уже занят другим пользователем")
+		}
 
 		
 		if (!deviceId) {
@@ -168,6 +177,7 @@ class AuthService {
 			accessToken,
 			refreshToken,
 			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
+			userInfo,
 		}
 	}
 
