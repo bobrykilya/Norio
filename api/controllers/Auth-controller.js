@@ -94,7 +94,7 @@ class AuthController {
 
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, logOutTime } =
+			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo } =
 				await AuthService.refresh({
 					currentRefreshToken,
 					fingerprint,
@@ -103,7 +103,7 @@ class AuthController {
 
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
-			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime })
+			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo })
 		} catch (err) {
 			return ErrorsUtils.catchError({ typeCode: 701, req, res, err, fingerprint, queryTimeString })
 		}

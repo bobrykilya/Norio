@@ -244,11 +244,15 @@ class AuthService {
 			refreshToken,
 		})
 
+		const userInfo = await UserInfoRepository.getUserInfo(userId)
+		userInfo.username = username
+
 		return {
 			accessToken,
 			refreshToken,
 			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
 			logOutTime: refreshSession.log_out_time,
+			userInfo,
 		}
 	}
 

@@ -9,11 +9,13 @@ const ButtonsCont = () => {
     const [deferredPrompt, setDeferredPrompt] = useState(false);
 
     const askAppInstall = async () => {
+        // console.log(deferredPrompt)
         await deferredPrompt.prompt()
     }
 
     window.addEventListener("beforeinstallprompt", (e) => {
         e.preventDefault()
+        // console.log(`deferredPrompt saved`)
         setDeferredPrompt(e)
       })
 

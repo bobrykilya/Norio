@@ -3,7 +3,6 @@ import { createContext, useEffect, useRef, useState } from "react"
 import { Circle } from "react-preloaders"
 import inMemoryJWT from '../../services/inMemoryJWT.js'
 import config from "../config.js"
-import { useActions } from '../hooks/useActions.js'
 import showErrorMessage from "../utils/showErrorMessage.js"
 
 
@@ -41,7 +40,7 @@ const AuthProvider = ({ children }) => {
 	const [signUpUserName, setSignUpUserName] = useState(false)
 	const [signUpUserPassword, setSignUpUserPassword] = useState(false)
 	const [listOfUsedAvatars, setListOfUsedAvatars] = useState([])
-	const { toggleCoverPanel } = useActions()
+	const [coverPanelState, setCoverPanelState] = useState('sign_in')
 	const refSetTimeout = useRef(null)
 
 	const setTimer = (logOutTime) => {
@@ -66,6 +65,10 @@ const AuthProvider = ({ children }) => {
 
 	const getCountryCode = async () => {
 		return await axios.get('https://ipapi.co/json/').then((res) => {
+			if (res.data.country_code !== 'BV') {
+				// console.log(res)
+				// throw new Error(res.json('Ошибка'))
+			}
 			return res.data.country_code
 		})
 		.catch(showErrorMessage)
@@ -79,6 +82,11 @@ const AuthProvider = ({ children }) => {
 		return Object.assign(data, { countryCode, deviceType })
 	}
 
+	const handleUserLogged = () => {
+		setIsUserLogged(true)
+		setCoverPanelState('sign_in')
+	}
+
 	const handleSignIn = async (data) => {
 		await assignDeviceOtherData(data).then((newData) => {
 			// console.log(newData)
@@ -87,10 +95,9 @@ const AuthProvider = ({ children }) => {
 					const { accessToken, accessTokenExpiration, logOutTime, userInfo } = res.data
 					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 	
-					setIsUserLogged(true)
-					toggleCoverPanel('sign_in')
-	
 					localStorage.setItem('userInfo', JSON.stringify(userInfo))
+
+					handleUserLogged()
 
 					// console.log(logOutTime)
 					if (logOutTime) {
@@ -111,7 +118,7 @@ const AuthProvider = ({ children }) => {
 				setSignUpUserPassword(hashedPassword)
 				setListOfUsedAvatars(avatarsList)
 
-				toggleCoverPanel('sign_up_info')
+				setCoverPanelState('sign_up_info')
 			})
 			.catch(showErrorMessage)
 	}
@@ -121,11 +128,15 @@ const AuthProvider = ({ children }) => {
 		setSignUpUserPassword(false)
 		setListOfUsedAvatars([])
 	}
+	const resetSignInVariables = () => {
+		clearTimeout(refSetTimeout.current)
+		localStorage.removeItem('userInfo')
+	}
 
 	const handleReturnToSignUp = () => {
 		resetSignUpVariables()
 
-		toggleCoverPanel('sign_up')
+		setCoverPanelState('sign_up')
 	}
 
 	const handleSignUp = async (data) => {
@@ -144,18 +155,15 @@ const AuthProvider = ({ children }) => {
 
 					resetSignUpVariables()
 
-					setIsUserLogged(true)
-					toggleCoverPanel('sign_in')
+					handleUserLogged()
 				})
 				.catch(showErrorMessage)
 		})
 		.catch(showErrorMessage)
 	}
 
-
 	const handleLogOut = () => {
-		clearTimeout(refSetTimeout.current)
-		localStorage.removeItem('userInfo')
+		resetSignInVariables()
 
 		AuthClient.post("/logout")
 			.then(() => {
@@ -178,8 +186,10 @@ const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		AuthClient.post("/refresh")
 			.then((res) => {
-				const { accessToken, accessTokenExpiration, logOutTime } = res.data
+				const { accessToken, accessTokenExpiration, logOutTime, userInfo } = res.data
 				inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+
+				localStorage.setItem('userInfo', JSON.stringify(userInfo))				
 
 				setIsAppReady(true)
 				setIsUserLogged(true)
@@ -191,8 +201,7 @@ const AuthProvider = ({ children }) => {
 			.catch(() => {
 				setIsAppReady(true)
 				setIsUserLogged(false)
-				clearTimeout(refSetTimeout.current)
-				localStorage.removeItem('userInfo')
+				resetSignInVariables()
 			})
 	}, [])
 
@@ -217,9 +226,11 @@ const AuthProvider = ({ children }) => {
 		<AuthContext.Provider
 			value={{
 				data,
-				handleFetchProtected,
-				handleCheckUser,
+				coverPanelState,
+                setCoverPanelState,
 				handleReturnToSignUp,
+				handleCheckUser,
+				handleFetchProtected,
 				handleSignUp,
 				handleSignIn,
 				handleLogOut,

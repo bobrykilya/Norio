@@ -1,0 +1,75 @@
+@import '../AuthPage_variables'
+
+
+
+#signs-cont
+    .sign-cont
+        // border: 2px solid black
+        // justify-content: flex-start
+        width: 50%
+        height: auto
+        // overflow: visible
+        .enter_text-cont
+            // border: 2px solid yellow
+            flex-direction: row
+            // height: auto
+            // margin-left: 0.3rem
+            i
+                color: $color-main-text
+                font-size: 1.8rem
+                margin-right: 0.7rem
+            h1
+                // text-align: start
+        .buts-cont
+            // border: 2px solid red
+            // height: auto
+            margin-top: 1.1rem
+            margin-bottom: 0.4rem
+        .form
+            // border: 2px solid yellow
+            width: auto
+            overflow: visible
+            // flex-shrink: 1
+            // height: auto
+            .inputs-cont
+                // border: 2px solid red
+                overflow: visible
+                margin-bottom: 1rem
+                .fa-icon
+                    font-size: 0.8rem
+                .input-cont
+                    // border: 2px solid yellow
+                    margin-top: 0.3rem
+        #checkbox-cont
+            margin-top: 0.9rem
+        .submit-but
+            // margin-top: 1rem
+        .name_tag
+            // border: 2px solid red
+            margin-top: 1.4rem
+
+
+    // * CoverPanel toggle
+    .sign-cont
+        transition: transform $trans-dur + 0.2s $trans-style, opacity $trans-dur $trans-style
+        opacity: 0
+        pointer-events: none
+        overflow: visible
+        &.active
+            transition: all $trans-dur + 0.2s $trans-style
+            opacity: 1
+            pointer-events: auto
+    #sign_in-cont
+        transform: translateX($trans-content-X) scale(1 - $trans-content-scale)
+        &.active
+            transform: none
+    #sign_up-cont
+        transform: translateX(-$trans-content-X) scale(1 - $trans-content-scale)
+        &.active
+            transform: none
+    #sign_up_info-cont
+        position: absolute
+        left: 1rem
+        transform: translateX(-$trans-content-X) scale(1 - $trans-content-scale)
+        &.active
+            transform: none

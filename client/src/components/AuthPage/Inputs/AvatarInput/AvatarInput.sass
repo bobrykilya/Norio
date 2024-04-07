@@ -1,0 +1,262 @@
+@import '../../AuthPage_variables'
+
+
+
+.avatar-cont
+    // border: 2px solid orange
+    width: auto
+    overflow: visible    
+    .avatar-but
+        // border: 2px solid black
+        width: calc($size-confirm-but / 1.7)
+        height: calc($size-confirm-but / 1.7)
+        border-radius: 50%
+        z-index: 3
+        &:hover, &:focus
+            transform: translateY($height-but-act-jump)
+            border-radius: 40%
+            .no_avatar-cont
+                transition: all 0.2s ease
+                border: 1.5px solid $color-main-text-act
+            img
+                border-radius: 40%
+        &:active
+            .no_avatar-cont, img
+                transform: scale(0.9)
+        .no_avatar-cont
+            // border: 2px solid black
+            position: absolute
+            top: 0
+            left: 0
+            z-index: 1
+            $color-no-avatar: #6b6b6b
+            border: 1.5px solid $color-no-avatar
+            border-radius: 50%
+            transition: all 0.3s ease
+            opacity: 0
+            &::after
+                content: ''
+                position: absolute
+                top: 0
+                left: 0
+                width: 100%
+                height: 100%
+                z-index: -1
+                border-radius: 50%
+                background-color: $color-backgr
+                transition: all 0.3s ease
+                opacity: 0
+                transform: scale(0)
+            &.opened
+                opacity: 1
+                &::after
+                    opacity: 1
+                    transform: scale(1)
+            .fa-icon
+                transition: all 0.3s ease
+                color: $color-no-avatar
+                font-size: 1.5rem
+                width: 100%
+        img
+            // border: 2px solid black
+            width: 100%
+            height: 100%
+            object-fit: cover
+            transition: all 0.2s ease
+            border-radius: 50%
+        &.error
+            .no_avatar-cont
+                border: 1.5px solid $color-error
+                .fa-icon
+                    color: $color-error
+    .input_error-cont
+        top: $size-main-text - 1.5rem
+        // margin-right: -1rem
+        cursor: pointer
+    .inputs_cleaner-but
+        // border: 2px solid black
+        left: -1.7rem
+        transform: scale(0.8) + translateX(0.5rem)
+        &.opened
+            transform: scale(1) + translateX(0)
+    .avatar_list_cover-cont
+        position: fixed
+        left: 0
+        bottom: 0
+        width: 100vw
+        height: 100vh
+        backdrop-filter: blur(3px)
+        z-index: 11
+        transition: all 0.4s ease
+        opacity: 0
+        pointer-events: none
+        background-color: #00000019
+        &.opened
+            opacity: 1
+            pointer-events: auto
+            .avatar_list-cont
+                border-top-left-radius: 120px
+                border-top-right-radius: 120px
+                transform: translateX(-50%)
+                .avatar-list
+                    //* Avatars flying out animation delay
+                    li
+                        opacity: 1
+                        transform: none
+                        @for $i from 1 through 100
+                            &:nth-child(#{$i}n)
+                                transition-delay: #{$i * 0.025}s
+        .avatar_list-cont
+            // border: 2px solid black
+            // display: none
+            position: absolute
+            left: 50%
+            bottom: 0
+            width: 700px
+            height: 90vh
+            justify-content: flex-start
+            z-index: 12
+            border-top-left-radius: 200px
+            border-top-right-radius: 200px
+            background-color: $color-backgr
+            box-shadow: 2px 10px 30px #00000040
+            // overflow: visible
+            // transition: all 0.6s $trans-bounce-style
+            transition: all 0.4s ease
+            transform: translateX(-50%) translateY(100%)
+            .avatar-list
+                // border: 2px solid red
+                flex-direction: row
+                padding-bottom: 4rem
+                padding: 1.5rem
+                // border-radius: 150px
+                align-items: flex-start
+                flex-wrap: wrap
+                overflow-y: scroll
+                scroll-behavior: smooth
+                scroll-snap-type: y mandatory
+                -ms-overflow-style: none
+                scrollbar-width: none
+                &::-webkit-scrollbar 
+                    display: none 
+                li
+                    // border: 2px solid orange
+                    margin: 0.8rem
+                    margin-bottom: 0.7rem
+                    // scroll-snap-align: center
+                    $size-avatar-elem: 6rem
+                    width: $size-avatar-elem
+                    height: $size-avatar-elem + 1.4rem
+                    justify-content: flex-start
+                    overflow: visible
+                    transition-duration: 0.7s
+                    transform-style: ease
+                    transition-delay: 0
+                    opacity: 0
+                    transform: translateY(200px)
+                    button
+                        // border: 1px solid black
+                        height: $size-avatar-elem
+                        width: $size-avatar-elem
+                        border-radius: 50%
+                        overflow: hidden
+                        box-shadow: 2px 3px 7px #0000003a
+                        &:hover
+                            border-radius: 45%
+                            transform: translateY(calc($height-but-act-jump * 3))
+                            box-shadow: 2px 3px 7px #0000005d
+                            img
+                                border-radius: 45%
+                        &:active
+                            transform: translateY(calc($height-but-act-jump * 3)) scale(0.95)
+                        &.active
+                            border: 3px solid $color-cover-gradient
+                            padding: 3px
+                        img
+                            border-radius: 50%
+                            width: 100%
+                            height: 100%
+                            object-fit: cover
+                            z-index: -2
+                            transition: all 0.2s ease
+                    label
+                        // border: 1px solid black
+                        margin-top: -0.4rem
+                        padding-top: 1rem
+                        text-align: center
+                .empty_list-message
+                    line-height: 1.7rem
+                    font-size: 1rem
+                    text-align: center
+        .arrow_buts-cont
+            // border: 1px solid black
+            position: absolute
+            left: 50%
+            top: 42.5vh
+            width: auto
+            justify-content: space-between
+            overflow: visible
+            $size-arrow-but: 4rem
+            height: calc($size-arrow-but * 2.4)
+            transform: translateX(400px)
+            mix-blend-mode: screen
+            &.opened
+                button
+                    transform: translateX(0)
+                .avatar_list_up-but
+                    transition: all 0.7s 0.2s $trans-bounce-style
+                .avatar_list_down-but
+                    transition: all 0.7s 0.4s $trans-bounce-style
+            .tool_tip
+                bottom: calc(50% - 1.1rem)
+                left: calc(100% + 1.1rem)
+                transform: translateX(-2rem) scale(0.6)
+                &.active
+                    transform: translateX(0) scale(1)
+            button
+                width: $size-arrow-but
+                height: $size-arrow-but
+                border-radius: 50%
+                transition: all 0.1s ease
+                z-index: 1
+                overflow: visible
+                font-weight: 900
+                &::before
+                    content: ''
+                    position: absolute
+                    width: 140%
+                    height: 140%
+                    z-index: -2
+                    border-radius: 50%
+                    background-color:  #00000031
+                    transition: all 0.2s ease
+                    opacity: 0
+                    transform: scale(0.6)
+                &:hover
+                    transform: none
+                    &::before
+                        opacity: 1
+                        transform: scale(1)
+                    .arrow_but-cont
+                        .fa-icon
+                            color:  #25364bd2
+                &:active
+                    .arrow_but-cont
+                        transform: scale(0.9)
+                &:disabled
+                    pointer-events: none
+                    // .arrow_but-cont
+                    //     background-color: red
+                .arrow_but-cont
+                    border-radius: 50%
+                    background-color: $color-backgr
+                    transition: all 0.2s ease
+                    .fa-icon
+                        z-index: 5
+                        font-size: 1.8rem
+                        color:  #2f4866d2
+                        transition: all 0.2s ease
+            .avatar_list_up-but
+                transform: translate(-200px, 600px)
+            .avatar_list_down-but
+                transform: translate(-300px, 600px)

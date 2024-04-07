@@ -1,13 +1,12 @@
 import { useContext } from 'react'
 import { AuthContext } from '../../../context/Auth-context'
-import Me from '/avatars/bear.jpg'
 import ModeBut from './ModeBut/ModeBut'
 
 
 
 const AccountInfoCard = () => {
     const { handleLogOut } = useContext(AuthContext)
-    const { avatar } = JSON.parse(localStorage.getItem('userInfo'))
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
 
     return ( 
@@ -24,7 +23,7 @@ const AccountInfoCard = () => {
                 className='account-img'
                 onClick={handleLogOut}
             >
-                <img src={`/avatars/${avatar}.jpg`} alt="" />
+                <img src={`/avatars/${userInfo?.avatar}.jpg`} alt='Avatar error 3' />
             </button>
         </div>
      )
