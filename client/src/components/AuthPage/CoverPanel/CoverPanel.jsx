@@ -4,7 +4,7 @@ import SignUpImg from '../../../assets/login/sign_up.png'
 import SignInImg from '../../../assets/login/sign_in.png' 
 import { IoArrowBackCircleOutline } from "react-icons/io5"
 import ToolTip from '../../ToolTip/ToolTip'
-import CoverBgImg from '../../../assets/cover_bg.jpg'
+// import CoverBgImg from '../../../assets/cover_bg.jpg'
 
 
 
@@ -15,7 +15,7 @@ const CoverPanel = () => {
     return ( 
         <div id='cover_and_img-cont' className={`cont opened_${coverPanelState}`}>
             <div id='cover-cont' className='cont'>
-                <img src={CoverBgImg} className='cover_bg-img' alt="" />
+                {/* <img src={CoverBgImg} className='cover_bg-img' alt="" /> */}
                 <div id='cover-content' className='cont'>
                     <section id='sign_up_info-cont' className='cont'>
                         <h1>Нет аккаунта?</h1>

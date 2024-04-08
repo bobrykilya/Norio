@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom"
 import { SnackbarProvider } from "notistack"
 import { AuthContext } from "./context/Auth-context"
-import BgImg from '../src/assets/main_bg.jpg'
+// import BgImg from '../src/assets/main_bg.jpg'
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
@@ -23,14 +23,14 @@ const App = () => {
                             <HomePage />
                         } />
                     ) : (
-                        <Route path="auth" element={
+                        <Route path="authorization" element={
                             <AuthPage />
                         } />
                     )}
-                    <Route path="*" element={<Navigate to={isUserLogged ? "home" : "auth"} />} />
+                    <Route path="*" element={<Navigate to={isUserLogged ? "home" : "authorization"} />} />
                 </Routes>
             </BrowserRouter>
-            {!isUserLogged && <img className='main_bg-img' src={BgImg} alt="" />}
+            {/* {!isUserLogged && <img className='main_bg-img' src={BgImg} alt="" />} */}
         </div>
     )
 }

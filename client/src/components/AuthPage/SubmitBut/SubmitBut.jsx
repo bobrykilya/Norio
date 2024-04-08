@@ -23,9 +23,9 @@ const SubmitBut = ({icon, notSaveUser, onClick, disabled=false, isLoading, title
         >
             {icon}
             <ToolTip text={title} />
-            <div className='confirm_but_bg-cont cont'>
+            {/* <div className='confirm_but_bg-cont cont'>
                 <img src={ConfirmButBgImg} className='confirm_but_bg-img' alt="" />
-            </div>
+            </div> */}
         </button>
     )
 }

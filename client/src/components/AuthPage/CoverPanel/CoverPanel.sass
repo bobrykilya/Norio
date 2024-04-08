@@ -17,11 +17,11 @@
         // border-radius: $rad-up-cover-panel 0 0 $rad-down-cover-panel
         // transition: all $trans-dur $trans-wave-bounce-style
         transition: all $trans-dur $trans-style
-        background: linear-gradient(80deg,$color-cover-gradient, 40% , $color-confirm-but-act)
+        background: linear-gradient(80deg,$color-cover-light, 40% , $color-cover-dark)
         pointer-events: auto
         // overflow: visible
         &::after //* Smooth gradient toggle
-            background: linear-gradient(-80deg, $color-cover-gradient, 40% , $color-confirm-but-act)
+            background: linear-gradient(-80deg, $color-cover-light, 40% , $color-cover-dark)
             content: ''
             position: absolute
             top: 0
@@ -31,11 +31,11 @@
             z-index: -1
             transition: opacity $trans-dur + 0.5s
             // opacity: 0
-        .cover_bg-img
-            position: absolute
-            width: 100%
-            background-size: cover
-            opacity: 0.13
+        // .cover_bg-img
+        //     position: absolute
+        //     width: 100%
+        //     background-size: cover
+        //     opacity: 0.13
         #cover-content
             // border: 2px solid orange
             overflow: visible

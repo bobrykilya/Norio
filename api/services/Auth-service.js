@@ -32,6 +32,11 @@ class AuthService {
 		checkCountry(countryCode)
 
 		const userData = await UserRepository.getUserData(username)
+		
+		if (!userData) {
+			throw new NotFound("Пользователь не найден")
+		}
+
 		const userId = userData.id
 		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
 		const enterCode = !fastSession ? 201 : 202
@@ -39,9 +44,6 @@ class AuthService {
 
 		await checkSessionDouble(deviceId)
 
-		if (!userData) {
-			throw new NotFound("Пользователь не найден")
-		}
 
 		const isPasswordValid = bcrypt.compareSync(password, userData.password)
 		if (!isPasswordValid) {
