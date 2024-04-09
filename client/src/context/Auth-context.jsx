@@ -1,63 +1,10 @@
-import axios from "axios"
 import { createContext, useEffect, useRef, useState } from "react"
 import { Circle } from "react-preloaders"
-import inMemoryJWT from '../../services/inMemoryJWT-service.js'
+import inMemoryJWT from '../services/inMemoryJWT-service.js'
 import config from "../config.js"
-import showErrorMessage from "../utils/showErrorMessage.js"
+import AuthService from "../services/Auth-service.js"
 
 
-
-export const AuthClient = axios.create({
-	baseURL: `${config.API_URL}/auth`,
-	withCredentials: true,
-})
-
-const ResourceClient = axios.create({
-	baseURL: `${config.API_URL}/resource`,
-})
-
-ResourceClient.interceptors.request.use((config) => {
-	const accessToken = inMemoryJWT.getToken()
-
-	if (accessToken) {
-		config.headers["Authorization"] = `Bearer ${accessToken}`
-	}
-
-	return config
-},
-	(error) => {
-		Promise.reject(error)
-	}
-)
-
-const getDeviceType = () => {
-	const ua = navigator.userAgent
-	const tabletRegex = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i
-	const mobRegex = /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/
-	
-	if (tabletRegex.test(ua)) return "Tablet"
-	if (mobRegex.test(ua)) return "Mobile"
-	return "Desktop"
-}
-
-const getCountryCode = async () => {
-	return await axios.get('https://ipapi.co/json/').then((res) => {
-		if (res.data.country_code !== 'BV') {
-			// console.log(res)
-			// throw new Error(res.json('Ошибка'))
-		}
-		return res.data.country_code
-	})
-	.catch(showErrorMessage)
-}
-
-const assignDeviceOtherData = async (data) => {
-	const countryCode = await getCountryCode()
-	const deviceType = getDeviceType()
-	
-	// console.log(countryCode)
-	return Object.assign(data, { countryCode, deviceType })
-}
 
 export const AuthContext = createContext({})
 
@@ -102,39 +49,29 @@ const AuthProvider = ({ children }) => {
 
 
 	const handleSignIn = async (data) => {
-		await assignDeviceOtherData(data).then((newData) => {
-			// console.log(newData)
-			AuthClient.post("/sign-in", newData)
-				.then((res) => {
-					const { accessToken, accessTokenExpiration, logOutTime, userInfo } = res.data
-					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-	
-					localStorage.setItem('userInfo', JSON.stringify(userInfo))
 
-					handleUserHasLogged()
+		const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.signIn(data)
 
-					// console.log(logOutTime)
-					if (logOutTime) {
-						setLogOutTimer(logOutTime)
-					}
-				})
-				.catch(showErrorMessage)
-		})
-		.catch(showErrorMessage)
+		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+		localStorage.setItem('userInfo', JSON.stringify(userInfo))
+
+		handleUserHasLogged()
+
+		// console.log(logOutTime)
+		if (logOutTime) {
+			setLogOutTimer(logOutTime)
+		}
 	}
 
-	const handleCheckUser = (data) => {
-		AuthClient.post("/check-user", data)
-			.then((res) => {
-				const { userName, hashedPassword, avatarsList } = res.data
+	const handleCheckUser = async (data) => {
 
-				setSignUpUserName(userName)
-				setSignUpUserPassword(hashedPassword)
-				setListOfUsedAvatars(avatarsList)
+		const { userName, hashedPassword, avatarsList } = await AuthService.checkUser(data)
 
-				setCoverPanelState('sign_up_info')
-			})
-			.catch(showErrorMessage)
+		setSignUpUserName(userName)
+		setSignUpUserPassword(hashedPassword)
+		setListOfUsedAvatars(avatarsList)
+
+		setCoverPanelState('sign_up_info')
 	}
 
 	const handleSignUp = async (data) => {
@@ -142,66 +79,53 @@ const AuthProvider = ({ children }) => {
 		data.hashedPassword = signUpUserPassword
 		data.deviceType = getDeviceType()
 
-		await assignDeviceOtherData(data).then((newData) => {
-			// console.log(newData)
-			AuthClient.post("/sign-up", newData)
-				.then((res) => {
-					const { accessToken, accessTokenExpiration, userInfo } = res.data
-					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+		const { accessToken, accessTokenExpiration, userInfo } = await AuthService.signUp(data)
+		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 
-					localStorage.setItem('userInfo', JSON.stringify(userInfo))
+		localStorage.setItem('userInfo', JSON.stringify(userInfo))
 
-					resetSignUpVariables()
-
-					handleUserHasLogged()
-				})
-				.catch(showErrorMessage)
-		})
-		.catch(showErrorMessage)
+		resetSignUpVariables()
+		handleUserHasLogged()
 	}
 
 	const handleLogOut = () => {
 		resetSignInVariables()
 
-		AuthClient.post("/logout")
-			.then(() => {
-				inMemoryJWT.deleteToken()
-				// location.reload(true)
+		AuthService.logOut()
 
-				setIsUserLogged(false)
-			})
-			.catch(showErrorMessage)
+		inMemoryJWT.deleteToken()
+		// location.reload(true)
+
+		setIsUserLogged(false)
 	}
 
 	const handleFetchProtected = () => {
-		ResourceClient.get("/protected")
-			.then((res) => {
-				setData(res.data)
-			})
-			.catch(showErrorMessage)
+		const res = AuthService.fetchProtected()
+		setData(res)
 	}
 
 	
 	useEffect(() => {
-		AuthClient.post("/refresh")
-			.then((res) => {
-				const { accessToken, accessTokenExpiration, logOutTime, userInfo } = res.data
-				inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-
-				localStorage.setItem('userInfo', JSON.stringify(userInfo))				
-
-				setIsAppReady(true)
-				setIsUserLogged(true)
-
-				if (logOutTime) {
-					setLogOutTimer(logOutTime)
+			const refresh = async () => {
+				try {
+					const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.refresh()
+					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+	
+					localStorage.setItem('userInfo', JSON.stringify(userInfo))				
+	
+					setIsAppReady(true)
+					setIsUserLogged(true)
+	
+					if (logOutTime) {
+						setLogOutTimer(logOutTime)
+					}
+				} catch {
+					setIsAppReady(true)
+					setIsUserLogged(false)
+					resetSignInVariables()
 				}
-			})
-			.catch(() => {
-				setIsAppReady(true)
-				setIsUserLogged(false)
-				resetSignInVariables()
-			})
+			}
+			refresh()
 	}, [])
 
 	//* Exiting from all tabs when log out

@@ -1,5 +1,5 @@
-import { AuthClient } from '../src/context/Auth-context'
-import config from "../src/config"
+import { $authClient } from "../http/http.js"
+import config from "../config"
 
 
 
@@ -11,7 +11,7 @@ const inMemoryJWTService = () => {
         const timeoutTrigger = expiration - 10000
 
         refreshTimeoutId = setTimeout(() => {
-            AuthClient.post("/refresh")
+            $authClient.post("/refresh")
             .then((res) => {
                 const { accessToken, accessTokenExpiration } = res.data
                 setToken(accessToken, accessTokenExpiration)
