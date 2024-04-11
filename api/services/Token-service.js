@@ -29,9 +29,9 @@ class TokenService {
 		try {
 			req.user = await TokenService.verifyAccessToken(token)
 			// console.log(req.user)
-		} catch (error) {
-			// console.log(error)
-			return next(new Forbidden(error))
+		} catch (err) {
+			// console.log(err)
+			return next(new Forbidden(err))
 		}
 
 		next()

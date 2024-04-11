@@ -1,5 +1,6 @@
 import showErrorMessage from "../utils/showErrorMessage.js"
-import { $authClient, $resourceClient, $authInfo } from "../http/http.js"
+import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http.js"
+import ky from "ky"
 
 
 
@@ -14,17 +15,21 @@ const getDeviceType = () => {
 }
 
 const getCountryCode = async () => {
-	return $authInfo.get('/').then((res) => {
-		if (res.data.country_code !== 'BF') {
-			// console.log(res.data)
-			// throw new Error(res.json('Ошибка'))
-		}
-		return res.data.country_code
-	})
-	.catch(showErrorMessage)
+    try {
+        const res = await $apiIpInfo.get("").json()
+
+        if (res.country_code !== 'BF') {
+            // console.log(res)
+            // throw new Error(res.json('Ошибка'))
+        }
+
+        return res.country_code
+    }catch (err) {
+        showErrorMessage(err)
+    }
 }
 
-const assignDeviceOtherData = async (data) => {
+const addDeviceOtherData = async (data) => {
 	const countryCode = await getCountryCode()
 	const deviceType = getDeviceType()
 	
@@ -37,63 +42,68 @@ class AuthService {
     static async signIn(data) {
         // console.log(data)
         try {
-            const newData = await assignDeviceOtherData(data)
-            const res = await $authClient.post("/sign-in", newData)
+            const newData = await addDeviceOtherData(data)
+            // console.log(newData)
+            const res = await $apiAuth.post("sign-in", { json: newData }).json()
             
-            return res.data
-        } catch (error) {
-            showErrorMessage(error)
+            return res
+        } catch (err) {
+            // console.log(err.message)
+            showErrorMessage(err)
         }
     }
 
     static async checkUser(data) {
         try {
-            const res = await $authClient.post("/check-user", data)
+            const res = await $apiAuth.post("check-user", { json: data }).json()
 
-            return res.data
-        } catch (error) {
-            showErrorMessage(error)
+            return res
+        } catch (err) {
+            showErrorMessage(err)
         }
     }
 
     static async signUp(data) {
         try {
-            const newData = await assignDeviceOtherData(data)
-            const res = await $authClient.post("/sign-up", newData)
+            const newData = await addDeviceOtherData(data)
+            
+            const res = await $apiAuth.post("sign-up", { json: newData }).json()
 
-            return res.data
-        } catch (error) {
-            showErrorMessage(error)
+            return res
+        } catch (err) {
+            showErrorMessage(err)
         }
     }
 
     static logOut() {
         try {
-            const res = $authClient.post("/logout")
+            $apiAuth.post("logout")
+            // console.log(res)
 
-            return res.data
-        } catch (error) {
-            showErrorMessage(error)
+            // return res
+        } catch (err) {
+            console.log(err)
+            showErrorMessage(err)
         }
     }
 
     static async refresh() {
         try {
-            const res = await $authClient.post("/refresh")
+            const res = await $apiAuth.post("refresh").json()
 
-            return res.data
-        } catch (error) {
-            showErrorMessage(error)
+            return res
+        } catch (err) {
+            showErrorMessage(err)
         }
     }
 
     static fetchProtected() {
         try {
-            const res = $resourceClient.get("/protected")
+            const res = $apiSecureResource.get("protected").json()
 
-            return res.data
-        } catch (error) {
-            showErrorMessage(error)
+            return res
+        } catch (err) {
+            showErrorMessage(err)
         }
         
     }

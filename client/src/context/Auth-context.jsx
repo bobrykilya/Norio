@@ -77,7 +77,6 @@ const AuthProvider = ({ children }) => {
 	const handleSignUp = async (data) => {
 		data.username = signUpUserName
 		data.hashedPassword = signUpUserPassword
-		data.deviceType = getDeviceType()
 
 		const { accessToken, accessTokenExpiration, userInfo } = await AuthService.signUp(data)
 		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
@@ -88,10 +87,10 @@ const AuthProvider = ({ children }) => {
 		handleUserHasLogged()
 	}
 
-	const handleLogOut = () => {
-		resetSignInVariables()
-
+	const handleLogOut =  () => {
 		AuthService.logOut()
+
+		resetSignInVariables()
 
 		inMemoryJWT.deleteToken()
 		// location.reload(true)
@@ -104,10 +103,12 @@ const AuthProvider = ({ children }) => {
 		setData(res)
 	}
 
-	
+
+	//* Refresh handling
 	useEffect(() => {
 			const refresh = async () => {
 				try {
+					// console.log('refresh')
 					const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.refresh()
 					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 	

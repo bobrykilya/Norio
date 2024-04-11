@@ -23,11 +23,11 @@ const App = () => {
                             <HomePage />
                         } />
                     ) : (
-                        <Route path="authorization" element={
+                        <Route path="auth" element={
                             <AuthPage />
                         } />
                     )}
-                    <Route path="*" element={<Navigate to={isUserLogged ? "home" : "authorization"} />} />
+                    <Route path="*" element={<Navigate to={isUserLogged ? "home" : "auth"} />} />
                 </Routes>
             </BrowserRouter>
             {/* {!isUserLogged && <img className='main_bg-img' src={BgImg} alt="" />} */}

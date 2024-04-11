@@ -94,7 +94,7 @@ class AuthService {
 		userInfo.username = username
 		
 		// Auto logOut timer
-		if (fastSession) {
+		if (logOutTime) {
 			setTimeout(async () => {
 				const successDeleting = await RefreshSessionsRepository.deleteRefreshSessionByLogInTime(queryTime)
 
@@ -223,8 +223,8 @@ class AuthService {
 		let payload
 		try {
 			payload = await TokenService.verifyRefreshToken(currentRefreshToken)
-		} catch (error) {
-			throw new Forbidden(error.detail)
+		} catch (err) {
+			throw new Forbidden(err.detail)
 		}
 
 		const {

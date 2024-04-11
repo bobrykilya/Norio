@@ -1,36 +1,33 @@
-import axios from "axios"
+import ky from "ky"
 import config from "../config.js"
-import inMemoryJWT from '../services/inMemoryJWT-service.js'
+import inMemoryJWTService from '../services/inMemoryJWT-service.js'
 
 
 
-const $authClient = axios.create({
-	baseURL: `${config.API_URL}/auth`,
-	withCredentials: true,
+const $apiAuth = ky.extend({
+	prefixUrl: `${config.API_URL}/auth`,
+	cache: 'no-store', 
+	credentials: 'include',
 })
 
-const $resourceClient = axios.create({
-	baseURL: `${config.API_URL}/resource`,
+const $apiSecureResource = ky.extend({
+	prefixUrl: `${config.API_URL}/resource`,
+	hooks: {
+		beforeRequest: [
+		  (req) => {
+			const accessToken = inMemoryJWTService.getToken()
+			if (accessToken) {
+				req.headers.set("Authorization", `Bearer ${accessToken}`)
+			}
+		  },
+		],
+	},
 })
 
-$resourceClient.interceptors.request.use((config) => {
-	const accessToken = inMemoryJWT.getToken()
-
-	if (accessToken) {
-		config.headers["Authorization"] = `Bearer ${accessToken}`
-	}
-
-	return config
-},
-	(error) => {
-		Promise.reject(error)
-	}
-)
-
-const $authInfo = axios.create({
-	baseURL: `https://ipapi.co/json`,
+const $apiIpInfo = ky.extend({
+	prefixUrl: `https://ipapi.co/json`,
 })
 
 
-export { $authClient, $resourceClient, $authInfo }
+export { $apiAuth, $apiSecureResource, $apiIpInfo }
 

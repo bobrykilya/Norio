@@ -13,6 +13,7 @@ const getTime = () => {
 
 class AuthController {
 	static async signIn(req, res) {
+		// console.log(req)
 		const { username, password, fastSession, deviceType, countryCode } = req.body
 		const { fingerprint } = req
 		const { queryTime, queryTimeString } = getTime()
@@ -29,7 +30,7 @@ class AuthController {
 				deviceType,
 				countryCode, 
 			})
-
+			
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo })
@@ -74,6 +75,7 @@ class AuthController {
 		const refreshToken = req.cookies.refreshToken
 		const { fingerprint } = req
 		const { queryTime, queryTimeString } = getTime()
+		// console.log(fingerprint)
 
 
 		try {
