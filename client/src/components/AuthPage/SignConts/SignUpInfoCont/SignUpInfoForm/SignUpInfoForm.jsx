@@ -19,6 +19,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
     const { handleSignUp } = useContext(AuthContext)
     const [avatar, setAvatar] = useState('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
     const name_input_icon = <GrUserExpert className='input-icon' />
 
     const {
@@ -27,8 +28,9 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
         resetField,
         watch,
         setError,
+        setFocus,
         setValue,
-        formState: { errors, isLoading }
+        formState: { errors }
     } = useForm({
         mode: 'onChange',
         reValidateMode: "onChange",
@@ -46,16 +48,19 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
         avatar ? onSubmit(data) : setErrorAvatar({ message: 'Выберите аватар пользователя' })
     }
     
-    const onSubmit = async (data) => {
-        setTimeout(() => {
-            data.phone = '+375' + data.phone
-            data.avatar = avatar
-            // data.device = navigator.userAgent
+    const onSubmit = (data) => {
+        data.phone = '+375' + data.phone
+        data.avatar = avatar
+        
+        setTimeout(async () => {
+            setIsLoading(true)
+            await handleSignUp(data)
+                .then(() => setIsLoading(false))
+                .catch(() => {
+                    setFocus('phone')
+                    setIsLoading(false)
+            })
             // alert(JSON.stringify(data))
-            handleSignUp(data)
-            // console.log(`Юзер: ${data.first_name}`)
-            // console.log(`Точка: ${data.store}`)
-            // console.log(`Устройство: ${data.device}`)
         }, 100)
     }
 

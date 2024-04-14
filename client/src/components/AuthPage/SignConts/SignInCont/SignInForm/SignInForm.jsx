@@ -7,7 +7,7 @@ import CheckBox from '../../../../Inputs/CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { BiLogInCircle } from "react-icons/bi"
 import { FaUser } from "react-icons/fa"
-import ToolTip from './../../../../ToolTip/ToolTip';
+import ToolTip from './../../../../ToolTip/ToolTip' 
 
 
 
@@ -15,18 +15,19 @@ const SignInForm = ({  isFormBlur=false}) => {
     // console.log('SignIn')
     const { handleSignIn } = useContext(AuthContext)
     const [notSaveUser, setNotSaveUser] = useState(false)
-    // const inputUserNameRef = useRef(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const {
         register,
         handleSubmit,
+        reset,
         resetField,
         watch,
         setValue,
-        formState: { isLoading },
+        setFocus,
     } = useForm({
         mode: 'onBlur',
-        reValidateMode: "onBlur",
+        reValidateMode: 'onBlur',
         defaultValues: {
             username: 'Admin',
             password: 'Qwe123',
@@ -38,21 +39,31 @@ const SignInForm = ({  isFormBlur=false}) => {
     }
 
     const onSubmitNotSave = async (data) => {
-        setValue('username', '')
-        setValue('password', '')
-
-        data.username = data.username.toLowerCase()
         data.fastSession = true
+        
+        reset()
 
-        handleSignIn(data)
+        setIsLoading(true)
+        await handleSignIn(data)
+            .then(() => setIsLoading(false))
+            .catch(() => {
+                setValue('username', data.username)
+                setValue('password', data.password)
+                setFocus('username')
+                setIsLoading(false)
+            })
         // alert(JSON.stringify(data))
     }
 
     const onSubmit = async (data) => {
-        data.username = data.username.toLowerCase()
 
-        handleSignIn(data)
-        // console.log(data)
+        setIsLoading(true)
+        await handleSignIn(data)
+            .then(() => setIsLoading(false))
+            .catch(() => {
+                setFocus('username')
+                setIsLoading(false)
+            })
         // alert(JSON.stringify(data))
     }
 
@@ -73,7 +84,6 @@ const SignInForm = ({  isFormBlur=false}) => {
                     type='sign_in'
                     register={register}
                     reset={resetField}
-                    setValue={setValue}
                     watch={watch}
                     notSaveUser={notSaveUser}
                     disabled={isFormBlur}

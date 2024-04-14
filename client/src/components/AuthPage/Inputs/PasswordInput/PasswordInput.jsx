@@ -11,7 +11,6 @@ import ToolTip from '../../../ToolTip/ToolTip'
 
 const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watch=false, notSaveUser=false, disabled=false }) => {
     
-    // console.log('watch')
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)

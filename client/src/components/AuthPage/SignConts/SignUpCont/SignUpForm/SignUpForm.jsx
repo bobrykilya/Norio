@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AuthContext } from '../../../../../context/Auth-context'
 import { FaArrowRightLong } from "react-icons/fa6"
@@ -17,6 +17,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
     // console.log(isFormBlur)
     
     const { handleCheckUser } = useContext(AuthContext)
+    const [isLoading, setIsLoading] = useState(false)
 
     const {
         register,
@@ -24,7 +25,8 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
         resetField,
         watch,
         setError,
-        formState: { errors, isLoading } 
+        setFocus,
+        formState: { errors } 
     } = useForm({
         mode: 'onChange',
         reValidateMode: "onChange",
@@ -48,13 +50,16 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
     }, [watch('password'), watch('confirm_password')])
 
     const onSubmit = async (data) => {
-        data.username = data.username.toLowerCase()
         delete data.confirm_password
+
+        setIsLoading(true)
+        await handleCheckUser(data)
+            .then(() => setIsLoading(false))
+            .catch(() => {
+                setFocus('username')
+                setIsLoading(false)
+            })
         // alert(JSON.stringify(data))
-        // console.log(`Юзер: ${data.username}`)
-        // console.log(`Пароль: ${data.password}`)
-        // console.log(`Устройство: ${data.device}`)
-        handleCheckUser(data)
     }
 
     return (
@@ -93,7 +98,6 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
             </div>
             <SubmitBut 
                 icon={<FaArrowRightLong className='fa-icon'/>}
-                notSaveUser={false}
                 disabled={isSubmitButBlur}
                 isLoading={isLoading}
                 title='Продолжить регистрацию'

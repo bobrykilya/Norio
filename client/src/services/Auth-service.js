@@ -1,6 +1,5 @@
 import showErrorMessage from "../utils/showErrorMessage.js"
 import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http.js"
-import ky from "ky"
 
 
 
@@ -33,7 +32,6 @@ const addDeviceOtherData = async (data) => {
 	const countryCode = await getCountryCode()
 	const deviceType = getDeviceType()
 	
-	// console.log(countryCode)
 	return Object.assign(data, { countryCode, deviceType })
 }
 
@@ -43,13 +41,12 @@ class AuthService {
         // console.log(data)
         try {
             const newData = await addDeviceOtherData(data)
-            // console.log(newData)
             const res = await $apiAuth.post("sign-in", { json: newData }).json()
             
             return res
         } catch (err) {
-            // console.log(err.message)
-            showErrorMessage(err)
+            throw new Error(err)
+            // showErrorMessage(err)
         }
     }
 
@@ -89,7 +86,7 @@ class AuthService {
 
     static async refresh() {
         try {
-            const res = await $apiAuth.post("refresh").json()
+            const res = await $apiAuth.post("refresh")?.json()
 
             return res
         } catch (err) {
