@@ -95,7 +95,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
                 onFocus={handleFocusPhone}
             />
             <span className='phone_mask'>+375</span>
-            <FiPhoneCall className='input-icon'/>
+            <FiPhoneCall className='input-icon' />
             <InputsError error={error} onClick={() => useFocusInput(inputRef)} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>

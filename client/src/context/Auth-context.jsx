@@ -1,5 +1,5 @@
-import { createContext, useEffect, useRef, useState } from "react"
-import { Circle } from "react-preloaders"
+import { createContext, useCallback, useEffect, useRef, useState } from "react"
+import CircularProgress from '@mui/joy/CircularProgress'
 import inMemoryJWT from '../services/inMemoryJWT-service.js'
 import config from "../config.js"
 import AuthService from "../services/Auth-service.js"
@@ -17,7 +17,7 @@ const AuthProvider = ({ children }) => {
 	const refSetTimeout = useRef(null)
 	const [signUpUserName, setSignUpUserName] = useState(false)
 	const [signUpUserPassword, setSignUpUserPassword] = useState(false)
-
+	const [snackBarMessage, setSnackBarMessage] = useState({})
 
 	const setLogOutTimer = (logOutTime) => {
 		const timeOutTime = new Date(logOutTime).getTime() - new Date().getTime()
@@ -160,13 +160,15 @@ const AuthProvider = ({ children }) => {
 				isUserLogged,
 				isAppReady,
 				listOfUsedAvatars,
+				snackBarMessage,
+				setSnackBarMessage,
 			}}
 		>
 			{isAppReady ? (
 				children
 			) : (
 				<div className='cont'>
-					<Circle />
+					<CircularProgress variant="plain" />
 				</div>
 			)}
 		</AuthContext.Provider>

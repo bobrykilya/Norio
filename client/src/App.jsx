@@ -1,8 +1,9 @@
 import { useContext } from "react"
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom"
-import { SnackbarProvider } from "notistack"
 import { AuthContext } from "./context/Auth-context"
 // import BgImg from '../src/assets/main_bg.jpg'
+// import SnackBar from './components/SnackBar/SnackBar'
+import { Toaster } from 'react-hot-toast'
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
@@ -15,7 +16,17 @@ const App = () => {
 
     return (
         <div id='main_body-cont' className={`cont ${isUserLogged ? 'active_bg' : ''}`}>
-            <SnackbarProvider />
+            {/* <SnackBar message={snackBarError} /> */}
+            <div>
+                <Toaster 
+                    position="top-center"
+                    // reverseOrder={true}
+                    // gutter={8}
+                    toastOptions={{
+                        duration: 5000,
+                    }}
+                />
+            </div>
             <BrowserRouter>
                 <Routes>
                     {isUserLogged ? (

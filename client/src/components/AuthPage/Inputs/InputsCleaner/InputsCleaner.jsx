@@ -8,7 +8,7 @@ const InputsCleaner = ({opened, onClick}) => {
 
     return ( 
         <button 
-            className={`inputs_cleaner-but cont ${opened ? 'opened' : ''}`}
+            className={`inputs_cleaner-but before_but-hover cont ${opened ? 'opened' : ''}`}
             tabIndex={-1}
             type='button'
             onClick={onClick}

@@ -10,11 +10,6 @@ import _logAttentionRepository from '../database/repositories/_LogAttention.js'
 import _logAuthRepository from '../database/repositories/_LogAuth.js'
 
 
-const checkCountry = (countryCode) => {
-	if (countryCode !== 'BY') {
-		throw new Conflict('Приложение работает только на территории РБ')
-	}
-}
 
 const checkSessionDouble = async (deviceId) => {
 	if (deviceId) {
@@ -27,9 +22,7 @@ const checkSessionDouble = async (deviceId) => {
 
 class AuthService {
 
-	static async signIn({ username, password, fingerprint, fastSession, queryTime, queryTimeString, deviceType, countryCode }) {
-
-		checkCountry(countryCode)
+	static async signIn({ username, password, fingerprint, fastSession, queryTime, queryTimeString, deviceType }) {
 
 		const userData = await UserRepository.getUserData(username)
 		
@@ -113,9 +106,7 @@ class AuthService {
 		}
 	}
 
-	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, queryTimeString, deviceType, countryCode }) {
-
-		checkCountry(countryCode)
+	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, queryTimeString, deviceType }) {
 
 		//! Change
 		const role = 1

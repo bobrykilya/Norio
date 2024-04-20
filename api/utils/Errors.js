@@ -7,7 +7,7 @@ import _logErrorRepository from '../database/repositories/_logError.js'
 class WebError {
 	constructor(status, error) {
 		this.status = status
-		this.error = error
+		this.message = error
 		// console.log(this.status)
 	}
 }
@@ -56,7 +56,10 @@ class ErrorUtils {
 		// console.log(errorId)
 		// throw new BadRequest(`Что-то пошло не так! Обратитесь к админу. Ошибка: ${errorId} , Время: ${queryTimeString}`)
 		console.log(err)
-		return res.status(err.status || 500).json(err)
+		if (err instanceof WebError) {
+			return res.status(err.status).json(err)
+		}
+		return res.status(500).json('Непредвиденная ошибка')
 	}
 }
 

@@ -1,5 +1,5 @@
-import showErrorMessage from "../utils/showErrorMessage.js"
-import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http.js"
+import { showErrorMessage } from "../utils/showErrorMessage"
+import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http"
 
 
 
@@ -13,26 +13,21 @@ const getDeviceType = () => {
 	return "Desktop"
 }
 
-const getCountryCode = async () => {
-    try {
+const checkCountryCode = async () => {
         const res = await $apiIpInfo.get("").json()
+        // console.log(res)
 
-        if (res.country_code !== 'BF') {
-            // console.log(res)
-            // throw new Error(res.json('Ошибка'))
+        if (res.country_code !== 'BY') {
+            // console.log('Приложение работает только на территории РБ')
+            throw new Error('Приложение работает только на территории РБ')
         }
-
-        return res.country_code
-    }catch (err) {
-        showErrorMessage(err)
-    }
 }
 
-const addDeviceOtherData = async (data) => {
-	const countryCode = await getCountryCode()
+const preRequest = async (data) => {
+	await checkCountryCode()
 	const deviceType = getDeviceType()
 	
-	return Object.assign(data, { countryCode, deviceType })
+	return Object.assign(data, { deviceType })
 }
 
 
@@ -40,13 +35,12 @@ class AuthService {
     static async signIn(data) {
         // console.log(data)
         try {
-            const newData = await addDeviceOtherData(data)
+            const newData = await preRequest(data)
             const res = await $apiAuth.post("sign-in", { json: newData }).json()
-            
+
             return res
         } catch (err) {
-            throw new Error(err)
-            // showErrorMessage(err)
+           showErrorMessage(err)
         }
     }
 
@@ -62,7 +56,7 @@ class AuthService {
 
     static async signUp(data) {
         try {
-            const newData = await addDeviceOtherData(data)
+            const newData = await preRequest(data)
             
             const res = await $apiAuth.post("sign-up", { json: newData }).json()
 
@@ -90,7 +84,9 @@ class AuthService {
 
             return res
         } catch (err) {
-            showErrorMessage(err)
+            // console.log(err.response)
+            // showErrorMessage(err)
+            // showErrorMessage(err.response.json())
         }
     }
 

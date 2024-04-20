@@ -14,7 +14,7 @@ const AuthPage = () => {
     // console.log(coverPanelState)
 
     return ( 
-        <div id='login_panel-cont' className='cont'>
+        <div id='auth_panel-cont' className='cont'>
             <div id='signs-cont' className='cont'>
                 <SignInCont act_form={ coverPanelState }/>
                 <SignUpCont act_form={ coverPanelState } />

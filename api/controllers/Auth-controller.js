@@ -14,7 +14,7 @@ const getTime = () => {
 class AuthController {
 	static async signIn(req, res) {
 		// console.log(req)
-		const { username, password, fastSession, deviceType, countryCode } = req.body
+		const { username, password, fastSession, deviceType } = req.body
 		const { fingerprint } = req
 		const { queryTime, queryTimeString } = getTime()
 
@@ -28,7 +28,6 @@ class AuthController {
 				queryTime, 
 				queryTimeString,
 				deviceType,
-				countryCode, 
 			})
 			
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
@@ -40,7 +39,7 @@ class AuthController {
 	}
 
 	static async signUp(req, res) {
-		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, deviceType, countryCode } = req.body
+		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, deviceType } = req.body
 		const { fingerprint } = req
 		const { queryTime, queryTimeString } = getTime()
 
@@ -59,8 +58,7 @@ class AuthController {
 				fingerprint, 
 				queryTime,
 				queryTimeString,
-				deviceType,
-				countryCode, 
+				deviceType
 			})
 			
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
