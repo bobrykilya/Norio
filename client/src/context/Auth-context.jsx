@@ -3,6 +3,7 @@ import CircularProgress from '@mui/joy/CircularProgress'
 import inMemoryJWT from '../services/inMemoryJWT-service.js'
 import config from "../config.js"
 import AuthService from "../services/Auth-service.js"
+import { showSnackBarMessage } from "../utils/showSnackBarMessage"
 
 
 
@@ -17,7 +18,6 @@ const AuthProvider = ({ children }) => {
 	const refSetTimeout = useRef(null)
 	const [signUpUserName, setSignUpUserName] = useState(false)
 	const [signUpUserPassword, setSignUpUserPassword] = useState(false)
-	const [snackBarMessage, setSnackBarMessage] = useState({})
 
 	const setLogOutTimer = (logOutTime) => {
 		const timeOutTime = new Date(logOutTime).getTime() - new Date().getTime()
@@ -26,6 +26,7 @@ const AuthProvider = ({ children }) => {
 		refSetTimeout.current = setTimeout(() => {
 			// console.log('Auto logOut')
 			handleLogOut()
+			showSnackBarMessage({ type: 'w', message: 'Был выполнен выход из аккаунта пользователя по истечении быстрой сессии' })
 		}, timeOutTime)
 	}
 	const resetSignUpVariables = () => {
@@ -160,8 +161,6 @@ const AuthProvider = ({ children }) => {
 				isUserLogged,
 				isAppReady,
 				listOfUsedAvatars,
-				snackBarMessage,
-				setSnackBarMessage,
 			}}
 		>
 			{isAppReady ? (

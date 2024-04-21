@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"
 import TokenService from "./Token-service.js"
-import { NotFound, Forbidden, Conflict, Unauthorized } from "../utils/Errors.js"
+import { Forbidden, Conflict, Unauthorized } from "../utils/Errors.js"
 import { ACCESS_TOKEN_EXPIRATION } from "../constants.js"
 import RefreshSessionsRepository from "../database/repositories/RefreshSession.js"
 import UserRepository from "../database/repositories/User.js"
@@ -27,7 +27,7 @@ class AuthService {
 		const userData = await UserRepository.getUserData(username)
 		
 		if (!userData) {
-			throw new NotFound("Пользователь не найден")
+			throw new Conflict("Пользователь не найден")
 		}
 
 		const userId = userData.id
@@ -72,7 +72,7 @@ class AuthService {
 		const accessToken = await TokenService.generateAccessToken(payload)
 		const refreshToken = await TokenService.generateRefreshToken(payload)
 
-		const timeOutInSec = 600
+		const timeOutInSec = 6000
 		const logOutTime = fastSession ? new Date(queryTime.getTime() + timeOutInSec * 1000) : null
 
 		await RefreshSessionsRepository.createRefreshSession({
@@ -138,7 +138,7 @@ class AuthService {
 			userInfo.username = username
 		}catch {
 		 	await UserRepository.deleteUserById(userId)
-			throw new Unauthorized("Данный номер телефона уже занят другим пользователем")
+			throw new Conflict("Данный номер телефона уже занят другим пользователем")
 		}
 
 		

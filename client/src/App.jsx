@@ -15,18 +15,11 @@ const App = () => {
     const { isUserLogged } = useContext(AuthContext)
 
     return (
-        <div id='main_body-cont' className={`cont ${isUserLogged ? 'active_bg' : ''}`}>
-            {/* <SnackBar message={snackBarError} /> */}
-            <div>
-                <Toaster 
-                    position="top-center"
-                    // reverseOrder={true}
-                    // gutter={8}
-                    toastOptions={{
-                        duration: 5000,
-                    }}
-                />
-            </div>
+        <div 
+            id='main_body-cont' 
+            className={`cont ${isUserLogged ? 'active_bg' : ''}`}
+        >
+            <Toaster reverseOrder={true} />
             <BrowserRouter>
                 <Routes>
                     {isUserLogged ? (

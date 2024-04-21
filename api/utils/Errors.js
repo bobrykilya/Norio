@@ -50,6 +50,8 @@ export class BadRequest extends WebError {
 
 class ErrorUtils {
 	static async catchError({ typeCode, req, res, err, username, fingerprint, queryTimeString }) {
+		err.errTime = new Date().toLocaleString()
+		// const queryTimeString = queryTime.toLocaleString()
 		// const userData = username ? await UserRepository.getUserData(username) : null
 		// const deviceId = fingerprint ? await AuthDeviceRepository.getDeviceId(fingerprint.hash) : null
 		// const errorId = await _logErrorRepository.createLogError({ typeCode, err, userId: userData?.id, deviceId, queryTimeString })
@@ -58,8 +60,7 @@ class ErrorUtils {
 		console.log(err)
 		if (err instanceof WebError) {
 			return res.status(err.status).json(err)
-		}
-		return res.status(500).json('Непредвиденная ошибка')
+		}else res.status(500).json('Непредвиденная ошибка')
 	}
 }
 

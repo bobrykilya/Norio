@@ -1,4 +1,4 @@
-import { showErrorMessage } from "../utils/showErrorMessage"
+import { showSnackBarMessage } from "../utils/showSnackBarMessage"
 import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http"
 
 
@@ -40,7 +40,7 @@ class AuthService {
 
             return res
         } catch (err) {
-           showErrorMessage(err)
+           showSnackBarMessage(err)
         }
     }
 
@@ -50,7 +50,7 @@ class AuthService {
 
             return res
         } catch (err) {
-            showErrorMessage(err)
+            showSnackBarMessage(err)
         }
     }
 
@@ -62,7 +62,7 @@ class AuthService {
 
             return res
         } catch (err) {
-            showErrorMessage(err)
+            showSnackBarMessage(err)
         }
     }
 
@@ -74,7 +74,7 @@ class AuthService {
             // return res
         } catch (err) {
             console.log(err)
-            showErrorMessage(err)
+            showSnackBarMessage(err)
         }
     }
 
@@ -84,9 +84,7 @@ class AuthService {
 
             return res
         } catch (err) {
-            // console.log(err.response)
-            // showErrorMessage(err)
-            // showErrorMessage(err.response.json())
+            // showSnackBarMessage(err)
         }
     }
 
@@ -96,7 +94,7 @@ class AuthService {
 
             return res
         } catch (err) {
-            showErrorMessage(err)
+            showSnackBarMessage(err)
         }
         
     }

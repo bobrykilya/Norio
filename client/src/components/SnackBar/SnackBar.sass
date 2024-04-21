@@ -3,7 +3,6 @@
 
 
 .snackbar-cont
-    // border: 3px solid red
     flex-direction: row
     width: auto
     height: auto
@@ -11,10 +10,11 @@
     max-height: 7rem
     background-color: $color-backgr
     z-index: 15
-    padding: 0.3rem 0.7rem
+    padding: 0.4rem 0.7rem
     box-shadow: 2px 10px 30px #00000034
     border: 1px solid #00000034
     border-radius: 40px
+    // border: 3px solid red
     &:hover
         transform: none
         box-shadow: 2px 10px 30px #00000063
@@ -36,28 +36,28 @@
         animation: fadeOut 0.3s ease-out
     .message-icon
         // border: 3px solid orange
-        font-size: 2rem
-        &.red
+        font-size: 2.2rem
+        &.error
             color: #b00a0a
-        &.yellow
-            margin-right: -0.07rem
-            font-size: 2.2rem
-            color: #7210a3
-        &.green
+        &.warning
+            color: #c37201
+        &.success
             color: #048814
     .snackbar-message
         // border: 2px solid brown
-        margin: 0 0.6rem
+        // margin: 0 0.6rem
+        margin-left: 0.6rem
         text-align: start
         width: auto
         min-width: 12rem
         max-width: 19rem
         h3
             width: 100%
-            margin-bottom: -0.05rem
+            margin-bottom: 0.1rem
         p    
             width: 100%
             font-size: $size-main-text
+            line-height: $size-main-text + 0.1rem
             font-weight: 600
     .snackbar_close-cont
         // border: 2px solid black
