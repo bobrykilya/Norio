@@ -50,14 +50,22 @@ export class BadRequest extends WebError {
 
 class ErrorUtils {
 	static async catchError({ typeCode, req, res, err, username, fingerprint, queryTimeString }) {
-		err.errTime = new Date().toLocaleString()
+		err.errTime = new Date()
+		err.action = req.route.stack[0]?.name
+		console.log(req.body)
+		if (req.body) {
+			req.body.password ? delete req.body.password : null
+			req.body.hashedPassword ? delete req.body.hashedPassword : null
+			req.body.deviceType ? delete req.body.deviceType : null
+			err.req = req.body
+		}
 		// const queryTimeString = queryTime.toLocaleString()
 		// const userData = username ? await UserRepository.getUserData(username) : null
 		// const deviceId = fingerprint ? await AuthDeviceRepository.getDeviceId(fingerprint.hash) : null
 		// const errorId = await _logErrorRepository.createLogError({ typeCode, err, userId: userData?.id, deviceId, queryTimeString })
 		// console.log(errorId)
 		// throw new BadRequest(`Что-то пошло не так! Обратитесь к админу. Ошибка: ${errorId} , Время: ${queryTimeString}`)
-		console.log(err)
+		// console.log(res)
 		if (err instanceof WebError) {
 			return res.status(err.status).json(err)
 		}else res.status(500).json('Непредвиденная ошибка')

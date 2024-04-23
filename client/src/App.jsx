@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast'
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
+import ErrorsLogButton from './components/ErrorsLog/ErrorsLogButton'
 
 
 
@@ -20,6 +21,7 @@ const App = () => {
             className={`cont ${isUserLogged ? 'active_bg' : ''}`}
         >
             <Toaster reverseOrder={true} />
+            <ErrorsLogButton />
             <BrowserRouter>
                 <Routes>
                     {isUserLogged ? (

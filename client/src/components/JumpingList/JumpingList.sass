@@ -1,0 +1,36 @@
+@import '../../_variables'
+
+
+
+.jumping_list_cover-cont
+    // border: 5px solid black
+    position: fixed
+    left: 0
+    bottom: 0
+    width: 100vw
+    height: 100vh
+    backdrop-filter: blur(3px)
+    z-index: 11
+    transition: all 0.3s ease
+    background-color: #00000019
+    opacity: 0
+    pointer-events: none
+    &.opened
+        opacity: 1
+        pointer-events: auto
+        .jumping_list-cont
+            border-top-left-radius: 120px
+            border-top-right-radius: 120px
+            transform: translateX(-50%)
+    .jumping_list-cont
+        // border: 2px solid black
+        position: absolute
+        left: 50%
+        bottom: 0
+        height: 90vh
+        border-top-left-radius: 200px
+        border-top-right-radius: 200px
+        background-color: $color-backgr
+        box-shadow: 2px 10px 30px #00000040
+        transform: translateX(-50%) translateY(100%)
+        // overflow: visible

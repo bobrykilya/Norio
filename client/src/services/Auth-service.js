@@ -18,13 +18,12 @@ const checkCountryCode = async () => {
         // console.log(res)
 
         if (res.country_code !== 'BY') {
-            // console.log('Приложение работает только на территории РБ')
             throw new Error('Приложение работает только на территории РБ')
         }
 }
 
 const preRequest = async (data) => {
-	await checkCountryCode()
+	// await checkCountryCode()
 	const deviceType = getDeviceType()
 	
 	return Object.assign(data, { deviceType })

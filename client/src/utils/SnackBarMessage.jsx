@@ -7,16 +7,6 @@ import { MdErrorOutline } from "react-icons/md"
 
 
 
-// const getStatusDecoding = (status) => {
-// 	if (!status) return null
-// 	else 
-//     switch (status) {
-// 		case 404:
-// 		case 404: 
-// 			return 
-// 	}
-// }
-
 const getTypeDecoding = (type) => {
     switch (type) {
 		case 'w' : return { title: 'Внимание', icon: <PiSealWarning className='warning message-icon fa-icon' />, toastDuration: Infinity }
@@ -25,7 +15,7 @@ const getTypeDecoding = (type) => {
         default : return { title: 'Ошибка', icon: <MdErrorOutline className='error message-icon fa-icon' />, toastDuration: 4000 }
     }
 }
-const getLastTime = (timestamp, type) => {
+const getTimeDiff = (timestamp, type) => {
 	const timeDiff = (new Date() - new Date(timestamp)) / 1000 //* Time in seconds
 	// console.log(timeDiff)
 
@@ -38,15 +28,15 @@ const getLastTime = (timestamp, type) => {
 const filterErrsListByTime = (err) => {
 	if (!err.errTime) return false
 
-	const userErrStorageTime = 24 //* User error storage time in hours
-	return getLastTime(err.errTime, 'hour') < userErrStorageTime
+	const userErrStorageTime = 48 //* User error storage time in hours
+	return getTimeDiff(err.errTime, 'hour') < userErrStorageTime
 }
 const checkErrsQuantityForRecently = (list) => {
-	const recentlyTime = 1 //* Time of error counting in minutes
+	const recentTime = 1 //* Time of error counting in minutes
 	const sameErrsQuantity = 7 //* Limit of possible error quantity recently
 	let result = false
 
-	list = list.filter(err => err.type === 'e' && getLastTime(err.errTime, 'minute') < recentlyTime)
+	list = list.filter(err => err.type === 'e' && getTimeDiff(err.errTime, 'minute') < recentTime)
 	const countObject = {}
 
 	for (let err of list) {
@@ -69,6 +59,7 @@ const checkErrsQuantityForRecently = (list) => {
 
 export const showSnackBarMessage = (err) => {
 
+	// console.log(err.message)
 	if (!err.status && !err.type) {
 		try {
 			err = err.response.json().then(err => showSnackBarMessage(err))
@@ -78,11 +69,8 @@ export const showSnackBarMessage = (err) => {
 		}
 		return
 	}
-	// console.log(err)
-	// const err_type = getStatusDecoding(err.status)
-    // const { title, icon } = getTypeDecoding(err_type)
-	const { title, icon, toastDuration } = getTypeDecoding(err.type || 'e')
 
+	const { title, icon, toastDuration } = getTypeDecoding(err.type || 'e')
 	
     toast.custom((snack) => (
 		<SnackBar title={title} icon={icon} message={err.message} snack={snack} type={err.type}/>
@@ -92,28 +80,27 @@ export const showSnackBarMessage = (err) => {
 		position: "top-center",
 	})
 
-	if (['s'].includes(err.type)) return
-
+	
 	//* Error saving in LocalStorage
+	if (err.type === 's') return
+
 	let errsList = JSON.parse(localStorage.getItem('userErrsList')) || []
 	const userId = JSON.parse(localStorage.getItem('userInfo'))?.user_id || undefined
 
-	// console.log(errsList)
 	if (errsList[0]) errsList = errsList.filter(filterErrsListByTime) || []
 
-	// console.log(errsList)
 	errsList.push({ 
 		errTime: err.errTime || new Date(), 
 		type: err.type || 'e',
 		message: err.message,
 		userId,
-		action: err.action,
-		req: err.req,
 	})
 	localStorage.setItem('userErrsList', JSON.stringify(errsList))
 
+
 	//* Error counting for short time and blocking
 	if (errsList.length < 5 || err.type === 'b') return
+
 	if (checkErrsQuantityForRecently(errsList)) {
 		// console.log('block')
 		const err_mess = 'Устройство было временно заблокировано вследствие большого количества ошибок за короткий срок'

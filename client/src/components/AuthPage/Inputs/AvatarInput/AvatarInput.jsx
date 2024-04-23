@@ -6,6 +6,7 @@ import { PiUserThin } from "react-icons/pi"
 // import { LuArrowUpToLine, LuArrowDownToLine } from "react-icons/lu"
 import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
 import ToolTip from '../../../ToolTip/ToolTip'
+import JumpingList from '../../../JumpingList/JumpingList'
 
 
 
@@ -45,32 +46,12 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
         }
     }
 
-    const handleClickOutside = (e) => {
-        // console.log(e.target.className)
-        if (e.target.className.includes('avatar_list_cover-cont')) {
-            closeAvatarList()
-        }
-    }
-
     const closeAvatarList = () => {
         setIsAvatarListOpened(false)
         clearTimeout(refSetTimeout.current)
         setIsArrowButsActive(false)
         listRef.current.scrollTo({ top: 0})
     }
-
-    useEffect(() => {
-        const handleEscapePress = (e) => {
-            if (!isAvatarListOpened) return
-            if (e.key === 'Escape') {
-                closeAvatarList()
-            }
-        }
-        window.addEventListener('keydown', handleEscapePress)
-        return () => {
-            window.removeEventListener('keydown', handleEscapePress)
-        }
-    })
 
     return (
         <div className='avatar-cont cont'>
@@ -88,34 +69,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
             <InputsError error={error} onClick={handleClickAvatarInput} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
             {!isFormBlur && 
-                <div 
-                    className={`avatar_list_cover-cont cont ${isAvatarListOpened ? 'opened' : ''}`}
-                    onClick={handleClickOutside}
-                >
-                    <div className='avatar_list-cont cont'>
-                        <ul className='avatar-list cont' ref={listRef}>
-                            {
-                                !LIST[0] ?
-                                    <span className='empty_list-message cont'>Аватары закончились ( <br/>Обратитесь к разработчику</span> :
-                                    LIST.map((el) => {
-                                        const key_but = `${el.id}-but`
-                                        return <li key={el.id} className='cont'>
-                                                    <button 
-                                                        id={key_but}
-                                                        className={avatar === el.id ? 'active' : ''}
-                                                        type='button'
-                                                        tabIndex={-1} 
-                                                        onClick={handleClickElem}
-                                                        disabled={disabled}
-                                                    >
-                                                        <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
-                                                    </button>
-                                                    <label htmlFor={key_but}>{el.title}</label>
-                                            </li>
-                                    })
-                            }
-                        </ul>
-                    </div>
+                <JumpingList isListOpened={isAvatarListOpened} closeList={closeAvatarList} other_children={
                     <div className={`arrow_buts-cont cont ${isAvatarListOpened ? 'opened' : ''}`}>
                         <button
                             className='avatar_list_up-but cont'
@@ -142,7 +96,30 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
                             <ToolTip text='Пролистать список вниз' />
                         </button>
                     </div>
-                </div>
+                }>
+                        <ul className='avatar-list cont' ref={listRef}>
+                            {
+                                !LIST[0] ?
+                                    <span className='empty_list-message cont'>Аватары закончились ( <br/>Обратитесь к разработчику</span> :
+                                    LIST.map((el) => {
+                                        const key_but = `${el.id}-but`
+                                        return <li key={el.id} className='cont'>
+                                                    <button 
+                                                        id={key_but}
+                                                        className={avatar === el.id ? 'active' : ''}
+                                                        type='button'
+                                                        tabIndex={-1} 
+                                                        onClick={handleClickElem}
+                                                        disabled={disabled}
+                                                    >
+                                                        <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
+                                                    </button>
+                                                    <label htmlFor={key_but}>{el.title}</label>
+                                            </li>
+                                    })
+                            }
+                        </ul>
+                </JumpingList>
             }
         </div>
      )

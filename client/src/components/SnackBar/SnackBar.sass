@@ -34,11 +34,15 @@
         visibility: hidden
         pointer-events: none
         animation: fadeOut 0.3s ease-out
+    &.blocked
+        pointer-events: none
     .message-icon
         // border: 3px solid orange
         font-size: 2.2rem
         &.error
             color: #b00a0a
+        &.block
+            color: #9a0078
         &.warning
             color: #c37201
         &.success

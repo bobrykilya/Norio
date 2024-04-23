@@ -6,6 +6,9 @@
 @import './components/ButtonsCont/ButtonsCont'
 @import './components/ToolTip/ToolTip'
 @import './components/SnackBar/SnackBar'
+@import './components/JumpingList/JumpingList'
+@import './components/ErrorsLog/ErrorsLogButton'
+@import './components/ErrorsLog/ErrorsLogList'
 @import './components/Cards/Cards_imports'
 @import './components/Inputs/Inputs_imports'
 @import './Pages/AuthPage/AuthPage'
@@ -19,6 +22,10 @@
     background: radial-gradient(circle, $color-bg-light, $color-bg-dark)
     // &.active_bg
     //     background: radial-gradient(circle, #6281a7, #1a293f)
+    .errors_log-button
+        position: fixed
+        bottom: 0.5rem
+        left: 0.5rem
     .main_bg-img
         opacity: 0.9
         background-size: cover

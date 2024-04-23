@@ -79,25 +79,10 @@
         transform: scale(0.8) + translateX(0.5rem)
         &.opened
             transform: scale(1) + translateX(0)
-    .avatar_list_cover-cont
-        position: fixed
-        left: 0
-        bottom: 0
-        width: 100vw
-        height: 100vh
-        backdrop-filter: blur(3px)
-        z-index: 11
-        transition: all 0.4s ease
-        opacity: 0
-        pointer-events: none
-        background-color: #00000019
+    .jumping_list_cover-cont
+        // border: 2px solid black
         &.opened
-            opacity: 1
-            pointer-events: auto
-            .avatar_list-cont
-                border-top-left-radius: 120px
-                border-top-right-radius: 120px
-                transform: translateX(-50%)
+            .jumping_list-cont
                 .avatar-list
                     //* Avatars flying out animation delay
                     li
@@ -106,24 +91,9 @@
                         @for $i from 1 through 100
                             &:nth-child(#{$i}n)
                                 transition-delay: #{$i * 0.025}s
-        .avatar_list-cont
-            // border: 2px solid black
-            // display: none
-            position: absolute
-            left: 50%
-            bottom: 0
+        .jumping_list-cont
             width: 850px
-            height: 90vh
-            justify-content: flex-start
-            z-index: 12
-            border-top-left-radius: 200px
-            border-top-right-radius: 200px
-            background-color: $color-backgr
-            box-shadow: 2px 10px 30px #00000040
-            // overflow: visible
-            // transition: all 0.6s $trans-bounce-style
             transition: all 0.4s ease
-            transform: translateX(-50%) translateY(100%)
             .avatar-list
                 // border: 2px solid red
                 flex-direction: row
