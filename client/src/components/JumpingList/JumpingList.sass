@@ -15,9 +15,24 @@
     background-color: #00000019
     opacity: 0
     pointer-events: none
+    &::before
+        content: ''
+        position: absolute
+        top: 7.5vh
+        width: 4rem
+        height: 0.2rem
+        background-color: #ffffff4a
+        border-radius: 10px
+        transition: all 0.1s ease
+        opacity: 0
+        transform: translateY(4rem)
     &.opened
         opacity: 1
         pointer-events: auto
+        &::before
+            opacity: 1
+            transform: translateY(0)
+            transition: all 0.6s 0.25s $trans-bounce-style
         .jumping_list-cont
             border-top-left-radius: 120px
             border-top-right-radius: 120px
@@ -33,4 +48,5 @@
         background-color: $color-backgr
         box-shadow: 2px 10px 30px #00000040
         transform: translateX(-50%) translateY(100%)
+        transition: all 0.4s ease
         // overflow: visible

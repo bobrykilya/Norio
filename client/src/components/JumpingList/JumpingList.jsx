@@ -6,9 +6,13 @@ import { useEffect } from 'react'
 const JumpingList = ({ children, isListOpened, closeList, other_children }) => {
 
     const handleClickOutside = (e) => {
-        // console.log(e.target.className)
-        if (e.target.className.includes('jumping_list_cover-cont')) {
-            closeList()
+        // console.log(e.target)
+        try {
+            if (e.target?.className.includes('jumping_list_cover-cont')) {
+                closeList()
+            }
+        }catch {
+
         }
     }
     

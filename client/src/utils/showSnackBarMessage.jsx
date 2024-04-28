@@ -30,15 +30,17 @@ const getLastTime = (timestamp, type) => {
 	// console.log(timeDiff)
 
 	switch (type) {
-		case 'hour': return timeDiff / 60 / 60
-		case 'minute': return timeDiff / 60
-		case 'hour': return timeDiff
+		case 'hour': return (timeDiff / 60 / 60)
+		case 'minute': return (timeDiff / 60)
+		case 'second': return timeDiff
 	}
 }
 const filterErrsListByTime = (err) => {
 	if (!err.errTime) return false
 
 	const userErrStorageTime = 24 //* User error storage time in hours
+	// console.log(getLastTime(err.errTime, 'hour'))
+	// console.log(getLastTime(err.errTime, 'minute'))
 	return getLastTime(err.errTime, 'hour') < userErrStorageTime
 }
 const checkErrsQuantityForRecently = (list) => {

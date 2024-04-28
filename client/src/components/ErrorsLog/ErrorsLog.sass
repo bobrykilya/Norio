@@ -7,6 +7,7 @@
     border-radius: 50%
     width: $size-small-but + 0.3rem
     height: $size-small-but + 0.3rem
+    overflow: visible
     &::after
         transition: all 0.18s ease
         opacity: 0
@@ -23,3 +24,7 @@
         transition: all 0.15s ease-out
         font-size: 1.3rem
         color: #ffffff0d
+    .tool_tip
+        transform: translateY(2rem, 1rem) scale(0.5)
+        &.active
+            transform: translate(2rem, 0) scale(1)

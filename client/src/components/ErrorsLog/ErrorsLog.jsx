@@ -2,10 +2,11 @@ import { useContext } from 'react'
 import { GlobalContext } from '../../context/Global-context'
 import { BiError } from "react-icons/bi"
 import ErrorsLogList from './ErrorsLogList';
+import ToolTip from '../ToolTip/ToolTip';
 
 
 
-const ErrorsLogButton = () => {
+const ErrorsLog = () => {
 
     const { setIsErrorsLogListOpened } = useContext(GlobalContext)
 
@@ -18,10 +19,11 @@ const ErrorsLogButton = () => {
                 tabIndex={-1}
             >
                 <BiError className='fa-icon' />            
+                <ToolTip text={'Показать последние ошибки'} />
             </button>
             <ErrorsLogList />
         </>
      )
 }
  
-export default ErrorsLogButton
+export default ErrorsLog

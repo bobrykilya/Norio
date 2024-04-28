@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast'
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
-import ErrorsLogButton from './components/ErrorsLog/ErrorsLogButton'
+import ErrorsLogButton from './components/ErrorsLog/ErrorsLog'
 
 
 

@@ -52,7 +52,6 @@ class ErrorUtils {
 	static async catchError({ typeCode, req, res, err, username, fingerprint, queryTimeString }) {
 		err.errTime = new Date()
 		err.action = req.route.stack[0]?.name
-		console.log(req.body)
 		if (req.body) {
 			req.body.password ? delete req.body.password : null
 			req.body.hashedPassword ? delete req.body.hashedPassword : null
