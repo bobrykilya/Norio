@@ -15,6 +15,7 @@
         &:hover, &:focus
             transform: translateY($height-but-act-jump)
             border-radius: 40%
+            box-shadow: 0px 3px 3px #00000025
             .no_avatar-cont
                 transition: all 0.2s ease
                 border: 1.5px solid $color-main-text-act
@@ -88,9 +89,9 @@
                     li
                         opacity: 1
                         transform: none
-                        @for $i from 1 through 100
-                            &:nth-child(#{$i}n)
-                                transition-delay: #{$i * 0.025}s
+                        // @for $i from 1 through 100
+                        //     &:nth-child(#{$i}n)
+                        //         transition-delay: #{$i * 0.025}s
         .jumping_list-cont
             width: 850px
             .avatar-list

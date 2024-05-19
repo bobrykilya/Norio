@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useRef, useState } from "react"
+import { createContext, useEffect, useRef, useState } from "react"
 import CircularProgress from '@mui/joy/CircularProgress'
 import inMemoryJWT from '../services/inMemoryJWT-service.js'
 import config from "../config.js"
@@ -48,9 +48,16 @@ const AuthProvider = ({ children }) => {
 		setCoverPanelState('sign_in')
 	}
 
+	const checkSessionDouble = () => {
+		if (localStorage.getItem('userInfo')) {
+			handleLogOut()
+		}
+	}
 
 	const handleSignIn = async (data) => {
 
+		checkSessionDouble()
+		
 		const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.signIn(data)
 
 		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
@@ -76,6 +83,9 @@ const AuthProvider = ({ children }) => {
 	}
 
 	const handleSignUp = async (data) => {
+
+		checkSessionDouble()
+		
 		data.username = signUpUserName
 		data.hashedPassword = signUpUserPassword
 

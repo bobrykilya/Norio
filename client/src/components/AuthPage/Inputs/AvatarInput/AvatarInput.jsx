@@ -50,7 +50,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
         setIsAvatarListOpened(false)
         clearTimeout(refSetTimeout.current)
         setIsArrowButsActive(false)
-        listRef.current.scrollTo({ top: 0})
+        // listRef.current.scrollTo({ top: 0})
     }
 
     return (

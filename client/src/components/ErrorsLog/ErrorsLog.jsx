@@ -19,7 +19,7 @@ const ErrorsLog = () => {
                 tabIndex={-1}
             >
                 <BiError className='fa-icon' />            
-                <ToolTip text={'Показать последние ошибки'} />
+                <ToolTip text={'Открыть панель ошибок'} />
             </button>
             <ErrorsLogList />
         </>

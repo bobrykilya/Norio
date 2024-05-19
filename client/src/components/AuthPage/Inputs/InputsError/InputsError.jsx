@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 
 
@@ -6,25 +6,49 @@ const InputsError = ({ error, onClick }) => {
 
     const [errorMess, setErrorMess] = useState('')
     const [isErrorOpened, setIsErrorOpened] = useState(false)
+    const refSetTimeout = useRef(null)
 
     useEffect(() => {
-        // console.log(`error: ${error}`)
-        // console.log('Message saved')
-        //* Error closing
-        if (!error?.message || !error) {
+        // console.log(`error: ${error?.message}`)
+
+        //* Error opening
+        if (error?.message && !errorMess) {
+            console.log('Open')
+
+            setErrorMess(error?.message)
+            setIsErrorOpened(true)
+            return
+        }
+
+        //* Error swapping
+        if (error?.message && errorMess && error?.message !== errorMess) {
+            console.log('Swap')
+
             setIsErrorOpened(false)
-            setTimeout(() => {
+            refSetTimeout.current = setTimeout(() => {
+                setErrorMess(error?.message)
+                setIsErrorOpened(true)
+            }, 300)
+            return
+        }
+
+        //* Error closing
+        if (!error || !error?.message) {
+            // console.log('Close')
+            
+            setIsErrorOpened(false)
+            refSetTimeout.current = setTimeout(() => {
                 setErrorMess('')
             }, 300)
             return
         }
-        //* Error opening
-        if (error?.message !== errorMess) {
-            setIsErrorOpened(false)
-            setTimeout(() => {
-                setErrorMess(error?.message)
-                setIsErrorOpened(true)
-            }, 300)
+        
+        //* Error move interception
+        if (error?.message && error?.message === errorMess) {
+            // console.log('Intercept')
+
+            clearTimeout(refSetTimeout.current)
+            setIsErrorOpened(true)
             return
         }
     }, [error])

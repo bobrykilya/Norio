@@ -35,7 +35,7 @@ class AuthService {
 		const enterCode = !fastSession ? 201 : 202
 
 
-		await checkSessionDouble(deviceId)
+		//! await checkSessionDouble(deviceId)
 
 
 		const isPasswordValid = bcrypt.compareSync(password, userData.password)
@@ -72,7 +72,7 @@ class AuthService {
 		const accessToken = await TokenService.generateAccessToken(payload)
 		const refreshToken = await TokenService.generateRefreshToken(payload)
 
-		const timeOutInSec = 2
+		const timeOutInSec = 600
 		const logOutTime = fastSession ? new Date(queryTime.getTime() + timeOutInSec * 1000) : null
 
 		await RefreshSessionsRepository.createRefreshSession({
@@ -112,7 +112,7 @@ class AuthService {
 		const role = 1
 		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
 
-		await checkSessionDouble(deviceId)
+		//! await checkSessionDouble(deviceId)
 		let userId
 		let userInfo
 

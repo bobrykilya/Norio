@@ -18,7 +18,7 @@ const App = () => {
     return (
         <div 
             id='main_body-cont' 
-            className={`cont ${isUserLogged ? 'active_bg' : ''}`}
+            className={`cont`}
         >
             <Toaster reverseOrder={true} />
             <ErrorsLogButton />
