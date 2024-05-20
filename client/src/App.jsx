@@ -1,9 +1,8 @@
 import { useContext } from "react"
-import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom"
-import { AuthContext } from "./context/Auth-context"
-// import BgImg from '../src/assets/main_bg.jpg'
-// import SnackBar from './components/SnackBar/SnackBar'
+import { Routes, Route, Navigate, useLocation } from "react-router-dom"
 import { Toaster } from 'react-hot-toast'
+import { AnimatePresence } from 'framer-motion'
+import { AuthContext } from "./context/Auth-context"
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
@@ -15,28 +14,32 @@ const App = () => {
 
     const { isUserLogged } = useContext(AuthContext)
 
+    const location = useLocation()
+
     return (
         <div 
-            id='main_body-cont' 
+            id='main_body-cont'
             className={`cont`}
         >
             <Toaster reverseOrder={true} />
             <ErrorsLogButton />
-            <BrowserRouter>
-                <Routes>
-                    {isUserLogged ? (
-                        <Route path="home" element={
-                            <HomePage />
-                        } />
-                    ) : (
-                        <Route path="auth" element={
-                            <AuthPage />
-                        } />
-                    )}
-                    <Route path="*" element={<Navigate to={isUserLogged ? "home" : "auth"} />} />
-                </Routes>
-            </BrowserRouter>
-            {/* {!isUserLogged && <img className='main_bg-img' src={BgImg} alt="" />} */}
+                <AnimatePresence>
+                    <Routes
+                        location={location}
+                        key={location.pathname}
+                    >
+                        {isUserLogged ? (
+                            <Route path="home" element={
+                                <HomePage />
+                            } />
+                        ) : (
+                            <Route path="auth" element={
+                                <AuthPage />
+                            } />
+                        )}
+                        <Route path="*" element={<Navigate to={isUserLogged ? "home" : "auth"} />} />
+                    </Routes>
+                </AnimatePresence>
         </div>
     )
 }

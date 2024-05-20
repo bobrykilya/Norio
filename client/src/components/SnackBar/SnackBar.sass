@@ -33,7 +33,7 @@
     &.closed
         visibility: hidden
         pointer-events: none
-        animation: fadeOut 0.3s ease-out
+        animation: fadeOut 0.4s ease
     &.blocked
         pointer-events: none
     .message-icon
@@ -86,8 +86,8 @@
 @keyframes fadeOut
     0%
         opacity: 1
-        transform: translateY(0) scale(1)
     100%
         opacity: 0
-        transform: translateY(-4rem) scale(0.6)
-
+        transform: scale(0.9)
+        filter: blur(1rem) drop-shadow(0px 0px 10px #cdcdcd8e)
+        -webkit-filter: blur(1rem) drop-shadow(0px 0px 10px #cdcdcd8e)

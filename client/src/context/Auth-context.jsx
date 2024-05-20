@@ -51,24 +51,28 @@ const AuthProvider = ({ children }) => {
 	const checkSessionDouble = () => {
 		if (localStorage.getItem('userInfo')) {
 			handleLogOut()
+			return 200
 		}
+		return 0
 	}
 
 	const handleSignIn = async (data) => {
 
-		checkSessionDouble()
+		const timer = checkSessionDouble()
 		
-		const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.signIn(data)
+		setTimeout(async () => {
+			const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.signIn(data)
 
-		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-		localStorage.setItem('userInfo', JSON.stringify(userInfo))
+			inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+			localStorage.setItem('userInfo', JSON.stringify(userInfo))
 
-		handleUserHasLogged()
+			handleUserHasLogged()
 
-		// console.log(logOutTime)
-		if (logOutTime) {
-			setLogOutTimer(logOutTime)
-		}
+			// console.log(logOutTime)
+			if (logOutTime) {
+				setLogOutTimer(logOutTime)
+			}
+		}, timer)
 	}
 
 	const handleCheckUser = async (data) => {
@@ -84,18 +88,20 @@ const AuthProvider = ({ children }) => {
 
 	const handleSignUp = async (data) => {
 
-		checkSessionDouble()
+		const timer = checkSessionDouble()
 		
-		data.username = signUpUserName
-		data.hashedPassword = signUpUserPassword
-
-		const { accessToken, accessTokenExpiration, userInfo } = await AuthService.signUp(data)
-		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-
-		localStorage.setItem('userInfo', JSON.stringify(userInfo))
-
-		resetSignUpVariables()
-		handleUserHasLogged()
+		setTimeout(async () => {
+			data.username = signUpUserName
+			data.hashedPassword = signUpUserPassword
+	
+			const { accessToken, accessTokenExpiration, userInfo } = await AuthService.signUp(data)
+			inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+	
+			localStorage.setItem('userInfo', JSON.stringify(userInfo))
+	
+			resetSignUpVariables()
+			handleUserHasLogged()
+		}, timer)
 	}
 
 	const handleLogOut =  () => {
