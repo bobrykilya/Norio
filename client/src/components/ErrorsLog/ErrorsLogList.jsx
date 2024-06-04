@@ -5,13 +5,9 @@ import TableCollapsibleRow from '../Tables/TableCollapsibleRow/TableCollapsibleR
 
 
 
-const ErrorsLogList = () => {
+const ErrorsLogList = ({ closeErrorsLogList }) => {
     const { isErrorsLogListOpened, setIsErrorsLogListOpened } = useContext(GlobalContext)
     // console.log(isErrorsLogListOpened)
-
-    const closeErrorsLogList = () => {
-        setIsErrorsLogListOpened(false)
-    }
 
     const data = {}
     const columns = {}

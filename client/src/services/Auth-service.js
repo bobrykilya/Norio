@@ -24,8 +24,12 @@ const checkCountryCode = async () => {
 
 const preRequest = async (data) => {
 	// await checkCountryCode()
-	const deviceType = getDeviceType()
-	
+
+    const oldDeviceId = localStorage.getItem('deviceId')
+	if (oldDeviceId) 
+        return Object.assign(data, { oldDeviceId })
+
+    const deviceType = getDeviceType()
 	return Object.assign(data, { deviceType })
 }
 
@@ -35,11 +39,13 @@ class AuthService {
         // console.log(data)
         try {
             const newData = await preRequest(data)
+            // console.log(newData)
             const res = await $apiAuth.post("sign-in", { json: newData }).json()
 
             return res
         } catch (err) {
-           showSnackBarMessage(err)
+            showSnackBarMessage(err)
+            throw new Error('SignIn error')
         }
     }
 
@@ -62,17 +68,15 @@ class AuthService {
             return res
         } catch (err) {
             showSnackBarMessage(err)
+            throw new Error('SignUp error')
         }
     }
 
     static logOut() {
         try {
             $apiAuth.post("logout")
-            // console.log(res)
 
-            // return res
         } catch (err) {
-            console.log(err)
             showSnackBarMessage(err)
         }
     }
@@ -83,6 +87,7 @@ class AuthService {
 
             return res
         } catch (err) {
+            throw new Error('Token refresh error')
             // showSnackBarMessage(err)
         }
     }
@@ -94,6 +99,7 @@ class AuthService {
             return res
         } catch (err) {
             showSnackBarMessage(err)
+            throw new Error('FetchProtected error')
         }
         
     }

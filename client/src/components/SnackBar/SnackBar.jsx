@@ -1,14 +1,14 @@
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { IoCloseCircleOutline } from 'react-icons/io5'
-import { useToasterStore } from 'react-hot-toast'
+import { GlobalContext } from '../../context/Global-context'
 
 
 
 const SnackBar = ({ title, icon, message, snack, type }) => {
 
-    const { toasts } = useToasterStore()
     // console.log(toasts[0].duration)
+    const { toasts } = useContext(GlobalContext)
     const TOAST_LIMIT = 3
 
     useEffect(() => {
@@ -20,11 +20,11 @@ const SnackBar = ({ title, icon, message, snack, type }) => {
 
     return ( 
         <button
-            className={`snackbar-cont cont ${snack.visible ? 'opened' : 'closed'} ${type === 'b' ? 'blocked' : ''}`}
+            className={`snackbar-cont cont ${snack.visible ? 'opened' : 'closed'} ${type === 'b' && 'blocked'}`}
             type='button'
             tabIndex={-1}
             onClick={() => {
-                type !== 'b' ? toast.dismiss(snack.id) : null
+                if (type !== 'b') toast.dismiss(snack.id)
             }}
         >
             {icon}

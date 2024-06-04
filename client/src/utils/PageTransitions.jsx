@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'
 
 
 const transitionSettings = {
-    duration: 0.4, 
+    duration: 0.6, 
     ease: [0.22, 1, 0.86, 1] 
 }
-const jumpY = 17
+const jumpY = 20
 const jumpScale = 0.02
 
 const ClassicAnim = ({ children }) => {
@@ -38,11 +38,11 @@ const ClassicAnim = ({ children }) => {
 const AuthPageAnim = ({ children }) => {
     return (
         <motion.div
-            className='cont'
+            // className='cont'
             initial={{
                 opacity: 0, 
                 y: - jumpY,
-                // scale: 1 - jumpScale
+                // scale: 1 + jumpScale
             }}
             animate={{ 
                 opacity: 1,
@@ -52,7 +52,7 @@ const AuthPageAnim = ({ children }) => {
             exit={{ 
                 opacity: 0,
                 y: jumpY,
-                scale: 1 + jumpScale
+                // scale: 1 - jumpScale
             }}
             transition={transitionSettings} 
         >

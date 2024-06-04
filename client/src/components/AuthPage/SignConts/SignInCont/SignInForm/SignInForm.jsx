@@ -1,5 +1,6 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useRef } from 'react'
 import { useForm } from 'react-hook-form'
+import { useFocusInput } from './../../../../../hooks/useFocusInput';
 import { AuthContext } from "../../../../../context/Auth-context"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
@@ -16,6 +17,7 @@ const SignInForm = ({  isFormBlur=false}) => {
     const { handleSignIn } = useContext(AuthContext)
     const [notSaveUser, setNotSaveUser] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const inputRefLogin = useRef(null)
 
     const {
         register,
@@ -24,7 +26,6 @@ const SignInForm = ({  isFormBlur=false}) => {
         resetField,
         watch,
         setValue,
-        setFocus,
     } = useForm({
         mode: 'onBlur',
         reValidateMode: 'onBlur',
@@ -45,13 +46,12 @@ const SignInForm = ({  isFormBlur=false}) => {
 
         setIsLoading(true)
         await handleSignIn(data)
-            .then(() => setIsLoading(false))
             .catch(() => {
                 setValue('username', data.username)
                 setValue('password', data.password)
-                setFocus('username')
-                setIsLoading(false)
+                useFocusInput(inputRefLogin)
             })
+            .finally(() => setIsLoading(false))
         // alert(JSON.stringify(data))
     }
 
@@ -59,11 +59,10 @@ const SignInForm = ({  isFormBlur=false}) => {
 
         setIsLoading(true)
         await handleSignIn(data)
-            .then(() => setIsLoading(false))
             .catch(() => {
-                setFocus('username')
-                setIsLoading(false)
+                useFocusInput(inputRefLogin)
             })
+            .finally(() => setIsLoading(false))
         // alert(JSON.stringify(data))
     }
 
@@ -78,6 +77,7 @@ const SignInForm = ({  isFormBlur=false}) => {
                     reset={resetField}                 
                     notSaveUser={notSaveUser}
                     disabled={isFormBlur}
+                    inputRefLogin={inputRefLogin}
                 /> 
                 <PasswordInput
                     name='password'

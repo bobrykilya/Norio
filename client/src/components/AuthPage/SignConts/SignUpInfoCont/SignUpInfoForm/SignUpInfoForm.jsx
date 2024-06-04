@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AuthContext } from '../../../../../context/Auth-context'
 import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
@@ -11,6 +11,7 @@ import { GrUserExpert } from "react-icons/gr";
 import { BiLogInCircle } from "react-icons/bi"
 import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
 import AvatarInput from '../../../Inputs/AvatarInput/AvatarInput'
+import { useFocusInput } from '../../../../../hooks/useFocusInput'
 
 
 const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) => {
@@ -20,6 +21,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
     const [avatar, setAvatar] = useState('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const inputRefPhone = useRef(null)
     const name_input_icon = <GrUserExpert className='input-icon' />
 
     const {
@@ -28,7 +30,6 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
         resetField,
         watch,
         setError,
-        setFocus,
         setValue,
         formState: { errors }
     } = useForm({
@@ -55,11 +56,10 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
         setTimeout(async () => {
             setIsLoading(true)
             await handleSignUp(data)
-                .then(() => setIsLoading(false))
-                .catch(() => {
-                    setFocus('phone')
-                    setIsLoading(false)
+            .catch(() => {
+                useFocusInput(inputRefPhone)
             })
+            .finally(() => setIsLoading(false))
             // alert(JSON.stringify(data))
         }, 100)
     }
@@ -73,6 +73,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
                     error={errors?.phone}
                     reset={resetField}
                     disabled={isFormBlur}
+                    inputRefPhone={inputRefPhone}
                 />
                 <DropDownSearchInput 
                     LIST={STORES_LIST}

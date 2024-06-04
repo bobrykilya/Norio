@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useFocusInput } from '../../../../../hooks/useFocusInput'
 import { AuthContext } from '../../../../../context/Auth-context'
 import { FaArrowRightLong } from "react-icons/fa6"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
@@ -18,6 +19,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
     
     const { handleCheckUser } = useContext(AuthContext)
     const [isLoading, setIsLoading] = useState(false)
+    const inputRefLogin = useRef(null)
 
     const {
         register,
@@ -25,7 +27,6 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
         resetField,
         watch,
         setError,
-        setFocus,
         formState: { errors } 
     } = useForm({
         mode: 'onChange',
@@ -54,11 +55,10 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
 
         setIsLoading(true)
         await handleCheckUser(data)
-            .then(() => setIsLoading(false))
             .catch(() => {
-                setFocus('username')
-                setIsLoading(false)
+                useFocusInput(inputRefLogin)
             })
+            .finally(() => setIsLoading(false))
         // alert(JSON.stringify(data))
     }
 
@@ -74,6 +74,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
                     error={errors?.username}
                     reset={resetField}
                     disabled={isFormBlur}
+                    inputRefLogin={inputRefLogin}
                 />
                 <PasswordInput
                     name='password'

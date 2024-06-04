@@ -1,8 +1,8 @@
-import NavBarCard from '../../components/Cards/NavBarCard/NavBarCard.jsx'
-import NotificationCard from '../../components/Cards/NotificationCard/NotificationCard.jsx'
-import TaskCard from '../../components/Cards/TaskCard/TaskCard.jsx'
-import AccountInfoCard from '../../components/Cards/AccountInfoCard/AccountInfoCard.jsx'
-import { ClassicAnim } from '../../utils/PageTransitions.jsx'
+import NavBarCard from '../../components/Cards/NavBarCard/NavBarCard'
+import NotificationCard from '../../components/Cards/NotificationCard/NotificationCard'
+import TaskCard from '../../components/Cards/TaskCard/TaskCard'
+import AccountInfoCard from '../../components/Cards/AccountInfoCard/AccountInfoCard'
+import { ClassicAnim } from '../../utils/pageTransitions'
 
 
 

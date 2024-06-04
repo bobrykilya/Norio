@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
 import { FiPhoneCall } from "react-icons/fi";
@@ -6,12 +6,11 @@ import { useFocusInput } from "../../../../hooks/useFocusInput"
 
 
 
-const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
+const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRefPhone }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [number, setNumber] = useState(false)
-    const inputRef = useRef(null)
 
     const handleChangePhone = (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '')
@@ -32,7 +31,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
 
     const handleClickCleaner = () => {
         setNumber(false)
-        useFocusInput(inputRef)
+        useFocusInput(inputRefPhone)
         clearInput()
     }
 
@@ -74,7 +73,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
         <div className={`phone_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
             <span 
                 className='input-label'
-                onClick={() => useFocusInput(inputRef)}
+                onClick={() => useFocusInput(inputRefPhone)}
             >
                 Номер телефона
             </span>
@@ -82,7 +81,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
                 {... rest_register}
                 ref={(e) => {
                     ref(e)
-                    inputRef.current = e
+                    inputRefPhone.current = e
                 }}
                 className='phone_input'
                 type='tel'
@@ -96,7 +95,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false }) => {
             />
             <span className='phone_mask'>+375</span>
             <FiPhoneCall className='input-icon' />
-            <InputsError error={error} onClick={() => useFocusInput(inputRef)} />
+            <InputsError error={error} onClick={() => useFocusInput(inputRefPhone)} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
      )

@@ -6,7 +6,7 @@ import { AuthContext } from "./context/Auth-context"
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
-import ErrorsLogButton from './components/ErrorsLog/ErrorsLog'
+import ErrorsLogButton from './components/ErrorsLog/ErrorsLogButton'
 
 
 
@@ -19,27 +19,23 @@ const App = () => {
     return (
         <div 
             id='main_body-cont'
-            className={`cont`}
+            className='cont'
         >
             <Toaster reverseOrder={true} />
             <ErrorsLogButton />
-                <AnimatePresence>
-                    <Routes
-                        location={location}
-                        key={location.pathname}
-                    >
-                        {isUserLogged ? (
-                            <Route path="home" element={
-                                <HomePage />
-                            } />
-                        ) : (
-                            <Route path="auth" element={
-                                <AuthPage />
-                            } />
-                        )}
-                        <Route path="*" element={<Navigate to={isUserLogged ? "home" : "auth"} />} />
-                    </Routes>
-                </AnimatePresence>
+            <AnimatePresence>
+                <Routes
+                    location={location}
+                    key={location.pathname}
+                >
+                    <Route path="*" element={<Navigate to={isUserLogged ? "home" : "auth"} />} />
+                    {isUserLogged ? (
+                        <Route path="home" element={<HomePage />} />
+                    ) : (
+                        <Route path="auth" element={<AuthPage />} />
+                    )}
+                </Routes>
+            </AnimatePresence>
         </div>
     )
 }

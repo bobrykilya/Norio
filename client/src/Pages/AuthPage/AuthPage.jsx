@@ -1,22 +1,22 @@
 import { useContext } from 'react'
-import SignInCont from '../../components/AuthPage/SignConts/SignInCont/SignInCont.jsx'
-import SignUpCont from '../../components/AuthPage/SignConts/SignUpCont/SignUpCont.jsx'
-import SignUpInfoCont from '../../components/AuthPage/SignConts/SignUpInfoCont/SignUpInfoCont.jsx'
-import CoverPanel from '../../components/AuthPage/CoverPanel/CoverPanel.jsx'
+import SignInCont from '../../components/AuthPage/SignConts/SignInCont/SignInCont'
+import SignUpCont from '../../components/AuthPage/SignConts/SignUpCont/SignUpCont'
+import SignUpInfoCont from '../../components/AuthPage/SignConts/SignUpInfoCont/SignUpInfoCont'
+import CoverPanel from '../../components/AuthPage/CoverPanel/CoverPanel'
 import { AuthContext } from './../../context/Auth-context'
-import { AuthPageAnim } from '../../utils/PageTransitions.jsx'
+import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
 
 
 
 
 const AuthPage = () => {
-    const { coverPanelState } = useContext(AuthContext)
+    const { coverPanelState, blockAuthPage } = useContext(AuthContext)
     // console.log(coverPanelState)
 
     return ( 
         <AuthPageAnim>
-            <div id='auth_panel-cont' className='cont'>
+            <div id='auth_panel-cont' className={`cont ${blockAuthPage && 'block'}`}>
                 <div id='signs-cont' className='cont'>
                     <SignInCont act_form={ coverPanelState }/>
                     <SignUpCont act_form={ coverPanelState } />

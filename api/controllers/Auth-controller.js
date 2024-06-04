@@ -14,13 +14,13 @@ const getTime = () => {
 class AuthController {
 	static async signIn(req, res) {
 		// console.log(req)
-		const { username, password, fastSession, deviceType } = req.body
+		const { username, password, fastSession, deviceType, oldDeviceId } = req.body
 		const { fingerprint } = req
 		const { queryTime, queryTimeString } = getTime()
-
+		// console.log(deviceType)
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.signIn({ 
+			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } = await AuthService.signIn({ 
 				username, 
 				password, 
 				fingerprint, 
@@ -28,24 +28,25 @@ class AuthController {
 				queryTime, 
 				queryTimeString,
 				deviceType,
+				oldDeviceId,
 			})
 			
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
-			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo })
+			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
 		} catch (err) {
 			return ErrorsUtils.catchError({ typeCode: !fastSession ? 201 : 202, req, res, err, username, fingerprint, queryTimeString })
 		}
 	}
 
 	static async signUp(req, res) {
-		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, deviceType } = req.body
+		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, deviceType, oldDeviceId } = req.body
 		const { fingerprint } = req
 		const { queryTime, queryTimeString } = getTime()
 
 		
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, userInfo } = await AuthService.signUp({ 
+			const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp({ 
 				username, 
 				hashedPassword, 
 				phone, 
@@ -58,12 +59,13 @@ class AuthController {
 				fingerprint, 
 				queryTime,
 				queryTimeString,
-				deviceType
+				deviceType,
+				oldDeviceId,
 			})
 			
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 			
-			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo })
+			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
 			return ErrorsUtils.catchError({ typeCode: 205,req, res, err, username, fingerprint, queryTimeString })
 		}

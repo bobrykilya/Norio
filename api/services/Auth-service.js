@@ -20,9 +20,34 @@ const checkSessionDouble = async (deviceId) => {
 	}
 }
 
+const fingerprintCheckingAndUpdating = async ({ oldDeviceId, fingerprint }) => {
+	if (oldDeviceId) {
+		const oldFingerprintHash = await AuthDeviceRepository.getDeviceHash(oldDeviceId)
+		if (oldFingerprintHash !== fingerprint.hash) {
+			await AuthDeviceRepository.updateDeviceHash({ fingerprint, oldDeviceId })
+		}
+		return oldDeviceId
+	}
+	return false
+}
+
+const createNewDeviceWithHandling = async ({ fingerprint, userId, queryTimeString, deviceType }) => {
+	let deviceId
+
+	
+	try {
+		deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType })
+		await _logAttentionRepository.createLogAttention({ typeCode: 102, userId, deviceId, logTime: queryTimeString })
+	}catch {
+		//* Handling if db have this fingerprint, but device doesn't have number in LocalStorage
+		deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
+	}
+	return deviceId
+}
+
 class AuthService {
 
-	static async signIn({ username, password, fingerprint, fastSession, queryTime, queryTimeString, deviceType }) {
+	static async signIn({ username, password, fingerprint, fastSession, queryTime, queryTimeString, deviceType, oldDeviceId }) {
 
 		const userData = await UserRepository.getUserData(username)
 		
@@ -30,18 +55,18 @@ class AuthService {
 			throw new Conflict("Пользователь не найден")
 		}
 
-		const userId = userData.id
-		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
+		const userId = userData.id		
 		const enterCode = !fastSession ? 201 : 202
-
-
+		
 		//! await checkSessionDouble(deviceId)
-
-
+		
+		
 		const isPasswordValid = bcrypt.compareSync(password, userData.password)
 		if (!isPasswordValid) {
 			throw new Unauthorized("Неверный логин или пароль")
 		}
+
+		let deviceId = await fingerprintCheckingAndUpdating({ oldDeviceId, fingerprint })
 
 		//* Control of max sessions for every user
 		const sessionsQuantity = await RefreshSessionsRepository.getRefreshSessionsQuantity(userId)
@@ -54,9 +79,9 @@ class AuthService {
 			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId, deviceId, logTime: queryTimeString })
 		}
 		if (!deviceId) {
-			deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType })
-			await _logAttentionRepository.createLogAttention({ typeCode: 102, userId, deviceId, logTime: queryTimeString })
+			deviceId = await createNewDeviceWithHandling({ fingerprint, userId, queryTimeString, deviceType })
 		}
+		
 		if (userData.role !== 1) {
 			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId, deviceId, logTime: queryTimeString })
 		}
@@ -103,14 +128,14 @@ class AuthService {
 			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
 			logOutTime,
 			userInfo,
+			deviceId,
 		}
 	}
 
-	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, queryTimeString, deviceType }) {
+	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, queryTimeString, deviceType, oldDeviceId }) {
 
 		//! Change
 		const role = 1
-		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
 
 		//! await checkSessionDouble(deviceId)
 		let userId
@@ -141,10 +166,10 @@ class AuthService {
 			throw new Conflict("Данный номер телефона уже занят другим пользователем")
 		}
 
-		
+		let deviceId = await fingerprintCheckingAndUpdating({ oldDeviceId, fingerprint })
+
 		if (!deviceId) {
-			deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType })
-			await _logAttentionRepository.createLogAttention({ typeCode: 102, userId, deviceId, logTime: queryTimeString })
+			deviceId = await createNewDeviceWithHandling({ fingerprint, userId, queryTimeString, deviceType })
 		}
 		
 		await _logAttentionRepository.createLogAttention({ typeCode: 205, userId, deviceId, logTime: queryTimeString })
@@ -171,6 +196,7 @@ class AuthService {
 			refreshToken,
 			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
 			userInfo,
+			deviceId,
 		}
 	}
 
@@ -246,6 +272,7 @@ class AuthService {
 			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
 			logOutTime: refreshSession.log_out_time,
 			userInfo,
+			deviceId,
 		}
 	}
 

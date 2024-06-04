@@ -64,7 +64,7 @@ class ErrorUtils {
 		// const errorId = await _logErrorRepository.createLogError({ typeCode, err, userId: userData?.id, deviceId, queryTimeString })
 		// console.log(errorId)
 		// throw new BadRequest(`Что-то пошло не так! Обратитесь к админу. Ошибка: ${errorId} , Время: ${queryTimeString}`)
-		// console.log(res)
+		// console.log(err)
 		if (err instanceof WebError) {
 			return res.status(err.status).json(err)
 		}else res.status(500).json('Непредвиденная ошибка')

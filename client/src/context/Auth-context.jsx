@@ -43,36 +43,50 @@ const AuthProvider = ({ children }) => {
 		
 		setCoverPanelState('sign_up')
 	}
-	const handleUserHasLogged = () => {
-		setIsUserLogged(true)
-		setCoverPanelState('sign_in')
+	const userHasLogged = (pauseTime) => {
+		setTimeout(() => {
+			setIsUserLogged(true)
+			setCoverPanelState('sign_in')
+		}, pauseTime)
 	}
 
-	const checkSessionDouble = () => {
+	const checkSessionDouble = (newUserInfo) => {
 		if (localStorage.getItem('userInfo')) {
-			handleLogOut()
-			return 200
+
+			const { last_name, first_name, username } = JSON.parse(localStorage.getItem('userInfo')) //* Old user info
+			const messageEnding = last_name ? `${last_name} ${first_name} (${username})` : username
+
+			if (newUserInfo.username !== username) {
+				showSnackBarMessage({ 
+					type: 'w', 
+					duration: 5000, 
+					message: `Был выполнен фоновый выход из аккаунта пользователя: ${messageEnding}` 
+				})
+				handleLogOut()
+				return 300 //* Timeout after logout, before new login
+			}
 		}
 		return 0
 	}
 
+	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }) => {
+		const pauseTime = checkSessionDouble(userInfo)
+		
+		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+		if (!localStorage.getItem('deviceId')) localStorage.setItem('deviceId', deviceId)
+		localStorage.setItem('userInfo', JSON.stringify(userInfo))
+
+		userHasLogged(pauseTime)
+	}
+
 	const handleSignIn = async (data) => {
 
-		const timer = checkSessionDouble()
-		
-		setTimeout(async () => {
-			const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.signIn(data)
+		const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId } = await AuthService.signIn(data)
+		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 
-			inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-			localStorage.setItem('userInfo', JSON.stringify(userInfo))
-
-			handleUserHasLogged()
-
-			// console.log(logOutTime)
-			if (logOutTime) {
-				setLogOutTimer(logOutTime)
-			}
-		}, timer)
+		if (logOutTime) {
+			setLogOutTimer(logOutTime)
+		}
 	}
 
 	const handleCheckUser = async (data) => {
@@ -88,20 +102,13 @@ const AuthProvider = ({ children }) => {
 
 	const handleSignUp = async (data) => {
 
-		const timer = checkSessionDouble()
+		data.username = signUpUserName
+		data.hashedPassword = signUpUserPassword
 		
-		setTimeout(async () => {
-			data.username = signUpUserName
-			data.hashedPassword = signUpUserPassword
-	
-			const { accessToken, accessTokenExpiration, userInfo } = await AuthService.signUp(data)
-			inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-	
-			localStorage.setItem('userInfo', JSON.stringify(userInfo))
-	
-			resetSignUpVariables()
-			handleUserHasLogged()
-		}, timer)
+		const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp(data)
+		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
+
+		resetSignUpVariables()
 	}
 
 	const handleLogOut =  () => {

@@ -6,11 +6,11 @@ import { useCapitalize } from '../../../../hooks/useCapitalize'
 
 
 
-const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=20, disabled=false }) => {
+const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=false }) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    const inputRef = useRef(null)
+    const inputRef = inputRefLogin || useRef(null)
     
     const handleChangeName = (e) => {
         e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, '')

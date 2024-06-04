@@ -13,7 +13,7 @@ const InputsError = ({ error, onClick }) => {
 
         //* Error opening
         if (error?.message && !errorMess) {
-            console.log('Open')
+            // console.log('Open')
 
             setErrorMess(error?.message)
             setIsErrorOpened(true)
@@ -22,7 +22,7 @@ const InputsError = ({ error, onClick }) => {
 
         //* Error swapping
         if (error?.message && errorMess && error?.message !== errorMess) {
-            console.log('Swap')
+            // console.log('Swap')
 
             setIsErrorOpened(false)
             refSetTimeout.current = setTimeout(() => {
