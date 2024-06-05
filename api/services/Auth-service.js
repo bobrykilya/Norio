@@ -20,34 +20,50 @@ const checkSessionDouble = async (deviceId) => {
 	}
 }
 
-const fingerprintCheckingAndUpdating = async ({ oldDeviceId, fingerprint }) => {
-	if (oldDeviceId) {
-		const oldFingerprintHash = await AuthDeviceRepository.getDeviceHash(oldDeviceId)
-		if (oldFingerprintHash !== fingerprint.hash) {
-			await AuthDeviceRepository.updateDeviceHash({ fingerprint, oldDeviceId })
+const fingerprintCheckingAndUpdating = async ({ lsDeviceId, fingerprint, userId, queryTimeString }) => {
+
+	// console.log(lsDeviceId)
+	if (lsDeviceId) {
+		const savedDeviceIdInDB = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
+
+		if (savedDeviceIdInDB) {
+			if (savedDeviceIdInDB !== lsDeviceId){
+				//* Handling if db has this fingerprint, but device has other deviceId
+				await _logAttentionRepository.createLogAttention({ typeCode: 804, userId, deviceId: savedDeviceIdInDB, logTime: queryTimeString })
+				throw new Forbidden("Попытка несанкционированной подмены id устройства")
+				//! Block device
+			} else return lsDeviceId
 		}
-		return oldDeviceId
-	}
-	return false
+
+		const oldFingerprintHash = await AuthDeviceRepository.getDeviceHash(lsDeviceId)
+		//* Handling if device has number, but this device hasn't been registered/removed
+		if (!oldFingerprintHash) return false
+
+		//* Handling if device has number, but fingerprint in db is different (Browser has been updated)
+		if (oldFingerprintHash !== fingerprint.hash) {
+			await AuthDeviceRepository.updateDeviceHash({ fingerprint, lsDeviceId })
+		}
+		return lsDeviceId
+	} else return false
 }
 
 const createNewDeviceWithHandling = async ({ fingerprint, userId, queryTimeString, deviceType }) => {
 	let deviceId
-
 	
 	try {
-		deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType })
+		deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType: deviceType || 'Unknown'  })
 		await _logAttentionRepository.createLogAttention({ typeCode: 102, userId, deviceId, logTime: queryTimeString })
 	}catch {
 		//* Handling if db have this fingerprint, but device doesn't have number in LocalStorage
 		deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
+		await _logAttentionRepository.createLogAttention({ typeCode: 803, userId, deviceId, logTime: queryTimeString })
 	}
 	return deviceId
 }
 
 class AuthService {
 
-	static async signIn({ username, password, fingerprint, fastSession, queryTime, queryTimeString, deviceType, oldDeviceId }) {
+	static async signIn({ username, password, fingerprint, fastSession, queryTime, queryTimeString, deviceType, lsDeviceId }) {
 
 		const userData = await UserRepository.getUserData(username)
 		
@@ -66,7 +82,8 @@ class AuthService {
 			throw new Unauthorized("Неверный логин или пароль")
 		}
 
-		let deviceId = await fingerprintCheckingAndUpdating({ oldDeviceId, fingerprint })
+		let deviceId = await fingerprintCheckingAndUpdating({ lsDeviceId, fingerprint, userId, queryTimeString })
+		// console.log(deviceId)
 
 		//* Control of max sessions for every user
 		const sessionsQuantity = await RefreshSessionsRepository.getRefreshSessionsQuantity(userId)
@@ -132,7 +149,7 @@ class AuthService {
 		}
 	}
 
-	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, queryTimeString, deviceType, oldDeviceId }) {
+	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, queryTimeString, deviceType, lsDeviceId }) {
 
 		//! Change
 		const role = 1
@@ -166,7 +183,7 @@ class AuthService {
 			throw new Conflict("Данный номер телефона уже занят другим пользователем")
 		}
 
-		let deviceId = await fingerprintCheckingAndUpdating({ oldDeviceId, fingerprint })
+		let deviceId = await fingerprintCheckingAndUpdating({ lsDeviceId, fingerprint, userId, queryTimeString })
 
 		if (!deviceId) {
 			deviceId = await createNewDeviceWithHandling({ fingerprint, userId, queryTimeString, deviceType })
@@ -233,6 +250,7 @@ class AuthService {
 			await _logAttentionRepository.createLogAttention({ typeCode: typeCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTimeString })
 
 			throw new Forbidden("Попытка несанкционированного обновления токенов!")
+			//! Block device
 		}
 
 		await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)

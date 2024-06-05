@@ -1,4 +1,4 @@
-import pool from "../db.js"
+import useQueryDB from '../../hooks/useQueryDB.js'
 
 
 
@@ -16,15 +16,20 @@ const getInsertData = ({ typeCode, userId }) => {
 			return { receiver_user_id: null, receiver_user_role: 1 }
 		case 802:	//* Hacking attempt from new device & block him
 			return { receiver_user_id: null, receiver_user_role: 1 }
+		case 803:	//* 'DeviceId losing
+			return { receiver_user_id: null, receiver_user_role: 1 }
+		case 804:	//* DeviceId hacking attempt & block
+			return { receiver_user_id: null, receiver_user_role: 1 }
 	}
 
 }
 
 class LogAttentionRepository {
 	static async createLogAttention({ typeCode, userId, deviceId, logTime }) {
+
 		const { receiver_user_id, receiver_user_role } = getInsertData({ typeCode, userId })
 
-		await pool.query("INSERT INTO _log_Attention (type_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
+		await useQueryDB("INSERT INTO _log_Attention (type_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
 			typeCode, 
 			userId, 
 			deviceId, 
@@ -39,7 +44,7 @@ class LogAttentionRepository {
 	//   }
 
 	static async getLogsAttention() {
-		const response = await pool.query("SELECT * FROM _log_Attention")
+		const response = await useQueryDB("SELECT * FROM _log_Attention")
 
 		return response.rows
 	}

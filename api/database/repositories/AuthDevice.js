@@ -1,4 +1,4 @@
-import pool from "../db.js"
+import useQueryDB from '../../hooks/useQueryDB.js'
 
 
 
@@ -12,7 +12,7 @@ class AuthDeviceRepository {
 	static async createDevice({ fingerprint, regTime, deviceType }) {
 		const { browser, os } = getBrowserAndOs(fingerprint)
 
-		const response = await pool.query("INSERT INTO auth_devices (type, browser, os, reg_time, finger_print, is_blocked) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+		const response = await useQueryDB("INSERT INTO auth_devices (type, browser, os, reg_time, finger_print, is_blocked) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
 			[
 				deviceType,
 				browser,
@@ -26,25 +26,25 @@ class AuthDeviceRepository {
 	}
 
 	static async getDeviceId(fingerprintHash) {
-		const response = await pool.query("SELECT * FROM auth_devices WHERE finger_print=$1", [fingerprintHash])
+		const response = await useQueryDB("SELECT * FROM auth_devices WHERE finger_print=$1", [fingerprintHash])
 
 		return response.rows[0]?.id
 	}
 
 	static async getDeviceHash(deviceId) {
-		const response = await pool.query("SELECT * FROM auth_devices WHERE id=$1", [deviceId])
+		const response = await useQueryDB("SELECT * FROM auth_devices WHERE id=$1", [deviceId])
 
 		return response.rows[0]?.fingerprint
 	}
 
 	static async setBlockStatusForDevice({ deviceId, status }) {
-		await pool.query("UPDATE auth_devices SET is_blocked=$1 WHERE id=$2", [status, deviceId])
+		await useQueryDB("UPDATE auth_devices SET is_blocked=$1 WHERE id=$2", [status, deviceId])
 	}
 
 	static async updateDeviceHash({ fingerprint, deviceId }) {
 		const { browser } = getBrowserAndOs(fingerprint)
 
-		await pool.query("UPDATE auth_devices SET browser=$1, finger_print=$2 WHERE id=$3", [browser, fingerprint.hash, deviceId])
+		await useQueryDB("UPDATE auth_devices SET browser=$1, finger_print=$2 WHERE id=$3", [browser, fingerprint.hash, deviceId])
 	}
 }
 

@@ -71,9 +71,11 @@ const AuthProvider = ({ children }) => {
 
 	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }) => {
 		const pauseTime = checkSessionDouble(userInfo)
+		const lsDeviceId = Number(localStorage.getItem('deviceId'))
 		
 		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-		if (!localStorage.getItem('deviceId')) localStorage.setItem('deviceId', deviceId)
+		
+		if (!lsDeviceId || lsDeviceId !== deviceId) localStorage.setItem('deviceId', deviceId)
 		localStorage.setItem('userInfo', JSON.stringify(userInfo))
 
 		userHasLogged(pauseTime)

@@ -54,5 +54,15 @@
         type_name: 'Hacking attempt & block',
         type_description: 'Попытка несанкционированного обновления токенов с нового устройства. Блокировка нового девайса (Уведомление для админов)',
     },
+    {
+        type_code: 803,
+        type_name: 'DeviceId losing',
+        type_description: 'Потеря ранее зарегистрированного id девайса (Уведомление для админов)'
+    },
+    {
+        type_code: 804,
+        type_name: 'DeviceId hacking attempt & block',
+        type_description: 'Попытка несанкционированной подмены id устройства. Блокировка девайса (Уведомление для админов)',
+    },
 
 ]

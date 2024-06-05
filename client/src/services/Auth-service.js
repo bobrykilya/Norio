@@ -25,9 +25,9 @@ const checkCountryCode = async () => {
 const preRequest = async (data) => {
 	// await checkCountryCode()
 
-    const oldDeviceId = localStorage.getItem('deviceId')
-	if (oldDeviceId) 
-        return Object.assign(data, { oldDeviceId })
+    const lsDeviceId = Number(localStorage.getItem('deviceId'))
+	if (lsDeviceId) 
+        return Object.assign(data, { lsDeviceId })
 
     const deviceType = getDeviceType()
 	return Object.assign(data, { deviceType })
