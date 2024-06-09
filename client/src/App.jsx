@@ -6,7 +6,7 @@ import { AuthContext } from "./context/Auth-context"
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
-import ErrorsLogButton from './components/ErrorsLog/ErrorsLogButton'
+import LogBookButton from './components/LogBook/LogBookButton'
 
 
 
@@ -22,7 +22,7 @@ const App = () => {
             className='cont'
         >
             <Toaster reverseOrder={true} />
-            <ErrorsLogButton />
+            <LogBookButton />
             <AnimatePresence>
                 <Routes
                     location={location}

@@ -1,4 +1,4 @@
-import useQueryDB from '../../hooks/useQueryDB.js'
+import useQueryDB from '../../../hooks/useQueryDB.js'
 
 
 
@@ -16,9 +16,11 @@ const getInsertData = ({ typeCode, userId }) => {
 			return { receiver_user_id: null, receiver_user_role: 1 }
 		case 802:	//* Hacking attempt from new device & block him
 			return { receiver_user_id: null, receiver_user_role: 1 }
-		case 803:	//* 'DeviceId losing
+		case 803:	//* DeviceId front losing
 			return { receiver_user_id: null, receiver_user_role: 1 }
 		case 804:	//* DeviceId hacking attempt & block
+			return { receiver_user_id: null, receiver_user_role: 1 }
+		case 805:	//* DeviceId db losing
 			return { receiver_user_id: null, receiver_user_role: 1 }
 	}
 

@@ -1,4 +1,4 @@
-import useQueryDB from '../../hooks/useQueryDB.js'
+import useQueryDB from '../../../hooks/useQueryDB.js'
 
 class UserInfoRepository {
 	static async createUserInfo({

@@ -1,4 +1,4 @@
-import pool from '../database/db.js'
+import pool from '../src/_database/db.js'
 import { Conflict } from '../utils/Errors.js'
 
 

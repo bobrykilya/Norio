@@ -3,7 +3,7 @@ import CircularProgress from '@mui/joy/CircularProgress'
 import inMemoryJWT from '../services/inMemoryJWT-service.js'
 import config from "../config.js"
 import AuthService from "../services/Auth-service.js"
-import { showSnackBarMessage } from "../utils/showSnackBarMessage"
+import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage.jsx"
 
 
 
@@ -135,7 +135,10 @@ const AuthProvider = ({ children }) => {
 			const refresh = async () => {
 				try {
 					// console.log('refresh')
-					const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.refresh()
+					const data = {
+						lsDeviceId: localStorage.getItem('deviceId')
+					}
+					const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.refresh(data)
 					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 	
 					localStorage.setItem('userInfo', JSON.stringify(userInfo))				
@@ -169,6 +172,21 @@ const AuthProvider = ({ children }) => {
 		return () => {
 			window.removeEventListener("storage", handlePersistedLogOut)
 		}
+	}, [])
+
+	useEffect(() => {
+		const defaultProcessing = () => {
+			try {
+				if (localStorage.getItem('blockDevice')) {
+					setTimeout(() => handleLogOut(), 300)
+				}
+			} catch {
+				setIsAppReady(true)
+				setIsUserLogged(false)
+				resetSignInVariables()
+			}
+		}
+		defaultProcessing()
 	}, [])
 
 	return (

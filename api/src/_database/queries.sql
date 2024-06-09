@@ -22,9 +22,10 @@ CREATE TABLE auth_devices(
     id SMALLSERIAL PRIMARY KEY,
     type VARCHAR(7) NOT NULL,   
     browser VARCHAR(15) NOT NULL,
+    b_version VARCHAR(7) NOT NULL,
     os VARCHAR(15) NOT NULL,
     reg_time TIMESTAMP NOT NULL,
-    is_blocked BOOLEAN NOT NULL,
+    unlock_time VARCHAR(24) NOT NULL,
     finger_print VARCHAR(32) UNIQUE NOT NULL
 )
 

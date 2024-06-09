@@ -1,6 +1,6 @@
-import _logErrorRepository from '../database/repositories/_logError.js'
-// import UserRepository from '../database/repositories/User.js'
-// import AuthDeviceRepository from '../database/repositories/AuthDevice.js'
+import _logErrorRepository from '../src/_database/repositories/_logError-db.js'
+// import UserRepository from '../src/_database/repositories/User.js'
+// import AuthDeviceRepository from '../src/_database/repositories/AuthDevice.js'
 
 
 
@@ -48,15 +48,24 @@ export class BadRequest extends WebError {
 	}
 }
 
+export class BlockDevice extends WebError {
+	constructor(error) {
+		super(900, error)
+	}
+}
+
 class ErrorUtils {
 	static async catchError({ typeCode, req, res, err, username, fingerprint, queryTimeString }) {
-		err.errTime = new Date()
+		err.errTime = new Date().toLocaleString()
 		err.action = req.route.stack[0]?.name
 		if (req.body) {
 			req.body.password ? delete req.body.password : null
 			req.body.hashedPassword ? delete req.body.hashedPassword : null
 			req.body.deviceType ? delete req.body.deviceType : null
 			err.req = req.body
+		}
+		if (!(err instanceof Unauthorized)) {
+			console.log(err)
 		}
 		// const queryTimeString = queryTime.toLocaleString()
 		// const userData = username ? await UserRepository.getUserData(username) : null

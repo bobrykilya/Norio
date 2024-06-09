@@ -1,6 +1,6 @@
 import AuthService from "../services/Auth-service.js"
-import ErrorsUtils from "../utils/Errors.js"
-import { COOKIE_SETTINGS } from "../constants.js"
+import ErrorsUtils from "../../utils/Errors.js"
+import { COOKIE_SETTINGS } from "../../constants.js"
 
 
 
@@ -90,7 +90,7 @@ class AuthController {
 	}
 
 	static async refresh(req, res) {
-		const { fingerprint } = req
+		const { fingerprint, lsDeviceId } = req
 		const currentRefreshToken = req.cookies.refreshToken
 		const { queryTime, queryTimeString } = getTime()
 
@@ -101,6 +101,7 @@ class AuthController {
 					currentRefreshToken,
 					fingerprint,
 					queryTimeString,
+					lsDeviceId,
 				})
 
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)

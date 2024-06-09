@@ -1,10 +1,11 @@
 import toast from 'react-hot-toast'
-import SnackBar from '../components/SnackBar/SnackBar'
+import SnackBar from '../../components/SnackBar/SnackBar'
 import { PiSealWarning } from "react-icons/pi"
 import { TbLockSquareRounded } from "react-icons/tb";
 import { FiCheckCircle } from "react-icons/fi"
 import { MdErrorOutline } from "react-icons/md"
-import saveErrorInLocalStorage from './saveErrorInLocalStorage'
+import saveLogInLocalStorage from './saveLogInLocalStorage'
+import blockDevice from '../blockDevice/blockDevice'
 
 
 
@@ -20,11 +21,17 @@ const getTypeDecoding = (type) => {
 const messagePreprocessing = (message) => {
 	switch (message) {
 		case 'Failed to fetch' : return 'Ошибка подключения к серверу'
-        default : return false
+		case 'Request timed out' : return 'Ошибка ответа сервера'
+        default : return false 	
     }
 }
 
 export const showSnackBarMessage = (err) => {
+
+	if (err.status === 900) {
+		// console.log(err)
+		blockDevice({ logTime: err.errTime, infinityBlock: true })
+	}
 
 	if (!err.status && !err.type) {
 		try {
@@ -54,5 +61,5 @@ export const showSnackBarMessage = (err) => {
 	})
 
 	// if (!['s'].includes(err.type)) 
-		saveErrorInLocalStorage({ err })
+		saveLogInLocalStorage({ err })
 }

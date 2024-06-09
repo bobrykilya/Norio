@@ -1,13 +1,15 @@
 import bcrypt from "bcryptjs"
 import TokenService from "./Token-service.js"
-import { Forbidden, Conflict, Unauthorized } from "../utils/Errors.js"
-import { ACCESS_TOKEN_EXPIRATION } from "../constants.js"
-import RefreshSessionsRepository from "../database/repositories/RefreshSession.js"
-import UserRepository from "../database/repositories/User.js"
-import UserInfoRepository from '../database/repositories/UserInfo.js'
-import AuthDeviceRepository from '../database/repositories/AuthDevice.js'
-import _logAttentionRepository from '../database/repositories/_LogAttention.js'
-import _logAuthRepository from '../database/repositories/_LogAuth.js'
+import { Forbidden, Conflict, Unauthorized, BlockDevice, BadRequest } from "../../utils/Errors.js"
+import { ACCESS_TOKEN_EXPIRATION } from "../../constants.js"
+import RefreshSessionsRepository from "../_database/repositories/RefreshSession-db.js"
+import UserRepository from "../_database/repositories/User-db.js"
+import UserInfoRepository from '../_database/repositories/UserInfo-db.js'
+import AuthDeviceRepository from '../_database/repositories/AuthDevice-db.js'
+import _logAttentionRepository from '../_database/repositories/_logAttention-db.js'
+import _logAuthRepository from '../_database/repositories/_LogAuth-db.js'
+import getCodeDescription from '../../utils/inter_codes.js'
+import getBrowserAndOs from '../../hooks/useGetBrowserAndOS.js'
 
 
 
@@ -24,35 +26,48 @@ const fingerprintCheckingAndUpdating = async ({ lsDeviceId, fingerprint, userId,
 
 	// console.log(lsDeviceId)
 	if (lsDeviceId) {
+
 		const savedDeviceIdInDB = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
 
 		if (savedDeviceIdInDB) {
 			if (savedDeviceIdInDB !== lsDeviceId){
 				//* Handling if db has this fingerprint, but device has other deviceId
 				await _logAttentionRepository.createLogAttention({ typeCode: 804, userId, deviceId: savedDeviceIdInDB, logTime: queryTimeString })
-				throw new Forbidden("Попытка несанкционированной подмены id устройства")
+				throw new BlockDevice(getCodeDescription(804).message)
 				//! Block device
 			} else return lsDeviceId
 		}
 
-		const oldFingerprintHash = await AuthDeviceRepository.getDeviceHash(lsDeviceId)
+		const deviceInDB = await AuthDeviceRepository.getDevice(lsDeviceId)
+		// console.log(deviceInDB)
 		//* Handling if device has number, but this device hasn't been registered/removed
-		if (!oldFingerprintHash) return false
+		if (!deviceInDB) {
+			return false
+		}
 
 		//* Handling if device has number, but fingerprint in db is different (Browser has been updated)
-		if (oldFingerprintHash !== fingerprint.hash) {
-			await AuthDeviceRepository.updateDeviceHash({ fingerprint, lsDeviceId })
+		const { browser, bVersion, os } = getBrowserAndOs(fingerprint)
+		if (deviceInDB.browser === browser && deviceInDB.os === os && deviceInDB.b_version !== bVersion) {
+			
+			await AuthDeviceRepository.updateDevice({ fingerprint, lsDeviceId })
+		} else {
+			//* Handling if db has device's deviceId with other browser
+			await _logAttentionRepository.createLogAttention({ typeCode: 804, userId, deviceId: savedDeviceIdInDB, logTime: queryTimeString })
+			throw new BlockDevice(getCodeDescription(804).message)
+			//! Block device
 		}
+
 		return lsDeviceId
 	} else return false
 }
 
-const createNewDeviceWithHandling = async ({ fingerprint, userId, queryTimeString, deviceType }) => {
+const createNewDeviceWithHandling = async ({ typeCode, fingerprint, userId, queryTimeString, deviceType }) => {
 	let deviceId
 	
 	try {
 		deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType: deviceType || 'Unknown'  })
-		await _logAttentionRepository.createLogAttention({ typeCode: 102, userId, deviceId, logTime: queryTimeString })
+
+		await _logAttentionRepository.createLogAttention({ typeCode, userId, deviceId, logTime: queryTimeString })
 	}catch {
 		//* Handling if db have this fingerprint, but device doesn't have number in LocalStorage
 		deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
@@ -71,7 +86,7 @@ class AuthService {
 			throw new Conflict("Пользователь не найден")
 		}
 
-		const userId = userData.id		
+		const userId = userData.id
 		const enterCode = !fastSession ? 201 : 202
 		
 		//! await checkSessionDouble(deviceId)
@@ -96,7 +111,7 @@ class AuthService {
 			await _logAttentionRepository.createLogAttention({ typeCode: enterCode, userId, deviceId, logTime: queryTimeString })
 		}
 		if (!deviceId) {
-			deviceId = await createNewDeviceWithHandling({ fingerprint, userId, queryTimeString, deviceType })
+			deviceId = await createNewDeviceWithHandling({ typeCode: enterCode, fingerprint, userId, queryTimeString, deviceType })
 		}
 		
 		if (userData.role !== 1) {
@@ -227,7 +242,7 @@ class AuthService {
 		await RefreshSessionsRepository.deleteRefreshSessionByToken(refreshToken)
 	}
 
-	static async refresh({ fingerprint, currentRefreshToken, queryTimeString }) {
+	static async refresh({ fingerprint, currentRefreshToken, queryTimeString, lsDeviceId }) {
 		if (!currentRefreshToken) {
 			throw new Unauthorized()
 		}
@@ -239,17 +254,19 @@ class AuthService {
 		}
 		// console.log(refreshSession)
 
-		const deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
+		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash) || 
+			await fingerprintCheckingAndUpdating({ lsDeviceId, fingerprint, userId: refreshSession.user_id, queryTimeString })
 		if (refreshSession.device_id !== deviceId) {
 			let typeCodeAttention = 801
 			if (!deviceId) {
-				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType })
-				await AuthDeviceRepository.setBlockStatusForDevice({ deviceId, status: true })
+				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType: 'Unknown' })
 				typeCodeAttention = 802
+				throw new BlockDevice(getCodeDescription(typeCodeAttention).message)
+				//! Block device
 			}
 			await _logAttentionRepository.createLogAttention({ typeCode: typeCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTimeString })
 
-			throw new Forbidden("Попытка несанкционированного обновления токенов!")
+			throw new Forbidden(getCodeDescription(typeCodeAttention).message)
 			//! Block device
 		}
 

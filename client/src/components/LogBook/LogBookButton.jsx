@@ -1,14 +1,14 @@
 import { useContext, useState } from 'react'
 import { GlobalContext } from '../../context/Global-context'
 import { BiError } from "react-icons/bi"
-import ErrorsLogList from './ErrorsLogList';
+import LogBook from './LogBook';
 import ToolTip from '../ToolTip/ToolTip';
 import toast from 'react-hot-toast'
-import { showSnackBarMessage } from '../../utils/showSnackBarMessage'
+import { showSnackBarMessage } from '../../features/showSnackBarMessage/showSnackBarMessage'
 
 
 
-const ErrorsLog = () => {
+const LogBookButton = () => {
 
     const { setIsErrorsLogListOpened } = useContext(GlobalContext)
     const { toasts } = useContext(GlobalContext)
@@ -37,7 +37,7 @@ const ErrorsLog = () => {
     return ( 
         <>
             <button 
-                className='errors_log-button cont before_but-hover'
+                className='log_book-button cont before_but-hover'
                 onClick={() => checkSnackBarListBeforeOpen()}
                 type='button'
                 tabIndex={-1}
@@ -45,9 +45,9 @@ const ErrorsLog = () => {
                 <BiError className='fa-icon' />            
                 <ToolTip text={'Открыть панель ошибок'} />
             </button>
-            <ErrorsLogList closeErrorsLogList={checkSnackBarListBeforeClose}/>
+            <LogBook closeErrorsLogList={checkSnackBarListBeforeClose}/>
         </>
      )
 }
  
-export default ErrorsLog
+export default LogBookButton

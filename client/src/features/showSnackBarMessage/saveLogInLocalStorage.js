@@ -1,4 +1,4 @@
-import blockDevice from '../services/blockDevice-service'
+import blockDevice from '../blockDevice/blockDevice'
 
 
 
@@ -45,7 +45,7 @@ const checkErrsQuantityForRecently = (list) => {
 }
 
 
-const saveErrorInLocalStorage = ({ err }) => {
+const saveLogInLocalStorage = ({ err }) => {
     
     if (localStorage.getItem('blockDevice')) return
 
@@ -57,7 +57,7 @@ const saveErrorInLocalStorage = ({ err }) => {
 
 	// console.log(errsList)
 	errsList.push({ 
-		errTime: err.errTime || new Date(),
+		errTime: err.errTime || new Date().toLocaleString(),
 		type: err.type || 'e',
 		message: err.message,
 		userId,
@@ -69,8 +69,8 @@ const saveErrorInLocalStorage = ({ err }) => {
 	//* Error counting for short time blocking
 	if (errsList.length < sameErrsQuantity || err.type === 'b') return
 	if (checkErrsQuantityForRecently(errsList)) {
-        blockDevice({ errTime: err.errTime })
+        blockDevice({ logTime: err.errTime })
 	}
 }
 
-export default saveErrorInLocalStorage
+export default saveLogInLocalStorage

@@ -5,7 +5,7 @@ import TableCollapsibleRow from '../Tables/TableCollapsibleRow/TableCollapsibleR
 
 
 
-const ErrorsLogList = ({ closeErrorsLogList }) => {
+const LogBook = ({ closeErrorsLogList }) => {
     const { isErrorsLogListOpened, setIsErrorsLogListOpened } = useContext(GlobalContext)
     // console.log(isErrorsLogListOpened)
 
@@ -13,7 +13,7 @@ const ErrorsLogList = ({ closeErrorsLogList }) => {
     const columns = {}
 
     return (
-        <div className='errors_log_list-cont'>
+        <div className='log_book-cont'>
             <JumpingList isListOpened={isErrorsLogListOpened} closeList={closeErrorsLogList} >
                 <TableCollapsibleRow data={data} columns={columns} />
             </JumpingList>
@@ -21,4 +21,4 @@ const ErrorsLogList = ({ closeErrorsLogList }) => {
     )
 }
  
-export default ErrorsLogList
+export default LogBook

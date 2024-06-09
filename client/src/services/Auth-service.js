@@ -1,4 +1,4 @@
-import { showSnackBarMessage } from "../utils/showSnackBarMessage"
+import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
 import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http"
 
 
@@ -26,6 +26,7 @@ const preRequest = async (data) => {
 	// await checkCountryCode()
 
     const lsDeviceId = Number(localStorage.getItem('deviceId'))
+
 	if (lsDeviceId) 
         return Object.assign(data, { lsDeviceId })
 
@@ -64,7 +65,7 @@ class AuthService {
             const newData = await preRequest(data)
             
             const res = await $apiAuth.post("sign-up", { json: newData }).json()
-
+            
             return res
         } catch (err) {
             showSnackBarMessage(err)
@@ -87,8 +88,8 @@ class AuthService {
 
             return res
         } catch (err) {
-            throw new Error('Token refresh error')
             // showSnackBarMessage(err)
+            throw new Error('Token refresh error')
         }
     }
 
