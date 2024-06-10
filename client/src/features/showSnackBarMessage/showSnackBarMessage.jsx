@@ -27,6 +27,8 @@ const messagePreprocessing = (message) => {
 }
 
 export const showSnackBarMessage = (err) => {
+	if (!err.message) return
+
 
 	if (err.status === 900) {
 		// console.log(err)
@@ -37,6 +39,7 @@ export const showSnackBarMessage = (err) => {
 		try {
 			err = err.response.json().then(err => showSnackBarMessage(err))
 		}catch {
+			// console.log(err.message)
 			showSnackBarMessage({ status: 422, message: err.message })
 			// console.log(err)
 		}

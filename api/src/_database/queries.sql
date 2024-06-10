@@ -7,7 +7,7 @@ CREATE TABLE users(
 )
 
 CREATE TABLE users_info(
-    user_id SMALLINT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    user_id SMALLINT PRIMARY KEY REFERENCES users(id)INTER_CODE,
     last_name VARCHAR(25) NOT NULL,
     first_name VARCHAR(20) NOT NULL,
     middle_name VARCHAR(20) NOT NULL,
@@ -31,8 +31,8 @@ CREATE TABLE auth_devices(
 
 CREATE TABLE refresh_sessions(
     id SERIAL PRIMARY KEY,
-    user_id SMALLINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    device_id SMALLINT NOT NULL REFERENCES auth_devices(id) ON DELETE CASCADE,
+    user_id SMALLINT NOT NULL REFERENCES users(id),
+    device_id SMALLINT NOT NULL REFERENCES auth_devices(id)INTER_CODE,
     auth_time TIMESTAMP NOT NULL,
     log_in_time TIMESTAMP UNIQUE NOT NULL,
     log_out_time TIMESTAMP,
@@ -41,19 +41,19 @@ CREATE TABLE refresh_sessions(
 
 CREATE TABLE _log_Attention(
     id SERIAL PRIMARY KEY,
-    type_code SMALLINT NOT NULL,
-    user_id SMALLINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    device_id SMALLINT NOT NULL REFERENCES auth_devices(id) ON DELETE CASCADE,
+    inter_code SMALLINT NOT NULL,
+    user_id SMALLINT NOT NULL REFERENCES users(id),
+    device_id SMALLINT NOT NULL REFERENCES auth_devices(id),
     log_time TIMESTAMP NOT NULL,
-    receiver_user_id SMALLINT REFERENCES users(id) ON DELETE CASCADE,
+    receiver_user_id SMALLINT REFERENCES users(id),
     receiver_user_role SMALLINT
 )
 
 CREATE TABLE _log_Auth(
     id SERIAL PRIMARY KEY,
-    type_code SMALLINT NOT NULL,
-    user_id SMALLINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    device_id SMALLINT NOT NULL REFERENCES auth_devices(id) ON DELETE CASCADE,
+    inter_code SMALLINT NOT NULL,
+    user_id SMALLINT NOT NULL REFERENCES users(id),
+    device_id SMALLINT NOT NULL REFERENCES auth_devices(id),
     log_time TIMESTAMP NOT NULL
 )
 
@@ -62,8 +62,8 @@ CREATE TABLE _log_Error(
     req VARCHAR(400), 
     res VARCHAR(400) NOT NULL, 
     err VARCHAR(400), 
-    user_id SMALLINT REFERENCES users(id) ON DELETE CASCADE, 
-    device_id SMALLINT REFERENCES auth_devices(id) ON DELETE CASCADE, 
+    user_id SMALLINT REFERENCES users(id)INTER_CODE, 
+    device_id SMALLINT REFERENCES auth_devices(id)INTER_CODE, 
     log_time TIMESTAMP NOT NULL
 )
 

@@ -2,14 +2,14 @@ import useQueryDB from '../../../hooks/useQueryDB.js'
 
 
 
-const getInsertData = ({ typeCode, userId }) => {
-	switch (typeCode) {
+const getInsertData = ({ interCode, userId }) => {
+	switch (interCode) {
 		case 102:	//* Sign-in to userAccount from new device
-			return { receiver_user_id: null, receiver_user_role: 1 }
+			return { receiver_user_id: userId, receiver_user_role: 1 }
 		case 201:	//* Sign-in to user
-			return { receiver_user_id: userId, receiver_user_role: null }
+			return { receiver_user_id: null, receiver_user_role: null }
 		case 202:	//* Sign-in to user (don't forget mode)
-			return { receiver_user_id: userId, receiver_user_role: null }
+			return { receiver_user_id: null, receiver_user_role: null }
 		case 205:	//* Sign-up user
 			return { receiver_user_id: null, receiver_user_role: 1 }
 		case 801:	//* Hacking attempt
@@ -27,12 +27,12 @@ const getInsertData = ({ typeCode, userId }) => {
 }
 
 class LogAttentionRepository {
-	static async createLogAttention({ typeCode, userId, deviceId, logTime }) {
+	static async createLogAttention({ interCode, userId, deviceId, logTime }) {
 
-		const { receiver_user_id, receiver_user_role } = getInsertData({ typeCode, userId })
+		const { receiver_user_id, receiver_user_role } = getInsertData({ interCode, userId })
 
-		await useQueryDB("INSERT INTO _log_Attention (type_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
-			typeCode, 
+		await useQueryDB("INSERT INTO _log_Attention (inter_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
+			interCode, 
 			userId, 
 			deviceId, 
 			logTime, 

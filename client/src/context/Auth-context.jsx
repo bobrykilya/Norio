@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
 	
 		refSetTimeout.current = setTimeout(() => {
 			// console.log('Auto logOut')
-			handleLogOut()
+			handleLogOut({ interCode: 204 })
 			showSnackBarMessage({ type: 'w', message: 'Был выполнен выход из аккаунта пользователя по истечении быстрой сессии' })
 		}, timeOutTime)
 	}
@@ -71,14 +71,19 @@ const AuthProvider = ({ children }) => {
 
 	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }) => {
 		const pauseTime = checkSessionDouble(userInfo)
-		const lsDeviceId = Number(localStorage.getItem('deviceId'))
 		
 		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-		
-		if (!lsDeviceId || lsDeviceId !== deviceId) localStorage.setItem('deviceId', deviceId)
-		localStorage.setItem('userInfo', JSON.stringify(userInfo))
 
+		testAndUpdateLSDeviceId({ deviceId })
+		localStorage.setItem('userInfo', JSON.stringify(userInfo))
+		
 		userHasLogged(pauseTime)
+	}
+
+	const testAndUpdateLSDeviceId = ({ lsDeviceId, deviceId }) => {
+		const lsDeviceId_2 = lsDeviceId || Number(localStorage.getItem('deviceId'))
+
+		if (!lsDeviceId_2 || lsDeviceId_2 !== deviceId) localStorage.setItem('deviceId', deviceId)
 	}
 
 	const handleSignIn = async (data) => {
@@ -113,8 +118,9 @@ const AuthProvider = ({ children }) => {
 		resetSignUpVariables()
 	}
 
-	const handleLogOut =  () => {
-		AuthService.logOut()
+	const handleLogOut = ({ interCode }) => {
+
+		AuthService.logOut({ interCode })
 
 		resetSignInVariables()
 
@@ -135,10 +141,12 @@ const AuthProvider = ({ children }) => {
 			const refresh = async () => {
 				try {
 					// console.log('refresh')
-					const data = {
-						lsDeviceId: localStorage.getItem('deviceId')
-					}
-					const { accessToken, accessTokenExpiration, logOutTime, userInfo } = await AuthService.refresh(data)
+					const lsDeviceId = localStorage.getItem('deviceId')
+
+					const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId } = await AuthService.refresh({ lsDeviceId })
+
+					testAndUpdateLSDeviceId({ lsDeviceId, deviceId })
+
 					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 	
 					localStorage.setItem('userInfo', JSON.stringify(userInfo))				

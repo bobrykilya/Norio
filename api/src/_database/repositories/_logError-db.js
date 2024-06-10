@@ -3,8 +3,8 @@ import useQueryDB from '../../../hooks/useQueryDB.js'
 
 
 class LogErrorRepository {
-	static async createLogError({ typeCode, req=null, res=null, err, userId=null, deviceId=null, queryTimeString }) {
-		err.myOperationCode = typeCode
+	static async createLogError({ interCode, req=null, res=null, err, userId=null, deviceId=null, queryTimeString }) {
+		err.myOperationCode = interCode
 		delete err.length
 		delete err.name
 		delete err.severity

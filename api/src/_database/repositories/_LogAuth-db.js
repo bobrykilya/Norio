@@ -3,10 +3,10 @@ import useQueryDB from '../../../hooks/useQueryDB.js'
 
 
 class LogAuthRepository {
-	static async createLogAuth({ typeCode, userId, deviceId, logTime }) {
+	static async createLogAuth({ interCode, userId, deviceId, logTime }) {
 
-		await useQueryDB("INSERT INTO _log_Auth (type_code, user_id, device_id, log_time) VALUES ($1, $2, $3, $4)", [
-			typeCode, 
+		await useQueryDB("INSERT INTO _log_Auth (inter_code, user_id, device_id, log_time) VALUES ($1, $2, $3, $4)", [
+			interCode, 
 			userId, 
 			deviceId, 
 			logTime, 

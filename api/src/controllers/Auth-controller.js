@@ -73,13 +73,13 @@ class AuthController {
 
 	static async logOut(req, res) {
 		const refreshToken = req.cookies.refreshToken
+		const { interCode } = req.body
 		const { fingerprint } = req
-		const { queryTime, queryTimeString } = getTime()
-		// console.log(fingerprint)
+		const { queryTimeString } = getTime()
 
 
 		try {
-			await AuthService.logOut({ refreshToken, queryTimeString })
+			await AuthService.logOut({ refreshToken, queryTimeString, interCode })
 
 			res.clearCookie("refreshToken")
 
@@ -90,13 +90,14 @@ class AuthController {
 	}
 
 	static async refresh(req, res) {
-		const { fingerprint, lsDeviceId } = req
+		const { lsDeviceId } = req.body
+		const { fingerprint } = req
+		const { queryTimeString } = getTime()
 		const currentRefreshToken = req.cookies.refreshToken
-		const { queryTime, queryTimeString } = getTime()
 
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo } =
+			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } =
 				await AuthService.refresh({
 					currentRefreshToken,
 					fingerprint,
@@ -106,7 +107,7 @@ class AuthController {
 
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
-			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo })
+			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
 		} catch (err) {
 			return ErrorsUtils.catchError({ typeCode: 701, req, res, err, fingerprint, queryTimeString })
 		}

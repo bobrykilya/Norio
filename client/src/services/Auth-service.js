@@ -17,21 +17,23 @@ const checkCountryCode = async () => {
         const res = await $apiIpInfo.get("").json()
         // console.log(res)
 
-        if (res.country_code !== 'BY') {
-            throw new Error('Приложение работает только на территории РБ')
+        if (res.country_code !== 'BF') {
+            showSnackBarMessage({ type: 'e', duration: Infinity, message: 'Приложение работает только на территории РБ' })
+            throw new Error()
         }
 }
 
 const preRequest = async (data) => {
-	// await checkCountryCode()
+	await checkCountryCode()
 
     const lsDeviceId = Number(localStorage.getItem('deviceId'))
 
-	if (lsDeviceId) 
+	if (lsDeviceId) {
         return Object.assign(data, { lsDeviceId })
-
-    const deviceType = getDeviceType()
-	return Object.assign(data, { deviceType })
+    } else {
+        const deviceType = getDeviceType()
+        return Object.assign(data, { deviceType })
+    }
 }
 
 
@@ -57,6 +59,7 @@ class AuthService {
             return res
         } catch (err) {
             showSnackBarMessage(err)
+            throw new Error('checkUser error')
         }
     }
 
@@ -73,18 +76,19 @@ class AuthService {
         }
     }
 
-    static logOut() {
+    static logOut(data) {
         try {
-            $apiAuth.post("logout")
+            $apiAuth.post("logout", { json: data })
 
         } catch (err) {
+            console.log(err)
             showSnackBarMessage(err)
         }
     }
 
-    static async refresh() {
+    static async refresh(data) {
         try {
-            const res = await $apiAuth.post("refresh")?.json()
+            const res = await $apiAuth.post("refresh", { json: data })?.json()
 
             return res
         } catch (err) {

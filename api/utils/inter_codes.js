@@ -3,19 +3,19 @@ const getCodeDescription = (type_code) => {
     switch (type_code) {
         case 102 : return {
             name: 'Sign-in from new device',
-            description: 'Вход в пользователя с нового устройства',
+            description: 'Вход в аккаунт пользователя с нового устройства',
             notif_for_admin: true,
-            notif_for_user: false,
+            notif_for_user: true,
         }
         case 201 : return {
             name: 'Sign-in to user account',
-            description: 'Вход в аккаунт',
+            description: 'Вход в аккаунт пользователя',
             notif_for_admin: false,
             notif_for_user: false,
         }
         case 202 : return {
             name: 'Sign-in to user account (don`t forget mode)',
-            description: 'Вход в аккаунт под "Не запоминать меня"',
+            description: 'Вход в аккаунт пользователя под "Не запоминать меня"',
             notif_for_admin: false,
             notif_for_user: false,
         }
