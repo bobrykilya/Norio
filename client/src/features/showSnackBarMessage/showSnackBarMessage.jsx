@@ -28,13 +28,13 @@ const messagePreprocessing = (message) => {
 
 export const showSnackBarMessage = (err) => {
 	if (!err.message) return
-
-
-	if (err.status === 900) {
+	
+	
+	if (err.status === 900) { //* Block err
 		// console.log(err)
 		blockDevice({ logTime: err.errTime, infinityBlock: true })
 	}
-
+	
 	if (!err.status && !err.type) {
 		try {
 			err = err.response.json().then(err => showSnackBarMessage(err))
@@ -45,6 +45,7 @@ export const showSnackBarMessage = (err) => {
 		}
 		return
 	}
+	// console.log(err)
 
 	const { title, icon, toastDuration } = getTypeDecoding(err.type || 'e')
 

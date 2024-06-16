@@ -7,7 +7,7 @@ CREATE TABLE users(
 )
 
 CREATE TABLE users_info(
-    user_id SMALLINT PRIMARY KEY REFERENCES users(id)INTER_CODE,
+    user_id SMALLINT PRIMARY KEY REFERENCES users(id),
     last_name VARCHAR(25) NOT NULL,
     first_name VARCHAR(20) NOT NULL,
     middle_name VARCHAR(20) NOT NULL,
@@ -25,14 +25,23 @@ CREATE TABLE auth_devices(
     b_version VARCHAR(7) NOT NULL,
     os VARCHAR(15) NOT NULL,
     reg_time TIMESTAMP NOT NULL,
-    unlock_time VARCHAR(24) NOT NULL,
     finger_print VARCHAR(32) UNIQUE NOT NULL
+)
+
+CREATE TABLE block(
+    id SMALLSERIAL PRIMARY KEY,
+    device_id SMALLINT REFERENCES auth_devices(id),
+    user_id SMALLINT REFERENCES users(id),
+    block_time TIMESTAMP NOT NULL,
+    unlock_time TIMESTAMP,
+    ip VARCHAR(13),
+    finger_print VARCHAR(32) NOT NULL
 )
 
 CREATE TABLE refresh_sessions(
     id SERIAL PRIMARY KEY,
     user_id SMALLINT NOT NULL REFERENCES users(id),
-    device_id SMALLINT NOT NULL REFERENCES auth_devices(id)INTER_CODE,
+    device_id SMALLINT NOT NULL REFERENCES auth_devices(id),
     auth_time TIMESTAMP NOT NULL,
     log_in_time TIMESTAMP UNIQUE NOT NULL,
     log_out_time TIMESTAMP,
@@ -62,8 +71,8 @@ CREATE TABLE _log_Error(
     req VARCHAR(400), 
     res VARCHAR(400) NOT NULL, 
     err VARCHAR(400), 
-    user_id SMALLINT REFERENCES users(id)INTER_CODE, 
-    device_id SMALLINT REFERENCES auth_devices(id)INTER_CODE, 
+    user_id SMALLINT REFERENCES users(id), 
+    device_id SMALLINT REFERENCES auth_devices(id), 
     log_time TIMESTAMP NOT NULL
 )
 

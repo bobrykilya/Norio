@@ -16,7 +16,7 @@ class DeviceService {
         // console.log(data)
 
         try {
-            await $apiAuth.post("block", { json: data }).json()
+            $apiAuth.post("block", { json: data }).json()
 
             // return res
         } catch (err) {

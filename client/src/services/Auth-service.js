@@ -15,16 +15,23 @@ const getDeviceType = () => {
 
 const checkCountryCode = async () => {
         const res = await $apiIpInfo.get("").json()
+            .catch(() => {
+                showSnackBarMessage({type: 'w', message: 'Ошибка обращения к сервису apiIpInfo (checkCountryCode function)'})
+                console.log('Ошибка обращения к сервису apiIpInfo')
+            })
         // console.log(res)
+        if (!res) return null
 
-        if (res.country_code !== 'BF') {
+        if (res.country_code !== 'BY') {
             showSnackBarMessage({ type: 'e', duration: Infinity, message: 'Приложение работает только на территории РБ' })
             throw new Error()
         }
+        return res.ip
 }
 
 const preRequest = async (data) => {
-	await checkCountryCode()
+	const deviceIP = await checkCountryCode()
+    data.deviceIP = deviceIP
 
     const lsDeviceId = Number(localStorage.getItem('deviceId'))
 
@@ -92,7 +99,7 @@ class AuthService {
 
             return res
         } catch (err) {
-            // showSnackBarMessage(err)
+            showSnackBarMessage(err)
             throw new Error('Token refresh error')
         }
     }

@@ -7,6 +7,7 @@ import { COOKIE_SETTINGS } from "../../constants.js"
 const getTime = () => {
 	const queryTime = new Date()
 	const queryTimeString = queryTime.toLocaleString()
+	// console.log({ queryTime, queryTimeString })
 
 	return { queryTime, queryTimeString }
 }
@@ -14,10 +15,10 @@ const getTime = () => {
 class AuthController {
 	static async signIn(req, res) {
 		// console.log(req)
-		const { username, password, fastSession, deviceType, lsDeviceId } = req.body
+		const { username, password, fastSession, deviceType, lsDeviceId, deviceIP } = req.body
 		const { fingerprint } = req
 		const { queryTime, queryTimeString } = getTime()
-		// console.log(deviceType)
+
 
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } = await AuthService.signIn({ 
@@ -29,6 +30,7 @@ class AuthController {
 				queryTimeString,
 				deviceType,
 				lsDeviceId,
+				deviceIP,
 			})
 			
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
@@ -97,7 +99,7 @@ class AuthController {
 
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } =
+			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId, unlockTime } =
 				await AuthService.refresh({
 					currentRefreshToken,
 					fingerprint,
@@ -107,7 +109,7 @@ class AuthController {
 
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
-			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
+			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, unlockTime })
 		} catch (err) {
 			return ErrorsUtils.catchError({ typeCode: 701, req, res, err, fingerprint, queryTimeString })
 		}

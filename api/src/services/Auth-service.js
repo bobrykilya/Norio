@@ -9,84 +9,15 @@ import AuthDeviceRepository from '../_database/repositories/AuthDevice-db.js'
 import _logAttentionRepository from '../_database/repositories/_logAttention-db.js'
 import _logAuthRepository from '../_database/repositories/_LogAuth-db.js'
 import getCodeDescription from '../../utils/Inter_codes.js'
-import getBrowserAndOs from '../../hooks/useGetBrowserAndOS.js'
+import DeviceService from './Device-service.js'
 
 
-
-const deviceIdHandlingAndUpdating = async ({ lsDeviceId, fingerprint, userId, queryTimeString }) => {
-
-	// console.log(lsDeviceId)
-	if (lsDeviceId) {
-
-		const savedDeviceIdInDB = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
-
-		if (savedDeviceIdInDB) {
-			if (savedDeviceIdInDB !== lsDeviceId){
-				//* Handling if db has this fingerprint, but device has other deviceId
-				await _logAttentionRepository.createLogAttention({ interCode: 804, userId, deviceId: savedDeviceIdInDB, logTime: queryTimeString })
-				throw new BlockDevice(getCodeDescription(804).message)
-				//! Block device
-			} else return lsDeviceId
-		} else {
-			const deviceInDB = await AuthDeviceRepository.getDevice(lsDeviceId)
-			
-			//* Handling if device has number, but this device hasn't been registered/has been removed
-			if (!deviceInDB) {
-				try {
-					await _logAttentionRepository.createLogAttention({ interCode: 805, userId, deviceId: lsDeviceId, logTime: queryTimeString })
-				} catch {
-
-				}
-				
-				return null
-			}
-	
-			const { browser, bVersion, os } = getBrowserAndOs(fingerprint)
-
-			if (deviceInDB.browser === browser && deviceInDB.os === os 
-				&& deviceInDB.b_version !== bVersion
-			) {
-				//* Handling if device has number, but fingerprint in db is different (Browser has been updated)
-				// await AuthDeviceRepository.updateDevice({ fingerprint, deviceId: lsDeviceId })
-				return null
-			} else {
-				//* Handling if db has deviceId with other browser or OS
-				await _logAttentionRepository.createLogAttention({ interCode: 804, userId, deviceId: lsDeviceId, logTime: queryTimeString })
-				throw new BlockDevice(getCodeDescription(804).message)
-				//! Block device
-			}
-	
-			return lsDeviceId
-		}
-
-	} else return null
-}
-
-const createNewDeviceWithHandling = async ({ interCode, fingerprint, userId, queryTimeString, deviceType }) => {
-	let deviceId
-	
-	try {
-		deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType: deviceType || 'Unknown'  })
-
-		await _logAttentionRepository.createLogAttention({ interCode, userId, deviceId, logTime: queryTimeString })
-	}catch {
-		//* Handling if db have this fingerprint, but device doesn't have number in LocalStorage
-		deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash)
-		await _logAttentionRepository.createLogAttention({ interCode: 803, userId, deviceId, logTime: queryTimeString })
-	}
-	return deviceId
-}
-
-const getDeviceId = async ({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId }) => {
-	const deviceId = await deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId, queryTimeString }) ||
-		await createNewDeviceWithHandling({ interCode, fingerprint, userId, queryTimeString, deviceType })
-
-	return deviceId
-}
 
 class AuthService {
 
-	static async signIn({ username, password, fingerprint, fastSession, queryTime, queryTimeString, deviceType, lsDeviceId }) {
+	static async signIn({ username, password, fingerprint, fastSession, queryTime, queryTimeString, deviceType, lsDeviceId, deviceIP }) {
+		
+		await DeviceService.checkDeviceIPForBlock(deviceIP)
 
 		const userData = await UserRepository.getUserData(username)
 		
@@ -111,7 +42,7 @@ class AuthService {
 			}
 		//*
 		
-		const deviceId = await getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId })
+		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId })
 		
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTimeString })
 
@@ -194,7 +125,7 @@ class AuthService {
 			throw new Conflict("Данный номер телефона уже занят другим пользователем")
 		}
 
-		const deviceId = await getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId })
+		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId })
 
 		await _logAttentionRepository.createLogAttention({ interCode, userId, deviceId, logTime: queryTimeString })
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTimeString })
@@ -235,6 +166,9 @@ class AuthService {
 	}
 
 	static async refresh({ fingerprint, currentRefreshToken, queryTimeString, lsDeviceId }) {
+
+		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint })
+
 		if (!currentRefreshToken) {
 			throw new Unauthorized()
 		}
@@ -248,17 +182,23 @@ class AuthService {
 
 		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash) || 
 			await deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId: refreshSession.user_id, queryTimeString })
-		if (refreshSession.device_id !== deviceId) {
+
+		if (Number(refreshSession.device_id) !== Number(deviceId)) {
+			console.log(refreshSession.device_id + '    ' + deviceId)
 			let interCodeAttention = 801
 			if (!deviceId) {
 				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType: 'Unknown' })
 				interCodeAttention = 802
-				throw new BlockDevice(getCodeDescription(interCodeAttention).message)
+				
+				await _logAttentionRepository.createLogAttention({ interCode: interCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTimeString })
+				await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
+				throw new BlockDevice(getCodeDescription(interCodeAttention))
 				//! Block device
 			}
-			await _logAttentionRepository.createLogAttention({ interCode: interCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTimeString })
 
-			throw new Forbidden(getCodeDescription(interCodeAttention).message)
+			await _logAttentionRepository.createLogAttention({ interCode: interCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTimeString })
+			await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
+			throw new BlockDevice(getCodeDescription(interCodeAttention))
 			//! Block device
 		}
 
@@ -300,6 +240,7 @@ class AuthService {
 			logOutTime: refreshSession.log_out_time,
 			userInfo,
 			deviceId,
+			unlockTime,
 		}
 	}
 

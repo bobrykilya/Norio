@@ -4,6 +4,7 @@ import inMemoryJWT from '../services/inMemoryJWT-service.js'
 import config from "../config.js"
 import AuthService from "../services/Auth-service.js"
 import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage.jsx"
+import { setUnlockTimer } from '../features/blockDevice/unlockDevice.js'
 
 
 
@@ -143,7 +144,7 @@ const AuthProvider = ({ children }) => {
 					// console.log('refresh')
 					const lsDeviceId = localStorage.getItem('deviceId')
 
-					const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId } = await AuthService.refresh({ lsDeviceId })
+					const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, unlockTime } = await AuthService.refresh({ lsDeviceId })
 
 					testAndUpdateLSDeviceId({ lsDeviceId, deviceId })
 
@@ -157,6 +158,9 @@ const AuthProvider = ({ children }) => {
 					if (logOutTime) {
 						setLogOutTimer(logOutTime)
 					}
+					// if (unlockTime) {
+					// 	setUnlockTimer(unlockTime)
+					// }
 				} catch {
 					setIsAppReady(true)
 					setIsUserLogged(false)
@@ -186,7 +190,7 @@ const AuthProvider = ({ children }) => {
 		const defaultProcessing = () => {
 			try {
 				if (localStorage.getItem('blockDevice')) {
-					setTimeout(() => handleLogOut(), 300)
+					setTimeout(() => handleLogOut({}), 300)
 				}
 			} catch {
 				setIsAppReady(true)

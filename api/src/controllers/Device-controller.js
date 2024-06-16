@@ -1,4 +1,5 @@
 import DeviceService from '../services/Device-service.js'
+import ErrorsUtils from "../../utils/Errors.js"
 
 
 
@@ -14,7 +15,7 @@ class DeviceController {
         const { fingerprint } = req
 
         try {
-            const {  } = await DeviceService.blockDevice({ 
+            await DeviceService.blockDevice({ 
                 logTime,
                 unlockTime,
                 userInfo,
@@ -23,10 +24,10 @@ class DeviceController {
                 fingerprint,
             })
 
-            return res.status(200).json({  })
+            return res.status(200)
         } catch (err) {
-            console.log(err)
-            // return ErrorsUtils.catchError({ typeCode: 900, req, res, err, username, fingerprint, queryTimeString })
+            // console.log(err)
+            return ErrorsUtils.catchError({ typeCode: 900, req, res, err, username, fingerprint, queryTimeString })
         }
     }
 }
