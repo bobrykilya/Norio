@@ -1,46 +1,62 @@
 import DeviceService from '../../services/Device-service'
 import { showSnackBarMessage } from '../showSnackBarMessage/showSnackBarMessage'
 import inMemoryJWT from '../../services/inMemoryJWT-service.js'
+import useGetEndTime from '../../hooks/useGetEndTime.js'
+import useGetTimeShort from '../../hooks/useGetTimeShort.js';
 
 
 
-const getErrorMessage = ({ lockTime, infinityBlock }) => {
+const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB }) => {
+    // console.log(infinityBlock)
     if (!infinityBlock) {
-        const blockDuration = 5 //* Device block duration in minutes
-        
-        lockTime.setMinutes(lockTime.getMinutes() + blockDuration)
-        const lockTimeMinutes = lockTime.getMinutes()
-        const unlockTime = `${lockTime.getHours()}:${lockTimeMinutes > 9 ? lockTimeMinutes : '0' + lockTimeMinutes}`
 
-        return { err_mess: `Устройство было заблокировано до ${unlockTime} вследствие большого количества однотипных ошибок за короткий срок`, unlockTime: lockTime.toLocaleString() }
+        let endTimeStamp
+        let unlockTimeShort
+
+        if (!unlockTimeDB) {
+            endTimeStamp = useGetEndTime({ startTime: lockTime, duration: 5 })
+        }
+        unlockTimeShort = useGetTimeShort(unlockTimeDB || endTimeStamp)
+        // console.log({ lockTime, infinityBlock, unlockTimeDB, unlockTimeShort, endTimeStamp })
+
+        return { 
+            err_mess: `Устройство было заблокировано до ${unlockTimeShort} вследствие большого количества однотипных ошибок за короткий срок`, 
+            unlockTime: unlockTimeDB || endTimeStamp,
+        }
     } else {
-        return { err_mess:`Устройство было заблокировано. Обратитесь к администратору`, unlockTime: null }
+        return { 
+            err_mess:`Устройство было заблокировано. Обратитесь к администратору`, 
+            unlockTime: null,
+        }
     }
 }
 
 
-const blockDevice = async ({ logTime, infinityBlock=false }) => {
-
+const blockDevice = async ({ logTime, infinityBlock=null, unlockTimeDB=null, interCode=null }) => {
+    
     const lockTime = logTime ? new Date(logTime) : new Date()
-    const { err_mess, unlockTime } = getErrorMessage({ lockTime, infinityBlock })
+    const { err_mess, unlockTime } = getErrorMessage({ lockTime, infinityBlock, unlockTimeDB })
+    // console.log(err_mess)
     
     setTimeout(() => {
         showSnackBarMessage({ type: 'b', message: err_mess })
         localStorage.setItem('blockDevice', err_mess)
-    }, 1000)
-    // throw new Error(err_mess)
+    }, 300)
 
     inMemoryJWT.deleteToken()
-    // console.log(unlockTime)
+
+    if (unlockTimeDB) return 
 
     const data = { 
         logTime,
-        unlockTime: unlockTime,
+        unlockTime,
         userInfo: localStorage.getItem('userInfo'),
         deviceId: localStorage.getItem('deviceId'),
+        interCode,
     }
 
     // console.log(data)
+    
     DeviceService.blockDeviceInDB(data)
 }
 

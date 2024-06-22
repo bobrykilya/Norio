@@ -24,27 +24,29 @@ CREATE TABLE auth_devices(
     browser VARCHAR(15) NOT NULL,
     b_version VARCHAR(7) NOT NULL,
     os VARCHAR(15) NOT NULL,
-    reg_time TIMESTAMP NOT NULL,
+    reg_time TIMESTAMP WITH TIME NOT NULL,
     finger_print VARCHAR(32) UNIQUE NOT NULL
 )
 
 CREATE TABLE block(
     id SMALLSERIAL PRIMARY KEY,
+    inter_code SMALLINT NOT NULL,
     device_id SMALLINT REFERENCES auth_devices(id),
     user_id SMALLINT REFERENCES users(id),
-    block_time TIMESTAMP NOT NULL,
-    unlock_time TIMESTAMP,
+    block_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    unlock_time TIMESTAMP WITH TIME ZONE,
     ip VARCHAR(13),
-    finger_print VARCHAR(32) NOT NULL
+    finger_print VARCHAR(32) NOT NULL,
+    is_active BOOLEAN NOT NULL
 )
 
 CREATE TABLE refresh_sessions(
     id SERIAL PRIMARY KEY,
     user_id SMALLINT NOT NULL REFERENCES users(id),
     device_id SMALLINT NOT NULL REFERENCES auth_devices(id),
-    auth_time TIMESTAMP NOT NULL,
-    log_in_time TIMESTAMP UNIQUE NOT NULL,
-    log_out_time TIMESTAMP,
+    auth_time TIMESTAMP WITH TIME NOT NULL,
+    log_in_time TIMESTAMP WITH TIME UNIQUE NOT NULL,
+    log_out_time TIMESTAMP WITH TIME ZONE,
     refresh_token VARCHAR(400) UNIQUE NOT NULL
 )
 
@@ -53,7 +55,7 @@ CREATE TABLE _log_Attention(
     inter_code SMALLINT NOT NULL,
     user_id SMALLINT NOT NULL REFERENCES users(id),
     device_id SMALLINT NOT NULL REFERENCES auth_devices(id),
-    log_time TIMESTAMP NOT NULL,
+    log_time TIMESTAMP WITH TIME NOT NULL,
     receiver_user_id SMALLINT REFERENCES users(id),
     receiver_user_role SMALLINT
 )
@@ -63,7 +65,7 @@ CREATE TABLE _log_Auth(
     inter_code SMALLINT NOT NULL,
     user_id SMALLINT NOT NULL REFERENCES users(id),
     device_id SMALLINT NOT NULL REFERENCES auth_devices(id),
-    log_time TIMESTAMP NOT NULL
+    log_time TIMESTAMP WITH TIME NOT NULL
 )
 
 CREATE TABLE _log_Error(
@@ -73,7 +75,7 @@ CREATE TABLE _log_Error(
     err VARCHAR(400), 
     user_id SMALLINT REFERENCES users(id), 
     device_id SMALLINT REFERENCES auth_devices(id), 
-    log_time TIMESTAMP NOT NULL
+    log_time TIMESTAMP WITH TIME NOT NULL
 )
 
 SELECT * FROM users

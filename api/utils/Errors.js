@@ -57,8 +57,7 @@ export class BlockDevice extends WebError {
 class ErrorUtils {
 	static async catchError({ interCode, req, res, err, username, fingerprint, queryTimeString }) {
 		if (err instanceof WebError) {
-			// err.errTime = new Date().toLocaleString()
-			err.errTime = new Date()
+			err.errTime = new Date().toUTCString()
 			err.action = req.route.stack[0]?.name
 			
 			if (typeof(err.message) === 'object') {

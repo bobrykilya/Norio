@@ -12,7 +12,7 @@ const getUserIPAddress = async () => {
 
 class DeviceService {
     static blockDeviceInDB = async (data) => {
-        data.deviceIP = await getUserIPAddress()
+        if (!data.unlockTime) data.deviceIP = await getUserIPAddress()
         // console.log(data)
 
         try {

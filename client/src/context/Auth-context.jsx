@@ -145,12 +145,16 @@ const AuthProvider = ({ children }) => {
 					const lsDeviceId = localStorage.getItem('deviceId')
 
 					const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, unlockTime } = await AuthService.refresh({ lsDeviceId })
+						.catch (err => {
+							// console.log(err)
+							localStorage.removeItem('blockDevice')
+						})
 
 					testAndUpdateLSDeviceId({ lsDeviceId, deviceId })
 
 					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 	
-					localStorage.setItem('userInfo', JSON.stringify(userInfo))				
+					localStorage.setItem('userInfo', JSON.stringify(userInfo))
 	
 					setIsAppReady(true)
 					setIsUserLogged(true)

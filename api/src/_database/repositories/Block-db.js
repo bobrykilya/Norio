@@ -4,29 +4,32 @@ import useQueryDB from '../../../hooks/useQueryDB.js'
 
 
 class BlockRepository {
-	static async createBlock({ deviceId, userInfo, blockTime, unlockTime, deviceIP, fingerprintHash }) {
+	static async createBlock({ interCode, deviceId, userInfo, blockTime, unlockTime, deviceIP, fingerprintHash }) {
+		const isActive = true
+		if (unlockTime) deviceIP = null
 
-		const response = await useQueryDB("INSERT INTO block (device_id, user_id, block_time, unlock_time, ip, finger_print) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+		const response = await useQueryDB("INSERT INTO block (inter_code, device_id, user_id, block_time, unlock_time, ip, finger_print, is_active) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id",
 			[
+				interCode,
 				deviceId,
 				userInfo?.userId,
 				blockTime,
 				unlockTime,
 				deviceIP,
 				fingerprintHash,
+				isActive,
 			])
 
 		return response.rows[0]?.id
 	}
 
-	static async checkIPForBlockStatus(deviceIP) {
-		const response = await useQueryDB("SELECT id FROM block WHERE ip=$1", [deviceIP])
-
-		return response.rows[0]
-	}
-
-	static async checkIdForBlockStatus(deviceId) {
-		const response = await useQueryDB("SELECT unlock_time FROM block WHERE device_id=$1 ORDER BY unlock_time", [deviceId])
+	static async checkDeviceForBlockStatus({ deviceId, fingerprintHash, deviceIP }) {
+		const response = await useQueryDB("SELECT unlock_time FROM block WHERE is_active=true AND device_id=$1 OR finger_print=$2 OR ip=$3",
+			[
+				deviceId, 
+				fingerprintHash, 
+				deviceIP
+			])
 
 		return response.rows[0]
 	}

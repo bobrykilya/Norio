@@ -17,7 +17,7 @@ class AuthService {
 
 	static async signIn({ username, password, fingerprint, fastSession, queryTime, queryTimeString, deviceType, lsDeviceId, deviceIP }) {
 		
-		await DeviceService.checkDeviceIPForBlock(deviceIP)
+		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP })
 
 		const userData = await UserRepository.getUserData(username)
 		
@@ -92,7 +92,11 @@ class AuthService {
 		}
 	}
 
-	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, queryTimeString, deviceType, lsDeviceId }) {
+
+
+	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, queryTimeString, deviceType, lsDeviceId, deviceIP }) {
+
+		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP })
 
 		//! Change
 		const role = 1
@@ -155,6 +159,8 @@ class AuthService {
 		}
 	}
 
+
+
 	static async logOut({ refreshToken, queryTimeString, interCode }) {
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(refreshToken)
 
@@ -164,6 +170,8 @@ class AuthService {
 
 		await RefreshSessionsRepository.deleteRefreshSessionByToken(refreshToken)
 	}
+
+
 
 	static async refresh({ fingerprint, currentRefreshToken, queryTimeString, lsDeviceId }) {
 
@@ -244,6 +252,8 @@ class AuthService {
 		}
 	}
 
+
+	
 	static async checkUser({ username, password }) {
 		const salt = bcrypt.genSaltSync(10)
 

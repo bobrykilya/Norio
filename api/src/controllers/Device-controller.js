@@ -11,6 +11,7 @@ class DeviceController {
             userInfo,
             deviceId,
             deviceIP,
+            interCode,
         } = req.body
         const { fingerprint } = req
 
@@ -22,12 +23,12 @@ class DeviceController {
                 deviceId,
                 deviceIP,
                 fingerprint,
+                interCode,
             })
 
             return res.status(200)
         } catch (err) {
-            // console.log(err)
-            return ErrorsUtils.catchError({ typeCode: 900, req, res, err, username, fingerprint, queryTimeString })
+            return ErrorsUtils.catchError({ interCode: 900, req, res, err, username: userInfo?.username, fingerprint, queryTimeString: logTime })
         }
     }
 }

@@ -1,5 +1,5 @@
 
-const getLastTime = (timestamp, type) => {
+const useGetLastTime = (timestamp, type) => {
 
     const nowTime = new Date()
     const timestampTime = new Date(timestamp)
@@ -19,4 +19,4 @@ const getLastTime = (timestamp, type) => {
     }
 }
 
-export default getLastTime
+export default useGetLastTime

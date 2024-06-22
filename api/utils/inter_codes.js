@@ -79,6 +79,7 @@ const getCodeDescription = (interCode) => {
             notifForAdmin: true,
             notifForUser: false,
             message: 'Попытка несанкционированного обновления токенов',
+            infinityBlock: true,
         }
         case 803 : return {
             interCode,
@@ -94,6 +95,7 @@ const getCodeDescription = (interCode) => {
             notifForAdmin: true,
             notifForUser: false,
             message: 'Попытка несанкционированной подмены id устройства',
+            infinityBlock: true,
         }
         case 805 : return {
             interCode,
@@ -108,6 +110,7 @@ const getCodeDescription = (interCode) => {
             description: 'Попытка несанкционированной подмены id неизвестного устройства. Блокировка девайса',
             notifForAdmin: true,
             notifForUser: false,
+            infinityBlock: true,
         }
     }
 }

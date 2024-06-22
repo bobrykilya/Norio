@@ -6,7 +6,7 @@ import { COOKIE_SETTINGS } from "../../constants.js"
 
 const getTime = () => {
 	const queryTime = new Date()
-	const queryTimeString = queryTime.toLocaleString()
+	const queryTimeString = queryTime.toUTCString()
 	// console.log({ queryTime, queryTimeString })
 
 	return { queryTime, queryTimeString }
@@ -37,12 +37,12 @@ class AuthController {
 
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
 		} catch (err) {
-			return ErrorsUtils.catchError({ typeCode: !fastSession ? 201 : 202, req, res, err, username, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: !fastSession ? 201 : 202, req, res, err, username, fingerprint, queryTimeString })
 		}
 	}
 
 	static async signUp(req, res) {
-		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, deviceType, lsDeviceId } = req.body
+		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, deviceType, lsDeviceId, deviceIP } = req.body
 		const { fingerprint } = req
 		const { queryTime, queryTimeString } = getTime()
 
@@ -63,13 +63,14 @@ class AuthController {
 				queryTimeString,
 				deviceType,
 				lsDeviceId,
+				deviceIP,
 			})
 			
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
-			return ErrorsUtils.catchError({ typeCode: 205,req, res, err, username, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: 205,req, res, err, username, fingerprint, queryTimeString })
 		}
 	}
 
@@ -87,7 +88,7 @@ class AuthController {
 
 			return res.sendStatus(200)
 		} catch (err) {
-			return ErrorsUtils.catchError({ typeCode: 203, req, res, err, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: 203, req, res, err, fingerprint, queryTimeString })
 		}
 	}
 
@@ -111,7 +112,7 @@ class AuthController {
 
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, unlockTime })
 		} catch (err) {
-			return ErrorsUtils.catchError({ typeCode: 701, req, res, err, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: 701, req, res, err, fingerprint, queryTimeString })
 		}
 	}
 
@@ -126,7 +127,7 @@ class AuthController {
 
 			return res.status(200).json({ userName, hashedPassword, avatarsList })
 		} catch (err) {
-			return ErrorsUtils.catchError({ typeCode: 711, req, res, err, username, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: 711, req, res, err, username, fingerprint, queryTimeString })
 		}
 	}
 }

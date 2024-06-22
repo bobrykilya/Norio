@@ -1,23 +1,23 @@
 import blockDevice from '../blockDevice/blockDevice'
-import getLastTime from './../../hooks/useGetLastTime'
+import useGetLastTime from '../../hooks/useGetPastTime'
 
 
 
 const recentlyTime = 1 //* Time of error counting in minutes
-const sameErrsQuantity = 7 //* Limit of possible error quantity recently
+const sameErrsQuantity = 2 //* Limit of possible error quantity recently
 const userErrStorageTime = 24 //* User error storage time in hours
 
 
 const filterErrsListByTime = (err) => {
 	if (!err.errTime) return false
 
-	return getLastTime(err.errTime, 'hour') < userErrStorageTime
+	return useGetLastTime(err.errTime, 'hour') < userErrStorageTime
 }
 const checkErrsQuantityForRecently = (list) => {
 
 	let result = false
 
-	list = list.filter(err => err.type === 'e' && getLastTime(err.errTime, 'minute') < recentlyTime)
+	list = list.filter(err => err.type === 'e' && useGetLastTime(err.errTime, 'minute') < recentlyTime)
 	const countObject = {}
 	
 	for (let err of list) {
@@ -41,11 +41,11 @@ const checkErrsQuantityForRecently = (list) => {
 
 const saveLogInLocalStorage = ({ err }) => {
 	// console.log(err.detail)
-    const ErrDetail = err.detail
 	if (localStorage.getItem('blockDevice')) return
 	
     let errsList = JSON.parse(localStorage.getItem('userErrsList')) || []
 	const userId = JSON.parse(localStorage.getItem('userInfo'))?.user_id || undefined
+    const ErrDetail = err.detail
 	
 	// console.log(errsList)
 	if (errsList[0]) errsList = errsList.filter(filterErrsListByTime) || []

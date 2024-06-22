@@ -79,34 +79,33 @@ class DeviceService {
         return deviceId
     }
 
-	static async checkDeviceIPForBlock(deviceIP) {
+	static async checkDeviceForBlock({ deviceId, fingerprint, deviceIP=false }) {
 
-		const isBlocked = await BlockRepository.checkIPForBlockStatus(deviceIP)
-	
-		// console.log(isBlocked)
-		if (isBlocked) {
-			throw new BlockDevice('Устройство было заблокировано. Обратитесь к администратору')
-		}
-	}
-
-	static async checkDeviceForBlock({ deviceId, fingerprint }) {
-
-		const isBlocked = await BlockRepository.checkFingerprintForBlockStatus(fingerprint.hash) || 
-			await BlockRepository.checkIdForBlockStatus(deviceId)
+		const blockedDeviceInfo = await BlockRepository.checkDeviceForBlockStatus({ deviceId, fingerprintHash: fingerprint.hash, deviceIP })
+		// console.log(blockedDeviceInfo)
 		
-	
-		// console.log(isBlocked)
-		if (isBlocked) {
-			throw new Conflict('Устройство было заблокировано. Обратитесь к администратору')
+
+		if (blockedDeviceInfo) {
+			if (blockedDeviceInfo.unlock_time)
+				throw new BlockDevice({ unlockTime: blockedDeviceInfo.unlock_time })
+			else 
+				throw new BlockDevice({ infinityBlock: true })
 		}
 	}
 
-    static async blockDevice({ logTime, unlockTime, userInfo, deviceId, deviceIP, fingerprint }) {
-        // console.log(userInfo)
+    static async blockDevice({ logTime, unlockTime, userInfo, deviceId, deviceIP, fingerprint, interCode }) {
+        // console.log({ logTime, unlockTime, userInfo, deviceId, deviceIP, fingerprint })
 
-		BlockRepository.createBlock({ deviceId, userInfo, blockTime: logTime, unlockTime, deviceIP, fingerprintHash: fingerprint.hash })
+		const isBlocked = await BlockRepository.checkDeviceForBlockStatus({ deviceId, fingerprintHash: fingerprint.hash, deviceIP })
+		
+		if (!isBlocked) {
+				await BlockRepository.createBlock({ interCode, deviceId, userInfo, blockTime: logTime, unlockTime, deviceIP, fingerprintHash: fingerprint.hash })
+					.catch(async () => {
+						//* Handling for block-db if device has unknown deviceId
+						await BlockRepository.createBlock({ interCode, deviceId: null, userInfo, blockTime: logTime, unlockTime, deviceIP, fingerprintHash: fingerprint.hash })
+					})
+		}
     }
-
 }
 
 

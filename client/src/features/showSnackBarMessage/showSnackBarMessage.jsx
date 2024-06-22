@@ -27,13 +27,13 @@ const messagePreprocessing = (message) => {
 }
 
 export const showSnackBarMessage = (err) => {
-	if (!err.message) return
-	
-	
+	// console.log(err)
+
 	if (err.status === 900) { //* Block err
-		// console.log(err)
-		blockDevice({ logTime: err.errTime, infinityBlock: true })
+		blockDevice({ logTime: err.errTime, infinityBlock: err.detail.infinityBlock, unlockTimeDB: err.detail.unlockTime, interCode: err.detail.interCode })
 	}
+
+	if (!err.message) return
 	
 	if (!err.status && !err.type) {
 		try {
