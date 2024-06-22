@@ -6,6 +6,7 @@ import CoverPanel from '../../components/AuthPage/CoverPanel/CoverPanel'
 import { AuthContext } from './../../context/Auth-context'
 import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
+import AppTitle from './../../components/AppTitle/AppTitle';
 
 
 
@@ -15,16 +16,19 @@ const AuthPage = () => {
     // console.log(coverPanelState)
 
     return ( 
-        <AuthPageAnim>
-            <div id='auth_panel-cont' className={`cont ${blockAuthPage && 'block'}`}>
-                <div id='signs-cont' className='cont'>
-                    <SignInCont act_form={ coverPanelState }/>
-                    <SignUpCont act_form={ coverPanelState } />
-                    {coverPanelState !== 'sign_in' && <SignUpInfoCont act_form={ coverPanelState } />}
+        <>
+            <AppTitle />
+            <AuthPageAnim>
+                <div id='auth_panel-cont' className={`cont ${blockAuthPage && 'block'}`}>
+                    <div id='signs-cont' className='cont'>
+                        <SignInCont act_form={ coverPanelState }/>
+                        <SignUpCont act_form={ coverPanelState } />
+                        {coverPanelState !== 'sign_in' && <SignUpInfoCont act_form={ coverPanelState } />}
+                    </div>
+                    <CoverPanel />
                 </div>
-                <CoverPanel />
-            </div>
-        </AuthPageAnim>
+            </AuthPageAnim>
+        </>
     )
 }
 

@@ -8,6 +8,7 @@ import { TbTableShortcut } from "react-icons/tb"
 import { TbReportAnalytics } from "react-icons/tb"
 import { LuBuilding } from "react-icons/lu"
 import { FiSettings } from "react-icons/fi"
+import AppTitle from '../../AppTitle/AppTitle'
 
 
 
@@ -67,11 +68,12 @@ const NavBarCard = () => {
     return ( 
         <div className='nav_bar_card-cont cont card'>
             <button 
-                className='logo-cont card_label-cont cont'
+                className='logo-cont cont'
                 title='Улыбнись, заяц)'
             >
-                <img src={LittleLogoImg} alt="" className='little_logo-img' />
-                <p className='little_logo-name'>Stroypr<br/>Team</p>
+                {/* <img src={LittleLogoImg} alt="" className='little_logo-img' /> */}
+                {/* <p className='little_logo-name'>Stroypr<br/>Team</p> */}
+                <AppTitle />
             </button>
             <div className='card_content-cont cont'>
                 <nav className='views_list-cont cont'>

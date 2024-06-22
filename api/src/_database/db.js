@@ -8,7 +8,7 @@ const pool = new pg.Pool({
 	host: "localhost",
 	// host: "192.168.0.20",
 	port: 5433,
-	database: "StroyprTeam",
+	database: "Norio",
 })
 
 export default pool

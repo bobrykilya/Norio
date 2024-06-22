@@ -1,6 +1,6 @@
 # dependencies
-/config/env.js
-/db.js
+/env.js
+/src/database/db.js
 
 #yarn
 .yarn/*
