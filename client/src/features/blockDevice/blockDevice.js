@@ -6,7 +6,7 @@ import useGetTimeShort from '../../hooks/useGetTimeShort.js';
 
 
 
-const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB }) => {
+const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }) => {
     // console.log(infinityBlock)
     if (!infinityBlock) {
 
@@ -22,11 +22,13 @@ const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB }) => {
         return { 
             err_mess: `Устройство было заблокировано до ${unlockTimeShort} вследствие большого количества однотипных ошибок за короткий срок`, 
             unlockTime: unlockTimeDB || endTimeStamp,
+            newInterCode: interCode || 807,
         }
     } else {
         return { 
             err_mess:`Устройство было заблокировано. Обратитесь к администратору`, 
             unlockTime: null,
+            newInterCode: interCode,
         }
     }
 }
@@ -35,7 +37,7 @@ const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB }) => {
 const blockDevice = async ({ logTime, infinityBlock=null, unlockTimeDB=null, interCode=null }) => {
     
     const lockTime = logTime ? new Date(logTime) : new Date()
-    const { err_mess, unlockTime } = getErrorMessage({ lockTime, infinityBlock, unlockTimeDB })
+    const { err_mess, unlockTime, newInterCode } = getErrorMessage({ lockTime, infinityBlock, unlockTimeDB, interCode })
     // console.log(err_mess)
     
     setTimeout(() => {
@@ -52,7 +54,7 @@ const blockDevice = async ({ logTime, infinityBlock=null, unlockTimeDB=null, int
         unlockTime,
         userInfo: localStorage.getItem('userInfo'),
         deviceId: localStorage.getItem('deviceId'),
-        interCode,
+        interCode: newInterCode,
     }
 
     // console.log(data)

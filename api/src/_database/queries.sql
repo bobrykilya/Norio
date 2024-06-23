@@ -20,15 +20,16 @@ CREATE TABLE users_info(
 
 CREATE TABLE auth_devices(
     id SMALLSERIAL PRIMARY KEY,
-    type VARCHAR(7) NOT NULL,   
     browser VARCHAR(15) NOT NULL,
+    type VARCHAR(7) NOT NULL,   
     b_version VARCHAR(7) NOT NULL,
     os VARCHAR(15) NOT NULL,
     reg_time TIMESTAMP WITH TIME NOT NULL,
-    finger_print VARCHAR(32) UNIQUE NOT NULL
+    finger_print VARCHAR(32) UNIQUE NOT NULL,
+    ip_reg VARCHAR(13) NOT NULL
 )
 
-CREATE TABLE block(
+CREATE TABLE blocks(
     id SMALLSERIAL PRIMARY KEY,
     inter_code SMALLINT NOT NULL,
     device_id SMALLINT REFERENCES auth_devices(id),

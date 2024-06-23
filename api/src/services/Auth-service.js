@@ -42,7 +42,7 @@ class AuthService {
 			}
 		//*
 		
-		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId })
+		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId, deviceIP })
 		
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTimeString })
 
@@ -129,7 +129,7 @@ class AuthService {
 			throw new Conflict("Данный номер телефона уже занят другим пользователем")
 		}
 
-		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId })
+		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId, deviceIP })
 
 		await _logAttentionRepository.createLogAttention({ interCode, userId, deviceId, logTime: queryTimeString })
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTimeString })

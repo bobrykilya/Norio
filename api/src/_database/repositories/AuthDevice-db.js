@@ -6,17 +6,18 @@ import useQueryDB from '../../../hooks/useQueryDB.js'
 
 
 class AuthDeviceRepository {
-	static async createDevice({ fingerprint, regTime, deviceType }) {
+	static async createDevice({ fingerprint, regTime, deviceType, deviceIP }) {
 		const { browser, bVersion, os } = getBrowserAndOs(fingerprint)
 
-		const response = await useQueryDB("INSERT INTO auth_devices (type, browser, b_version, os, reg_time, finger_print) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+		const response = await useQueryDB("INSERT INTO auth_devices (browser, type, b_version, os, reg_time, finger_print, ip_reg) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
 			[
-				deviceType,
 				browser,
+				deviceType,
 				bVersion,
 				os,
 				regTime,
 				fingerprint.hash,
+				deviceIP,
 			])
 
 		return response.rows[0]?.id
@@ -34,10 +35,10 @@ class AuthDeviceRepository {
 		return response.rows[0]
 	}
 
-	static async updateDevice({ fingerprint, deviceId, bVersion=false }) {
+	static async updateDevice({ fingerprint, deviceId, bVersion=false, deviceIP }) {
 		const browserVersion = bVersion || getBrowserAndOs(fingerprint)
 
-		await useQueryDB("UPDATE auth_devices SET b_version=$1, finger_print=$2 WHERE id=$3", [browserVersion , fingerprint.hash, deviceId])
+		await useQueryDB("UPDATE auth_devices SET b_version=$1, finger_print=$2, ip_reg=$3 WHERE id=$4", [browserVersion , fingerprint.hash, deviceIP, deviceId])
 	}
 }
 

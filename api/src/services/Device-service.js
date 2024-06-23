@@ -3,11 +3,11 @@ import _logAttentionRepository from '../_database/repositories/_logAttention-db.
 import getBrowserAndOs from '../../hooks/useGetBrowserAndOS.js'
 import { BlockDevice, Conflict } from '../../utils/Errors.js'
 import getCodeDescription from '../../utils/Inter_codes.js'
-import BlockRepository from './../_database/repositories/Block-db.js'
+import BlockRepository from '../_database/repositories/Block-db.js'
 
 
 
-const deviceIdHandlingAndUpdating = async ({ lsDeviceId, fingerprint, userId, queryTimeString }) => {
+const deviceIdHandlingAndUpdating = async ({ lsDeviceId, fingerprint, userId, queryTimeString, deviceIP }) => {
 
 	// console.log(lsDeviceId)
 	if (lsDeviceId) {
@@ -41,7 +41,7 @@ const deviceIdHandlingAndUpdating = async ({ lsDeviceId, fingerprint, userId, qu
 			) {
 				//* Handling if device has number, but fingerprint in db is different (Browser has been updated)
 				console.log('Device ' + lsDeviceId + ' has been updated')
-				await AuthDeviceRepository.updateDevice({ fingerprint, deviceId: lsDeviceId, bVersion })
+				await AuthDeviceRepository.updateDevice({ fingerprint, deviceId: lsDeviceId, bVersion, deviceIP })
 				return lsDeviceId
 			} else {
 				//* Handling if db has deviceId with other browser or OS
@@ -54,11 +54,11 @@ const deviceIdHandlingAndUpdating = async ({ lsDeviceId, fingerprint, userId, qu
 	} else return null
 }
 
-const createNewDeviceWithHandling = async ({ interCode, fingerprint, userId, queryTimeString, deviceType }) => {
+const createNewDeviceWithHandling = async ({ interCode, fingerprint, userId, queryTimeString, deviceType, deviceIP }) => {
 	let deviceId
 	
 	try {
-		deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType: deviceType || 'Unknown'  })
+		deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType: deviceType || 'Unknown', deviceIP  })
 
 		await _logAttentionRepository.createLogAttention({ interCode, userId, deviceId, logTime: queryTimeString })
 	}catch {
@@ -72,9 +72,9 @@ const createNewDeviceWithHandling = async ({ interCode, fingerprint, userId, que
 
 class DeviceService {
     
-    static async getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId }) {
-        const deviceId = await deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId, queryTimeString }) ||
-        await createNewDeviceWithHandling({ interCode, fingerprint, userId, queryTimeString, deviceType })
+    static async getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId, deviceIP }) {
+        const deviceId = await deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId, queryTimeString, deviceIP }) ||
+        await createNewDeviceWithHandling({ interCode, fingerprint, userId, queryTimeString, deviceType, deviceIP })
         
         return deviceId
     }
@@ -94,7 +94,7 @@ class DeviceService {
 	}
 
     static async blockDevice({ logTime, unlockTime, userInfo, deviceId, deviceIP, fingerprint, interCode }) {
-        // console.log({ logTime, unlockTime, userInfo, deviceId, deviceIP, fingerprint })
+        // console.log({ logTime, unlockTime, userInfo, deviceId, deviceIP, fingerprint, interCode })
 
 		const isBlocked = await BlockRepository.checkDeviceForBlockStatus({ deviceId, fingerprintHash: fingerprint.hash, deviceIP })
 		

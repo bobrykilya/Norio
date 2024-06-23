@@ -112,6 +112,13 @@ const getCodeDescription = (interCode) => {
             notifForUser: false,
             infinityBlock: true,
         }
+        case 807 : return {
+            interCode,
+            name: 'Many similar errors in a short period & temporary block',
+            description: 'Большое количество однотипных ошибок за короткий срок. Временная блокировка девайса',
+            notifForAdmin: false,
+            notifForUser: false,
+        }
     }
 }
 

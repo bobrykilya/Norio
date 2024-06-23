@@ -7,7 +7,6 @@ import SignUpInfoForm from './SignUpInfoForm/SignUpInfoForm'
 const SignUpInfoCont = ({ act_form }) => {
 
     const { listOfUsedAvatars } = useContext(AuthContext)
-    let FILTERED_LIST = []
 
     // console.log('Form updated')
     const STORES_LIST = [
@@ -495,15 +494,15 @@ const SignUpInfoCont = ({ act_form }) => {
         },
     ]
 
-        FILTERED_LIST = listOfUsedAvatars[0] ? AVATARS_LIST.filter(avatar => !listOfUsedAvatars.includes(avatar.id)) : AVATARS_LIST
-        // console.log(FILTERED_LIST)
+        const FILTERED_LIST = listOfUsedAvatars[0] ? AVATARS_LIST.filter(avatar => !listOfUsedAvatars.includes(avatar.id)) : AVATARS_LIST //* Filtering of used avatars
+        const SORTED_AND_FILTERED_LIST = FILTERED_LIST.sort((a, b) => a.title.localeCompare(b.title)) //* Sorting of avatar list by title
 
     return ( 
         <section
             id='sign_up_info-cont'
             className={`sign-cont cont ${act_form === 'sign_up_info' ? 'active' : ''}`}
         >
-            < SignUpInfoForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} AVATARS_LIST={FILTERED_LIST} isFormBlur={act_form !== 'sign_up_info'} />
+            < SignUpInfoForm STORES_LIST={STORES_LIST} JOBS_LIST={JOBS_LIST} AVATARS_LIST={SORTED_AND_FILTERED_LIST} isFormBlur={act_form !== 'sign_up_info'} />
         </section>
      )
 }
