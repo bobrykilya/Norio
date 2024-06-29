@@ -16,8 +16,8 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     const inputRef = useRef(null)
     
     
-    const filterAndSortList = (list) => {
-        const val = watch(name)?.toLowerCase().trim()
+    const filterAndSortList = ({ search, list }) => {
+        const val = search.toLowerCase().trim()
         const filtered_list = list.filter(el => el.title.toLowerCase().includes(val))
         const filtered_sorted_list = filtered_list.sort(
             (el_1, el_2) => el_1.title.toLowerCase().indexOf(val) > el_2.title.toLowerCase().indexOf(val) ? 1 : -1
@@ -26,7 +26,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         return filtered_sorted_list
     }
         
-    const LIST_FILTERED = watch(name) ? filterAndSortList(LIST) : LIST
+    const LIST_FILTERED = watch(name) ? filterAndSortList({ search: watch(name), list: LIST }) : LIST
     // console.log(error)
     
     const handleChangeInput = (e) => {

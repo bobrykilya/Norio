@@ -1,5 +1,6 @@
 import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
 import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http"
+import { ICheckUserService, IResponseLoginService, IResponseRefreshService } from '../types/Auth-types'
 
 
 
@@ -50,7 +51,7 @@ class AuthService {
         try {
             const newData = await preRequest(data)
             // console.log(newData)
-            const res = await $apiAuth.post("sign-in", { json: newData }).json()
+            const res: IResponseLoginService = await $apiAuth.post("sign-in", { json: newData }).json()
 
             return res
         } catch (err) {
@@ -61,7 +62,7 @@ class AuthService {
 
     static async checkUser(data) {
         try {
-            const res = await $apiAuth.post("check-user", { json: data }).json()
+            const res: ICheckUserService = await $apiAuth.post("check-user", { json: data }).json()
 
             return res
         } catch (err) {
@@ -74,7 +75,7 @@ class AuthService {
         try {
             const newData = await preRequest(data)
             
-            const res = await $apiAuth.post("sign-up", { json: newData }).json()
+            const res: IResponseLoginService = await $apiAuth.post("sign-up", { json: newData }).json()
             
             return res
         } catch (err) {
@@ -95,7 +96,7 @@ class AuthService {
 
     static async refresh(data) {
         try {
-            const res = await $apiAuth.post("refresh", { json: data })?.json()
+            const res: IResponseRefreshService = await $apiAuth.post("refresh", { json: data })?.json()
 
             return res
         } catch (err) {

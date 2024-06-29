@@ -36,6 +36,7 @@ const LogBookButton = () => {
 
     return ( 
         <>
+            <LogBook closeErrorsLogList={checkSnackBarListBeforeClose}/>
             <button 
                 className='log_book-button cont before_but-hover'
                 onClick={() => checkSnackBarListBeforeOpen()}
@@ -45,7 +46,6 @@ const LogBookButton = () => {
                 <BiError className='fa-icon' />            
                 <ToolTip text={'Открыть панель ошибок'} />
             </button>
-            <LogBook closeErrorsLogList={checkSnackBarListBeforeClose}/>
         </>
      )
 }

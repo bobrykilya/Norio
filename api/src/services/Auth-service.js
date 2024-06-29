@@ -76,7 +76,7 @@ class AuthService {
 				const successDeleting = await RefreshSessionsRepository.deleteRefreshSessionByLogInTime(queryTime)
 
 				if (successDeleting) {
-					await _logAuthRepository.createLogAuth({ interCode: 204, userId, deviceId, logTime: logOutTime.toLocaleString() })
+					await _logAuthRepository.createLogAuth({ interCode: 204, userId, deviceId, logTime: logOutTime.toUTCString() })
 				}
 			}, timeOutInSec * 1000)
 		}

@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { AuthContext } from '../../../context/Auth-context'
-import SignUpImg from '../../../assets/login/sign_up.png'
-import SignInImg from '../../../assets/login/sign_in.png' 
+import SignUpImg from '../../../assets/AuthPage/sign_up.png'
+import SignInImg from '../../../assets/AuthPage/sign_in.png' 
 import { IoArrowBackCircleOutline } from "react-icons/io5"
 import ToolTip from '../../ToolTip/ToolTip'
 // import CoverBgImg from '../../../assets/cover_bg.jpg'

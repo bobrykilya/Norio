@@ -3,7 +3,7 @@
 
 
 .log_book-button
-    // border: 3px solid orange
+    // border: 1px solid red
     border-radius: 50%
     width: $size-small-but + 0.3rem
     height: $size-small-but + 0.3rem
@@ -21,10 +21,10 @@
         .fa-icon    
             transform: scale(0.7)
     .fa-icon
+        margin-top: -0.15rem
         transition: all 0.15s ease-out
         font-size: 1.3rem
-        color: #ffffff0d
     .tool_tip
-        transform: translateY(2rem, 1rem) scale(0.5)
+        bottom: calc(-100% + 30px)
         &.active
-            transform: translate(2rem, 0) scale(1)
+            transform: translate(-2rem, 2.5rem) scale(1)

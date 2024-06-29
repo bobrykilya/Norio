@@ -32,7 +32,11 @@
         transition: all 0.2s ease
         opacity: 0
         transform: translateY(1rem) scale(0.5)
+        filter: blur(7px)
+        -webkit-filter: blur(7px)
         &.active
             opacity: 1
             transform: translateY(0) scale(1)
+            filter: none
+            -webkit-filter: none
                 

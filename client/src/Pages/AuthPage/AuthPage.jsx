@@ -7,6 +7,7 @@ import { AuthContext } from './../../context/Auth-context'
 import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
 import AppTitle from './../../components/AppTitle/AppTitle';
+import LogBookButton from '../../components/LogBook/LogBookButton'
 
 
 
@@ -17,7 +18,10 @@ const AuthPage = () => {
 
     return ( 
         <>
-            <AppTitle />
+            <div className='page_header-cont cont'>
+                <AppTitle />
+                <LogBookButton />
+            </div>
             <AuthPageAnim>
                 <div id='auth_panel-cont' className={`cont ${blockAuthPage && 'block'}`}>
                     <div id='signs-cont' className='cont'>

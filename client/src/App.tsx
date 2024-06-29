@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import React, { useContext, FC } from "react"
 import { Routes, Route, Navigate, useLocation } from "react-router-dom"
 import { Toaster } from 'react-hot-toast'
 import { AnimatePresence } from 'framer-motion'
@@ -6,11 +6,10 @@ import { AuthContext } from "./context/Auth-context"
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
-import LogBookButton from './components/LogBook/LogBookButton'
 
 
 
-const App = () => {
+const App: FC = () => {
 
     const { isUserLogged } = useContext(AuthContext)
 
@@ -22,7 +21,6 @@ const App = () => {
             className='cont'
         >
             <Toaster reverseOrder={true} />
-            <LogBookButton />
             <AnimatePresence>
                 <Routes
                     location={location}
