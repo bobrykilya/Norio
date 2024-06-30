@@ -1,3 +1,4 @@
+import React from "react"
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import GlobalProvider from './context/Global-context'
@@ -8,7 +9,7 @@ import { BrowserRouter } from "react-router-dom"
 
 const queryClient = new QueryClient()
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
+const root = ReactDOM.createRoot(document.getElementById('root')!)
 root.render(
     <QueryClientProvider client={queryClient}>
         <GlobalProvider>

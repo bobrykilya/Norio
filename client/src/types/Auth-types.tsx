@@ -27,8 +27,8 @@ export interface ICheckUserService {
 
 export interface IUserInfo {
     user_id: number;
-    username?: string | null;
-    hashedPassword?: string | null;
+    username: string;
+    hashedPassword: string;
     last_name: string;
     first_name: string;
     middle_name: string;
@@ -41,8 +41,4 @@ export interface IUserInfo {
 
 export interface ILSUserInfo extends IUserInfo {
     username: string;
-}
-
-export interface IResponseRefreshService extends IResponseLoginService {
-    unlockTime?: Date;
 }

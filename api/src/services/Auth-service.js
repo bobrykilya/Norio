@@ -180,19 +180,19 @@ class AuthService {
 		if (!currentRefreshToken) {
 			throw new Unauthorized()
 		}
-
+		
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(currentRefreshToken)
+		// console.log(currentRefreshToken)
 
 		if (!refreshSession) {
 			throw new Unauthorized()
 		}
-		// console.log(refreshSession)
-
+		
 		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash) || 
-			await deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId: refreshSession.user_id, queryTimeString })
-
+		await deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId: refreshSession.user_id, queryTimeString })
+		
 		if (Number(refreshSession.device_id) !== Number(deviceId)) {
-			console.log(refreshSession.device_id + '    ' + deviceId)
+
 			let interCodeAttention = 801
 			if (!deviceId) {
 				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTimeString, deviceType: 'Unknown' })
@@ -248,7 +248,6 @@ class AuthService {
 			logOutTime: refreshSession.log_out_time,
 			userInfo,
 			deviceId,
-			unlockTime,
 		}
 	}
 

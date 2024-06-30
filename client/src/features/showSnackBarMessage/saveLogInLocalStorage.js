@@ -3,8 +3,8 @@ import useGetLastTime from '../../hooks/useGetPastTime'
 
 
 
-const recentlyTime = 1 //* Time of error counting in minutes
-const sameErrsQuantity = 2 //* Limit of possible error quantity recently
+const recentlyTime = 0.1 //* Time of error counting in minutes
+const sameErrsQuantity = 3 //* Limit of possible error quantity recently
 const userErrStorageTime = 24 //* User error storage time in hours
 
 

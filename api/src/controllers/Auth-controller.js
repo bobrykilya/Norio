@@ -19,7 +19,6 @@ class AuthController {
 		const { fingerprint } = req
 		const { queryTime, queryTimeString } = getTime()
 
-
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } = await AuthService.signIn({ 
 				username, 
@@ -100,7 +99,7 @@ class AuthController {
 
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId, unlockTime } =
+			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } =
 				await AuthService.refresh({
 					currentRefreshToken,
 					fingerprint,
@@ -109,8 +108,8 @@ class AuthController {
 				})
 
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
-
-			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, unlockTime })
+			
+			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
 		} catch (err) {
 			return ErrorsUtils.catchError({ interCode: 701, req, res, err, fingerprint, queryTimeString })
 		}

@@ -50,7 +50,7 @@ const blockDevice = async ({ logTime, infinityBlock=null, unlockTimeDB=null, int
     if (unlockTimeDB) return 
 
     const data = { 
-        logTime,
+        logTime: lockTime.toUTCString(),
         unlockTime,
         userInfo: localStorage.getItem('userInfo'),
         deviceId: localStorage.getItem('deviceId'),

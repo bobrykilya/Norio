@@ -1,8 +1,19 @@
 import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
 import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http"
-import { ICheckUserService, IResponseLoginService, IResponseRefreshService } from '../types/Auth-types'
+import { ICheckUserService, IHandleCheckUser, IHandleSignIn, IResponseLoginService, IUserInfo } from '../types/Auth-types'
 
 
+
+type IProcessedRequestLoginService<T> = T & {
+    deviceIP?: string;
+    lsDeviceId?: number;
+    deviceType?: string;
+}
+
+interface IApiIpInfoResponse {
+    country_code: string;
+    ip: string;
+}
 
 const getDeviceType = () => {
 	const ua = navigator.userAgent
@@ -15,25 +26,25 @@ const getDeviceType = () => {
 }
 
 const checkCountryCode = async () => {
-        const res = await $apiIpInfo.get("").json()
-            .catch(() => {
-                showSnackBarMessage({type: 'w', message: 'Ошибка обращения к сервису apiIpInfo (checkCountryCode function)'})
-                console.log('Ошибка обращения к сервису apiIpInfo')
-            })
+        const res: IApiIpInfoResponse = await $apiIpInfo.get("").json()
         // console.log(res)
-        if (!res) return null
+        if (!res) {
+            showSnackBarMessage({type: 'w', message: 'Ошибка обращения к сервису apiIpInfo (checkCountryCode function)'})
+            console.log('Ошибка обращения к сервису apiIpInfo')
+            return undefined
+        }
 
         if (res.country_code !== 'BY') {
-            showSnackBarMessage({ type: 'e', duration: Infinity, message: 'Приложение работает только на территории РБ' })
+            showSnackBarMessage({ type: 'e', message: 'Приложение работает только на территории РБ' })
             throw new Error()
         }
         return res.ip
 }
 
-const preRequest = async (data) => {
+const preRequest = async <T>(data: IProcessedRequestLoginService<T>) => {
 	const deviceIP = await checkCountryCode()
     data.deviceIP = deviceIP
-
+    
     const lsDeviceId = Number(localStorage.getItem('deviceId'))
 
 	if (lsDeviceId) {
@@ -46,10 +57,10 @@ const preRequest = async (data) => {
 
 
 class AuthService {
-    static async signIn(data) {
+    static async signIn(data: IHandleSignIn) {
         // console.log(data)
         try {
-            const newData = await preRequest(data)
+            const newData = await preRequest<IHandleSignIn>(data)
             // console.log(newData)
             const res: IResponseLoginService = await $apiAuth.post("sign-in", { json: newData }).json()
 
@@ -60,20 +71,20 @@ class AuthService {
         }
     }
 
-    static async checkUser(data) {
+    static async checkUser(data: IHandleCheckUser) {
         try {
             const res: ICheckUserService = await $apiAuth.post("check-user", { json: data }).json()
 
             return res
         } catch (err) {
             showSnackBarMessage(err)
-            throw new Error('checkUser error')
+            throw new Error('CheckUser error')
         }
     }
 
-    static async signUp(data) {
+    static async signUp(data: IUserInfo) {
         try {
-            const newData = await preRequest(data)
+            const newData = await preRequest<IUserInfo>(data)
             
             const res: IResponseLoginService = await $apiAuth.post("sign-up", { json: newData }).json()
             
@@ -84,7 +95,8 @@ class AuthService {
         }
     }
 
-    static logOut(data) {
+    static logOut(data: { interCode?: number }) {
+        
         try {
             $apiAuth.post("logout", { json: data })
 
@@ -94,12 +106,13 @@ class AuthService {
         }
     }
 
-    static async refresh(data) {
+    static async refresh(data: { lsDeviceId?: number }) {
         try {
-            const res: IResponseRefreshService = await $apiAuth.post("refresh", { json: data })?.json()
+            const res: IResponseLoginService = await $apiAuth.post("refresh", { json: data })?.json()
 
             return res
         } catch (err) {
+            // console.log(err)
             showSnackBarMessage(err)
             throw new Error('Token refresh error')
         }

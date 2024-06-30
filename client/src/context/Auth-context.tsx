@@ -1,11 +1,10 @@
-import React, { createContext, useEffect, useRef, useState } from "react"
+import React, { FC, ReactNode, createContext, useEffect, useRef, useState } from "react"
 import CircularProgress from '@mui/joy/CircularProgress'
 import inMemoryJWT from '../services/inMemoryJWT-service.js'
 import config from "../config.js"
 import AuthService from "../services/Auth-service.js"
 import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage.jsx"
-// import { setUnlockTimer } from '../features/blockDevice/unlockDevice.js'
-import { AvailableCoverPanel, ICheckUserService, IHandleCheckUser, IHandleSignIn, ILSUserInfo, IResponseLoginService, IResponseRefreshService, IUserInfo } from "../types/Auth-types.js"
+import { AvailableCoverPanel, ICheckUserService, IHandleCheckUser, IHandleSignIn, ILSUserInfo, IResponseLoginService, IUserInfo } from "../types/Auth-types.js"
 
 
 
@@ -15,30 +14,30 @@ const AuthProvider = ({ children }) => {
 	const [data, setData] = useState<Object | null>(null) //! Change type
 	const [isAppReady, setIsAppReady] = useState<Boolean>(false)
 	const [isUserLogged, setIsUserLogged] = useState<Boolean>(false)
-	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<{ title: string }[] | null>(null)
+	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<{ title: string }[]>([])
 	const [coverPanelState, setCoverPanelState] = useState<AvailableCoverPanel>('sign_in')
 	// const refSetTimeout = useRef<ReturnType<typeof setInterval> | null>(null)
-	let LogOutTimer: number
-	const [signUpUserName, setSignUpUserName] = useState<string | null>(null)
-	const [signUpUserPassword, setSignUpUserPassword] = useState<string | null>(null)
+	let logOutTimer: number
+	const [signUpUserName, setSignUpUserName] = useState<string>('')
+	const [signUpUserPassword, setSignUpUserPassword] = useState<string>('')
 
 	const setLogOutTimer = (logOutTime: Date): void => {
 		const timeOutTime = new Date(logOutTime).getTime() - new Date().getTime()
 		if (!timeOutTime) return
 	
-		LogOutTimer = setTimeout(() => { //! Test timer
+		logOutTimer = setTimeout(() => {
 			// console.log('Auto logOut')
-			handleLogOut(204)
+			handleLogOut({ interCode: 204 })
 			showSnackBarMessage({ type: 'w', message: 'Был выполнен выход из аккаунта пользователя по истечении быстрой сессии' })
 		}, timeOutTime)
 	}
 	const resetSignUpVariables = () => {
-		setSignUpUserName(null)
-		setSignUpUserPassword(null)
-		setListOfUsedAvatars(null)
+		setSignUpUserName('')
+		setSignUpUserPassword('')
+		setListOfUsedAvatars([])
 	}
 	const resetSignInVariables = () => {
-		clearTimeout(LogOutTimer)
+		clearTimeout(logOutTimer)
 		localStorage.removeItem('userInfo')
 	}
 	const handleReturnToSignUp = () => {
@@ -121,7 +120,7 @@ const AuthProvider = ({ children }) => {
 		resetSignUpVariables()
 	}
 
-	const handleLogOut = (interCode?: number) => {
+	const handleLogOut = ({ interCode }: { interCode?: number } = {}) => {
 
 		AuthService.logOut({ interCode })
 
@@ -146,8 +145,8 @@ const AuthProvider = ({ children }) => {
 					// console.log('refresh')
 					const lsDeviceId = Number(localStorage.getItem('deviceId'))
 
-					const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, unlockTime }: IResponseRefreshService = await AuthService.refresh({ lsDeviceId })
-
+					const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId }: IResponseLoginService = await AuthService.refresh({ lsDeviceId })
+					
 					testAndUpdateLSDeviceId(deviceId, lsDeviceId)
 
 					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
@@ -160,11 +159,8 @@ const AuthProvider = ({ children }) => {
 					if (logOutTime) {
 						setLogOutTimer(logOutTime)
 					}
-					// if (unlockTime) {
-					// 	setUnlockTimer(unlockTime)
-					// }
-				} catch {
-					localStorage.removeItem('blockDevice') //! Check removing "blockDevice"
+				} catch (err) {
+					localStorage.removeItem('blockDevice')
 					setIsAppReady(true)
 					setIsUserLogged(false)
 					resetSignInVariables()
@@ -175,7 +171,7 @@ const AuthProvider = ({ children }) => {
 
 	//* Exiting from all tabs when log out
 	useEffect(() => {
-		const handlePersistedLogOut = (event) => {
+		const handlePersistedLogOut = (event: StorageEvent) => {
 			// console.log(event.key)
 			if (event.key === config.LOGOUT_STORAGE_KEY) {
 				inMemoryJWT.deleteToken()
@@ -189,6 +185,7 @@ const AuthProvider = ({ children }) => {
 		}
 	}, [])
 
+	//* Check for block on Front
 	useEffect(() => {
 		const defaultProcessing = () => {
 			try {
