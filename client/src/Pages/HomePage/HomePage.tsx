@@ -1,3 +1,4 @@
+import React from 'react'
 import NavBarCard from '../../components/Cards/NavBarCard/NavBarCard'
 import NotificationCard from '../../components/Cards/NotificationCard/NotificationCard'
 import TaskCard from '../../components/Cards/TaskCard/TaskCard'

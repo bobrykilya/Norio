@@ -30,7 +30,7 @@ const SignInForm = ({  isFormBlur=false}) => {
         mode: 'onBlur',
         reValidateMode: 'onBlur',
         defaultValues: {
-            username: 'Admin',
+            username: 'Admin2',
             password: 'Qwe123',
         }
     })

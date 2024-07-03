@@ -1,7 +1,11 @@
 
+interface IUseGetEndTime {
+    startTime: Date;
+    duration: number;
+}
 
 //* Getting timestamp (LocalString) and time-string after duration time (in minutes)
-const useGetEndTime = ({ startTime, duration }) => {
+const useGetEndTime = ({ startTime, duration }: IUseGetEndTime): string => {
 
     const time = new Date(startTime)
     time.setMinutes(time.getMinutes() + duration)

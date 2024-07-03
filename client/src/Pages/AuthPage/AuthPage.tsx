@@ -1,13 +1,13 @@
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 import SignInCont from '../../components/AuthPage/SignConts/SignInCont/SignInCont'
 import SignUpCont from '../../components/AuthPage/SignConts/SignUpCont/SignUpCont'
 import SignUpInfoCont from '../../components/AuthPage/SignConts/SignUpInfoCont/SignUpInfoCont'
 import CoverPanel from '../../components/AuthPage/CoverPanel/CoverPanel'
-import { AuthContext } from './../../context/Auth-context'
+import AppTitle from '../../components/AppTitle/AppTitle'
+import LogBookButton from '../../components/LogBook/LogBookButton'
+import { AuthContext } from '../../context/Auth-context'
 import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
-import AppTitle from './../../components/AppTitle/AppTitle';
-import LogBookButton from '../../components/LogBook/LogBookButton'
 
 
 

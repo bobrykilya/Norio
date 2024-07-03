@@ -1,17 +1,22 @@
 import { showSnackBarMessage } from '../features/showSnackBarMessage/showSnackBarMessage'
 import { $apiAuth, $apiIpInfo } from '../http/http'
+import { IBlockDeviceService } from '../types/Device-types';
 
 
+
+interface IApiIpInfoResponse {
+    ip: string;
+}
 
 const getUserIPAddress = async () => {
-    const res = await $apiIpInfo.get("").json()
+    const res: IApiIpInfoResponse = await $apiIpInfo.get("").json()
     
     return res.ip
 }
 
 
 class DeviceService {
-    static blockDeviceInDB = async (data) => {
+    static blockDeviceInDB = async (data: IBlockDeviceService) => {
         if (!data.unlockTime) data.deviceIP = await getUserIPAddress()
         // console.log(data)
 

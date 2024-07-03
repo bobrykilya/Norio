@@ -1,27 +1,41 @@
-import DeviceService from '../../services/Device-service'
-import { showSnackBarMessage } from '../showSnackBarMessage/showSnackBarMessage'
+import DeviceService from '../../services/Device-service.js'
+import { showSnackBarMessage } from '../showSnackBarMessage/showSnackBarMessage.jsx'
 import inMemoryJWT from '../../services/inMemoryJWT-service.js'
 import useGetEndTime from '../../hooks/useGetEndTime.js'
 import useGetTimeShort from '../../hooks/useGetTimeShort.js';
+import { IBlockDevice, IBlockDeviceService } from '../../types/Device-types.js';
 
 
 
-const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }) => {
+interface IGetErrorMessage {
+    lockTime: Date;
+    infinityBlock: boolean;
+    unlockTimeDB: string | null;
+    interCode: number | null;
+}
+
+
+const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: IGetErrorMessage) => {
     // console.log(infinityBlock)
     if (!infinityBlock) {
 
-        let endTimeStamp
-        let unlockTimeShort
+        let endTimeString: string
+        let unlockTimeShort: string
+        let unlockTime: string
 
         if (!unlockTimeDB) {
-            endTimeStamp = useGetEndTime({ startTime: lockTime, duration: 5 })
+            endTimeString = useGetEndTime({ startTime: lockTime, duration: 5 })
+            unlockTimeShort = useGetTimeShort( endTimeString)
+            unlockTime = endTimeString
+        } else {
+            unlockTimeShort = useGetTimeShort(unlockTimeDB)
+            unlockTime = unlockTimeDB
         }
-        unlockTimeShort = useGetTimeShort(unlockTimeDB || endTimeStamp)
-        // console.log({ lockTime, infinityBlock, unlockTimeDB, unlockTimeShort, endTimeStamp })
+        // console.log({ lockTime, infinityBlock, unlockTimeDB, unlockTimeShort, endTimeString })
 
         return { 
             err_mess: `Устройство было заблокировано до ${unlockTimeShort} вследствие большого количества однотипных ошибок за короткий срок`, 
-            unlockTime: unlockTimeDB || endTimeStamp,
+            unlockTime,
             newInterCode: interCode || 807,
         }
     } else {
@@ -34,7 +48,7 @@ const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }) =
 }
 
 
-const blockDevice = async ({ logTime, infinityBlock=null, unlockTimeDB=null, interCode=null }) => {
+const blockDevice = async ({ logTime, infinityBlock=false, unlockTimeDB=null, interCode=null }: IBlockDevice) => {
     
     const lockTime = logTime ? new Date(logTime) : new Date()
     const { err_mess, unlockTime, newInterCode } = getErrorMessage({ lockTime, infinityBlock, unlockTimeDB, interCode })
@@ -52,8 +66,8 @@ const blockDevice = async ({ logTime, infinityBlock=null, unlockTimeDB=null, int
     const data = { 
         logTime: lockTime.toUTCString(),
         unlockTime,
-        userInfo: localStorage.getItem('userInfo'),
-        deviceId: localStorage.getItem('deviceId'),
+        userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}'),
+        deviceId: Number(localStorage.getItem('deviceId')),
         interCode: newInterCode,
     }
 

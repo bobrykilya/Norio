@@ -1,4 +1,4 @@
-import React, { useContext, FC } from "react"
+import React, { useContext } from "react"
 import { Routes, Route, Navigate, useLocation } from "react-router-dom"
 import { Toaster } from 'react-hot-toast'
 import { AnimatePresence } from 'framer-motion'
@@ -9,7 +9,7 @@ import './App.sass'
 
 
 
-const App: FC = () => {
+const App = () => {
 
     const { isUserLogged } = useContext(AuthContext)
 

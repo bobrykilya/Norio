@@ -1,19 +1,24 @@
 import blockDevice from '../blockDevice/blockDevice'
 import useGetLastTime from '../../hooks/useGetPastTime'
+import { IError } from './showSnackBarMessage'
 
 
+
+interface ILSError extends IError {
+	errTime: string;
+	message: string;
+}
 
 const recentlyTime = 0.1 //* Time of error counting in minutes
 const sameErrsQuantity = 3 //* Limit of possible error quantity recently
 const userErrStorageTime = 24 //* User error storage time in hours
 
 
-const filterErrsListByTime = (err) => {
-	if (!err.errTime) return false
+const filterErrsListByTime = (err: IError) => {
 
-	return useGetLastTime(err.errTime, 'hour') < userErrStorageTime
+	return err.errTime ? useGetLastTime(err.errTime, 'hour') < userErrStorageTime : false
 }
-const checkErrsQuantityForRecently = (list) => {
+const checkErrsQuantityForRecently = (list: ILSError[]) => {
 
 	let result = false
 
@@ -29,7 +34,7 @@ const checkErrsQuantityForRecently = (list) => {
 	}
 	// console.log(countObject)
 	
-	Object.values(countObject).forEach(quantity => {
+	Object.values(countObject).forEach((quantity: any) => {
 		if (quantity >= sameErrsQuantity) {
 			result = true
 		}
@@ -39,12 +44,12 @@ const checkErrsQuantityForRecently = (list) => {
 }
 
 
-const saveLogInLocalStorage = ({ err }) => {
+const saveLogInLocalStorage = (err: IError) => {
 	// console.log(err.detail)
 	if (localStorage.getItem('blockDevice')) return
 	
-    let errsList = JSON.parse(localStorage.getItem('userErrsList')) || []
-	const userId = JSON.parse(localStorage.getItem('userInfo'))?.user_id || undefined
+    let errsList = JSON.parse(localStorage.getItem('userErrsList') || '{}') || []
+	const userId = JSON.parse(localStorage.getItem('userInfo') || '{}')?.user_id || undefined
     const ErrDetail = err.detail
 	
 	// console.log(errsList)

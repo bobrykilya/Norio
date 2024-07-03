@@ -4,9 +4,8 @@ import InputsError from './../InputsError/InputsError'
 import { PiUserThin } from "react-icons/pi"
 // import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5"
 // import { LuArrowUpToLine, LuArrowDownToLine } from "react-icons/lu"
-import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
 import ToolTip from '../../../ToolTip/ToolTip'
-import JumpingList from '../../../JumpingList/JumpingList'
+import AvatarInputList from './AvatarInputList'
 
 
 
@@ -69,57 +68,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
             <InputsError error={error} onClick={handleClickAvatarInput} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
             {!isFormBlur && 
-                <JumpingList isListOpened={isAvatarListOpened} closeList={closeAvatarList} other_children={
-                    <div className={`arrow_buts-cont cont ${isAvatarListOpened ? 'opened' : ''}`}>
-                        <button
-                            className='avatar_list_up-but cont'
-                            type='button'
-                            tabIndex={-1}
-                            onClick={() => listRef.current.scrollTo({ top: 0, behavior: 'smooth'})}
-                            disabled={!isArrowButsActive}
-                        >
-                            <div className='arrow_but-cont cont'>
-                                <IoMdArrowRoundUp className='fa-icon' />
-                            </div>
-                            <ToolTip text='Пролистать список вверх' />
-                        </button>
-                        <button
-                            className='avatar_list_down-but cont opened'
-                            type='button'
-                            tabIndex={-1}
-                            onClick={() => listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth'})}
-                            disabled={!isArrowButsActive}
-                        >
-                            <div className='arrow_but-cont cont'>
-                                <IoMdArrowRoundDown className='fa-icon' />
-                            </div>
-                            <ToolTip text='Пролистать список вниз' />
-                        </button>
-                    </div>
-                }>
-                        <ul className='avatar-list cont' ref={listRef}>
-                            {
-                                !LIST[0] ?
-                                    <span className='empty_list-message cont'>Аватары закончились ( <br/>Обратитесь к разработчику</span> :
-                                    LIST.map((el) => {
-                                        const key_but = `${el.id}-but`
-                                        return <li key={el.id} className='cont'>
-                                                    <button 
-                                                        id={key_but}
-                                                        className={avatar === el.id ? 'active' : ''}
-                                                        type='button'
-                                                        tabIndex={-1} 
-                                                        onClick={handleClickElem}
-                                                        disabled={disabled}
-                                                    >
-                                                        <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
-                                                    </button>
-                                                    <label htmlFor={key_but}>{el.title}</label>
-                                            </li>
-                                    })
-                            }
-                        </ul>
-                </JumpingList>
+                <AvatarInputList LIST={LIST} avatar={avatar} isAvatarListOpened={isAvatarListOpened} closeAvatarList={closeAvatarList} handleClickElem={handleClickElem} listRef={listRef} isArrowButsActive={isArrowButsActive} disabled={disabled} />
             }
         </div>
      )

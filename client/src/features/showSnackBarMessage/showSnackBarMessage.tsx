@@ -1,3 +1,4 @@
+import React from 'react'
 import toast from 'react-hot-toast'
 import SnackBar from '../../components/SnackBar/SnackBar'
 import { PiSealWarning } from "react-icons/pi"
@@ -9,7 +10,25 @@ import blockDevice from '../blockDevice/blockDevice'
 
 
 
-const getTypeDecoding = (type) => {
+export interface IError {
+	status?: number;
+	errTime?: string;
+	message?: string;
+	duration?: number;
+	action?: string;
+	type?: string;
+	response?: any;
+	req?: Request;
+	detail?: {
+		infinityBlock: boolean;
+		unlockTime: string;
+		deviceIP: string;
+		interCode: number;
+		username: string;
+	}
+}
+
+const getTypeDecoding = (type: string) => {
     switch (type) {
 		case 'w' : return { title: 'Внимание', icon: <PiSealWarning className='warning message-icon fa-icon' />, toastDuration: Infinity }
 		case 'b' : return { title: 'Блок', icon: <TbLockSquareRounded className='block message-icon fa-icon' />, toastDuration: Infinity }
@@ -18,7 +37,7 @@ const getTypeDecoding = (type) => {
     }
 }
 
-const messagePreprocessing = (message) => {
+const messagePreprocessing = (message: string) => {
 	switch (message) {
 		case 'Failed to fetch' : return 'Ошибка подключения к серверу'
 		case 'Request timed out' : return 'Ошибка ответа сервера'
@@ -26,21 +45,21 @@ const messagePreprocessing = (message) => {
     }
 }
 
-export const showSnackBarMessage = (err) => {
+export const showSnackBarMessage = (err: IError) => {
 	// console.log(err)
 
 	if (err.status === 900) { //* Block err
-		blockDevice({ logTime: err.errTime, infinityBlock: err.detail.infinityBlock, unlockTimeDB: err.detail.unlockTime, interCode: err.detail.interCode })
+		blockDevice({ logTime: err.errTime, infinityBlock: err.detail?.infinityBlock, unlockTimeDB: err.detail?.unlockTime, interCode: err.detail?.interCode })
 	}
 
 	if (!err.message) return
 	
 	if (!err.status && !err.type) {
 		try {
-			err = err.response.json().then(err => showSnackBarMessage(err))
+			if (err.response) err = err.response.json().then((err: IError) => showSnackBarMessage(err))
 		}catch {
 			// console.log(err.message)
-			showSnackBarMessage({ status: 422, message: err.message })
+			showSnackBarMessage({ status: 422, message: err.message, errTime: err.errTime })
 			// console.log(err)
 		}
 		return
@@ -60,10 +79,10 @@ export const showSnackBarMessage = (err) => {
 		duration: err.duration || toastDuration,
 		// duration: Infinity,
 		position: "top-center",
-		snackBarType: err.type || 'e',
-		snackBarMessage: err.message,
+		// snackBarType: err.type || 'e',
+		// snackBarMessage: err.message,
 	})
 
 	// if (!['s'].includes(err.type)) 
-		saveLogInLocalStorage({ err })
+		saveLogInLocalStorage(err)
 }
