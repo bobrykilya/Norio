@@ -33,14 +33,14 @@ const ButtonsCont = () => {
                     onClick={askAppInstall}
                     >
                         <MdInstallDesktop className='fa-icon'/>
-                        <ToolTip text={'Создать ярлык на рабочем столе'} />
+                        <ToolTip text='Создать ярлык на рабочем столе' />
                 </button>
                 <button
                     className='info-but'
                     tabIndex={-1}
                     >
                         <FaInfo className='fa-icon'/>
-                        <ToolTip text={'Описание приложения и инструкция'} />
+                        <ToolTip text='Описание приложения и инструкция' />
                 </button>
         </div>
     )

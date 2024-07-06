@@ -11,22 +11,21 @@ import { AvailableCoverPanel, ICheckUserService, IHandleCheckUser, IHandleSignIn
 export const AuthContext = createContext({})
 
 const AuthProvider = ({ children }) => {
-	const [data, setData] = useState<Object | null>(null) //! Change type
-	const [isAppReady, setIsAppReady] = useState<Boolean>(false)
-	const [isUserLogged, setIsUserLogged] = useState<Boolean>(false)
+	const [data, setData] = useState<Record<string, any> | null>(null) //! Change type
+	const [isAppReady, setIsAppReady] = useState(false)
+	const [isUserLogged, setIsUserLogged] = useState(false)
 	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<{ title: string }[]>([])
-	const [coverPanelState, setCoverPanelState] = useState<AvailableCoverPanel>('sign_up')
-	// const refSetTimeout = useRef<ReturnType<typeof setInterval> | null>(null)
-	let logOutTimer: number
-	const [signUpUserName, setSignUpUserName] = useState<string>('')
-	const [signUpUserPassword, setSignUpUserPassword] = useState<string>('')
+	const [coverPanelState, setCoverPanelState] = useState<AvailableCoverPanel>('sign_in')
+	const logOutTimer = useRef<ReturnType<typeof setTimeout>>()
+	const [signUpUserName, setSignUpUserName] = useState('')
+	const [signUpUserPassword, setSignUpUserPassword] = useState('')
 
 	const setLogOutTimer = (logOutTime: Date): void => {
 		const timeOutTime = new Date(logOutTime).getTime() - new Date().getTime()
 		if (!timeOutTime) return
 	
-		logOutTimer = setTimeout(() => {
-			// console.log('Auto logOut')
+		logOutTimer.current = setTimeout(() => {
+			console.log('Auto logOut')
 			handleLogOut({ interCode: 204 })
 			showSnackBarMessage({ type: 'w', message: 'Был выполнен выход из аккаунта пользователя по истечении быстрой сессии' })
 		}, timeOutTime)
@@ -37,7 +36,7 @@ const AuthProvider = ({ children }) => {
 		setListOfUsedAvatars([])
 	}
 	const resetSignInVariables = () => {
-		clearTimeout(logOutTimer)
+		clearTimeout(logOutTimer.current)
 		localStorage.removeItem('userInfo')
 	}
 	const handleReturnToSignUp = () => {
@@ -200,6 +199,7 @@ const AuthProvider = ({ children }) => {
 		}
 		defaultProcessing()
 	}, [])
+
 
 	return (
 		<AuthContext.Provider

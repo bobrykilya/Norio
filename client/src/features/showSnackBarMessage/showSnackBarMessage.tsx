@@ -7,6 +7,7 @@ import { FiCheckCircle } from "react-icons/fi"
 import { MdErrorOutline } from "react-icons/md"
 import saveLogInLocalStorage from './saveLogInLocalStorage'
 import blockDevice from '../blockDevice/blockDevice'
+import { useBlockError } from '../../stores/Global-store';
 
 
 
@@ -50,6 +51,7 @@ export const showSnackBarMessage = (err: IError) => {
 
 	if (err.status === 900) { //* Block err
 		blockDevice({ logTime: err.errTime, infinityBlock: err.detail?.infinityBlock, unlockTimeDB: err.detail?.unlockTime, interCode: err.detail?.interCode })
+		const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
 	}
 
 	if (!err.message) return
@@ -77,8 +79,8 @@ export const showSnackBarMessage = (err: IError) => {
 		<SnackBar title={title} icon={icon} message={err.message} snack={snack} type={err.type}/>
     ), {
 		duration: err.duration || toastDuration,
-		// duration: Infinity,
 		position: "top-center",
+		// duration: Infinity,
 		// snackBarType: err.type || 'e',
 		// snackBarMessage: err.message,
 	})

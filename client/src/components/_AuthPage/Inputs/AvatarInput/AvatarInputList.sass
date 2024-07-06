@@ -1,0 +1,148 @@
+
+
+.avatar_list-cont
+    .jumping_list_cover-cont
+        // border: 2px solid black
+        &.opened
+            .jumping_list-cont
+                .avatar-list
+                    //* Avatars flying out animation delay
+                    li
+                        opacity: 1
+                        transform: none
+                        // @for $i from 1 through 100
+                        //     &:nth-child(#{$i}n)
+                        //         transition-delay: #{$i * 0.025}s
+        .jumping_list-cont
+            width: 850px
+            .avatar-list
+                // border: 2px solid red
+                flex-direction: row
+                padding-bottom: 4rem
+                padding: 1.5rem
+                // border-radius: 150px
+                align-items: flex-start
+                flex-wrap: wrap
+                overflow-y: scroll
+                scroll-behavior: smooth
+                scroll-snap-type: y mandatory
+                -ms-overflow-style: none
+                scrollbar-width: none
+                &::-webkit-scrollbar 
+                    display: none 
+                li
+                    // border: 2px solid orange
+                    margin: 0.8rem
+                    margin-bottom: 0.7rem
+                    // scroll-snap-align: center
+                    $size-avatar-elem: 6rem
+                    width: $size-avatar-elem
+                    height: $size-avatar-elem + 1.4rem
+                    justify-content: flex-start
+                    overflow: visible
+                    transition-duration: 0.7s
+                    transform-style: ease
+                    transition-delay: 0
+                    opacity: 0
+                    transform: translateY(200px)
+                    button
+                        // border: 1px solid black
+                        height: $size-avatar-elem
+                        width: $size-avatar-elem
+                        border-radius: 50%
+                        overflow: hidden
+                        box-shadow: 2px 3px 7px #0000003a
+                        &:hover
+                            border-radius: 45%
+                            transform: translateY(calc($height-but-act-jump * 3))
+                            box-shadow: 2px 3px 7px #0000005d
+                            img
+                                border-radius: 45%
+                        &:active
+                            transform: translateY(calc($height-but-act-jump * 3)) scale(0.95)
+                        &.active
+                            border: 3px solid $color-cover-light
+                            padding: 3px
+                        img
+                            border-radius: 50%
+                            width: 100%
+                            height: 100%
+                            object-fit: cover
+                            z-index: -2
+                            transition: all 0.2s ease
+                    label
+                        // border: 1px solid black
+                        margin-top: -0.4rem
+                        padding-top: 1rem
+                        text-align: center
+                .empty_list-message
+                    line-height: 1.7rem
+                    font-size: 1rem
+                    text-align: center
+        .scroll_buts-cont
+            // border: 1px solid black
+            position: absolute
+            left: 50%
+            top: 42.5vh
+            width: auto
+            justify-content: space-between
+            overflow: visible
+            $size-scroll-but: 4rem
+            height: calc($size-scroll-but * 2.4)
+            transform: translateX(480px)
+            mix-blend-mode: screen
+            &.opened
+                button
+                    transform: translateX(0)
+                .avatar_list_up-but
+                    transition: all 0.7s 0.2s $trans-bounce-style
+                .avatar_list_down-but
+                    transition: all 0.7s 0.4s $trans-bounce-style
+            button
+                // border: 1px solid black
+                width: $size-scroll-but
+                height: $size-scroll-but
+                border-radius: 50%
+                transition: all 0.1s ease
+                z-index: 1
+                overflow: visible
+                font-weight: 900
+                &::before
+                    content: ''
+                    position: absolute
+                    width: 140%
+                    height: 140%
+                    z-index: -2
+                    border-radius: 50%
+                    background-color:  #00000031
+                    transition: all 0.2s ease
+                    opacity: 0
+                    transform: scale(0.6)
+                &:hover
+                    transform: none
+                    &::before
+                        opacity: 1
+                        transform: scale(1)
+                    .scroll_but-cont
+                        .fa-icon
+                            color:  #25364bd2
+                &:active
+                    .scroll_but-cont
+                        transform: scale(0.9)
+                &:disabled
+                    pointer-events: none
+                    // .scroll_but-cont
+                    //     background-color: red
+                .scroll_but-cont
+                    border-radius: 50%
+                    background-color: $color-backgr
+                    transition: all 0.2s ease
+                    .fa-icon
+                        z-index: 5
+                        font-size: 1.8rem
+                        color:  #2f4866d2
+                        transition: all 0.2s ease
+            .avatar_list_up-but
+                transform: translate(-150px, 600px)
+            .avatar_list_down-but
+                transform: translate(-200px, 600px)

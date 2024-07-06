@@ -1,6 +1,6 @@
 import { showSnackBarMessage } from '../features/showSnackBarMessage/showSnackBarMessage'
 import { $apiAuth, $apiIpInfo } from '../http/http'
-import { IBlockDeviceService } from '../types/Device-types';
+import { IBlockDeviceService } from '../types/Device-types'
 
 
 

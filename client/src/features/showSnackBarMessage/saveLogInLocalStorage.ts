@@ -1,6 +1,7 @@
 import blockDevice from '../blockDevice/blockDevice'
 import useGetLastTime from '../../hooks/useGetPastTime'
 import { IError } from './showSnackBarMessage'
+// import { useBlockError } from '../../stores/Global-store';
 
 
 
@@ -45,19 +46,21 @@ const checkErrsQuantityForRecently = (list: ILSError[]) => {
 
 
 const saveLogInLocalStorage = (err: IError) => {
-	// console.log(err.detail)
+	// console.log(err)
 	if (localStorage.getItem('blockDevice')) return
+	// const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
+	// if (blockErrorMessage) return
 	
-    let errsList = JSON.parse(localStorage.getItem('userErrsList') || '{}') || []
-	const userId = JSON.parse(localStorage.getItem('userInfo') || '{}')?.user_id || undefined
+    let errsList = JSON.parse(localStorage.getItem('userErrsList') || '[]') || []
+	const userId = JSON.parse(localStorage.getItem('userInfo') || '[]')?.user_id || undefined
     const ErrDetail = err.detail
 	
-	// console.log(errsList)
 	if (errsList[0]) errsList = errsList.filter(filterErrsListByTime) || []
-	
+	// console.log(errsList)
+
 	// console.log(err)
 	errsList.push({ 
-		errTime: err.errTime || new Date(),
+		errTime: err.errTime || new Date().toUTCString(),
 		type: err.type || 'e',
 		message: err.message,
 		userId,

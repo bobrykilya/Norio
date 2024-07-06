@@ -14,8 +14,6 @@
     .tool_tip
         // border: 2px solid black
         position: absolute
-        bottom: calc(100% + 5px)
-        left: calc(50% - 3rem)
         text-align: center
         pointer-events: none
         width: 6rem
@@ -31,12 +29,44 @@
         padding: 10px
         transition: all 0.2s ease
         opacity: 0
-        transform: translateY(1rem) scale(0.5)
         filter: blur(7px)
         -webkit-filter: blur(7px)
+        $tooltip-step: 17%
+        &.top
+            bottom: calc(100% + $tooltip-step)
+            left: calc(50% - 3rem)
+            transform: translateY(1rem) scale(0.5)
+        &.bottom
+            top: calc(100% + $tooltip-step)
+            left: calc(50% - 3rem)
+            transform: translateY(-1rem) scale(0.5)
+        &.left
+            bottom: calc(-50%)
+            right: calc(100% + $tooltip-step)
+            transform: translateX(2rem) scale(0.5)
+        &.right
+            bottom: calc(-50%)
+            left: calc(100% + $tooltip-step)
+            transform: translateX(-2rem) scale(0.5)
+        &.bottom_left 
+            top: calc(100% + $tooltip-step)
+            right: 0
+            transform: translate(1rem, -1rem) scale(0.5)
+        &.bottom_right
+            top: calc(100% + $tooltip-step)
+            left: 0
+            transform: translate(-1rem, -1rem) scale(0.5)
+        &.top_left
+            bottom: calc(100% + $tooltip-step)
+            right: 0
+            transform: translate(-1rem, -1rem) scale(0.5)
+        &.top_right
+            bottom: calc(100% + $tooltip-step)
+            left: 0
+            transform: translate(-1rem, -1rem) scale(0.5)
         &.active
             opacity: 1
-            transform: translateY(0) scale(1)
+            transform: none
             filter: none
             -webkit-filter: none
                 

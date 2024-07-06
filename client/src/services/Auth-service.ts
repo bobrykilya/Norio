@@ -106,7 +106,7 @@ class AuthService {
         }
     }
 
-    static async refresh(data: { lsDeviceId?: number }) {
+    static async refresh(data: { lsDeviceId?: number } = {}) {
         try {
             const res: IResponseLoginService = await $apiAuth.post("refresh", { json: data })?.json()
 

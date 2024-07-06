@@ -4,6 +4,7 @@ import inMemoryJWT from '../../services/inMemoryJWT-service.js'
 import useGetEndTime from '../../hooks/useGetEndTime.js'
 import useGetTimeShort from '../../hooks/useGetTimeShort.js';
 import { IBlockDevice, IBlockDeviceService } from '../../types/Device-types.js';
+import { useBlockError } from '../../stores/Global-store.js';
 
 
 
@@ -14,6 +15,19 @@ interface IGetErrorMessage {
     interCode: number | null;
 }
 
+// type INew = IGetErrorMessage & {
+//     lockTime: never;
+// }
+
+// type INew_2 = Omit<IGetErrorMessage, 'lockTime'>
+
+// const A: INew_2 = {
+//     // lockTime: new Date(),
+//     infinityBlock: true,
+//     unlockTimeDB: new Date().toUTCString(),
+//     interCode: 1,
+// }
+// console.log(A)
 
 const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: IGetErrorMessage) => {
     // console.log(infinityBlock)
@@ -52,16 +66,18 @@ const blockDevice = async ({ logTime, infinityBlock=false, unlockTimeDB=null, in
     
     const lockTime = logTime ? new Date(logTime) : new Date()
     const { err_mess, unlockTime, newInterCode } = getErrorMessage({ lockTime, infinityBlock, unlockTimeDB, interCode })
+    // const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
     // console.log(err_mess)
     
     setTimeout(() => {
         showSnackBarMessage({ type: 'b', message: err_mess })
+        // setBlockErrorMessage(err_mess)
         localStorage.setItem('blockDevice', err_mess)
     }, 300)
 
     inMemoryJWT.deleteToken()
 
-    if (unlockTimeDB) return 
+    if (unlockTimeDB) return
 
     const data = { 
         logTime: lockTime.toUTCString(),

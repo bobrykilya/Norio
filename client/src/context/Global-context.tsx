@@ -7,15 +7,14 @@ import React from "react"
 export const GlobalContext = createContext({})
 
 const GlobalProvider = ({ children }) => {
-    const [isErrorsLogListOpened, setIsErrorsLogListOpened] = useState<Boolean>(false)
+	
 	const { toasts } = useToasterStore()
+
 
     return (
 		<GlobalContext.Provider
 			value={{
-                isErrorsLogListOpened,
-                setIsErrorsLogListOpened,
-				toasts,
+				toasts
 			}}
 		>
 		    {children}

@@ -1,24 +1,22 @@
-import { useContext, useState } from 'react'
-import { GlobalContext } from '../../context/Global-context'
 import { BiError } from "react-icons/bi"
-import LogBook from './LogBook';
-import ToolTip from '../ToolTip/ToolTip';
-import toast from 'react-hot-toast'
+import LogBookList from './LogBookList'
+import ToolTip from '../ToolTip/ToolTip'
+import toast, { useToasterStore } from 'react-hot-toast'
 import { showSnackBarMessage } from '../../features/showSnackBarMessage/showSnackBarMessage'
+import { useBlockError, useLogList } from '../../stores/Global-store'
 
 
 
 const LogBookButton = () => {
 
-    const { setIsErrorsLogListOpened } = useContext(GlobalContext)
-    const { toasts } = useContext(GlobalContext)
-    const [blockSnackBarMessage, setBlockSnackBarMessage] = useState(false);
+    const { isErrorsLogListOpened, setIsErrorsLogListOpened } = useLogList()
+    const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
+    const { toasts } = useToasterStore()
 
     const checkSnackBarListBeforeOpen = () => {
         // console.log(toasts)
         if (toasts[0]) {
             toasts.forEach(t => {
-                if (t.snackBarType === 'b') setBlockSnackBarMessage(t.snackBarMessage)
                 toast.dismiss(t.id)
             })
         }
@@ -28,15 +26,15 @@ const LogBookButton = () => {
 
     const checkSnackBarListBeforeClose = () => {
         // console.log(blockSnackBarMessage)
-        if (blockSnackBarMessage || localStorage.getItem('blockDevice')) {
-            showSnackBarMessage({ type: 'b', message: blockSnackBarMessage || localStorage.getItem('blockDevice') })
+        if (blockErrorMessage) {
+            // showSnackBarMessage({ type: 'b', message: blockErrorMessage })
         }
         setIsErrorsLogListOpened(false)
     }
 
     return ( 
         <>
-            <LogBook closeErrorsLogList={checkSnackBarListBeforeClose}/>
+            <LogBookList closeErrorsLogList={checkSnackBarListBeforeClose} isErrorsLogListOpened={isErrorsLogListOpened} />
             <button 
                 className='log_book-button cont before_but-hover'
                 onClick={() => checkSnackBarListBeforeOpen()}
@@ -44,7 +42,7 @@ const LogBookButton = () => {
                 tabIndex={-1}
             >
                 <BiError className='fa-icon' />            
-                <ToolTip text={'Открыть панель ошибок'} />
+                <ToolTip text='Открыть панель ошибок' position='bottom_left' />
             </button>
         </>
      )
