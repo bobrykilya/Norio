@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AuthContext } from '../../../../../context/Auth-context'
 import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
@@ -10,16 +10,25 @@ import { GrUserExpert } from "react-icons/gr";
 // import { TiArrowRightOutline } from "react-icons/ti"
 import { BiLogInCircle } from "react-icons/bi"
 import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
-import AvatarInput from '../../../Inputs/AvatarInput/AvatarInput'
+import AvatarButton from '../../../AvatarButton/AvatarButton'
 import { useFocusInput } from '../../../../../hooks/useFocusInput'
+import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
+import { IUserInfo } from '../../../../../types/Auth-types'
 
 
-const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) => {
+
+interface SignUpInfoFormProps {
+    STORES_LIST: IDataListElement[];
+    JOBS_LIST: IDataListElement[];
+    AVATARS_LIST: IDataListElement[];
+    isFormBlur: boolean;
+}
+const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: SignUpInfoFormProps) => {
     // console.log('SignUpInfoForm')
 
     const { handleSignUp } = useContext(AuthContext)
-    const [avatar, setAvatar] = useState('hedgehog')
-    const [errorAvatar, setErrorAvatar] = useState(null)
+    const [avatar, setAvatar] = useState<string | null>('hedgehog')
+    const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef(null)
     const name_input_icon = <GrUserExpert className='input-icon' />
@@ -45,13 +54,13 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
         }
     })
 
-    const checkAvatar = (data) => {
+    const checkAvatar = (data: IUserInfo) => {
         avatar ? onSubmit(data) : setErrorAvatar({ message: 'Выберите аватар пользователя' })
     }
     
-    const onSubmit = (data) => {
+    const onSubmit = (data: IUserInfo) => {
         data.phone = '+375' + data.phone
-        data.avatar = avatar
+        if (avatar) data.avatar = avatar
         
         setTimeout(async () => {
             setIsLoading(true)
@@ -134,7 +143,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }) =
                 />
             </div>
             <div className='avatar_and_submit_buts-cont cont'>
-                <AvatarInput
+                <AvatarButton
                     LIST={AVATARS_LIST}
                     avatar={avatar} 
                     setAvatar={setAvatar}

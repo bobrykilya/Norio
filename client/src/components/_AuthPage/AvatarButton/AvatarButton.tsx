@@ -1,28 +1,37 @@
-import { useState, useRef, useEffect } from 'react'
-import InputsCleaner from './../InputsCleaner/InputsCleaner'
-import InputsError from './../InputsError/InputsError'
+import React, { useState, useRef, MutableRefObject } from 'react'
+import InputsCleaner from '../Inputs/InputsCleaner/InputsCleaner'
+import InputsError from '../Inputs/InputsError/InputsError'
 import { PiUserThin } from "react-icons/pi"
 // import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5"
 // import { LuArrowUpToLine, LuArrowDownToLine } from "react-icons/lu"
-import ToolTip from '../../../ToolTip/ToolTip'
-import AvatarInputList from './AvatarInputList'
+import ToolTip from '../../ToolTip/ToolTip'
+import AvatarList from './AvatarList'
+import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 
 
 
-const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false, isFormBlur=false }) => {
+interface AvatarButtonProps {
+    LIST: IDataListElement[];
+    avatar: string | null;
+    setAvatar: React.Dispatch<React.SetStateAction<string | null>>;
+    error: { message: string };
+    setError: React.Dispatch<React.SetStateAction<{ message: string } | null>>;
+    disabled: boolean;
+    isFormBlur: boolean;
+}
+const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false, isFormBlur=false }: AvatarButtonProps) => {
 
     const [isNoAvatarOpened, setIsNoAvatarOpened] = useState(true)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isAvatarListOpened, setIsAvatarListOpened] = useState(false)
     const [isArrowButsActive, setIsArrowButsActive] = useState(false)
-    const listRef = useRef(null)
-    const refSetTimeout = useRef(null)
+    const refSetTimeout = useRef<ReturnType<typeof setTimeout>>(null) as MutableRefObject<ReturnType<typeof setTimeout>>
 
-    const createPathToAvatars = (name) => {
+    const createPathToAvatars = (name: string) => {
         return `/avatars/${name}.jpg`
     }
 
-    const handleClickAvatarInput = () => {
+    const handleClickAvatarButton = () => {
         if (error) setError(null)
         setIsAvatarListOpened(true)
         refSetTimeout.current = setTimeout(() => {setIsArrowButsActive(true)}, 1100)
@@ -30,7 +39,7 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
 
     const handleClickCleaner = () => {
         setIsNoAvatarOpened(true)
-        setTimeout(() => {setAvatar(false)}, 300)
+        setTimeout(() => {setAvatar(null)}, 300)
         setIsCleanerOpened(false)
         if (error) setError(null)
     }
@@ -49,18 +58,17 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
         setIsAvatarListOpened(false)
         clearTimeout(refSetTimeout.current)
         setIsArrowButsActive(false)
-        // listRef.current.scrollTo({ top: 0})
     }
 
     return (
         <div className='avatar-cont cont'>
             {!isFormBlur && 
-                <AvatarInputList LIST={LIST} avatar={avatar} isAvatarListOpened={isAvatarListOpened} closeAvatarList={closeAvatarList} handleClickElem={handleClickElem} listRef={listRef} isArrowButsActive={isArrowButsActive} disabled={disabled} createPathToAvatars={createPathToAvatars} />
+                <AvatarList LIST={LIST} avatar={avatar} isAvatarListOpened={isAvatarListOpened} closeAvatarList={closeAvatarList} handleClickElem={handleClickElem} isArrowButsActive={isArrowButsActive} disabled={disabled} createPathToAvatars={createPathToAvatars} />
             }
             <button
                 className={`avatar-but ${error?.message ? 'error' : ''}`}
                 type='button'
-                onClick={handleClickAvatarInput}
+                onClick={handleClickAvatarButton}
             >
                 <div className={`no_avatar-cont cont ${isNoAvatarOpened ? 'opened' : ''}`}>
                     <PiUserThin className='fa-icon' />
@@ -68,10 +76,10 @@ const AvatarInput = ({ LIST, avatar, setAvatar, error, setError, disabled=false,
                 {avatar && <img src={createPathToAvatars(avatar)} alt='Avatar error 2' />}
                 <ToolTip text='Выбрать аватар пользователя' />
             </button>
-            <InputsError error={error} onClick={handleClickAvatarInput} />
+            <InputsError error={error} onClick={handleClickAvatarButton} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
      )
 }
  
-export default AvatarInput
+export default AvatarButton

@@ -1,11 +1,11 @@
-type IDataElement = {
+export interface IDataListElement {
     id: string;
     title: string;
 }
 
 
 
-export const STORES_LIST: IDataElement[] = [
+export const STORES_LIST: IDataListElement[] = [
     {
         id: 'office',
         title: 'Офис'
@@ -44,7 +44,7 @@ export const STORES_LIST: IDataElement[] = [
     },
 ]
 
-export const JOBS_LIST: IDataElement[] = [
+export const JOBS_LIST: IDataListElement[] = [
     {
         id: 'sys_admin',
         title: 'Сис. админ.',
@@ -131,7 +131,7 @@ export const JOBS_LIST: IDataElement[] = [
     },
 ]
 
-export const AVATARS_LIST: IDataElement[] = [
+export const AVATARS_LIST: IDataListElement[] = [
     {
         id: 'squirrel',
         title: 'Белка',

@@ -10,18 +10,18 @@ interface ToolTipProps {
 }
 const ToolTip = ({ text, position='top' }: ToolTipProps) => {
     const [isToolTipVisible, setIsToolTipVisible] = useState(false)
-    const refSetTimeout = useRef<ReturnType<typeof setTimeout>>()
+    const refSetTimeout = useRef<ReturnType<typeof setTimeout>>(null) as MutableRefObject<ReturnType<typeof setTimeout>>
 
     const handleEnterMouse = () => {
         refSetTimeout.current = setTimeout(() => {
             setIsToolTipVisible(true)
-        }, 1100)
-      }
+        }, 1300)
+    }
     
-      const handleLeaveMouse = () => {
+    const handleLeaveMouse = () => {
         clearTimeout(refSetTimeout.current)
         setIsToolTipVisible(false)
-      }
+    }
 
     return ( 
         <div 

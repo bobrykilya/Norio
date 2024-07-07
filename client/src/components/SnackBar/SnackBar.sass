@@ -18,12 +18,12 @@
     &:hover
         transform: none
         box-shadow: 2px 10px 30px #00000063
-        .snackbar_close-cont
+        .snackbar_close-but
             &::after
                 background-color: #bbbbbb4e
                 transform: scale(0.8)
     &:active
-        .snackbar_close-cont
+        .snackbar_close-but
             .fa-icon
                 transform: scale(0.6)
     &.opened
@@ -63,7 +63,7 @@
             font-size: $size-main-text
             line-height: $size-main-text + 0.1rem
             font-weight: 600
-    .snackbar_close-cont
+    .snackbar_close-but
         // border: 2px solid black
         border-radius: 50%
         width: $size-big-but

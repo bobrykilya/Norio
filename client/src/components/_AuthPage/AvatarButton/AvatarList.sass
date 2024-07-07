@@ -6,10 +6,10 @@
         &.opened
             .jumping_list-cont
                 .avatar-list
-                    //* Avatars flying out animation delay
                     li
                         opacity: 1
                         transform: none
+                //* Avatars flying out animation delay
                         // @for $i from 1 through 100
                         //     &:nth-child(#{$i}n)
                         //         transition-delay: #{$i * 0.025}s
@@ -91,6 +91,7 @@
             height: calc($size-scroll-but * 2.4)
             transform: translateX(480px)
             mix-blend-mode: screen
+            z-index: -1
             &.opened
                 button
                     transform: translateX(0)
@@ -146,3 +147,6 @@
                 transform: translate(-150px, 600px)
             .avatar_list_down-but
                 transform: translate(-200px, 600px)
+            .tool_tip
+                &.right
+                    bottom: 25%

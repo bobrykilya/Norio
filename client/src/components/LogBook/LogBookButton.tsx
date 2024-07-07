@@ -1,19 +1,20 @@
+import React, { useState } from "react"
 import { BiError } from "react-icons/bi"
 import LogBookList from './LogBookList'
 import ToolTip from '../ToolTip/ToolTip'
 import toast, { useToasterStore } from 'react-hot-toast'
 import { showSnackBarMessage } from '../../features/showSnackBarMessage/showSnackBarMessage'
-import { useBlockError, useLogList } from '../../stores/Global-store'
+import { useBlockError } from '../../stores/Global-store'
 
 
 
 const LogBookButton = () => {
 
-    const { isErrorsLogListOpened, setIsErrorsLogListOpened } = useLogList()
+    const [isLogListOpened, setIsLogListOpened] = useState(false)
     const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
     const { toasts } = useToasterStore()
 
-    const checkSnackBarListBeforeOpen = () => {
+    const openLogList = () => {
         // console.log(toasts)
         if (toasts[0]) {
             toasts.forEach(t => {
@@ -21,23 +22,23 @@ const LogBookButton = () => {
             })
         }
         // console.log(blockSnackBarMessageList)
-        setIsErrorsLogListOpened(true)
+        setIsLogListOpened(true)
     }
 
-    const checkSnackBarListBeforeClose = () => {
-        // console.log(blockSnackBarMessage)
+    const closeLogList = () => {
+        // console.log(blockErrorMessage)
         if (blockErrorMessage) {
-            // showSnackBarMessage({ type: 'b', message: blockErrorMessage })
+            showSnackBarMessage({ type: 'b', message: blockErrorMessage })
         }
-        setIsErrorsLogListOpened(false)
+        setIsLogListOpened(false)
     }
 
     return ( 
         <>
-            <LogBookList closeErrorsLogList={checkSnackBarListBeforeClose} isErrorsLogListOpened={isErrorsLogListOpened} />
+            <LogBookList closeLogList={closeLogList} isLogListOpened={isLogListOpened} />
             <button 
                 className='log_book-button cont before_but-hover'
-                onClick={() => checkSnackBarListBeforeOpen()}
+                onClick={openLogList}
                 type='button'
                 tabIndex={-1}
             >

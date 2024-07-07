@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useRef, useState } from "react"
+import React, { createContext, MutableRefObject, useEffect, useRef, useState } from "react"
 import CircularProgress from '@mui/joy/CircularProgress'
 import inMemoryJWT from '../services/inMemoryJWT-service.js'
 import config from "../config.js"
@@ -16,7 +16,7 @@ const AuthProvider = ({ children }) => {
 	const [isUserLogged, setIsUserLogged] = useState(false)
 	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<{ title: string }[]>([])
 	const [coverPanelState, setCoverPanelState] = useState<AvailableCoverPanel>('sign_in')
-	const logOutTimer = useRef<ReturnType<typeof setTimeout>>()
+	const logOutTimer = useRef<ReturnType<typeof setTimeout>>(null) as MutableRefObject<ReturnType<typeof setTimeout>>
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
 

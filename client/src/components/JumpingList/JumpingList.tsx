@@ -1,14 +1,21 @@
+import React from 'react'
 import { useEffect } from 'react'
 
 
 
+interface JumpingListProps {
+    children: React.ReactElement;
+    isListOpened: boolean;
+    closeList: () => void;
+    other_children?: React.ReactElement;
+}
+const JumpingList = ({ children, isListOpened, closeList, other_children }: JumpingListProps) => {
 
-const JumpingList = ({ children, isListOpened, closeList, other_children }) => {
+    const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
+        const target = e.target as Element
 
-    const handleClickOutside = (e) => {
-        // console.log(e.target)
         try {
-            if (e.target?.className.includes('jumping_list_cover-cont')) {
+            if (target?.className.includes('jumping_list_cover-cont')) {
                 closeList()
             }
         }catch {
@@ -17,7 +24,7 @@ const JumpingList = ({ children, isListOpened, closeList, other_children }) => {
     }
     
     useEffect(() => {
-        const handleEscapePress = (e) => {
+        const handleEscapePress = (e: globalThis.KeyboardEvent) => {
             if (!isListOpened) return
             if (e.key === 'Escape') {
                 closeList()
@@ -37,9 +44,9 @@ const JumpingList = ({ children, isListOpened, closeList, other_children }) => {
             <div className='jumping_list-cont cont'>
                 {children}
             </div>
-                {other_children}
+            {other_children}
         </div>
      )
 }
- 
+
 export default JumpingList

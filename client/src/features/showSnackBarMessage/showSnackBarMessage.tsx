@@ -11,13 +11,15 @@ import { useBlockError } from '../../stores/Global-store';
 
 
 
+export type AvailableSnackBarType = 'e' | 'w' | 'b' | 's'
+
 export interface IError {
 	status?: number;
 	errTime?: string;
 	message?: string;
 	duration?: number;
 	action?: string;
-	type?: string;
+	type?: AvailableSnackBarType;
 	response?: any;
 	req?: Request;
 	detail?: {
@@ -29,12 +31,12 @@ export interface IError {
 	}
 }
 
-const getTypeDecoding = (type: string) => {
+const getTypeDecoding = (type: AvailableSnackBarType) => {
     switch (type) {
 		case 'w' : return { title: 'Внимание', icon: <PiSealWarning className='warning message-icon fa-icon' />, toastDuration: Infinity }
 		case 'b' : return { title: 'Блок', icon: <TbLockSquareRounded className='block message-icon fa-icon' />, toastDuration: Infinity }
         case 's' : return { title: 'Успех', icon: <FiCheckCircle className='success message-icon fa-icon' />, toastDuration: 3000 }
-        default : return { title: 'Ошибка', icon: <MdErrorOutline className='error message-icon fa-icon' />, toastDuration: 4000 }
+        default  : return { title: 'Ошибка', icon: <MdErrorOutline className='error message-icon fa-icon' />, toastDuration: 4000 }
     }
 }
 
@@ -42,7 +44,7 @@ const messagePreprocessing = (message: string) => {
 	switch (message) {
 		case 'Failed to fetch' : return 'Ошибка подключения к серверу'
 		case 'Request timed out' : return 'Ошибка ответа сервера'
-        default : return false 	
+        default : return false
     }
 }
 
@@ -51,7 +53,7 @@ export const showSnackBarMessage = (err: IError) => {
 
 	if (err.status === 900) { //* Block err
 		blockDevice({ logTime: err.errTime, infinityBlock: err.detail?.infinityBlock, unlockTimeDB: err.detail?.unlockTime, interCode: err.detail?.interCode })
-		const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
+		// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
 	}
 
 	if (!err.message) return
@@ -60,8 +62,8 @@ export const showSnackBarMessage = (err: IError) => {
 		try {
 			if (err.response) err = err.response.json().then((err: IError) => showSnackBarMessage(err))
 		}catch {
-			// console.log(err.message)
 			showSnackBarMessage({ status: 422, message: err.message, errTime: err.errTime })
+			// console.log(err.message)
 			// console.log(err)
 		}
 		return
@@ -76,7 +78,7 @@ export const showSnackBarMessage = (err: IError) => {
 	}
 	
     toast.custom((snack) => (
-		<SnackBar title={title} icon={icon} message={err.message} snack={snack} type={err.type}/>
+		<SnackBar title={title} icon={icon} message={err.message || 'Непредвиденная ошибка'} snack={snack} type={err.type || 'e'} />
     ), {
 		duration: err.duration || toastDuration,
 		position: "top-center",

@@ -18,10 +18,10 @@ const AuthPage = () => {
 
     return ( 
         <>
-            <div className='page_header-cont cont'>
-                <AppTitle />
-                <LogBookButton />
-            </div>
+            {/* <div className='page_header-cont cont'>
+            </div> */}
+            <AppTitle />
+            <LogBookButton />
             <AuthPageAnim>
                 <div id='auth_panel-cont' className={`cont ${blockAuthPage && 'block'}`}>
                     <div id='signs-cont' className='cont'>

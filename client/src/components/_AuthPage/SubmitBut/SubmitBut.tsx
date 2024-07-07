@@ -1,10 +1,19 @@
+import React from 'react'
 import ToolTip from '../../ToolTip/ToolTip'
 import CircularProgress from '@mui/joy/CircularProgress'
 // import ConfirmButBgImg from '../../../assets/confirm_but_bg.jpg'
 
 
 
-const SubmitBut = ({icon, notSaveUser=false, onClick, disabled=false, isLoading, title}) => {
+interface SubmitButProps {
+    icon: React.ReactElement;
+    notSaveUser?: boolean;
+    onClick?: () => void;
+    disabled?: boolean;
+    isLoading: boolean;
+    title: string;
+}
+const SubmitBut = ({icon, notSaveUser=false, onClick, disabled=false, isLoading, title}: SubmitButProps) => {
 
     return (
         <button
@@ -12,7 +21,7 @@ const SubmitBut = ({icon, notSaveUser=false, onClick, disabled=false, isLoading,
             type={notSaveUser ? 'button' : 'submit'}
             tabIndex={-1}
             disabled={disabled ? true : isLoading}
-            onClick={notSaveUser ? onClick : null}
+            onClick={onClick}
         >
             {!isLoading ? icon : <CircularProgress color="neutral" size="sm" variant="plain" />}
             <ToolTip text={title} />

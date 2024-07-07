@@ -31,16 +31,16 @@ const ButtonsCont = () => {
                     className='pwa-but'
                     tabIndex={-1}
                     onClick={askAppInstall}
-                    >
-                        <MdInstallDesktop className='fa-icon'/>
-                        <ToolTip text='Создать ярлык на рабочем столе' />
+                >
+                    <MdInstallDesktop className='fa-icon'/>
+                    <ToolTip text='Создать ярлык на рабочем столе' />
                 </button>
                 <button
                     className='info-but'
                     tabIndex={-1}
-                    >
-                        <FaInfo className='fa-icon'/>
-                        <ToolTip text='Описание приложения и инструкция' />
+                >
+                    <FaInfo className='fa-icon'/>
+                    <ToolTip text='Описание приложения и инструкция' />
                 </button>
         </div>
     )

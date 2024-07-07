@@ -1,14 +1,15 @@
-import JumpingList from '../../../JumpingList/JumpingList'
+import React, {  MutableRefObject, useContext, useRef } from 'react'
+import JumpingList from '../../JumpingList/JumpingList'
 import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
-import ToolTip from '../../../ToolTip/ToolTip'
-import { useContext } from 'react'
-import { AuthContext } from '../../../../context/Auth-context'
+import ToolTip from '../../ToolTip/ToolTip'
+import { AuthContext } from '../../../context/Auth-context'
 
 
-
-const AvatarInputList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleClickElem, listRef, isArrowButsActive, disabled, createPathToAvatars  }) => {
+ 
+const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleClickElem, isArrowButsActive, disabled, createPathToAvatars  }) => {
     
     const { listOfUsedAvatars } = useContext(AuthContext)
+    const listRef = useRef<HTMLUListElement>(null) as MutableRefObject<HTMLUListElement>
 
     const FILTERED_LIST = listOfUsedAvatars[0] ? LIST.filter(avatar => !listOfUsedAvatars.includes(avatar.id)) : LIST //* Filtering of used avatars
     const SORTED_AND_FILTERED_LIST = FILTERED_LIST.sort((a, b) => a.title.localeCompare(b.title)) //* Sorting of avatar list by title
@@ -52,19 +53,20 @@ const AvatarInputList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, ha
                         <span className='empty_list-message cont'>Аватары закончились...<br/>Обратитесь к разработчику</span> :
                         SORTED_AND_FILTERED_LIST.map((el) => {
                                 const key_but = `${el.id}-but`
-                                return <li key={el.id} className='cont'>
-                                            <button 
-                                                id={key_but}
-                                                className={avatar === el.id ? 'active' : ''}
-                                                type='button'
-                                                tabIndex={-1} 
-                                                onClick={handleClickElem}
-                                                disabled={disabled}
-                                                >
-                                                <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
-                                            </button>
-                                            <label htmlFor={key_but}>{el.title}</label>
-                                       </li>
+                                return (
+                                    <li key={el.id} className='cont'>
+                                        <button 
+                                            id={key_but}
+                                            className={avatar === el.id ? 'active' : ''}
+                                            type='button'
+                                            tabIndex={-1} 
+                                            onClick={handleClickElem}
+                                            disabled={disabled}
+                                            >
+                                            <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
+                                        </button>
+                                        <label htmlFor={key_but}>{el.title}</label>
+                                    </li>)
                             })
                         }
                 </ul>
@@ -73,4 +75,4 @@ const AvatarInputList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, ha
     )
 }
  
-export default AvatarInputList
+export default AvatarList

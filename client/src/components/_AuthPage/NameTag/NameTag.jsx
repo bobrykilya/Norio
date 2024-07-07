@@ -6,8 +6,8 @@ const NameTag = () => {
 
     return (  
         <h3 className='name_tag'>
-            <ToolTip text="Бобрик Илья Юрьевич" />
             bobrykilya
+            <ToolTip text="Бобрик Илья Юрьевич" />
         </h3>
     )
 }

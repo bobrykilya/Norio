@@ -1,15 +1,28 @@
-import { useContext, useEffect } from 'react'
-import toast from 'react-hot-toast'
+import React from 'react'
+import { useEffect } from 'react'
+import toast, { useToasterStore } from 'react-hot-toast'
 import { IoCloseCircleOutline } from 'react-icons/io5'
-import { GlobalContext } from '../../context/Global-context'
+import { AvailableSnackBarType } from '../../features/showSnackBarMessage/showSnackBarMessage';
 
 
 
-const SnackBar = ({ title, icon, message, snack, type }) => {
+interface ISnack {
+    visible: boolean;
+    id: string;
+}
 
-    // console.log(toasts[0].duration)
-    const { toasts } = useContext(GlobalContext)
+interface SnackBarProps {
+    title: string;
+    icon: React.ReactElement;
+    message: string; 
+    snack: ISnack;
+    type: AvailableSnackBarType;
+}
+const SnackBar = ({ title, icon, message, snack, type }: SnackBarProps) => {
+
+    const { toasts } = useToasterStore()
     const TOAST_LIMIT = 3
+    // console.log(snack)
 
     useEffect(() => {
         toasts
@@ -34,7 +47,9 @@ const SnackBar = ({ title, icon, message, snack, type }) => {
             </div>
             {
                 type !== 'b' ? 
-                    <div className='snackbar_close-cont before_but-hover cont'>
+                    <div 
+                        className='snackbar_close-but before_but-hover cont'
+                    >
                         <IoCloseCircleOutline className='close-icon fa-icon' />
                     </div>
                 :
