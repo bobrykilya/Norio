@@ -25,17 +25,19 @@ export interface ICheckUserService {
     avatarsList: { title: string }[];
 }
 
+export interface IHandleSignUp {
+    phone: string;
+    store: string;
+    job: string;
+    last_name: string;
+    first_name: string;
+    middle_name: string;
+    avatar?: string;
+}
 export interface IUserInfo {
     user_id: number;
     username: string;
     hashedPassword: string;
-    last_name: string;
-    first_name: string;
-    middle_name: string;
-    job: string;
-    store: string;
-    phone: string;
-    avatar: string;
     is_store: boolean;
 }
 

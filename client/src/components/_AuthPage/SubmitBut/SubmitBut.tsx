@@ -21,7 +21,7 @@ const SubmitBut = ({icon, notSaveUser=false, onClick, disabled=false, isLoading,
             type={notSaveUser ? 'button' : 'submit'}
             tabIndex={-1}
             disabled={disabled ? true : isLoading}
-            onClick={onClick}
+            onClick={notSaveUser ? onClick : () => null}
         >
             {!isLoading ? icon : <CircularProgress color="neutral" size="sm" variant="plain" />}
             <ToolTip text={title} />

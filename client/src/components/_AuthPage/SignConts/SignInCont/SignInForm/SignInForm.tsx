@@ -43,6 +43,7 @@ const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
     }
 
     const onSubmitNotSave = async (data) => {
+        console.log('Fast')
         data.fastSession = true
         
         reset()

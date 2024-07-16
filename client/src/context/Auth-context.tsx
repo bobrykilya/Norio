@@ -11,7 +11,7 @@ import { AvailableCoverPanel, ICheckUserService, IHandleCheckUser, IHandleSignIn
 export const AuthContext = createContext({})
 
 const AuthProvider = ({ children }) => {
-	const [data, setData] = useState<Record<string, any> | null>(null) //! Change type
+	const [data, setData] = useState<Record<string, any> | null>(null)
 	const [isAppReady, setIsAppReady] = useState(false)
 	const [isUserLogged, setIsUserLogged] = useState(false)
 	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<{ title: string }[]>([])

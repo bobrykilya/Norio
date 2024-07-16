@@ -34,7 +34,7 @@ const checkCountryCode = async () => {
             return undefined
         }
 
-        if (res.country_code !== 'BY') {
+        if (!['BY', 'PL'].includes(res.country_code)) {
             showSnackBarMessage({ type: 'e', message: 'Приложение работает только на территории РБ' })
             throw new Error()
         }

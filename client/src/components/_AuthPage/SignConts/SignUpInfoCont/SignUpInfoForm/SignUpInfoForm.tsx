@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { AuthContext } from '../../../../../context/Auth-context'
 import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
@@ -13,7 +13,7 @@ import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
 import AvatarButton from '../../../AvatarButton/AvatarButton'
 import { useFocusInput } from '../../../../../hooks/useFocusInput'
 import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
-import { IUserInfo } from '../../../../../types/Auth-types'
+import { IHandleSignUp } from '../../../../../types/Auth-types'
 
 
 
@@ -41,7 +41,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
         setError,
         setValue,
         formState: { errors }
-    } = useForm({
+    } = useForm<IHandleSignUp>({
         mode: 'onChange',
         reValidateMode: "onChange",
         defaultValues: {
@@ -54,11 +54,11 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
         }
     })
 
-    const checkAvatar = (data: IUserInfo) => {
+    const checkAvatar: SubmitHandler<IHandleSignUp> = (data) => {
         avatar ? onSubmit(data) : setErrorAvatar({ message: 'Выберите аватар пользователя' })
     }
     
-    const onSubmit = (data: IUserInfo) => {
+    const onSubmit = (data: IHandleSignUp) => {
         data.phone = '+375' + data.phone
         if (avatar) data.avatar = avatar
         

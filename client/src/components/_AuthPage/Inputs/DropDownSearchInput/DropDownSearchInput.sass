@@ -14,11 +14,11 @@
         // align-items: flex-start
         top: $height-input + 0.1rem
         padding: 0.5rem
-        box-shadow: 2px 10px 30px #0000002a
+        box-shadow: 2px 10px 30px #00000031
         background-color: $color-backgr
         height: auto
         max-height: 7rem
-        width: 110%
+        width: 108%
         text-align: center
         // vertical-align: top
         overflow-y: scroll
@@ -26,12 +26,12 @@
         z-index: 10
         scroll-behavior: smooth
         scroll-snap-type: y mandatory
-        -ms-overflow-style: none
-        scrollbar-width: none
         pointer-events: none
         opacity: 0
         transform: scale(0.9) translateY(-0.5rem)
-        transition: all 0.3s ease
+        transition: all 0.2s ease
+        -ms-overflow-style: none
+        scrollbar-width: none
         &::-webkit-scrollbar 
             display: none   
         &.opened
@@ -40,7 +40,8 @@
             opacity: 1
             transform: scale(1) translateY(0)
         button
-            // border: 1px solid #acabab
+            // border: 1px solid #acabab24
+            position: relative
             scroll-snap-align: top
             display: inline-block
             border-radius: 15px
@@ -50,10 +51,13 @@
             color: $color-main-text
             margin: 4px 3px
             width: auto
-            transition: all 0.2s ease
+            transition: 0.15s ease 
             &:hover, &:focus
                 transform: none
-                background-color: #d3d3d37a
                 // border: 1px solid #9c9a9a9b
+                // color: $color-backgr
+                background-color: #cecece82
+                box-shadow: none
+                border: none
             &:active
                 transform: scale(0.9)

@@ -1,12 +1,27 @@
-import { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
 import { useFocusInput } from "../../../../hooks/useFocusInput"
 import { useCapitalize } from '../../../../hooks/useCapitalize'
+import { UseFormProps, UseFormResetField } from 'react-hook-form'
 
 
 
-const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=false }) => {
+type AvailableNameInputType = 'sign_in' | 'sign_up' | 'name'
+interface NameInputProps {
+    name: string;
+    placeholder: string;
+    icon: React.ReactElement
+    type: AvailableNameInputType;
+    register: UseFormRegister<TFieldValues>;
+    error: FieldErrors<TFieldValues>;
+    reset: UseFormResetField<UseFormProps>;
+    notSaveUser: boolean;
+    inputMaxLength: number;
+    disabled: boolean;
+    // inputRefLogin: ;
+}
+const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=false }: NameInputProps) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -32,7 +47,7 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
         setIsCleanerOpened(false)
     }
 
-    const getRegister = (type) => {
+    const getRegister = (type: AvailableNameInputType) => {
         switch(type) {
             case 'sign_in':  //**** SignIn
                 return register(name, {
@@ -60,8 +75,8 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
                 return register(name, {
                     required: true,
                     minLength: {
-                        value: 3,
-                        message: `Длина поля '${placeholder}' должна быть от 3 букв`
+                        value: 2,
+                        message: `Длина поля '${placeholder}' должна быть от 2 букв`
                     },
                     validate: {
                         isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 

@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { useFocusInput } from "../../../../hooks/useFocusInput"
 import { useClickOutside } from "../../../../hooks/useClickOutside"
-import { useCapitalize } from '../../../../hooks/useCapitalize';
+import { useCapitalize } from '../../../../hooks/useCapitalize'
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
 
