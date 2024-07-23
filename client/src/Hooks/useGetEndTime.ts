@@ -1,5 +1,4 @@
-
-interface IUseGetEndTime {
+type IUseGetEndTime = {
     startTime: Date;
     duration: number;
 }

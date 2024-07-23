@@ -1,3 +1,4 @@
+import React from 'react'
 import { motion } from 'framer-motion'
 
 
@@ -8,6 +9,7 @@ const transitionSettings = {
 }
 const jumpY = 20
 const jumpScale = 0.02
+
 
 const ClassicAnim = ({ children }) => {
     return (

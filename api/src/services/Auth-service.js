@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"
 import TokenService from "./Token-service.js"
-import { Forbidden, Conflict, Unauthorized, BlockDevice, BadRequest } from "../../utils/Errors.js"
+import { Forbidden, Conflict, Unauthorized, BlockDevice } from "../../utils/Errors.js"
 import { ACCESS_TOKEN_EXPIRATION } from "../../constants.js"
 import RefreshSessionsRepository from "../_database/repositories/RefreshSession-db.js"
 import UserRepository from "../_database/repositories/User-db.js"
@@ -30,7 +30,7 @@ class AuthService {
 		
 		const isPasswordValid = bcrypt.compareSync(password, userData.password)
 		if (!isPasswordValid) {
-			throw new Unauthorized("Неверный логин или пароль")
+			throw new Conflict("Неверный логин или пароль")
 		}
 
 		

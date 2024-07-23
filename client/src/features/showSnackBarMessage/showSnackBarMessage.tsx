@@ -11,32 +11,34 @@ import { useBlockError } from '../../stores/Global-store';
 
 
 
-export type AvailableSnackBarType = 'e' | 'w' | 'b' | 's'
+export type SnackBarTypeOptions = 'e' | 'w' | 'b' | 's'
 
-export interface IError {
-	status?: number;
-	errTime?: string;
-	message?: string;
+export type ISnack = {
+	type: SnackBarTypeOptions;
+	message: string;
 	duration?: number;
-	action?: string;
-	type?: AvailableSnackBarType;
-	response?: any;
-	req?: Request;
+	snackTime?: string;
+	response?: Response;
 	detail?: {
-		infinityBlock: boolean;
-		unlockTime: string;
-		deviceIP: string;
-		interCode: number;
-		username: string;
+		action: string;
+		req: Record<string, any>;
+		res: {
+			status: number;
+			title: string;
+		}
+		infinityBlock?: boolean;
+		unlockTime?: string;
+		deviceIP?: string;
+		interCode?: number;
 	}
 }
 
-const getTypeDecoding = (type: AvailableSnackBarType) => {
+const getTypeDecoding = (type: SnackBarTypeOptions) => {
     switch (type) {
+        case 'e' : return { title: 'Ошибка', icon: <MdErrorOutline className='error message-icon fa-icon' />, toastDuration: 4000 }
 		case 'w' : return { title: 'Внимание', icon: <PiSealWarning className='warning message-icon fa-icon' />, toastDuration: Infinity }
 		case 'b' : return { title: 'Блок', icon: <TbLockSquareRounded className='block message-icon fa-icon' />, toastDuration: Infinity }
         case 's' : return { title: 'Успех', icon: <FiCheckCircle className='success message-icon fa-icon' />, toastDuration: 3000 }
-        default  : return { title: 'Ошибка', icon: <MdErrorOutline className='error message-icon fa-icon' />, toastDuration: 4000 }
     }
 }
 
@@ -48,45 +50,54 @@ const messagePreprocessing = (message: string) => {
     }
 }
 
-export const showSnackBarMessage = (err: IError) => {
-	// console.log(err)
-
-	if (err.status === 900) { //* Block err
-		blockDevice({ logTime: err.errTime, infinityBlock: err.detail?.infinityBlock, unlockTimeDB: err.detail?.unlockTime, interCode: err.detail?.interCode })
-		// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
-	}
-
-	if (!err.message) return
+export const showSnackBarMessage = (snack: ISnack) => {
 	
-	if (!err.status && !err.type) {
+	
+	//* Response-snack handling
+	if (!snack.type && snack.response) {
 		try {
-			if (err.response) err = err.response.json().then((err: IError) => showSnackBarMessage(err))
+			if (snack.response) 
+				snack.response.json().then((snack: ISnack) => showSnackBarMessage(snack))
 		}catch {
-			showSnackBarMessage({ status: 422, message: err.message, errTime: err.errTime })
-			// console.log(err.message)
-			// console.log(err)
+			showSnackBarMessage({ type: 'w', message: snack.message || 'Непредвиденная ошибка', snackTime: snack.snackTime })
 		}
 		return
 	}
-	// console.log(err)
+	// console.log(snack)
+	
+	//* Refresh errs ban
+	if (snack?.detail?.action === 'refresh') return
+	
+	//* Missing elements adding
+	if (!snack.snackTime) snack.snackTime = new Date().toUTCString()
+		
 
-	const { title, icon, toastDuration } = getTypeDecoding(err.type || 'e')
+	//* Block handling
+	// if (snack.status === 900) { 
+	// 	blockDevice({ logTime: snack.snackTime, infinityBlock: snack.detail?.infinityBlock, unlockTimeDB: snack.detail?.unlockTime, interCode: snack.detail?.interCode })
+	// 	// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
+	// }
 
-	const newMessage = messagePreprocessing(err.message)
+	
+
+	const { title, icon, toastDuration } = getTypeDecoding(snack.type || 'e')
+	const newMessage = messagePreprocessing(snack.message)
 	if (newMessage) {
-		err.message = newMessage
+		snack.message = newMessage
 	}
 	
-    toast.custom((snack) => (
-		<SnackBar title={title} icon={icon} message={err.message || 'Непредвиденная ошибка'} snack={snack} type={err.type || 'e'} />
+    toast.custom((toastElem) => (
+		<SnackBar title={title} icon={icon} message={snack.message || 'Непредвиденная ошибка'} toastElem={toastElem} type={snack.type} />
     ), {
-		duration: err.duration || toastDuration,
-		position: "top-center",
+		duration: snack.duration || toastDuration,
 		// duration: Infinity,
-		// snackBarType: err.type || 'e',
-		// snackBarMessage: err.message,
 	})
 
-	// if (!['s'].includes(err.type)) 
-		saveLogInLocalStorage(err)
+	// console.log(err)
+	if (localStorage.getItem('blockDevice')) return
+	// const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
+	// if (blockErrorMessage) return
+	
+	if (!['s'].includes(snack.type)) 
+		saveLogInLocalStorage(snack)
 }

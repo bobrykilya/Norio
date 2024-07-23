@@ -1,4 +1,4 @@
-import { ILSUserInfo } from "./Auth-types";
+import { IUserInfo } from "./Auth-types";
 
 
 
@@ -12,7 +12,7 @@ export interface IBlockDevice {
 export interface IBlockDeviceService { 
     logTime: string;
     unlockTime: string | null;
-    userInfo: ILSUserInfo;
+    userInfo: IUserInfo;
     deviceId: number;
     interCode: number | null;
     deviceIP?: string;

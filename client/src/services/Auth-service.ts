@@ -1,6 +1,6 @@
 import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
 import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http"
-import { ICheckUserService, IHandleCheckUser, IHandleSignIn, IResponseLoginService, IUserInfo } from '../types/Auth-types'
+import { ILoginServiceResp, IHandleCheckUser, IHandleSignIn, ISignUpServiceReq, ICheckUserServiceResp, IHandleLogOut } from '../types/Auth-types'
 
 
 
@@ -10,7 +10,7 @@ type IProcessedRequestLoginService<T> = T & {
     deviceType?: string;
 }
 
-interface IApiIpInfoResponse {
+type IApiIpInfoResponse = {
     country_code: string;
     ip: string;
 }
@@ -26,7 +26,7 @@ const getDeviceType = () => {
 }
 
 const checkCountryCode = async () => {
-        const res: IApiIpInfoResponse = await $apiIpInfo.get("").json()
+        const res = await $apiIpInfo.get("").json<IApiIpInfoResponse>()
         // console.log(res)
         if (!res) {
             showSnackBarMessage({type: 'w', message: 'Ошибка обращения к сервису apiIpInfo (checkCountryCode function)'})
@@ -35,7 +35,7 @@ const checkCountryCode = async () => {
         }
 
         if (!['BY', 'PL'].includes(res.country_code)) {
-            showSnackBarMessage({ type: 'e', message: 'Приложение работает только на территории РБ' })
+            showSnackBarMessage({ type: 'e', message: 'Приложение работает только на территории РБ (И временно Польши)' })
             throw new Error()
         }
         return res.ip
@@ -60,9 +60,9 @@ class AuthService {
     static async signIn(data: IHandleSignIn) {
         // console.log(data)
         try {
-            const newData = await preRequest<IHandleSignIn>(data)
+            const newData = await preRequest(data)
             // console.log(newData)
-            const res: IResponseLoginService = await $apiAuth.post("sign-in", { json: newData }).json()
+            const res = await $apiAuth.post("sign-in", { json: newData }).json<ILoginServiceResp>()
 
             return res
         } catch (err) {
@@ -73,7 +73,7 @@ class AuthService {
 
     static async checkUser(data: IHandleCheckUser) {
         try {
-            const res: ICheckUserService = await $apiAuth.post("check-user", { json: data }).json()
+            const res = await $apiAuth.post("check-user", { json: data }).json<ICheckUserServiceResp>()
 
             return res
         } catch (err) {
@@ -82,11 +82,11 @@ class AuthService {
         }
     }
 
-    static async signUp(data: IUserInfo) {
+    static async signUp(data: ISignUpServiceReq) {
         try {
-            const newData = await preRequest<IUserInfo>(data)
+            const newData = await preRequest(data)
             
-            const res: IResponseLoginService = await $apiAuth.post("sign-up", { json: newData }).json()
+            const res = await $apiAuth.post("sign-up", { json: newData }).json<ILoginServiceResp>()
             
             return res
         } catch (err) {
@@ -95,8 +95,7 @@ class AuthService {
         }
     }
 
-    static logOut(data: { interCode?: number }) {
-        
+    static logOut(data: IHandleLogOut) {
         try {
             $apiAuth.post("logout", { json: data })
 
@@ -108,7 +107,7 @@ class AuthService {
 
     static async refresh(data: { lsDeviceId?: number } = {}) {
         try {
-            const res: IResponseLoginService = await $apiAuth.post("refresh", { json: data })?.json()
+            const res = await $apiAuth.post("refresh", { json: data })?.json<ILoginServiceResp>()
 
             return res
         } catch (err) {
@@ -118,17 +117,17 @@ class AuthService {
         }
     }
 
-    static fetchProtected() {
-        try {
-            const res = $apiSecureResource.get("protected").json()
+    // static fetchProtected() {
+    //     try {
+    //         const res = $apiSecureResource.get("protected").json()
 
-            return res
-        } catch (err) {
-            showSnackBarMessage(err)
-            throw new Error('FetchProtected error')
-        }
+    //         return res
+    //     } catch (err) {
+    //         showSnackBarMessage(err)
+    //         throw new Error('FetchProtected error')
+    //     }
         
-    }
+    // }
 }
 
 

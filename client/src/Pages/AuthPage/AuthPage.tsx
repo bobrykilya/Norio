@@ -18,8 +18,6 @@ const AuthPage = () => {
 
     return ( 
         <>
-            {/* <div className='page_header-cont cont'>
-            </div> */}
             <AppTitle />
             <LogBookButton />
             <AuthPageAnim>

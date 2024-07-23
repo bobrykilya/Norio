@@ -13,7 +13,7 @@ import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 interface AvatarButtonProps {
     LIST: IDataListElement[];
     avatar: string | null;
-    setAvatar: React.Dispatch<React.SetStateAction<string | null>>;
+    setAvatar: React.Dispatch<React.SetStateAction<string>>;
     error: { message: string };
     setError: React.Dispatch<React.SetStateAction<{ message: string } | null>>;
     disabled: boolean;
@@ -39,7 +39,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
 
     const handleClickCleaner = () => {
         setIsNoAvatarOpened(true)
-        setTimeout(() => {setAvatar(null)}, 300)
+        setTimeout(() => {setAvatar('')}, 300)
         setIsCleanerOpened(false)
         if (error) setError(null)
     }

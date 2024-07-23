@@ -2,33 +2,20 @@ import DeviceService from '../../services/Device-service.js'
 import { showSnackBarMessage } from '../showSnackBarMessage/showSnackBarMessage.jsx'
 import inMemoryJWT from '../../services/inMemoryJWT-service.js'
 import useGetEndTime from '../../hooks/useGetEndTime.js'
-import useGetTimeShort from '../../hooks/useGetTimeShort.js';
-import { IBlockDevice, IBlockDeviceService } from '../../types/Device-types.js';
-import { useBlockError } from '../../stores/Global-store.js';
+import useGetTimeShort from '../../hooks/useGetTimeShort.js'
+import { IBlockDevice, IBlockDeviceService } from '../../types/Device-types.js'
+import { useBlockError } from '../../stores/Global-store.js'
 
 
+const blockDurationInMinutes = 2
 
-interface IGetErrorMessage {
+
+type IGetErrorMessage = {
     lockTime: Date;
     infinityBlock: boolean;
     unlockTimeDB: string | null;
     interCode: number | null;
 }
-
-// type INew = IGetErrorMessage & {
-//     lockTime: never;
-// }
-
-// type INew_2 = Omit<IGetErrorMessage, 'lockTime'>
-
-// const A: INew_2 = {
-//     // lockTime: new Date(),
-//     infinityBlock: true,
-//     unlockTimeDB: new Date().toUTCString(),
-//     interCode: 1,
-// }
-// console.log(A)
-
 const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: IGetErrorMessage) => {
     // console.log(infinityBlock)
     if (!infinityBlock) {
@@ -38,7 +25,7 @@ const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: I
         let unlockTime: string
 
         if (!unlockTimeDB) {
-            endTimeString = useGetEndTime({ startTime: lockTime, duration: 5 })
+            endTimeString = useGetEndTime({ startTime: lockTime, duration: blockDurationInMinutes })
             unlockTimeShort = useGetTimeShort( endTimeString)
             unlockTime = endTimeString
         } else {

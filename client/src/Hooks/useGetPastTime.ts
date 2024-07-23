@@ -1,6 +1,6 @@
-type AvailableType = 'hour' | 'minute' | 'second'
+type TypeOptions = 'hour' | 'minute' | 'second';
 
-const useGetLastTime = (timestamp: string, type: AvailableType): number => {
+const useGetLastTime = (timestamp: string, type: TypeOptions): number => {
     try {
         const nowTime = new Date()
         const timestampTime = new Date(timestamp)

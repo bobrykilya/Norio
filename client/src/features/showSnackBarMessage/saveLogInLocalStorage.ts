@@ -1,29 +1,24 @@
 import blockDevice from '../blockDevice/blockDevice'
 import useGetLastTime from '../../hooks/useGetPastTime'
-import { IError } from './showSnackBarMessage'
+import { ISnack } from './showSnackBarMessage'
 // import { useBlockError } from '../../stores/Global-store';
 
 
-
-interface ILSError extends IError {
-	errTime: string;
-	message: string;
-}
 
 const recentlyTime = 0.1 //* Time of error counting in minutes
 const sameErrsQuantity = 3 //* Limit of possible error quantity recently
 const userErrStorageTime = 24 //* User error storage time in hours
 
 
-const filterErrsListByTime = (err: IError) => {
-
-	return err.errTime ? useGetLastTime(err.errTime, 'hour') < userErrStorageTime : false
+const filterErrsListByTime = (err: ISnack) => {	
+	return err.snackTime ? useGetLastTime(err.snackTime, 'hour') < userErrStorageTime : false
 }
-const checkErrsQuantityForRecently = (list: ILSError[]) => {
+
+const checkErrsQuantityForRecently = (list: ISnack[]) => {
 
 	let result = false
 
-	list = list.filter(err => err.type === 'e' && useGetLastTime(err.errTime, 'minute') < recentlyTime)
+	list = list.filter(err => err.type === 'e' && err.snackTime && useGetLastTime(err.snackTime, 'minute') < recentlyTime)
 	const countObject = {}
 	
 	for (let err of list) {
@@ -45,29 +40,20 @@ const checkErrsQuantityForRecently = (list: ILSError[]) => {
 }
 
 
-const saveLogInLocalStorage = (err: IError) => {
-	// console.log(err)
-	if (localStorage.getItem('blockDevice')) return
-	// const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
-	// if (blockErrorMessage) return
+const saveLogInLocalStorage = (err: ISnack) => {
 	
-    let errsList = JSON.parse(localStorage.getItem('userErrsList') || '[]') || []
-	const userId = JSON.parse(localStorage.getItem('userInfo') || '[]')?.user_id || undefined
-    const ErrDetail = err.detail
-	
+    let errsList: ISnack[] = JSON.parse(localStorage.getItem('userErrsList') || '[]')
 	if (errsList[0]) errsList = errsList.filter(filterErrsListByTime) || []
-	// console.log(errsList)
+
+	//! Save userInfo with err ???
+	// const userId = JSON.parse(localStorage.getItem('userInfo') || '[]')?.user_id || undefined
+	// if (userId && err.detail?.req) {
+	// 	err.detail!.req.userId = userId
+	// }
 
 	// console.log(err)
-	errsList.push({ 
-		errTime: err.errTime || new Date().toUTCString(),
-		type: err.type || 'e',
-		message: err.message,
-		userId,
-		action: err.action,
-		req: err.req,
-		ErrDetail,
-	})
+	errsList.push(err)
+	
 	// console.log(errsList)
 	localStorage.setItem('userErrsList', JSON.stringify(errsList))
 	
@@ -75,7 +61,7 @@ const saveLogInLocalStorage = (err: IError) => {
 	if (errsList.length < sameErrsQuantity || err.type === 'b') return
 	if (checkErrsQuantityForRecently(errsList)) {
 		// console.log('Blocked')
-        blockDevice({ logTime: err.errTime })
+        blockDevice({ logTime: err.snackTime })
 	}
 }
 

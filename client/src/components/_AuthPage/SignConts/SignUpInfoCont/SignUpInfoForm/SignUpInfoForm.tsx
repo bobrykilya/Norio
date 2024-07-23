@@ -17,7 +17,7 @@ import { IHandleSignUp } from '../../../../../types/Auth-types'
 
 
 
-interface SignUpInfoFormProps {
+type SignUpInfoFormProps = {
     STORES_LIST: IDataListElement[];
     JOBS_LIST: IDataListElement[];
     AVATARS_LIST: IDataListElement[];
@@ -27,7 +27,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
     // console.log('SignUpInfoForm')
 
     const { handleSignUp } = useContext(AuthContext)
-    const [avatar, setAvatar] = useState<string | null>('hedgehog')
+    const [avatar, setAvatar] = useState<string>('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef(null)
@@ -45,7 +45,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
         mode: 'onChange',
         reValidateMode: "onChange",
         defaultValues: {
-            phone: '295697982',
+            phone: '295697981',
             store: 'Офис',
             job: 'Управляющий',
             last_name: 'Бобрик',
@@ -60,7 +60,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
     
     const onSubmit = (data: IHandleSignUp) => {
         data.phone = '+375' + data.phone
-        if (avatar) data.avatar = avatar
+        data.avatar = avatar
         
         setTimeout(async () => {
             setIsLoading(true)

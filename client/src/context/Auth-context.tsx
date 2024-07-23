@@ -4,7 +4,7 @@ import inMemoryJWT from '../services/inMemoryJWT-service.js'
 import config from "../config.js"
 import AuthService from "../services/Auth-service.js"
 import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage.jsx"
-import { AvailableCoverPanel, ICheckUserService, IHandleCheckUser, IHandleSignIn, ILSUserInfo, IResponseLoginService, IUserInfo } from "../types/Auth-types.js"
+import { CoverPanelOptions, IAvatarListElement, IHandleCheckUser, IHandleSignIn, IUserInfo, ILoginServiceResp, ISignUpServiceReq, IHandleLogOut } from "../types/Auth-types.js"
 
 
 
@@ -14,13 +14,13 @@ const AuthProvider = ({ children }) => {
 	const [data, setData] = useState<Record<string, any> | null>(null)
 	const [isAppReady, setIsAppReady] = useState(false)
 	const [isUserLogged, setIsUserLogged] = useState(false)
-	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<{ title: string }[]>([])
-	const [coverPanelState, setCoverPanelState] = useState<AvailableCoverPanel>('sign_in')
+	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<IAvatarListElement[]>([])
+	const [coverPanelState, setCoverPanelState] = useState<CoverPanelOptions>('sign_in')
 	const logOutTimer = useRef<ReturnType<typeof setTimeout>>(null) as MutableRefObject<ReturnType<typeof setTimeout>>
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
 
-	const setLogOutTimer = (logOutTime: Date): void => {
+	const setLogOutTimer = (logOutTime: Date)=> {
 		const timeOutTime = new Date(logOutTime).getTime() - new Date().getTime()
 		if (!timeOutTime) return
 	
@@ -33,10 +33,10 @@ const AuthProvider = ({ children }) => {
 	const resetSignUpVariables = () => {
 		setSignUpUserName('')
 		setSignUpUserPassword('')
+		clearTimeout(logOutTimer.current)
 		setListOfUsedAvatars([])
 	}
 	const resetSignInVariables = () => {
-		clearTimeout(logOutTimer.current)
 		localStorage.removeItem('userInfo')
 	}
 	const handleReturnToSignUp = () => {
@@ -51,37 +51,40 @@ const AuthProvider = ({ children }) => {
 		}, pauseTime)
 	}
 
-	const checkSessionDouble = (newUserInfo : ILSUserInfo): number => {
+	const checkSessionDouble = (newUserInfo : IUserInfo): boolean => {
 		if (localStorage.getItem('userInfo')) {
 
 			const { last_name, first_name, username } = JSON.parse(localStorage.getItem('userInfo') || '{}') //* Old user info
 			const messageEnding = last_name ? `${last_name} ${first_name} (${username})` : username
 
 			if (newUserInfo.username !== username) {
-				showSnackBarMessage({ 
-					type: 'w', 
-					duration: 5000, 
-					message: `Был выполнен фоновый выход из аккаунта пользователя: ${messageEnding}` 
-				})
+				//! showSnackBarMessage({ 
+				// 	type: 'w', 
+				// 	duration: 5000, 
+				// 	message: `Был выполнен фоновый выход из аккаунта пользователя: ${messageEnding}` 
+				//! })
 				handleLogOut()
-				return 300 //* Timeout after logout, before new login
+				return true
 			}
 		}
-		return 0
+		return false
 	}
 
-	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }: IResponseLoginService) => {
-		const pauseTime = checkSessionDouble(userInfo)
+	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp) => {
+		const pauseTime = checkSessionDouble(userInfo) ? 300 : 0 //* Timeout after logout, before new login
 		
-		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-
-		testAndUpdateLSDeviceId(deviceId)
-		localStorage.setItem('userInfo', JSON.stringify(userInfo))
+		saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		
 		userHasLogged(pauseTime)
 	}
 
-	const testAndUpdateLSDeviceId = (deviceId: number, lsDeviceId: number | null = null) => {
+	const saveUserDataOnBrowser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId }: ILoginServiceResp & { lsDeviceId?: number }) => {
+		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+		testAndUpdateLSDeviceId(deviceId, lsDeviceId)
+		localStorage.setItem('userInfo', JSON.stringify(userInfo))
+	}
+
+	const testAndUpdateLSDeviceId = (deviceId: number, lsDeviceId?: number) => {
 		const lsDeviceId_2 = lsDeviceId || Number(localStorage.getItem('deviceId'))
 
 		if (!lsDeviceId_2 || (lsDeviceId_2 !== deviceId)) localStorage.setItem('deviceId', String(deviceId))
@@ -89,7 +92,7 @@ const AuthProvider = ({ children }) => {
 
 	const handleSignIn = async (data: IHandleSignIn) => {
 
-		const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId }: IResponseLoginService = await AuthService.signIn(data)
+		const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId } = await AuthService.signIn(data)
 		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 
 		if (logOutTime) {
@@ -99,7 +102,7 @@ const AuthProvider = ({ children }) => {
 
 	const handleCheckUser = async (data: IHandleCheckUser) => {
 
-		const { userName, hashedPassword, avatarsList }: ICheckUserService = await AuthService.checkUser(data)
+		const { userName, hashedPassword, avatarsList } = await AuthService.checkUser(data)
 
 		setSignUpUserName(userName)
 		setSignUpUserPassword(hashedPassword)
@@ -108,18 +111,18 @@ const AuthProvider = ({ children }) => {
 		setCoverPanelState('sign_up_info')
 	}
 
-	const handleSignUp = async (data: IUserInfo) => {
+	const handleSignUp = async (data: ISignUpServiceReq) => {
 
 		data.username = signUpUserName
 		data.hashedPassword = signUpUserPassword
 		
-		const { accessToken, accessTokenExpiration, userInfo, deviceId }: IResponseLoginService = await AuthService.signUp(data)
+		const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp(data)
 		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 
 		resetSignUpVariables()
 	}
 
-	const handleLogOut = ({ interCode }: { interCode?: number } = {}) => {
+	const handleLogOut = ({ interCode }: IHandleLogOut = {}) => {
 
 		AuthService.logOut({ interCode })
 
@@ -131,10 +134,10 @@ const AuthProvider = ({ children }) => {
 		setIsUserLogged(false)
 	}
 
-	const handleFetchProtected = () => {
-		const res = AuthService.fetchProtected()
-		setData(res)
-	}
+	// const handleFetchProtected = () => {
+	// 	const res = AuthService.fetchProtected()
+	// 	setData(res)
+	// }
 
 
 	//* Refresh handling
@@ -144,13 +147,9 @@ const AuthProvider = ({ children }) => {
 					// console.log('refresh')
 					const lsDeviceId = Number(localStorage.getItem('deviceId'))
 
-					const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId }: IResponseLoginService = await AuthService.refresh({ lsDeviceId })
+					const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId }: ILoginServiceResp = await AuthService.refresh({ lsDeviceId })
 					
-					testAndUpdateLSDeviceId(deviceId, lsDeviceId)
-
-					inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-	
-					localStorage.setItem('userInfo', JSON.stringify(userInfo))
+					saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
 	
 					setIsAppReady(true)
 					setIsUserLogged(true)
@@ -186,7 +185,7 @@ const AuthProvider = ({ children }) => {
 
 	//* Check for block on Front
 	useEffect(() => {
-		const defaultProcessing = () => {
+		const checkForBlock = () => {
 			try {
 				if (localStorage.getItem('blockDevice')) {
 					setTimeout(() => handleLogOut(), 300)
@@ -197,7 +196,7 @@ const AuthProvider = ({ children }) => {
 				resetSignInVariables()
 			}
 		}
-		defaultProcessing()
+		checkForBlock()
 	}, [])
 
 
@@ -209,7 +208,7 @@ const AuthProvider = ({ children }) => {
                 setCoverPanelState,
 				handleReturnToSignUp,
 				handleCheckUser,
-				handleFetchProtected,
+				// handleFetchProtected,
 				handleSignUp,
 				handleSignIn,
 				handleLogOut,

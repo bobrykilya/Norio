@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import toast, { useToasterStore } from 'react-hot-toast'
 import { IoCloseCircleOutline } from 'react-icons/io5'
-import { AvailableSnackBarType } from '../../features/showSnackBarMessage/showSnackBarMessage';
+import { SnackBarTypeOptions } from '../../features/showSnackBarMessage/showSnackBarMessage';
 
 
 
@@ -15,10 +15,10 @@ interface SnackBarProps {
     title: string;
     icon: React.ReactElement;
     message: string; 
-    snack: ISnack;
-    type: AvailableSnackBarType;
+    toastElem: ISnack;
+    type: SnackBarTypeOptions;
 }
-const SnackBar = ({ title, icon, message, snack, type }: SnackBarProps) => {
+const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
     const { toasts } = useToasterStore()
     const TOAST_LIMIT = 3
@@ -33,11 +33,11 @@ const SnackBar = ({ title, icon, message, snack, type }: SnackBarProps) => {
 
     return ( 
         <button
-            className={`snackbar-cont cont ${snack.visible ? 'opened' : 'closed'} ${type === 'b' && 'blocked'}`}
+            className={`snackbar-cont cont ${toastElem.visible ? 'opened' : 'closed'} ${type === 'b' && 'blocked'}`}
             type='button'
             tabIndex={-1}
             onClick={() => {
-                if (type !== 'b') toast.dismiss(snack.id)
+                if (type !== 'b') toast.dismiss(toastElem.id)
             }}
         >
             {icon}

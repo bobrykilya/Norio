@@ -9,6 +9,7 @@ import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { BiLogInCircle } from "react-icons/bi"
 import { FaUser } from "react-icons/fa"
 import ToolTip from '../../../../ToolTip/ToolTip' 
+import { IHandleSignIn } from '../../../../../types/Auth-types';
 
 
 
@@ -42,8 +43,8 @@ const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
         setNotSaveUser((prev) => !prev)
     }
 
-    const onSubmitNotSave = async (data) => {
-        console.log('Fast')
+    const onSubmitNotSave = async (data: IHandleSignIn) => {
+        // console.log('Fast')
         data.fastSession = true
         
         reset()
@@ -59,7 +60,7 @@ const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
         // alert(JSON.stringify(data))
     }
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: IHandleSignIn) => {
 
         setIsLoading(true)
         await handleSignIn(data)
