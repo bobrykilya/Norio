@@ -1,4 +1,4 @@
-import React, { useState, useRef, MutableRefObject } from 'react'
+import React, { useState, useRef } from 'react'
 
 
 
@@ -10,17 +10,20 @@ interface ToolTipProps {
 }
 const ToolTip = ({ text, position='top' }: ToolTipProps) => {
     const [isToolTipVisible, setIsToolTipVisible] = useState(false)
-    const refSetTimeout = useRef<ReturnType<typeof setTimeout>>(null) as MutableRefObject<ReturnType<typeof setTimeout>>
+    const timer = useRef<number | null>(null)
 
     const handleEnterMouse = () => {
-        refSetTimeout.current = setTimeout(() => {
+        // console.log('enter mouse')
+        timer.current = setTimeout(() => {
+            // console.log('open')
             setIsToolTipVisible(true)
         }, 1300)
     }
     
     const handleLeaveMouse = () => {
-        clearTimeout(refSetTimeout.current)
+        // console.log(timer.current)
         setIsToolTipVisible(false)
+        if (timer.current) clearTimeout(timer.current)
     }
 
     return ( 

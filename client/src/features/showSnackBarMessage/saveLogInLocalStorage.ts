@@ -18,7 +18,7 @@ const checkErrsQuantityForRecently = (list: ISnack[]) => {
 
 	let result = false
 
-	list = list.filter(err => err.type === 'e' && err.snackTime && useGetLastTime(err.snackTime, 'minute') < recentlyTime)
+	list = list.filter(err => err.type === 'e' && useGetLastTime(err.snackTime, 'minute') < recentlyTime)
 	const countObject = {}
 	
 	for (let err of list) {
@@ -61,7 +61,7 @@ const saveLogInLocalStorage = (err: ISnack) => {
 	if (errsList.length < sameErrsQuantity || err.type === 'b') return
 	if (checkErrsQuantityForRecently(errsList)) {
 		// console.log('Blocked')
-        blockDevice({ logTime: err.snackTime })
+        blockDevice({ logTime: err!.snackTime })
 	}
 }
 

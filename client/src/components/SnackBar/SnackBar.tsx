@@ -6,12 +6,12 @@ import { SnackBarTypeOptions } from '../../features/showSnackBarMessage/showSnac
 
 
 
-interface ISnack {
+type ISnack = {
     visible: boolean;
     id: string;
 }
 
-interface SnackBarProps {
+type SnackBarProps = {
     title: string;
     icon: React.ReactElement;
     message: string; 
@@ -21,7 +21,7 @@ interface SnackBarProps {
 const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
     const { toasts } = useToasterStore()
-    const TOAST_LIMIT = 3
+    const TOAST_LIMIT = 3 //* Max toasts quantity limit
     // console.log(snack)
 
     useEffect(() => {

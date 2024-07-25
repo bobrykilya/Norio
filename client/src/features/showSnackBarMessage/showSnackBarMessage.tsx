@@ -16,8 +16,8 @@ export type SnackBarTypeOptions = 'e' | 'w' | 'b' | 's'
 export type ISnack = {
 	type: SnackBarTypeOptions;
 	message: string;
+	snackTime: string;
 	duration?: number;
-	snackTime?: string;
 	response?: Response;
 	detail?: {
 		action: string;
@@ -31,6 +31,9 @@ export type ISnack = {
 		deviceIP?: string;
 		interCode?: number;
 	}
+}
+export type ISnackWithoutTime = Omit<ISnack, 'snackTime'> & {
+	snackTime?: string;
 }
 
 const getTypeDecoding = (type: SnackBarTypeOptions) => {
@@ -50,8 +53,7 @@ const messagePreprocessing = (message: string) => {
     }
 }
 
-export const showSnackBarMessage = (snack: ISnack) => {
-	
+export const showSnackBarMessage = (snack: ISnackWithoutTime) => {
 	
 	//* Response-snack handling
 	if (!snack.type && snack.response) {
@@ -68,28 +70,32 @@ export const showSnackBarMessage = (snack: ISnack) => {
 	//* Refresh errs ban
 	if (snack?.detail?.action === 'refresh') return
 	
+	
 	//* Missing elements adding
-	if (!snack.snackTime) snack.snackTime = new Date().toUTCString()
-		
+	const snackWithTime: ISnack = {
+		...structuredClone(snack),
+		snackTime: snack.snackTime || new Date().toUTCString()
+	}
+
 
 	//* Block handling
-	// if (snack.status === 900) { 
-	// 	blockDevice({ logTime: snack.snackTime, infinityBlock: snack.detail?.infinityBlock, unlockTimeDB: snack.detail?.unlockTime, interCode: snack.detail?.interCode })
+	// if (snackWithTime.status === 900) { 
+	// 	blockDevice({ logTime: snackWithTime.snackTime, infinityBlock: snackWithTime.detail?.infinityBlock, unlockTimeDB: snackWithTime.detail?.unlockTime, interCode: snackWithTime.detail?.interCode })
 	// 	// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
 	// }
 
 	
 
-	const { title, icon, toastDuration } = getTypeDecoding(snack.type || 'e')
-	const newMessage = messagePreprocessing(snack.message)
+	const { title, icon, toastDuration } = getTypeDecoding(snackWithTime.type || 'e')
+	const newMessage = messagePreprocessing(snackWithTime.message)
 	if (newMessage) {
-		snack.message = newMessage
+		snackWithTime.message = newMessage
 	}
 	
     toast.custom((toastElem) => (
-		<SnackBar title={title} icon={icon} message={snack.message || 'Непредвиденная ошибка'} toastElem={toastElem} type={snack.type} />
+		<SnackBar title={title} icon={icon} message={snackWithTime.message || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackWithTime.type} />
     ), {
-		duration: snack.duration || toastDuration,
+		duration: snackWithTime.duration || toastDuration,
 		// duration: Infinity,
 	})
 
@@ -98,6 +104,6 @@ export const showSnackBarMessage = (snack: ISnack) => {
 	// const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
 	// if (blockErrorMessage) return
 	
-	if (!['s'].includes(snack.type)) 
-		saveLogInLocalStorage(snack)
+	if (!['s'].includes(snackWithTime.type)) 
+		saveLogInLocalStorage(snackWithTime)
 }

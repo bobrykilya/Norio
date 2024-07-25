@@ -8,8 +8,8 @@ export const useClickOutside = (ref: RefObject<HTMLElement>, callback: () => voi
         // console.log(ref)
 
         const handleClick = (e: MouseEvent) => {
-            if (ref.current && !ref.current.contains(e.target) && !buttonRef?.current.contains(e.target)){
-                // callback()
+            if ((ref.current && !ref.current.contains(e.target as Node)) && (buttonRef?.current && !buttonRef.current.contains(e.target as Node))) {
+                callback()
             }
         }
 

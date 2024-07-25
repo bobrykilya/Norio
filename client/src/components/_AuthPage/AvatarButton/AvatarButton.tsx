@@ -10,7 +10,7 @@ import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 
 
 
-interface AvatarButtonProps {
+type AvatarButtonProps = {
     LIST: IDataListElement[];
     avatar: string | null;
     setAvatar: React.Dispatch<React.SetStateAction<string>>;

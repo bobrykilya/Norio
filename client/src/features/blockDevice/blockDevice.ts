@@ -49,9 +49,9 @@ const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: I
 }
 
 
-const blockDevice = async ({ logTime, infinityBlock=false, unlockTimeDB=null, interCode=null }: IBlockDevice) => {
+const blockDevice = ({ logTime, infinityBlock=false, unlockTimeDB=null, interCode=null }: IBlockDevice) => {
     
-    const lockTime = logTime ? new Date(logTime) : new Date()
+    const lockTime = new Date(logTime)
     const { err_mess, unlockTime, newInterCode } = getErrorMessage({ lockTime, infinityBlock, unlockTimeDB, interCode })
     // const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
     // console.log(err_mess)

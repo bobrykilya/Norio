@@ -1,10 +1,11 @@
-import React, { createContext, MutableRefObject, useEffect, useRef, useState } from "react"
+import React, { createContext, useEffect, useRef, useState } from "react"
 import CircularProgress from '@mui/joy/CircularProgress'
-import inMemoryJWT from '../services/inMemoryJWT-service.js'
-import config from "../config.js"
-import AuthService from "../services/Auth-service.js"
-import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage.jsx"
-import { CoverPanelOptions, IAvatarListElement, IHandleCheckUser, IHandleSignIn, IUserInfo, ILoginServiceResp, ISignUpServiceReq, IHandleLogOut } from "../types/Auth-types.js"
+import inMemoryJWT from '../services/inMemoryJWT-service'
+import config from "../config"
+import AuthService from "../services/Auth-service"
+import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
+import { CoverPanelOptions, IAvatarListElement, IHandleCheckUser, IHandleSignIn, IUserInfo, ILoginServiceResp, ISignUpServiceReq, IHandleLogOut } from "../types/Auth-types"
+import { Timer } from "../hooks/Timer"
 
 
 
@@ -16,27 +17,28 @@ const AuthProvider = ({ children }) => {
 	const [isUserLogged, setIsUserLogged] = useState(false)
 	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<IAvatarListElement[]>([])
 	const [coverPanelState, setCoverPanelState] = useState<CoverPanelOptions>('sign_in')
-	const logOutTimer = useRef<ReturnType<typeof setTimeout>>(null) as MutableRefObject<ReturnType<typeof setTimeout>>
+	const [logOutTimerState, setLogOutTimerState] = useState<number | null>(null)
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
-
-	const setLogOutTimer = (logOutTime: Date)=> {
-		const timeOutTime = new Date(logOutTime).getTime() - new Date().getTime()
-		if (!timeOutTime) return
 	
-		logOutTimer.current = setTimeout(() => {
-			console.log('Auto logOut')
-			handleLogOut({ interCode: 204 })
-			showSnackBarMessage({ type: 'w', message: 'Был выполнен выход из аккаунта пользователя по истечении быстрой сессии' })
-		}, timeOutTime)
+
+	const autoLogOut = () => {
+		console.log('Auto logOut')
+		handleLogOut({ interCode: 204 })
+		showSnackBarMessage({ type: 'w', message: 'Был выполнен выход из аккаунта пользователя по истечении быстрой сессии' })
 	}
+		
+	const logOutTimer = new Timer(logOutTimerState, setLogOutTimerState, autoLogOut)
+
 	const resetSignUpVariables = () => {
 		setSignUpUserName('')
 		setSignUpUserPassword('')
-		clearTimeout(logOutTimer.current)
 		setListOfUsedAvatars([])
 	}
 	const resetSignInVariables = () => {
+		// console.log(logOutTimer.timer)
+		// console.log('stop')
+		logOutTimer.stop()
 		localStorage.removeItem('userInfo')
 	}
 	const handleReturnToSignUp = () => {
@@ -96,7 +98,7 @@ const AuthProvider = ({ children }) => {
 		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 
 		if (logOutTime) {
-			setLogOutTimer(logOutTime)
+			logOutTimer.start(logOutTime)
 		}
 	}
 
@@ -155,7 +157,7 @@ const AuthProvider = ({ children }) => {
 					setIsUserLogged(true)
 	
 					if (logOutTime) {
-						setLogOutTimer(logOutTime)
+						logOutTimer.start(logOutTime)
 					}
 				} catch (err) {
 					localStorage.removeItem('blockDevice')

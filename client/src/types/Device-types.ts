@@ -3,7 +3,7 @@ import { IUserInfo } from "./Auth-types";
 
 
 export interface IBlockDevice {
-    logTime?: string;
+    logTime: string;
     infinityBlock?: boolean;
     unlockTimeDB?: string | null;
     interCode?: number | null;
