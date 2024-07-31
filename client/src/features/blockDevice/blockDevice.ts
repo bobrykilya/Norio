@@ -10,11 +10,8 @@ import { useBlockError } from '../../stores/Global-store.js'
 const blockDurationInMinutes = 2
 
 
-type IGetErrorMessage = {
+type IGetErrorMessage = Required<Omit<IBlockDevice, "logTime">> & {
     lockTime: Date;
-    infinityBlock: boolean;
-    unlockTimeDB: string | null;
-    interCode: number | null;
 }
 const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: IGetErrorMessage) => {
     // console.log(infinityBlock)
@@ -67,7 +64,7 @@ const blockDevice = ({ logTime, infinityBlock=false, unlockTimeDB=null, interCod
     if (unlockTimeDB) return
 
     const data = { 
-        logTime: lockTime.toUTCString(),
+        logTime,
         unlockTime,
         userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}'),
         deviceId: Number(localStorage.getItem('deviceId')),

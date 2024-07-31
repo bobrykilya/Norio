@@ -17,27 +17,29 @@ const AuthProvider = ({ children }) => {
 	const [isUserLogged, setIsUserLogged] = useState(false)
 	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<IAvatarListElement[]>([])
 	const [coverPanelState, setCoverPanelState] = useState<CoverPanelOptions>('sign_in')
-	const [logOutTimerState, setLogOutTimerState] = useState<number | null>(null)
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
+	const [logOutTimerState, setLogOutTimerState] = useState<number | null>(null)
 	
 
 	const autoLogOut = () => {
-		console.log('Auto logOut')
+		showSnackBarMessage({ type: 'w', message: `Был выполнен выход из аккаунта пользователя ${getUserAccountInfo()} по истечении быстрой сессии`})
+		// console.log('Auto logOut')
 		handleLogOut({ interCode: 204 })
-		showSnackBarMessage({ type: 'w', message: 'Был выполнен выход из аккаунта пользователя по истечении быстрой сессии' })
 	}
 		
 	const logOutTimer = new Timer(logOutTimerState, setLogOutTimerState, autoLogOut)
 
+	const getUserAccountInfo = () => {
+		const { last_name, first_name, username } = JSON.parse(localStorage.getItem('userInfo') || '{}') //* Old user info
+		return last_name ? `${last_name} ${first_name} (${username})` : username
+	}
 	const resetSignUpVariables = () => {
 		setSignUpUserName('')
 		setSignUpUserPassword('')
 		setListOfUsedAvatars([])
 	}
 	const resetSignInVariables = () => {
-		// console.log(logOutTimer.timer)
-		// console.log('stop')
 		logOutTimer.stop()
 		localStorage.removeItem('userInfo')
 	}
@@ -56,14 +58,13 @@ const AuthProvider = ({ children }) => {
 	const checkSessionDouble = (newUserInfo : IUserInfo): boolean => {
 		if (localStorage.getItem('userInfo')) {
 
-			const { last_name, first_name, username } = JSON.parse(localStorage.getItem('userInfo') || '{}') //* Old user info
-			const messageEnding = last_name ? `${last_name} ${first_name} (${username})` : username
+			const { username } = JSON.parse(localStorage.getItem('userInfo') || '{}') //* Old user info
 
 			if (newUserInfo.username !== username) {
 				//! showSnackBarMessage({ 
 				// 	type: 'w', 
 				// 	duration: 5000, 
-				// 	message: `Был выполнен фоновый выход из аккаунта пользователя: ${messageEnding}` 
+				// 	message: `Был выполнен фоновый выход из аккаунта пользователя: ${getUserAccountInfo()}` 
 				//! })
 				handleLogOut()
 				return true

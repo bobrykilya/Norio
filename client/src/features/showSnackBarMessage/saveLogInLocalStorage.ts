@@ -61,7 +61,7 @@ const saveLogInLocalStorage = (err: ISnack) => {
 	if (errsList.length < sameErrsQuantity || err.type === 'b') return
 	if (checkErrsQuantityForRecently(errsList)) {
 		// console.log('Blocked')
-        blockDevice({ logTime: err!.snackTime })
+        blockDevice({ logTime: err.snackTime })
 	}
 }
 
