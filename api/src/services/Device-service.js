@@ -87,7 +87,11 @@ class DeviceService {
 
 		if (blockedDeviceInfo) {
 			if (blockedDeviceInfo.unlock_time)
-				throw new BlockDevice({ unlockTime: blockedDeviceInfo.unlock_time })
+				throw new BlockDevice({ 
+					unlockTime: blockedDeviceInfo.unlock_time, 
+					description: getCodeDescription(blockedDeviceInfo.inter_code).message, 
+					interCode: blockedDeviceInfo.inter_code,
+				})
 			else 
 				throw new BlockDevice({ infinityBlock: true })
 		}

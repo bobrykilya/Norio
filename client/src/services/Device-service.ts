@@ -4,7 +4,7 @@ import { IBlockDeviceService } from '../types/Device-types'
 
 
 
-interface IApiIpInfoResponse {
+type IApiIpInfoResponse = {
     ip: string;
 }
 

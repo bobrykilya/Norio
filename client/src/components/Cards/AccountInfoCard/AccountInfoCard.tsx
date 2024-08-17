@@ -1,3 +1,4 @@
+import React from 'react'
 import { useContext } from 'react'
 import { AuthContext } from '../../../context/Auth-context'
 import ModeBut from './ModeBut/ModeBut'
@@ -6,7 +7,7 @@ import ModeBut from './ModeBut/ModeBut'
 
 const AccountInfoCard = () => {
     const { handleLogOut } = useContext(AuthContext)
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '')
 
 
     return ( 

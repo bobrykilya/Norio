@@ -23,7 +23,13 @@ class UserRepository {
 	}
 
 	static async setActivateStatusForUser({ userId, status }) {
-		await useQueryDB("UPDATE users SET is_activated=$1 WHERE user_id=$2", [status, userId])
+		await useQueryDB("UPDATE users SET is_activated=$1 WHERE id=$2", [status, userId])
+	}
+
+	static async getUsername(userId) {
+		const response = await useQueryDB("SELECT name FROM users WHERE id=$1", [userId])
+
+		return response.rows[0]
 	}
 }
 

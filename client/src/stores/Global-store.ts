@@ -3,7 +3,7 @@ import { create } from "zustand"
 
 
 
-interface IUseBlockError {
+type IUseBlockError = {
     blockErrorMessage: string;
     setBlockErrorMessage: (blockErrorMessage: string) => void;
 }

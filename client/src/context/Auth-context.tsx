@@ -4,12 +4,14 @@ import inMemoryJWT from '../services/inMemoryJWT-service'
 import config from "../config"
 import AuthService from "../services/Auth-service"
 import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
-import { CoverPanelOptions, IAvatarListElement, IHandleCheckUser, IHandleSignIn, IUserInfo, ILoginServiceResp, ISignUpServiceReq, IHandleLogOut } from "../types/Auth-types"
-import { Timer } from "../hooks/Timer"
+import { CoverPanelOptions, IAvatarListElement, IHandleCheckUser, IHandleSignIn, IUserInfo, ILoginServiceResp, ISignUpServiceReq, IHandleLogOut, IUserNameInfo } from "../types/Auth-types"
+import io from "socket.io-client"
 
 
 
 export const AuthContext = createContext({})
+export const socket = io(config.API_URL)
+
 
 const AuthProvider = ({ children }) => {
 	const [data, setData] = useState<Record<string, any> | null>(null)
@@ -19,28 +21,23 @@ const AuthProvider = ({ children }) => {
 	const [coverPanelState, setCoverPanelState] = useState<CoverPanelOptions>('sign_in')
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
-	const [logOutTimerState, setLogOutTimerState] = useState<number | null>(null)
 	
 
-	const autoLogOut = () => {
-		showSnackBarMessage({ type: 'w', message: `Был выполнен выход из аккаунта пользователя ${getUserAccountInfo()} по истечении быстрой сессии`})
+	const getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
+		return lastName ? `${lastName} ${firstName} "${username}"` : username
+	}
+	const autoLogOut = (userNameInfo: IUserNameInfo) => {
 		// console.log('Auto logOut')
+		showSnackBarMessage({ type: 'w', message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`})
 		handleLogOut({ interCode: 204 })
 	}
-		
-	const logOutTimer = new Timer(logOutTimerState, setLogOutTimerState, autoLogOut)
-
-	const getUserAccountInfo = () => {
-		const { last_name, first_name, username } = JSON.parse(localStorage.getItem('userInfo') || '{}') //* Old user info
-		return last_name ? `${last_name} ${first_name} (${username})` : username
-	}
+	
 	const resetSignUpVariables = () => {
 		setSignUpUserName('')
 		setSignUpUserPassword('')
 		setListOfUsedAvatars([])
 	}
 	const resetSignInVariables = () => {
-		logOutTimer.stop()
 		localStorage.removeItem('userInfo')
 	}
 	const handleReturnToSignUp = () => {
@@ -48,37 +45,31 @@ const AuthProvider = ({ children }) => {
 		
 		setCoverPanelState('sign_up')
 	}
-	const userHasLogged = (pauseTime: number) => {
-		setTimeout(() => {
-			setIsUserLogged(true)
-			setCoverPanelState('sign_in')
-		}, pauseTime)
+	const userHasLogged = () => {
+		setIsUserLogged(true)
+		setCoverPanelState('sign_in')
 	}
 
-	const checkSessionDouble = (newUserInfo : IUserInfo): boolean => {
-		if (localStorage.getItem('userInfo')) {
+	const checkSessionDouble = async (newUsername: string) => {
+		const userInfo = localStorage.getItem('userInfo')
+		if (userInfo) {
+			const { username, last_name, first_name }: IUserInfo = JSON.parse(userInfo || '{}') //* Old user info
 
-			const { username } = JSON.parse(localStorage.getItem('userInfo') || '{}') //* Old user info
-
-			if (newUserInfo.username !== username) {
-				//! showSnackBarMessage({ 
-				// 	type: 'w', 
-				// 	duration: 5000, 
-				// 	message: `Был выполнен фоновый выход из аккаунта пользователя: ${getUserAccountInfo()}` 
-				//! })
+			if (newUsername !== username) {
+				showSnackBarMessage({ 
+					type: 'i',
+					message: `Был выполнен фоновый выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo({ lastName: last_name, firstName: first_name, username })}</span>`
+				})
 				handleLogOut()
-				return true
+			}else {
+				location.reload()
 			}
 		}
-		return false
 	}
 
-	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp) => {
-		const pauseTime = checkSessionDouble(userInfo) ? 300 : 0 //* Timeout after logout, before new login
-		
+	const loginUser = async ({ accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp) => {
 		saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId })
-		
-		userHasLogged(pauseTime)
+		userHasLogged()
 	}
 
 	const saveUserDataOnBrowser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId }: ILoginServiceResp & { lsDeviceId?: number }) => {
@@ -94,13 +85,11 @@ const AuthProvider = ({ children }) => {
 	}
 
 	const handleSignIn = async (data: IHandleSignIn) => {
-
-		const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId } = await AuthService.signIn(data)
-		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
-
-		if (logOutTime) {
-			logOutTimer.start(logOutTime)
-		}
+		await checkSessionDouble(data.username)
+			.then(async () => {
+				const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signIn(data)
+				loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
+			})
 	}
 
 	const handleCheckUser = async (data: IHandleCheckUser) => {
@@ -115,24 +104,26 @@ const AuthProvider = ({ children }) => {
 	}
 
 	const handleSignUp = async (data: ISignUpServiceReq) => {
-
-		data.username = signUpUserName
-		data.hashedPassword = signUpUserPassword
+		await checkSessionDouble(data.username)
+			.then(async () => {
+				data.username = signUpUserName
+				data.hashedPassword = signUpUserPassword
+				
+				const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp(data)
+				loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		
-		const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp(data)
-		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
-
-		resetSignUpVariables()
+				resetSignUpVariables()
+			})
 	}
 
 	const handleLogOut = ({ interCode }: IHandleLogOut = {}) => {
+		// console.log('logOut')
 
 		AuthService.logOut({ interCode })
 
 		resetSignInVariables()
 
 		inMemoryJWT.deleteToken()
-		// location.reload(true)
 
 		setIsUserLogged(false)
 	}
@@ -150,16 +141,13 @@ const AuthProvider = ({ children }) => {
 					// console.log('refresh')
 					const lsDeviceId = Number(localStorage.getItem('deviceId'))
 
-					const { accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId }: ILoginServiceResp = await AuthService.refresh({ lsDeviceId })
+					const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp = await AuthService.refresh({ lsDeviceId })
 					
 					saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
 	
 					setIsAppReady(true)
 					setIsUserLogged(true)
-	
-					if (logOutTime) {
-						logOutTimer.start(logOutTime)
-					}
+
 				} catch (err) {
 					localStorage.removeItem('blockDevice')
 					setIsAppReady(true)
@@ -190,6 +178,7 @@ const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		const checkForBlock = () => {
 			try {
+				//! ////////////////////
 				if (localStorage.getItem('blockDevice')) {
 					setTimeout(() => handleLogOut(), 300)
 				}
@@ -202,6 +191,14 @@ const AuthProvider = ({ children }) => {
 		checkForBlock()
 	}, [])
 
+	useEffect(() => {
+		const socketEvents = () => {
+			socket.on('autoLogOut', ({ isLogOut, userNameInfo }) => {
+				if (isLogOut) autoLogOut(userNameInfo)
+			})
+		}
+		socketEvents()
+	}, [])
 
 	return (
 		<AuthContext.Provider
@@ -218,6 +215,7 @@ const AuthProvider = ({ children }) => {
 				isUserLogged,
 				isAppReady,
 				listOfUsedAvatars,
+				socket,
 			}}
 		>
 			{isAppReady ? (

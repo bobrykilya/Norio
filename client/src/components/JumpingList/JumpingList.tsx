@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 
 
 
-interface JumpingListProps {
+type JumpingListProps = {
     children: React.ReactElement;
     isListOpened: boolean;
     closeList: () => void;

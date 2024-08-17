@@ -28,6 +28,11 @@ class UserInfoRepository {
 		return response.rows.map(row => row.avatar)
 	}
 
+	static async getUserName(userId) {
+		const response = await useQueryDB("SELECT last_name, first_name FROM users_info WHERE user_id=$1", [userId])
+
+		return response.rows[0]
+	}
 }
 
 export default UserInfoRepository

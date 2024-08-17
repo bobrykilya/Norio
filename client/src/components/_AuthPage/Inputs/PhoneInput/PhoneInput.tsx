@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import InputsError from '../InputsError/InputsError'
-import InputsCleaner from '../../Inputs/InputsCleaner/InputsCleaner'
+import InputsCleaner from '../InputsCleaner/InputsCleaner'
 import { FiPhoneCall } from "react-icons/fi";
 import { useFocusInput } from "../../../../hooks/useFocusInput"
+import { ISignFormStringInput } from '../../../../types/Auth-types'
 
 
-
+type PhoneInputProps = ISignFormStringInput & { 
+    // inputRefPhone: ;
+}
 const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRefPhone }) => {
 
     // console.log(error)

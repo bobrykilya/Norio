@@ -36,7 +36,7 @@ const checkCountryCode = async () => {
 
         if (!['BY', 'PL'].includes(res.country_code)) {
             showSnackBarMessage({ type: 'e', message: 'Приложение работает только на территории РБ (И временно Польши)' })
-            throw new Error()
+            throw new Error('СheckCountryCode error')
         }
         return res.ip
 }
@@ -61,7 +61,6 @@ class AuthService {
         // console.log(data)
         try {
             const newData = await preRequest(data)
-            // console.log(newData)
             const res = await $apiAuth.post("sign-in", { json: newData }).json<ILoginServiceResp>()
 
             return res

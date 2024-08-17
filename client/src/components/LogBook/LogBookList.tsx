@@ -4,7 +4,7 @@ import TableCollapsibleRow from '../Tables/TableCollapsibleRow/TableCollapsibleR
 
 
 
-interface LogBookListProps {
+type LogBookListProps = {
     closeLogList: () => void;
     isLogListOpened: boolean;
 }

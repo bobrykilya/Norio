@@ -2,7 +2,7 @@ import DeviceService from '../../services/Device-service.js'
 import { showSnackBarMessage } from '../showSnackBarMessage/showSnackBarMessage.jsx'
 import inMemoryJWT from '../../services/inMemoryJWT-service.js'
 import useGetEndTime from '../../hooks/useGetEndTime.js'
-import useGetTimeShort from '../../hooks/useGetTimeShort.js'
+// import useGetTimeShort from '../../../../api/hooks/useGetTimeShort.js'
 import { IBlockDevice, IBlockDeviceService } from '../../types/Device-types.js'
 import { useBlockError } from '../../stores/Global-store.js'
 

@@ -34,7 +34,7 @@ const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
         mode: 'onBlur',
         reValidateMode: 'onBlur',
         defaultValues: {
-            username: 'Admind',
+            username: 'Admin',
             password: 'Qwe123',
         }
     })
@@ -61,7 +61,7 @@ const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
     }
 
     const onSubmit = async (data: IHandleSignIn) => {
-
+        // console.log(data)
         setIsLoading(true)
         await handleSignIn(data)
             .catch(() => {
@@ -79,7 +79,7 @@ const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
                     placeholder='Логин'
                     icon={<FaUser className='input-icon'/>}
                     register={register}
-                    reset={resetField}                 
+                    reset={resetField}
                     notSaveUser={notSaveUser}
                     disabled={isFormBlur}
                     inputRefLogin={inputRefLogin}

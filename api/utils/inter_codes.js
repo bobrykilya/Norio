@@ -118,6 +118,7 @@ const getCodeDescription = (interCode) => {
             description: 'Большое количество однотипных ошибок за короткий срок. Временная блокировка девайса',
             notifForAdmin: false,
             notifForUser: false,
+            message: 'Большое количество однотипных ошибок за короткий срок',
         }
     }
 }

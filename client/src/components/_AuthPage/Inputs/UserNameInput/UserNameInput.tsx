@@ -3,22 +3,14 @@ import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
 import { useFocusInput } from "../../../../hooks/useFocusInput"
 import { useCapitalize } from '../../../../hooks/useCapitalize'
-import { UseFormProps, UseFormResetField } from 'react-hook-form'
+import { ISignFormStringInput } from '../../../../types/Auth-types'
 
 
 
-type AvailableNameInputType = 'sign_in' | 'sign_up' | 'name'
-interface NameInputProps {
-    name: string;
+type NameInputProps = ISignFormStringInput & {
     placeholder: string;
-    icon: React.ReactElement
-    type: AvailableNameInputType;
-    register: UseFormRegister<TFieldValues>;
-    error: FieldErrors<TFieldValues>;
-    reset: UseFormResetField<UseFormProps>;
-    notSaveUser: boolean;
+    icon: React.ReactElement;
     inputMaxLength: number;
-    disabled: boolean;
     // inputRefLogin: ;
 }
 const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=false }: NameInputProps) => {

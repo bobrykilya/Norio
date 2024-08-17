@@ -1,4 +1,4 @@
-const useGetTimeShort = (timeStamp: string): string => {
+const useGetTimeShort = (timeStamp) => {
     // console.log(timeStamp)
     const time = new Date(timeStamp)
     // console.log(time)

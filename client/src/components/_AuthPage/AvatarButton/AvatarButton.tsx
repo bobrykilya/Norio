@@ -10,6 +10,11 @@ import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 
 
 
+export type IHandleClickButtonWithId = React.MouseEvent<HTMLButtonElement, MouseEvent> & {
+    target: {
+        id: string;
+    }
+}
 type AvatarButtonProps = {
     LIST: IDataListElement[];
     avatar: string | null;
@@ -44,8 +49,8 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
         if (error) setError(null)
     }
 
-    const handleClickElem = (e) => {
-        // console.log(e.target.id.split('-')[0])
+    const handleClickElem = (e: IHandleClickButtonWithId) => {
+        console.log(e.target.id)
         setAvatar(e.target.id.split('-')[0])
         setIsCleanerOpened(true)
         closeAvatarList()

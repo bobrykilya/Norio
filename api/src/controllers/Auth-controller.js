@@ -20,21 +20,22 @@ class AuthController {
 		const { queryTime, queryTimeString } = getTime()
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } = await AuthService.signIn({ 
-				username, 
-				password, 
+			const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signIn({ 
+				username,
+				password,
 				fingerprint, 
-				fastSession, 
-				queryTime, 
+				fastSession,
+				queryTime,
 				queryTimeString,
 				deviceType,
 				lsDeviceId,
 				deviceIP,
 			})
-			
+
+			// console.log('signIn')
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
-			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
+			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
 			return ErrorsUtils.catchError({ interCode: !fastSession ? 201 : 202, req, res, err, username, fingerprint, queryTimeString })
 		}
@@ -83,6 +84,7 @@ class AuthController {
 		try {
 			await AuthService.logOut({ refreshToken, queryTimeString, interCode })
 
+			// console.log('logOut')
 			res.clearCookie("refreshToken")
 
 			return res.sendStatus(200)

@@ -24,9 +24,9 @@ class RefreshSessionRepository {
 		await useQueryDB("DELETE FROM refresh_sessions WHERE refresh_token=$1", [refreshToken])
 	}
 
-	//! static async deleteRefreshSessionById(sessionId) {
-	//! 	await useQueryDB("DELETE FROM refresh_sessions WHERE id=$1", [sessionId])
-	//! }
+	static async deleteRefreshSessionById(sessionId) {
+		await useQueryDB("DELETE FROM refresh_sessions WHERE id=$1", [sessionId])
+	}
 
 	static async deleteRefreshSessionByLogInTime(logInTime) {
 		const response = await useQueryDB("DELETE FROM refresh_sessions WHERE log_in_time=$1 RETURNING id", [logInTime])
@@ -54,6 +54,12 @@ class RefreshSessionRepository {
 		const response = await useQueryDB("SELECT * FROM refresh_sessions WHERE device_id=$1", [deviceId])
 
 		return response?.rows[0]
+	}
+
+	static async getRefreshSessionsWithLogOutTime() {
+		const response = await useQueryDB("SELECT id, user_id, device_id, log_out_time FROM refresh_sessions WHERE log_out_time < now()")
+
+		return response?.rows
 	}
 }
 

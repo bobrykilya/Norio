@@ -3,10 +3,21 @@ import JumpingList from '../../JumpingList/JumpingList'
 import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
 import ToolTip from '../../ToolTip/ToolTip'
 import { AuthContext } from '../../../context/Auth-context'
+import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
+import { IHandleClickButtonWithId } from './AvatarButton'
 
 
- 
-const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleClickElem, isArrowButsActive, disabled, createPathToAvatars  }) => {
+type AvatarListProps = {
+    LIST: IDataListElement[];
+    avatar: string | null;
+    isAvatarListOpened: boolean;
+    closeAvatarList: () => void;
+    handleClickElem: (e: IHandleClickButtonWithId) => void;
+    isArrowButsActive: boolean;
+    disabled: boolean;
+    createPathToAvatars: (name: string) => string;
+}
+const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleClickElem, isArrowButsActive, disabled, createPathToAvatars }: AvatarListProps) => {
     
     const { listOfUsedAvatars } = useContext(AuthContext)
     const listRef = useRef<HTMLUListElement>(null) as MutableRefObject<HTMLUListElement>
@@ -62,7 +73,7 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
                                             tabIndex={-1} 
                                             onClick={handleClickElem}
                                             disabled={disabled}
-                                            >
+                                        >
                                             <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
                                         </button>
                                         <label htmlFor={key_but}>{el.title}</label>

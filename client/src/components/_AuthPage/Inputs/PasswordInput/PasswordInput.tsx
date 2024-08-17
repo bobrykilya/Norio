@@ -1,15 +1,20 @@
+import React from 'react'
 import { useRef, useState } from 'react'
 import { FaKey } from "react-icons/fa"
-import { VscEye, VscEyeClosed } from "react-icons/vsc";
+import { VscEye, VscEyeClosed } from "react-icons/vsc"
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
 import { useFocusInput } from "../../../../hooks/useFocusInput"
 import { useClickOutside } from "../../../../hooks/useClickOutside"
 import ToolTip from '../../../ToolTip/ToolTip'
+import { ISignFormStringInput } from '../../../../types/Auth-types'
 
 
 
-const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watch=false, notSaveUser=false, disabled=false }) => {
+type PasswordInputProps = ISignFormStringInput & {
+    // watch: ;
+}
+const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watch=false, notSaveUser=false, disabled=false }: PasswordInputProps) => {
     
     const [isLockVisible, setIsLockVisible] = useState(false)
     const [isLockOpened, setIsLockOpened] = useState(false)

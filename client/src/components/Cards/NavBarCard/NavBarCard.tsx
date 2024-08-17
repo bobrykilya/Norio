@@ -1,5 +1,6 @@
-import LittleLogoImg from '../../../assets/logos/little_logo.png'
-import ButtonsCont from './../../ButtonsCont/ButtonsCont'
+import React from 'react'
+// import LittleLogoImg from '../../../assets/logos/little_logo.png'
+import ButtonsCont from '../../ButtonsCont/ButtonsCont'
 import { AiOutlineHome } from "react-icons/ai"
 import { MdOutlineTaskAlt } from "react-icons/md"
 import { IoCalendarNumberOutline } from "react-icons/io5"

@@ -10,8 +10,10 @@ import _logAttentionRepository from '../_database/repositories/_logAttention-db.
 import _logAuthRepository from '../_database/repositories/_LogAuth-db.js'
 import getCodeDescription from '../../utils/Inter_codes.js'
 import DeviceService from './Device-service.js'
+import { sendToClient } from './WebSocket-service.js'
 
 
+const fastSessionDurationInSec = 600 //* Fast session duration in seconds
 
 class AuthService {
 
@@ -56,8 +58,7 @@ class AuthService {
 		const accessToken = await TokenService.generateAccessToken(payload)
 		const refreshToken = await TokenService.generateRefreshToken(payload)
 
-		const timeOutInSec = 5
-		const logOutTime = fastSession ? new Date(queryTime.getTime() + timeOutInSec * 1000) : null
+		const logOutTime = fastSession ? new Date(queryTime.getTime() + fastSessionDurationInSec * 1000) : null
 
 		await RefreshSessionsRepository.createRefreshSession({
 			userId,
@@ -69,24 +70,11 @@ class AuthService {
 
 		const userInfo = await UserInfoRepository.getUserInfo(userId)
 		userInfo.username = username
-		
-		//* Auto logOut timer (back)
-		if (logOutTime) {
-			setTimeout(async () => {
-				const successDeleting = await RefreshSessionsRepository.deleteRefreshSessionByLogInTime(queryTime)
-
-				if (successDeleting) {
-					await _logAuthRepository.createLogAuth({ interCode: 204, userId, deviceId, logTime: logOutTime.toUTCString() })
-				}
-			}, timeOutInSec * 1000)
-		}
-		//*
 
 		return {
 			accessToken,
 			refreshToken,
 			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
-			logOutTime,
 			userInfo,
 			deviceId,
 		}
@@ -176,15 +164,22 @@ class AuthService {
 	static async refresh({ fingerprint, currentRefreshToken, queryTimeString, lsDeviceId }) {
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint })
-
+		
 		if (!currentRefreshToken) {
 			throw new Unauthorized()
 		}
 		
+		
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(currentRefreshToken)
-		// console.log(currentRefreshToken)
-
+		// console.log(refreshSession)
+		
 		if (!refreshSession) {
+			throw new Unauthorized()
+		}
+
+		//* Checking for fast session ending
+		if (refreshSession.log_out_time < new Date()) {
+			AuthService.sessionsAutoLogOut(refreshSession)
 			throw new Unauthorized()
 		}
 		
@@ -271,6 +266,39 @@ class AuthService {
 		}
 	}
 
+	static async sessionsAutoLogOut(sessionInfo) { 
+		const sessionsLogOutList = sessionInfo ? [sessionInfo] : await RefreshSessionsRepository.getRefreshSessionsWithLogOutTime()
+		console.log(sessionsLogOutList)
+
+		if (!sessionsLogOutList[0]) return
+		
+		sessionsLogOutList.map(async ({ id, user_id, device_id, log_out_time  }) => {
+			await RefreshSessionsRepository.deleteRefreshSessionById(id)
+				.then(async () => {
+					await _logAuthRepository.createLogAuth({ interCode: 204, userId: user_id, deviceId: device_id, logTime: log_out_time.toUTCString() })
+					const { last_name, first_name } = await UserInfoRepository.getUserName(user_id)
+					const { name } = await UserRepository.getUsername(user_id)
+					
+					//* Auto logout for client by Socket-io
+					sendToClient({
+						room: { userId: user_id, deviceId: device_id }, 
+						event: 'autoLogOut', 
+						payload: { 
+							isLogOut: true, 
+							userNameInfo: { 
+								lastName: last_name, 
+								firstName: first_name, 
+								username: name,
+							}
+						}
+					})
+				})
+		})
+	}
+	static intervalTestFunc() {
+		AuthService.sessionsAutoLogOut()
+
+	}
 }
 
 export default AuthService

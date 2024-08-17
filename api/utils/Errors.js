@@ -1,3 +1,4 @@
+import useGetTimeShort from '../hooks/useGetTimeShort.js'
 import _logErrorRepository from '../src/_database/repositories/_logError-db.js'
 // import UserRepository from '../src/_database/repositories/User.js'
 // import AuthDeviceRepository from '../src/_database/repositories/AuthDevice.js'
@@ -57,46 +58,49 @@ export class BlockDevice extends WebError {
 
 class ErrorUtils {
 	static async catchError({ interCode, req, res, err, username, fingerprint, queryTimeString }) {
-		const status = err.status
-		const title = err.title
-		// console.log(res)
+		// console.log(err)
 		if (err instanceof WebError) {
-			
-			err.type = status === 900 ? 'b' : 'e'
-			err.snackTime = new Date().toUTCString()
-			err.detail = {}
-			err.detail.res = {}
+			const status = err.status
 
+			const error = {
+				type: status === 900 ? 'b' : 'e',
+				message: err.message,
+				snackTime: new Date().toUTCString(),
+				detail: {
+					action: req.route.stack[0]?.name,
+					req: {
 
-			//* Detail description
-			if (typeof(err.message) === 'object') {
-				const detailObject = err.message
-				err.message = detailObject.message
-				delete detailObject.message
-				delete detailObject.notifForAdmin
-				delete detailObject.notifForUser
-				detailObject.deviceIP = req.body.deviceIP
-				err.detail = detailObject
+					},
+					res: {
+						status,
+						title: err.title,
+					}
+				}
 			}
-			err.detail.action = req.route.stack[0]?.name
+
+			//* Block handling
+			if (status === 900) {
+				const { unlockTime, description, infinityBlock, interCode } = err.message
+
+				if (!infinityBlock) {
+					error.message = `${description}.<br><span class='info'>Устройство будет разблокировано в <span class='bold'>${useGetTimeShort(unlockTime)}</span></span>`
+				}else {
+					error.message = 'Устройство будет разблокировано. Обратитесь к администратору'
+				}
+				error.detail.res = { ...error.detail.res, unlockTime, interCode }
+			}
 			
 			//* Request description
 			if (req._body) {
 				delete req.body.password
 				delete req.body.hashedPassword
 				delete req.body.deviceType
-				// delete req.body.deviceIP
-				err.detail.req = req.body
+				error.detail.req = req.body
 			}
 
-			//* Response description
-			delete err.status
-			delete err.title
-			err.detail.res.status = status
-			err.detail.res.title = title
 			
 			if (!(err instanceof Unauthorized)) {
-				console.log(err)
+				console.log(error)
 			}
 			
 			// const queryTimeString = queryTime.toLocaleString()
@@ -107,7 +111,7 @@ class ErrorUtils {
 			// throw new BadRequest(`Что-то пошло не так! Обратитесь к админу. Ошибка: ${errorId} , Время: ${queryTimeString}`)
 			// console.log(err)
 			
-			return res.status(status).json(err)
+			return res.status(err.status).json(error)
 		} else 
 			res.status(500).json('Непредвиденная ошибка')
 	}

@@ -24,7 +24,7 @@ class BlockRepository {
 	}
 
 	static async checkDeviceForBlockStatus({ deviceId, fingerprintHash, deviceIP }) {
-		const response = await useQueryDB("SELECT unlock_time FROM blocks WHERE is_active=true AND device_id=$1 OR finger_print=$2 OR ip=$3",
+		const response = await useQueryDB("SELECT unlock_time, inter_code FROM blocks WHERE is_active=true AND device_id=$1 OR finger_print=$2 OR ip=$3",
 			[
 				deviceId, 
 				fingerprintHash, 
