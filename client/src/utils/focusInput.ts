@@ -2,7 +2,7 @@ import { RefObject } from "react"
 
 
 
-export const useFocusInput = async (ref: RefObject<HTMLInputElement> ) => {
+export const focusInput = async (ref: RefObject<HTMLInputElement> ) => {
     if (!ref.current) {
         return
     }

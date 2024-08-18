@@ -1,6 +1,6 @@
 type TypeOptions = 'hour' | 'minute' | 'second';
 
-const useGetLastTime = (timestamp: string, type: TypeOptions): number => {
+export const getLastTime = (timestamp: string, type: TypeOptions): number => {
     try {
         const nowTime = new Date()
         const timestampTime = new Date(timestamp)
@@ -20,4 +20,19 @@ const useGetLastTime = (timestamp: string, type: TypeOptions): number => {
     }
 }
 
-export default useGetLastTime
+
+type IUseGetEndTime = {
+    startTime: Date;
+    duration: number;
+}
+//* Getting timestamp (LocalString) and time-string after duration time (in minutes)
+export const getEndTime = ({ startTime, duration }: IUseGetEndTime): string => {
+
+    const time = new Date(startTime)
+    time.setMinutes(time.getMinutes() + duration)
+    // console.log(time.toUTCString())
+    // const time_2 = new Date(time.toUTCString())
+    // console.log(time_2.toUTCString())
+
+    return time.toUTCString()
+}

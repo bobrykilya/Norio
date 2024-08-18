@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
-import { useFocusInput } from "../../../../hooks/useFocusInput"
-import { useCapitalize } from '../../../../hooks/useCapitalize'
+import { focusInput } from '../../../../utils/focusInput'
+import { capitalize } from '../../../../utils/capitalize'
 import { ISignFormStringInput } from '../../../../types/Auth-types'
 
 
@@ -21,7 +21,7 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
     
     const handleChangeName = (e) => {
         e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, '')
-        e.target.value = useCapitalize(e.target.value)
+        e.target.value = capitalize(e.target.value)
         e.target.value ? changeInput() : clearInput()
     }
     
@@ -31,7 +31,7 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
 
     const handleClickCleaner = () => {
         clearInput()
-        useFocusInput(inputRef)
+        focusInput(inputRef)
     }
 
     const clearInput = () => {
@@ -87,7 +87,7 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
         <div className={`user_name_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
             <span 
                 className='input-label'
-                onClick={() => useFocusInput(inputRef)}
+                onClick={() => focusInput(inputRef)}
             >
                 {placeholder}
             </span>
@@ -106,7 +106,7 @@ const NameInput = ({ name, placeholder, icon, type='sign_in', register, error=nu
                 autoFocus
             />
             {icon}
-            <InputsError error={error} onClick={() => useFocusInput(inputRef)} />
+            <InputsError error={error} onClick={() => focusInput(inputRef)} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
     )

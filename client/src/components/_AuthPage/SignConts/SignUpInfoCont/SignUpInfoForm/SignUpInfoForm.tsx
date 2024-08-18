@@ -11,7 +11,7 @@ import { GrUserExpert } from "react-icons/gr";
 import { BiLogInCircle } from "react-icons/bi"
 import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
 import AvatarButton from '../../../AvatarButton/AvatarButton'
-import { useFocusInput } from '../../../../../hooks/useFocusInput'
+import { focusInput } from '../../../../../utils/focusInput'
 import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
 import { IHandleSignUp } from '../../../../../types/Auth-types'
 
@@ -66,7 +66,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
             setIsLoading(true)
             await handleSignUp(data)
             .catch(() => {
-                useFocusInput(inputRefPhone)
+                focusInput(inputRefPhone)
             })
             .finally(() => setIsLoading(false))
             // alert(JSON.stringify(data))

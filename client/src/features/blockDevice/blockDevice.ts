@@ -1,7 +1,7 @@
 import DeviceService from '../../services/Device-service.js'
 import { showSnackBarMessage } from '../showSnackBarMessage/showSnackBarMessage.jsx'
 import inMemoryJWT from '../../services/inMemoryJWT-service.js'
-import useGetEndTime from '../../hooks/useGetEndTime.js'
+import { getEndTime } from '../../utils/getTime.js'
 // import useGetTimeShort from '../../../../api/hooks/useGetTimeShort.js'
 import { IBlockDevice, IBlockDeviceService } from '../../types/Device-types.js'
 import { useBlockError } from '../../stores/Global-store.js'
@@ -22,7 +22,7 @@ const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: I
         let unlockTime: string
 
         if (!unlockTimeDB) {
-            endTimeString = useGetEndTime({ startTime: lockTime, duration: blockDurationInMinutes })
+            endTimeString = getEndTime({ startTime: lockTime, duration: blockDurationInMinutes })
             unlockTimeShort = useGetTimeShort( endTimeString)
             unlockTime = endTimeString
         } else {

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useFocusInput } from '../../../../../hooks/useFocusInput'
+import { focusInput } from '../../../../../utils/focusInput'
 import { AuthContext } from '../../../../../context/Auth-context'
 import { FaArrowRightLong } from "react-icons/fa6"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
@@ -56,7 +56,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
         setIsLoading(true)
         await handleCheckUser(data)
             .catch(() => {
-                useFocusInput(inputRefLogin)
+                focusInput(inputRefLogin)
             })
             .finally(() => setIsLoading(false))
         // alert(JSON.stringify(data))

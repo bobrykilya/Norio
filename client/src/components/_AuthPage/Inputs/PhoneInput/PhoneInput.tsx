@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
 import { FiPhoneCall } from "react-icons/fi";
-import { useFocusInput } from "../../../../hooks/useFocusInput"
+import { focusInput } from "../../../../utils/focusInput"
 import { ISignFormStringInput } from '../../../../types/Auth-types'
 
 
@@ -34,7 +34,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
 
     const handleClickCleaner = () => {
         setNumber(false)
-        useFocusInput(inputRefPhone)
+        focusInput(inputRefPhone)
         clearInput()
     }
 
@@ -76,7 +76,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
         <div className={`phone_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
             <span 
                 className='input-label'
-                onClick={() => useFocusInput(inputRefPhone)}
+                onClick={() => focusInput(inputRefPhone)}
             >
                 Номер телефона
             </span>
@@ -98,7 +98,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
             />
             <span className='phone_mask'>+375</span>
             <FiPhoneCall className='input-icon' />
-            <InputsError error={error} onClick={() => useFocusInput(inputRefPhone)} />
+            <InputsError error={error} onClick={() => focusInput(inputRefPhone)} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
      )

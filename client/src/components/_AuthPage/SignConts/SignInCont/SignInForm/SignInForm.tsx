@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef } from 'react'
 import { useForm } from 'react-hook-form'
-import { useFocusInput } from '../../../../../hooks/useFocusInput';
+import { focusInput } from '../../../../../utils/focusInput';
 import { AuthContext } from "../../../../../context/Auth-context"
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
@@ -54,7 +54,7 @@ const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
             .catch(() => {
                 setValue('username', data.username)
                 setValue('password', data.password)
-                useFocusInput(inputRefLogin)
+                focusInput(inputRefLogin)
             })
             .finally(() => setIsLoading(false))
         // alert(JSON.stringify(data))
@@ -65,7 +65,7 @@ const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
         setIsLoading(true)
         await handleSignIn(data)
             .catch(() => {
-                useFocusInput(inputRefLogin)
+                focusInput(inputRefLogin)
             })
             .finally(() => setIsLoading(false))
         // alert(JSON.stringify(data))

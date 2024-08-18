@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
-import { useFocusInput } from "../../../../hooks/useFocusInput"
+import { focusInput } from "../../../../utils/focusInput"
+import { capitalize } from '../../../../utils/capitalize'
 import { useClickOutside } from "../../../../hooks/useClickOutside"
-import { useCapitalize } from '../../../../hooks/useCapitalize'
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
 
@@ -32,7 +32,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     const handleChangeInput = (e) => {
         // console.log(e.target.value)
         e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/, '')
-        e.target.value = useCapitalize(e.target.value)
+        e.target.value = capitalize(e.target.value)
         if (/[^а-яА-ЯёЁ ]/.test(e.target.value)) {
             // console.log('close')
             toggleDropDown(false)
@@ -75,7 +75,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         // console.log('clear')
         reset(name)
         setIsCleanerOpened(false)
-        useFocusInput(inputRef)
+        focusInput(inputRef)
         setError(name, null)
     }
 
@@ -137,14 +137,14 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 focusJumping('next')
                 break
             case 'Escape':
-                useFocusInput(inputRef)
+                focusInput(inputRef)
                 toggleDropDown(false)
                 break
             case 'Enter':
                 break
             default:
-                useFocusInput(inputRef)
-                setTimeout(() => (useFocusInput(inputRef)), 10)
+                focusInput(inputRef)
+                setTimeout(() => (focusInput(inputRef)), 10)
                 break
         }
     }
@@ -160,7 +160,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 try {
                     active.previousElementSibling.focus()
                 }catch {
-                    useFocusInput(inputRef)
+                    focusInput(inputRef)
                 }
                 break
         }
@@ -184,7 +184,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         <div className={`dropdown_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
             <span 
                 className='input-label'
-                onClick={() => useFocusInput(inputRef)}
+                onClick={() => focusInput(inputRef)}
             >
                 {placeholder}
             </span>
@@ -206,7 +206,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 disabled={disabled}
             />
             {icon}
-            <InputsError error={error} onClick={() => useFocusInput(inputRef)} />
+            <InputsError error={error} onClick={() => focusInput(inputRef)} />
             <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
             <ul
                 id='dropdown-cont'

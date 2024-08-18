@@ -4,7 +4,7 @@ import { FaKey } from "react-icons/fa"
 import { VscEye, VscEyeClosed } from "react-icons/vsc"
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
-import { useFocusInput } from "../../../../hooks/useFocusInput"
+import { focusInput } from "../../../../utils/focusInput"
 import { useClickOutside } from "../../../../hooks/useClickOutside"
 import ToolTip from '../../../ToolTip/ToolTip'
 import { ISignFormStringInput } from '../../../../types/Auth-types'
@@ -39,7 +39,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
 
     const handleClickCleaner = () => {
         clearInput()
-        useFocusInput(inputRef)
+        focusInput(inputRef)
     }
 
     const clearInput = () => {
@@ -58,7 +58,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
 
     const handleSwitchLockPosition = (e) => {
         setIsLockOpened((prev) => !prev)
-        useFocusInput(inputRef)
+        focusInput(inputRef)
     }
 
     //* CapsLock closing onBlur
@@ -124,7 +124,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
         <div className={`password_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
             <span 
                 className='input-label'
-                onClick={() => useFocusInput(inputRef)}
+                onClick={() => focusInput(inputRef)}
             >
                 {type !== 'confirm' ? 'Пароль' : 'Повтор пароля'}
             </span>
@@ -150,7 +150,7 @@ const PasswordInput = ({ name, type='sign_in', register, error=null, reset, watc
                 <span>CAPS</span>
                 <ToolTip text='Включён Caps-Lock' />
             </div>
-            <InputsError error={error} onClick={() => useFocusInput(inputRef)} />
+            <InputsError error={error} onClick={() => focusInput(inputRef)} />
             <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
                 <button 
                     className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}

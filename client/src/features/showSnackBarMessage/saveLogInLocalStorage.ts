@@ -1,5 +1,5 @@
 import blockDevice from '../blockDevice/blockDevice'
-import useGetLastTime from '../../hooks/useGetPastTime'
+import { getLastTime } from '../../utils/getTime'
 import { ISnack } from './showSnackBarMessage'
 // import { useBlockError } from '../../stores/Global-store';
 
@@ -11,14 +11,14 @@ const userErrStorageTime = 24 //* User error storage time in hours
 
 
 const filterErrsListByTime = (err: ISnack) => {	
-	return err.snackTime ? useGetLastTime(err.snackTime, 'hour') < userErrStorageTime : false
+	return err.snackTime ? getLastTime(err.snackTime, 'hour') < userErrStorageTime : false
 }
 
 const checkErrsQuantityForRecently = (list: ISnack[]) => {
 
 	let result = false
 
-	list = list.filter(err => err.type === 'e' && useGetLastTime(err.snackTime, 'minute') < recentlyTime)
+	list = list.filter(err => err.type === 'e' && getLastTime(err.snackTime, 'minute') < recentlyTime)
 	const countObject = {}
 	
 	for (let err of list) {
