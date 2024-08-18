@@ -50,7 +50,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
     }
 
     const handleClickElem = (e: IHandleClickButtonWithId) => {
-        console.log(e.target.id)
+        // console.log(e.target.id)
         setAvatar(e.target.id.split('-')[0])
         setIsCleanerOpened(true)
         closeAvatarList()

@@ -1,19 +1,18 @@
 import bcrypt from "bcryptjs"
 import TokenService from "./Token-service.js"
-import { Forbidden, Conflict, Unauthorized, BlockDevice } from "../../utils/Errors.js"
-import { ACCESS_TOKEN_EXPIRATION } from "../../constants.js"
+import { Forbidden, Conflict, Unauthorized, BlockDevice } from "../../utils/errors.js"
+import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION } from "../../constants.js"
 import RefreshSessionsRepository from "../_database/repositories/RefreshSession-db.js"
 import UserRepository from "../_database/repositories/User-db.js"
-import UserInfoRepository from '../_database/repositories/UserInfo-db.js'
 import AuthDeviceRepository from '../_database/repositories/AuthDevice-db.js'
 import _logAttentionRepository from '../_database/repositories/_logAttention-db.js'
 import _logAuthRepository from '../_database/repositories/_LogAuth-db.js'
 import getCodeDescription from '../../utils/Inter_codes.js'
 import DeviceService from './Device-service.js'
 import { sendToClient } from './WebSocket-service.js'
+import { getEndTime } from './../../utils/getEndTime.js'
 
 
-const fastSessionDurationInSec = 600 //* Fast session duration in seconds
 
 class AuthService {
 
@@ -27,7 +26,7 @@ class AuthService {
 			throw new Conflict("Пользователь не найден")
 		}
 
-		const userId = userData.id
+		const userId = userData.user_id
 		const interCode = !fastSession ? 201 : 202
 		
 		const isPasswordValid = bcrypt.compareSync(password, userData.password)
@@ -43,7 +42,7 @@ class AuthService {
 			await RefreshSessionsRepository.deleteRefreshSessionByLogInTime(oldestSessionLogInTime)
 			}
 		//*
-		
+
 		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId, deviceIP })
 		
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTimeString })
@@ -52,13 +51,13 @@ class AuthService {
 		const payload = {
 			userId,
 			username,
-			isActivated: userData.is_activated,
+			deviceId,
 		}
 
 		const accessToken = await TokenService.generateAccessToken(payload)
 		const refreshToken = await TokenService.generateRefreshToken(payload)
 
-		const logOutTime = fastSession ? new Date(queryTime.getTime() + fastSessionDurationInSec * 1000) : null
+		const logOutTime = fastSession ? getEndTime({ startTime: queryTime, duration: FAST_SESSION_DURATION }) : null
 
 		await RefreshSessionsRepository.createRefreshSession({
 			userId,
@@ -68,8 +67,7 @@ class AuthService {
 			refreshToken,
 		})
 
-		const userInfo = await UserInfoRepository.getUserInfo(userId)
-		userInfo.username = username
+		const userInfo = await UserRepository.getUserInfo(userId)
 
 		return {
 			accessToken,
@@ -86,21 +84,21 @@ class AuthService {
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP })
 
-		//! Change
+		//! Change role, is_store
 		const role = 1
+		const isActivated = false
+		const isStore = false
+
 		let userId
 		let userInfo
 		const interCode = 205
 
 		try {
-			userId = await UserRepository.createUser({
-				username,
-				hashedPassword,
-				role,
-			})
-
 			userInfo = {
-				userId,
+				username, 
+				hashedPassword, 
+				role,
+				isActivated, 
 				phone,
 				store,
 				job,
@@ -108,12 +106,12 @@ class AuthService {
 				firstName,
 				middleName,
 				avatar,
+				isStore,
 			}
-
-			await UserInfoRepository.createUserInfo(userInfo)
-			userInfo.username = username
+			userId = await UserRepository.createUser(userInfo)
+			
+			delete userInfo.hashedPassword
 		}catch {
-		 	await UserRepository.deleteUserById(userId)
 			throw new Conflict("Данный номер телефона уже занят другим пользователем")
 		}
 
@@ -123,9 +121,9 @@ class AuthService {
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTimeString })
 
 		const payload = { 
-			userId, 
+			userId,
 			username, 
-			isActivated: false, 
+			deviceId,
 		}
 
 		const accessToken = await TokenService.generateAccessToken(payload)
@@ -169,7 +167,6 @@ class AuthService {
 			throw new Unauthorized()
 		}
 		
-		
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(currentRefreshToken)
 		// console.log(refreshSession)
 		
@@ -177,11 +174,12 @@ class AuthService {
 			throw new Unauthorized()
 		}
 
-		//* Checking for fast session ending
-		if (refreshSession.log_out_time < new Date()) {
+		//* Checking for fast session end
+		if (refreshSession.log_out_time && new Date(refreshSession.log_out_time) < new Date()) {
 			AuthService.sessionsAutoLogOut(refreshSession)
 			throw new Unauthorized()
 		}
+		//
 		
 		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash) || 
 		await deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId: refreshSession.user_id, queryTimeString })
@@ -196,13 +194,11 @@ class AuthService {
 				await _logAttentionRepository.createLogAttention({ interCode: interCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTimeString })
 				await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
 				throw new BlockDevice(getCodeDescription(interCodeAttention))
-				//! Block device
 			}
 
 			await _logAttentionRepository.createLogAttention({ interCode: interCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTimeString })
 			await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
 			throw new BlockDevice(getCodeDescription(interCodeAttention))
-			//! Block device
 		}
 
 		await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
@@ -214,13 +210,9 @@ class AuthService {
 			throw new Forbidden(err.detail)
 		}
 
-		const {
-			id: userId,
-			name: username,
-			is_activated: isActivated,
-		} = await UserRepository.getUserData(payload.username)
+		const { user_id: userId } = await UserRepository.getUserData(payload.username)
 
-		const actualPayload = { userId, username, isActivated }
+		const actualPayload = { userId, username: payload.username, deviceId }
 
 		const accessToken = await TokenService.generateAccessToken(actualPayload)
 		const refreshToken = await TokenService.generateRefreshToken(actualPayload)
@@ -233,8 +225,7 @@ class AuthService {
 			refreshToken,
 		})
 
-		const userInfo = await UserInfoRepository.getUserInfo(userId)
-		userInfo.username = username
+		const userInfo = await UserRepository.getUserInfo(userId)
 
 		return {
 			accessToken,
@@ -257,7 +248,7 @@ class AuthService {
 		}
 
 		const hashedPassword = bcrypt.hashSync(password, salt)
-		const avatarsList = await UserInfoRepository.getUsedAvatarsList()
+		const avatarsList = await UserRepository.getUsedAvatarsList()
 
 		return {
 			userName: username,
@@ -272,12 +263,11 @@ class AuthService {
 
 		if (!sessionsLogOutList[0]) return
 		
-		sessionsLogOutList.map(async ({ id, user_id, device_id, log_out_time  }) => {
-			await RefreshSessionsRepository.deleteRefreshSessionById(id)
+		sessionsLogOutList.map(async ({ sess_id, user_id, device_id, log_out_time  }) => {
+			await RefreshSessionsRepository.deleteRefreshSessionById(sess_id)
 				.then(async () => {
 					await _logAuthRepository.createLogAuth({ interCode: 204, userId: user_id, deviceId: device_id, logTime: log_out_time.toUTCString() })
-					const { last_name, first_name } = await UserInfoRepository.getUserName(user_id)
-					const { name } = await UserRepository.getUsername(user_id)
+					const { username, last_name, first_name } = await UserInfoRepository.getUserName(user_id)
 					
 					//* Auto logout for client by Socket-io
 					sendToClient({
@@ -286,9 +276,9 @@ class AuthService {
 						payload: { 
 							isLogOut: true, 
 							userNameInfo: { 
-								lastName: last_name, 
-								firstName: first_name, 
-								username: name,
+								lastName: last_name,
+								firstName: first_name,
+								username
 							}
 						}
 					})

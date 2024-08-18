@@ -8,6 +8,7 @@ import AuthRootRouter from "./src/routers/Global-router.js"
 import TokenService from "./src/services/Token-service.js"
 import { socketConnection } from './src/services/WebSocket-service.js'
 import AuthService from './src/services/Auth-service.js'
+import { AUTO_LOGOUT_INTERVAL } from './constants.js'
 
 
 
@@ -42,5 +43,5 @@ server.listen(PORT, (err) => {
 	err ? console.log(err) : console.log(`Server listening on ${PORT}`)
 })
 
-const autoLogOutIntervalInSec = 60
-setInterval(AuthService.intervalTestFunc, autoLogOutIntervalInSec * 1000)
+
+setInterval(AuthService.intervalTestFunc, AUTO_LOGOUT_INTERVAL * 1000)

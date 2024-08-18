@@ -1,13 +1,9 @@
 CREATE TABLE users(
-    id SMALLSERIAL PRIMARY KEY,
-    name VARCHAR(20) UNIQUE NOT NULL,
+    user_id SMALLSERIAL PRIMARY KEY,
+    username VARCHAR(20) UNIQUE NOT NULL,
     password VARCHAR(60) NOT NULL,
     role SMALLINT NOT NULL,
-    is_activated BOOLEAN NOT NULL
-)
-
-CREATE TABLE users_info(
-    user_id SMALLINT PRIMARY KEY REFERENCES users(id),
+    is_activated BOOLEAN NOT NULL,
     last_name VARCHAR(25) NOT NULL,
     first_name VARCHAR(20) NOT NULL,
     middle_name VARCHAR(20) NOT NULL,
@@ -19,7 +15,7 @@ CREATE TABLE users_info(
 )
 
 CREATE TABLE auth_devices(
-    id SMALLSERIAL PRIMARY KEY,
+    device_id SMALLSERIAL PRIMARY KEY,
     browser VARCHAR(15) NOT NULL,
     type VARCHAR(7) NOT NULL,   
     b_version VARCHAR(7) NOT NULL,
@@ -30,10 +26,10 @@ CREATE TABLE auth_devices(
 )
 
 CREATE TABLE blocks(
-    id SMALLSERIAL PRIMARY KEY,
+    block_id SMALLSERIAL PRIMARY KEY,
     inter_code SMALLINT NOT NULL,
-    device_id SMALLINT REFERENCES auth_devices(id),
-    user_id SMALLINT REFERENCES users(id),
+    user_id SMALLINT REFERENCES users(user_id) ON DELETE RESTRICT,
+    device_id SMALLINT REFERENCES auth_devices(device_id) ON DELETE RESTRICT,
     block_time TIMESTAMP WITH TIME ZONE NOT NULL,
     unlock_time TIMESTAMP WITH TIME ZONE,
     ip VARCHAR(13),
@@ -42,9 +38,9 @@ CREATE TABLE blocks(
 )
 
 CREATE TABLE refresh_sessions(
-    id SERIAL PRIMARY KEY,
-    user_id SMALLINT NOT NULL REFERENCES users(id),
-    device_id SMALLINT NOT NULL REFERENCES auth_devices(id),
+    sess_id SERIAL PRIMARY KEY,
+    user_id SMALLINT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    device_id SMALLINT NOT NULL REFERENCES auth_devices(device_id) ON DELETE CASCADE,
     auth_time TIMESTAMP WITH TIME ZONE NOT NULL,
     log_in_time TIMESTAMP WITH TIME ZONE UNIQUE NOT NULL,
     log_out_time TIMESTAMP WITH TIME ZONE,
@@ -52,30 +48,30 @@ CREATE TABLE refresh_sessions(
 )
 
 CREATE TABLE _log_Attention(
-    id SERIAL PRIMARY KEY,
+    att_id SERIAL PRIMARY KEY,
     inter_code SMALLINT NOT NULL,
-    user_id SMALLINT NOT NULL REFERENCES users(id),
-    device_id SMALLINT NOT NULL REFERENCES auth_devices(id),
+    user_id SMALLINT NOT NULL REFERENCES users(user_id) ON DELETE RESTRICT,
+    device_id SMALLINT NOT NULL REFERENCES auth_devices(device_id) ON DELETE RESTRICT,
     log_time TIMESTAMP WITH TIME ZONE NOT NULL,
-    receiver_user_id SMALLINT REFERENCES users(id),
+    receiver_user_id SMALLINT REFERENCES users(user_id),
     receiver_user_role SMALLINT
 )
 
 CREATE TABLE _log_Auth(
-    id SERIAL PRIMARY KEY,
+    auth_id SERIAL PRIMARY KEY,
     inter_code SMALLINT NOT NULL,
-    user_id SMALLINT NOT NULL REFERENCES users(id),
-    device_id SMALLINT NOT NULL REFERENCES auth_devices(id),
+    user_id SMALLINT NOT NULL REFERENCES users(user_id) ON DELETE RESTRICT,
+    device_id SMALLINT NOT NULL REFERENCES auth_devices(device_id) ON DELETE RESTRICT,
     log_time TIMESTAMP WITH TIME ZONE NOT NULL
 )
 
 CREATE TABLE _log_Error(
-    id SERIAL PRIMARY KEY,
+    err_id SERIAL PRIMARY KEY,
     req VARCHAR(400), 
     res VARCHAR(400) NOT NULL, 
     err VARCHAR(400), 
-    user_id SMALLINT REFERENCES users(id), 
-    device_id SMALLINT REFERENCES auth_devices(id), 
+    user_id SMALLINT REFERENCES users(user_id) ON DELETE RESTRICT, 
+    device_id SMALLINT REFERENCES auth_devices(device_id) ON DELETE RESTRICT, 
     log_time TIMESTAMP WITH TIME ZONE NOT NULL
 )
 

@@ -1,4 +1,3 @@
-import useGetTimeShort from '../hooks/useGetTimeShort.js'
 import _logErrorRepository from '../src/_database/repositories/_logError-db.js'
 // import UserRepository from '../src/_database/repositories/User.js'
 // import AuthDeviceRepository from '../src/_database/repositories/AuthDevice.js'
@@ -65,7 +64,7 @@ class ErrorUtils {
 			const error = {
 				type: status === 900 ? 'b' : 'e',
 				message: err.message,
-				snackTime: new Date().toUTCString(),
+				snackTime: Date.now(),
 				detail: {
 					action: req.route.stack[0]?.name,
 					req: {
@@ -83,7 +82,7 @@ class ErrorUtils {
 				const { unlockTime, description, infinityBlock, interCode } = err.message
 
 				if (!infinityBlock) {
-					error.message = `${description}.<br><span class='info'>Устройство будет разблокировано в <span class='bold'>${useGetTimeShort(unlockTime)}</span></span>`
+					error.message = `${description}.<br><span class='info'>Устройство будет разблокировано в <span class='bold'>${''}</span></span>`
 				}else {
 					error.message = 'Устройство будет разблокировано. Обратитесь к администратору'
 				}
@@ -101,6 +100,7 @@ class ErrorUtils {
 			
 			if (!(err instanceof Unauthorized)) {
 				console.log(error)
+				console.log()
 			}
 			
 			// const queryTimeString = queryTime.toLocaleString()
@@ -113,7 +113,8 @@ class ErrorUtils {
 			
 			return res.status(err.status).json(error)
 		} else 
-			res.status(500).json('Непредвиденная ошибка')
+			console.log(err)
+			res.status(500).json('Непредвиденная ошибка. Обратитесь к администратору')
 	}
 }
 

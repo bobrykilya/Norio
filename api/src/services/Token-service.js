@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
-import { Forbidden, Unauthorized } from "../../utils/Errors.js"
+import { Forbidden, Unauthorized } from "../../utils/errors.js"
 
 dotenv.config()
 

@@ -1,4 +1,5 @@
-import useQueryDB from '../../../hooks/useQueryDB.js'
+import queryDB from '../../../utils/queryDB.js'
+
 
 
 
@@ -31,7 +32,7 @@ class LogAttentionRepository {
 
 		const { receiver_user_id, receiver_user_role } = getInsertData({ interCode, userId })
 
-		await useQueryDB("INSERT INTO _log_Attention (inter_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
+		await queryDB("INSERT INTO _log_Attention (inter_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
 			interCode, 
 			userId, 
 			deviceId, 
@@ -46,7 +47,7 @@ class LogAttentionRepository {
 	//   }
 
 	static async getLogsAttention() {
-		const response = await useQueryDB("SELECT * FROM _log_Attention")
+		const response = await queryDB("SELECT * FROM _log_Attention")
 
 		return response.rows
 	}

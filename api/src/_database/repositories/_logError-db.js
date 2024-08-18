@@ -1,4 +1,4 @@
-import useQueryDB from '../../../hooks/useQueryDB.js'
+import queryDB from '../../../utils/queryDB.js'
 
 
 
@@ -13,7 +13,7 @@ class LogErrorRepository {
 		delete err.line
 
 
-		const response = await useQueryDB("INSERT INTO _log_Error (req, res, err, user_id, device_id, log_time) VALUES ($1, $2, $3, $4, $5, $6)", [
+		const response = await queryDB("INSERT INTO _log_Error (req, res, err, user_id, device_id, log_time) VALUES ($1, $2, $3, $4, $5, $6)", [
 			JSON.stringify(req), 
 			JSON.stringify(res), 
 			JSON.stringify(err), 
@@ -26,7 +26,7 @@ class LogErrorRepository {
 	}
 
 	static async getLogError() {
-		const response = await useQueryDB("SELECT * FROM _log_Error")
+		const response = await queryDB("SELECT * FROM _log_Error")
 
 		return response.rows
 	}

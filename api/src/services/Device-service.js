@@ -1,7 +1,7 @@
 import AuthDeviceRepository from '../_database/repositories/AuthDevice-db.js'
 import _logAttentionRepository from '../_database/repositories/_logAttention-db.js'
-import getBrowserAndOs from '../../hooks/useGetBrowserAndOS.js'
-import { BlockDevice, Conflict } from '../../utils/Errors.js'
+import getBrowserAndOs from '../../utils/getBrowserAndOs.js'
+import { BlockDevice, Conflict } from '../../utils/errors.js'
 import getCodeDescription from '../../utils/Inter_codes.js'
 import BlockRepository from '../_database/repositories/Block-db.js'
 
@@ -74,7 +74,7 @@ class DeviceService {
     
     static async getDeviceId({ interCode, fingerprint, userId, queryTimeString, deviceType, lsDeviceId, deviceIP }) {
         const deviceId = await deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId, queryTimeString, deviceIP }) ||
-        await createNewDeviceWithHandling({ interCode, fingerprint, userId, queryTimeString, deviceType, deviceIP })
+        	await createNewDeviceWithHandling({ interCode, fingerprint, userId, queryTimeString, deviceType, deviceIP })
         
         return deviceId
     }
@@ -103,11 +103,11 @@ class DeviceService {
 		const isBlocked = await BlockRepository.checkDeviceForBlockStatus({ deviceId, fingerprintHash: fingerprint.hash, deviceIP })
 		
 		if (!isBlocked) {
-				await BlockRepository.createBlock({ interCode, deviceId, userInfo, blockTime: logTime, unlockTime, deviceIP, fingerprintHash: fingerprint.hash })
-					.catch(async () => {
-						//* Handling for block-db if device has unknown deviceId
-						await BlockRepository.createBlock({ interCode, deviceId: null, userInfo, blockTime: logTime, unlockTime, deviceIP, fingerprintHash: fingerprint.hash })
-					})
+			await BlockRepository.createBlock({ interCode, deviceId, userInfo, blockTime: logTime, unlockTime, deviceIP, fingerprintHash: fingerprint.hash })
+				.catch(async () => {
+					//* Handling for block-db if device has unknown deviceId
+					await BlockRepository.createBlock({ interCode, deviceId: null, userInfo, blockTime: logTime, unlockTime, deviceIP, fingerprintHash: fingerprint.hash })
+				})
 		}
     }
 }

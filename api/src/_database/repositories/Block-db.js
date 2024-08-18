@@ -1,5 +1,4 @@
-import getBrowserAndOs from '../../../hooks/useGetBrowserAndOS.js'
-import useQueryDB from '../../../hooks/useQueryDB.js'
+import queryDB from '../../../utils/queryDB.js'
 
 
 
@@ -8,7 +7,7 @@ class BlockRepository {
 		const isActive = true
 		if (unlockTime) deviceIP = null
 
-		const response = await useQueryDB("INSERT INTO blocks (inter_code, device_id, user_id, block_time, unlock_time, ip, finger_print, is_active) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id",
+		const response = await queryDB("INSERT INTO blocks (inter_code, device_id, user_id, block_time, unlock_time, ip, finger_print, is_active) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING block_id",
 			[
 				interCode,
 				deviceId,
@@ -20,11 +19,11 @@ class BlockRepository {
 				isActive,
 			])
 
-		return response.rows[0]?.id
+		return response.rows[0]?.block_id
 	}
 
 	static async checkDeviceForBlockStatus({ deviceId, fingerprintHash, deviceIP }) {
-		const response = await useQueryDB("SELECT unlock_time, inter_code FROM blocks WHERE is_active=true AND device_id=$1 OR finger_print=$2 OR ip=$3",
+		const response = await queryDB("SELECT unlock_time, inter_code FROM blocks WHERE is_active=true AND device_id=$1 OR finger_print=$2 OR ip=$3",
 			[
 				deviceId, 
 				fingerprintHash, 
@@ -35,18 +34,18 @@ class BlockRepository {
 	}
 
 	static async checkFingerprintForBlockStatus(fingerprintHash) {
-		const response = await useQueryDB("SELECT unlock_time FROM blocks WHERE finger_print=$1 ORDER BY unlock_time", [fingerprintHash])
+		const response = await queryDB("SELECT unlock_time FROM blocks WHERE finger_print=$1 ORDER BY unlock_time", [fingerprintHash])
 
 		return response.rows[0]
 	}
 
 	static async setUnlockTime({ deviceId, unlockTime }) {
-		await useQueryDB("UPDATE blocks SET unlock_time=$1 WHERE id=$2", [unlockTime, deviceId])
+		await queryDB("UPDATE blocks SET unlock_time=$1 WHERE block_id=$2", [unlockTime, deviceId])
 	}
 
 	static async saveBlockedIPForDevice({ blockedIPList, deviceId }) {
 
-		await useQueryDB("UPDATE blocks SET blocked_ip=$1 WHERE id=$3", [blockedIPList, deviceId])
+		await queryDB("UPDATE blocks SET blocked_ip=$1 WHERE block_id=$3", [blockedIPList, deviceId])
 	}
 }
 
