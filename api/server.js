@@ -1,14 +1,14 @@
 import express from "express"
-import {createServer} from 'node:http'
+import { createServer } from 'node:http'
 import cors from "cors"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import Fingerprint from "express-fingerprint"
 import AuthRootRouter from "./src/routers/Global-router.js"
 import TokenService from "./src/services/Token-service.js"
-import {socketConnection} from './src/services/WebSocket-service.js'
+import { socketConnection } from './src/services/WebSocket-service.js'
 import AuthService from './src/services/Auth-service.js'
-import {AUTO_LOGOUT_INTERVAL} from './constants.js'
+import { AUTO_LOGOUT_INTERVAL } from './constants.js'
 
 
 
@@ -17,7 +17,6 @@ dotenv.config()
 const app = express()
 const server = createServer(app)
 const PORT = process.env.API_PORT || 5000
-// socketConnection(process.env.SOCKET_PORT)
 socketConnection(server)
 
 app.use(cookieParser())

@@ -1,9 +1,9 @@
-import React, {createContext, useEffect, useState} from "react"
+import React, { createContext, useEffect, useState } from "react"
 import CircularProgress from '@mui/joy/CircularProgress'
 import inMemoryJWT from '../services/inMemoryJWT-service'
-import {LOGOUT_STORAGE_KEY} from "../../constants"
+import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "../services/Auth-service"
-import {showSnackBarMessage} from "../features/showSnackBarMessage/showSnackBarMessage"
+import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
 import {
 	CoverPanelOptions,
 	IAvatarListElement,

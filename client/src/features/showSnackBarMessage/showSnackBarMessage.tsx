@@ -1,12 +1,12 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 import SnackBar from '../../components/SnackBar/SnackBar'
-import {PiSealWarning, PiWarningCircleBold} from "react-icons/pi"
-import {TbLockSquareRounded} from "react-icons/tb"
-import {FiCheckCircle} from "react-icons/fi"
-import {LuBadgeInfo} from "react-icons/lu"
+import { PiSealWarning, PiWarningCircleBold } from "react-icons/pi"
+import { TbLockSquareRounded } from "react-icons/tb"
+import { FiCheckCircle } from "react-icons/fi"
+import { LuBadgeInfo } from "react-icons/lu"
 import saveLogInLocalStorage from './saveLogInLocalStorage'
-import {getTime} from "../../utils/getTime";
+import { getTime } from "../../utils/getTime";
 
 
 export type SnackBarTypeOptions = 'e' | 'i' |'w' | 'b' | 's'
@@ -89,7 +89,6 @@ export const showSnackBarMessage = (snack: ISnackWithoutTime) => {
 	
 	//* Refresh errs ban
 	if (snack?.detail?.action === 'refresh') return
-	
 	
 	//* Missing elements adding (snackTime)
 	const snackWithTime: ISnack = {

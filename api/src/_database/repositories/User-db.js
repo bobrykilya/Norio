@@ -7,7 +7,7 @@ class UserRepository {
 		username, 
 		hashedPassword, 
 		role,
-		isActivated, 
+		status,
 		phone,
 		store,
 		job,
@@ -18,11 +18,11 @@ class UserRepository {
 		isStore,
 	}) {
 
-		const response = await queryDB("INSERT INTO users (username, password, role, is_activated, phone, store, job, last_name, first_name, middle_name, avatar, is_store) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING user_id", [
+		const response = await queryDB("INSERT INTO users (username, password, role, status, phone, store, job, last_name, first_name, middle_name, avatar, is_store) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING user_id", [
 			username, 
 			hashedPassword, 
 			role, 
-			isActivated,
+			status,
 			phone, 
 			store, 
 			job, 
@@ -62,8 +62,8 @@ class UserRepository {
 		return response.rows
 	}
 
-	static async setActivateStatusForUser({ userId, status }) {
-		await queryDB("UPDATE users SET is_activated=$1 WHERE user_id=$2", [status, userId])
+	static async setStatusForUser({ userId, status }) {
+		await queryDB("UPDATE users SET status=$1 WHERE user_id=$2", [status, userId])
 	}
 
 	static async deleteUserById(userId) {

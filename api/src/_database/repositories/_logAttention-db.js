@@ -31,14 +31,14 @@ class LogAttentionRepository {
 
 		const { receiver_user_id, receiver_user_role } = getInsertData({ interCode, userId })
 
-		await queryDB("INSERT INTO _log_Attention (inter_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
-			interCode, 
-			userId, 
-			deviceId, 
-			logTime.toString(),
-			receiver_user_id, 
-			receiver_user_role
-		])
+		// await queryDB("INSERT INTO _log_Attention (inter_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
+		// 	interCode,
+		// 	userId,
+		// 	deviceId,
+		// 	logTime.toString(),
+		// 	receiver_user_id,
+		// 	receiver_user_role
+		// ])
 	}
 
 	//   static async createUserInfo(id) {

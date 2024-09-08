@@ -1,8 +1,14 @@
-export const getTime = () => {
+import { TIME_ZONE } from "../../constants"
 
+export const getTime = () => {
     return Date.now()
 }
 
+export const getTimeString = (time: number) => {
+    // const timeZone = new Date().getTimezoneOffset() //* Belarus timeZone = -180 (+3 GMT)
+    // return new Date(time + (-timeZone * 60 * 1000)).toUTCString()
+    return new Date(time + (TIME_ZONE * 60 * 60 * 1000)).toUTCString()
+}
 
 type TypeOptions = 'hour' | 'minute' | 'second';
 export const getLastTime = (timestamp: number, type: TypeOptions): number => {

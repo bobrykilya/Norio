@@ -3,7 +3,7 @@ CREATE TABLE users(
     username VARCHAR(20) UNIQUE NOT NULL,
     password VARCHAR(60) NOT NULL,
     role SMALLINT NOT NULL,
-    is_activated BOOLEAN NOT NULL,
+    status VARCHAR(8) NOT NULL, -- active, inactive, blocked
     last_name VARCHAR(25) NOT NULL,
     first_name VARCHAR(20) NOT NULL,
     middle_name VARCHAR(20) NOT NULL,

@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs"
 import TokenService from "./Token-service.js"
-import {BlockDevice, Conflict, Forbidden, Unauthorized} from "../utils/errors.js"
-import {ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION} from "../../constants.js"
+import { BlockDevice, Conflict, Forbidden, Unauthorized } from "../utils/errors.js"
+import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION } from "../../constants.js"
 import RefreshSessionsRepository from "../_database/repositories/RefreshSession-db.js"
 import UserRepository from "../_database/repositories/User-db.js"
 import AuthDeviceRepository from '../_database/repositories/AuthDevice-db.js'
@@ -9,8 +9,8 @@ import _logAttentionRepository from '../_database/repositories/_logAttention-db.
 import _logAuthRepository from '../_database/repositories/_LogAuth-db.js'
 import getCodeDescription from '../utils/Inter_codes.js'
 import DeviceService from './Device-service.js'
-import {sendToClient} from './WebSocket-service.js'
-import {getEndTime} from '../utils/getTime.js'
+import { sendToClient } from './WebSocket-service.js'
+import { getEndTime } from '../utils/getTime.js'
 
 
 
@@ -82,9 +82,9 @@ class AuthService {
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP })
 
-		//! Change role, is_store
+		//TODO: Change role, is_store
 		const role = 1
-		const isActivated = false
+		const status = 'inactive'
 		const isStore = false
 
 		let userId
@@ -96,7 +96,7 @@ class AuthService {
 				username, 
 				hashedPassword, 
 				role,
-				isActivated, 
+				status,
 				phone,
 				store,
 				job,
@@ -108,6 +108,7 @@ class AuthService {
 			}
 			userId = await UserRepository.createUser(userInfo)
 			
+            userInfo.user_id = userId
 			delete userInfo.hashedPassword
 		}catch {
 			throw new Conflict("Данный номер телефона уже занят другим пользователем")
