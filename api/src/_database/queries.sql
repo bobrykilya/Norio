@@ -20,7 +20,7 @@ CREATE TABLE auth_devices(
     type VARCHAR(7) NOT NULL,   
     b_version VARCHAR(7) NOT NULL,
     os VARCHAR(15) NOT NULL,
-    reg_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    reg_time VARCHAR(14) NOT NULL,
     finger_print VARCHAR(32) UNIQUE NOT NULL,
     ip_reg VARCHAR(13) NOT NULL
 )
@@ -30,8 +30,8 @@ CREATE TABLE blocks(
     inter_code SMALLINT NOT NULL,
     user_id SMALLINT REFERENCES users(user_id) ON DELETE RESTRICT,
     device_id SMALLINT REFERENCES auth_devices(device_id) ON DELETE RESTRICT,
-    block_time TIMESTAMP WITH TIME ZONE NOT NULL,
-    unlock_time TIMESTAMP WITH TIME ZONE,
+    block_time VARCHAR(14) NOT NULL,
+    unlock_time VARCHAR(14),
     ip VARCHAR(13),
     finger_print VARCHAR(32) NOT NULL,
     is_active BOOLEAN NOT NULL
@@ -41,9 +41,9 @@ CREATE TABLE refresh_sessions(
     sess_id SERIAL PRIMARY KEY,
     user_id SMALLINT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     device_id SMALLINT NOT NULL REFERENCES auth_devices(device_id) ON DELETE CASCADE,
-    auth_time TIMESTAMP WITH TIME ZONE NOT NULL,
-    log_in_time TIMESTAMP WITH TIME ZONE UNIQUE NOT NULL,
-    log_out_time TIMESTAMP WITH TIME ZONE,
+    auth_time VARCHAR(14) NOT NULL,
+    log_in_time VARCHAR(14) UNIQUE NOT NULL,
+    log_out_time VARCHAR(14),
     refresh_token VARCHAR(400) UNIQUE NOT NULL
 )
 
@@ -52,7 +52,7 @@ CREATE TABLE _log_Attention(
     inter_code SMALLINT NOT NULL,
     user_id SMALLINT NOT NULL REFERENCES users(user_id) ON DELETE RESTRICT,
     device_id SMALLINT NOT NULL REFERENCES auth_devices(device_id) ON DELETE RESTRICT,
-    log_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    log_time VARCHAR(14) NOT NULL,
     receiver_user_id SMALLINT REFERENCES users(user_id),
     receiver_user_role SMALLINT
 )
@@ -62,7 +62,7 @@ CREATE TABLE _log_Auth(
     inter_code SMALLINT NOT NULL,
     user_id SMALLINT NOT NULL REFERENCES users(user_id) ON DELETE RESTRICT,
     device_id SMALLINT NOT NULL REFERENCES auth_devices(device_id) ON DELETE RESTRICT,
-    log_time TIMESTAMP WITH TIME ZONE NOT NULL
+    log_time VARCHAR(14) NOT NULL
 )
 
 CREATE TABLE _log_Error(
@@ -72,7 +72,7 @@ CREATE TABLE _log_Error(
     err VARCHAR(400), 
     user_id SMALLINT REFERENCES users(user_id) ON DELETE RESTRICT, 
     device_id SMALLINT REFERENCES auth_devices(device_id) ON DELETE RESTRICT, 
-    log_time TIMESTAMP WITH TIME ZONE NOT NULL
+    log_time VARCHAR(14) NOT NULL
 )
 
 SELECT * FROM users

@@ -1,4 +1,4 @@
-import queryDB from '../../../utils/queryDB.js'
+import queryDB from '../../utils/queryDB.js'
 
 
 
@@ -12,8 +12,8 @@ class BlockRepository {
 				interCode,
 				deviceId,
 				userInfo?.userId,
-				blockTime,
-				unlockTime,
+				blockTime.toString(),
+				unlockTime.toString(),
 				deviceIP,
 				fingerprintHash,
 				isActive,
@@ -22,7 +22,7 @@ class BlockRepository {
 		return response.rows[0]?.block_id
 	}
 
-	static async checkDeviceForBlockStatus({ deviceId, fingerprintHash, deviceIP }) {
+	static async getBlockedDeviceInfo({ deviceId, fingerprintHash, deviceIP }) {
 		const response = await queryDB("SELECT unlock_time, inter_code FROM blocks WHERE is_active=true AND device_id=$1 OR finger_print=$2 OR ip=$3",
 			[
 				deviceId, 

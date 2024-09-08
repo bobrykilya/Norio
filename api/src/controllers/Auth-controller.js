@@ -1,23 +1,17 @@
 import AuthService from "../services/Auth-service.js"
-import ErrorsUtils from "../../utils/errors.js"
-import { COOKIE_SETTINGS } from "../../constants.js"
+import ErrorsUtils from "../utils/errors.js"
+import {COOKIE_SETTINGS} from "../../constants.js"
+import {getTime} from "../utils/getTime.js"
 
 
-
-const getTime = () => {
-	const queryTime = new Date()
-	const queryTimeString = queryTime.toUTCString()
-	// console.log({ queryTime, queryTimeString })
-
-	return { queryTime, queryTimeString }
-}
 
 class AuthController {
 	static async signIn(req, res) {
 		// console.log(req)
 		const { username, password, fastSession, deviceType, lsDeviceId, deviceIP } = req.body
 		const { fingerprint } = req
-		const { queryTime, queryTimeString } = getTime()
+		const queryTime = getTime()
+
 
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signIn({ 
@@ -26,7 +20,6 @@ class AuthController {
 				fingerprint, 
 				fastSession,
 				queryTime,
-				queryTimeString,
 				deviceType,
 				lsDeviceId,
 				deviceIP,
@@ -37,14 +30,14 @@ class AuthController {
 
 			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
-			return ErrorsUtils.catchError({ interCode: !fastSession ? 201 : 202, req, res, err, username, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: !fastSession ? 201 : 202, req, res, err, username, fingerprint, queryTime })
 		}
 	}
 
 	static async signUp(req, res) {
 		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, deviceType, lsDeviceId, deviceIP } = req.body
 		const { fingerprint } = req
-		const { queryTime, queryTimeString } = getTime()
+        const queryTime = getTime()
 
 		
 		try {
@@ -60,7 +53,6 @@ class AuthController {
 				avatar, 
 				fingerprint, 
 				queryTime,
-				queryTimeString,
 				deviceType,
 				lsDeviceId,
 				deviceIP,
@@ -70,7 +62,7 @@ class AuthController {
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
-			return ErrorsUtils.catchError({ interCode: 205,req, res, err, username, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: 205,req, res, err, username, fingerprint, queryTime })
 		}
 	}
 
@@ -78,25 +70,25 @@ class AuthController {
 		const refreshToken = req.cookies.refreshToken
 		const { interCode } = req.body
 		const { fingerprint } = req
-		const { queryTimeString } = getTime()
+        const queryTime = getTime()
 
 
 		try {
-			await AuthService.logOut({ refreshToken, queryTimeString, interCode })
+			await AuthService.logOut({ refreshToken, queryTime, interCode })
 
 			// console.log('logOut')
 			res.clearCookie("refreshToken")
 
 			return res.sendStatus(200)
 		} catch (err) {
-			return ErrorsUtils.catchError({ interCode: 203, req, res, err, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: 203, req, res, err, fingerprint, queryTime })
 		}
 	}
 
 	static async refresh(req, res) {
 		const { lsDeviceId } = req.body
 		const { fingerprint } = req
-		const { queryTimeString } = getTime()
+        const queryTime = getTime()
 		const currentRefreshToken = req.cookies.refreshToken
 
 
@@ -105,7 +97,6 @@ class AuthController {
 				await AuthService.refresh({
 					currentRefreshToken,
 					fingerprint,
-					queryTimeString,
 					lsDeviceId,
 				})
 
@@ -113,22 +104,22 @@ class AuthController {
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
 		} catch (err) {
-			return ErrorsUtils.catchError({ interCode: 701, req, res, err, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: 701, req, res, err, fingerprint, queryTime })
 		}
 	}
 
 	static async checkUser(req, res) {
 		const { username, password } = req.body
 		const { fingerprint } = req
-		const { queryTime, queryTimeString } = getTime()
+        const queryTime = getTime()
 
 
 		try {
-			const { userName, hashedPassword, avatarsList } = await AuthService.checkUser({ username, password, queryTime, queryTimeString })
+			const { userName, hashedPassword, avatarsList } = await AuthService.checkUser({ username, password, queryTime })
 
 			return res.status(200).json({ userName, hashedPassword, avatarsList })
 		} catch (err) {
-			return ErrorsUtils.catchError({ interCode: 711, req, res, err, username, fingerprint, queryTimeString })
+			return ErrorsUtils.catchError({ interCode: 711, req, res, err, username, fingerprint, queryTime })
 		}
 	}
 }

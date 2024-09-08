@@ -1,5 +1,5 @@
 import DeviceService from '../services/Device-service.js'
-import ErrorsUtils from "../../utils/errors.js"
+import ErrorsUtils from "../utils/errors.js"
 
 
 

@@ -1,15 +1,12 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 import SnackBar from '../../components/SnackBar/SnackBar'
-import { PiSealWarning } from "react-icons/pi"
-import { PiWarningCircleBold } from "react-icons/pi"
-import { TbLockSquareRounded } from "react-icons/tb"
-import { FiCheckCircle } from "react-icons/fi"
-import { LuBadgeInfo } from "react-icons/lu"
+import {PiSealWarning, PiWarningCircleBold} from "react-icons/pi"
+import {TbLockSquareRounded} from "react-icons/tb"
+import {FiCheckCircle} from "react-icons/fi"
+import {LuBadgeInfo} from "react-icons/lu"
 import saveLogInLocalStorage from './saveLogInLocalStorage'
-import blockDevice from '../blockDevice/blockDevice'
-import { useBlockError } from '../../stores/Global-store'
-
+import {getTime} from "../../utils/getTime";
 
 
 export type SnackBarTypeOptions = 'e' | 'i' |'w' | 'b' | 's'
@@ -24,7 +21,7 @@ type IGetTypeDecoding = {
 export type ISnack = {
 	type: SnackBarTypeOptions;
 	message: string;
-	snackTime: string;
+	snackTime: number;
 	duration?: number;
 	response?: Response;
 	detail?: {
@@ -41,7 +38,7 @@ export type ISnack = {
 	}
 }
 export type ISnackWithoutTime = Omit<ISnack, 'snackTime'> & {
-	snackTime?: string;
+	snackTime?: number;
 }
 const showAllSnacksDev = () => {
 	
@@ -94,10 +91,10 @@ export const showSnackBarMessage = (snack: ISnackWithoutTime) => {
 	if (snack?.detail?.action === 'refresh') return
 	
 	
-	//* Missing elements adding
+	//* Missing elements adding (snackTime)
 	const snackWithTime: ISnack = {
 		...structuredClone(snack),
-		snackTime: snack.snackTime || new Date().toUTCString()
+		snackTime: snack.snackTime || getTime()
 	}
 
 

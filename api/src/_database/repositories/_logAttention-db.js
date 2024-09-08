@@ -1,5 +1,4 @@
-import queryDB from '../../../utils/queryDB.js'
-
+import queryDB from '../../utils/queryDB.js'
 
 
 
@@ -36,7 +35,7 @@ class LogAttentionRepository {
 			interCode, 
 			userId, 
 			deviceId, 
-			logTime, 
+			logTime.toString(),
 			receiver_user_id, 
 			receiver_user_role
 		])

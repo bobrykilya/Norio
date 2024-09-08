@@ -1,4 +1,5 @@
-import queryDB from '../../../utils/queryDB.js'
+import queryDB from '../../utils/queryDB.js'
+import {getTime} from "../../utils/getTime.js"
 
 
 
@@ -7,9 +8,9 @@ class RefreshSessionRepository {
 		await queryDB("INSERT INTO refresh_sessions (user_id, device_id, auth_time, log_in_time, log_out_time, refresh_token) VALUES ($1, $2, $3, $4, $5, $6)", [
 			userId,
 			deviceId,
-			new Date().toLocaleString(), //* auth_time
-			logInTime,
-			logOutTime,
+            getTime().toString(), //* auth_time
+			logInTime.toString(),
+            logOutTime ? logOutTime.toString() : null,
 			refreshToken,
 		])
 	}
@@ -27,27 +28,19 @@ class RefreshSessionRepository {
 	static async deleteRefreshSessionById(sessionId) {
 		await queryDB("DELETE FROM refresh_sessions WHERE sess_id=$1", [sessionId])
 	}
-
-	static async deleteRefreshSessionByLogInTime(logInTime) {
-		const response = await queryDB("DELETE FROM refresh_sessions WHERE log_in_time=$1 RETURNING sess_id", [logInTime])
-
-		return response?.rows[0]
-	}
 	
 	// static async deleteAllRefreshSessionsByUserId(UserId) {
 	// 	await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1", [UserId])
 	// }
 	
 	static async getRefreshSessionsQuantity(userId) {
-		const response = await queryDB("SELECT * FROM refresh_sessions WHERE user_id=$1", [userId])
+		const response = await queryDB("SELECT sess_id FROM refresh_sessions WHERE user_id=$1", [userId])
 
 		return response?.rows.length
 	}
 
-	static async getOldestRefreshSession(userId) {
-		const response = await queryDB("SELECT * FROM refresh_sessions WHERE user_id=$1 ORDER BY log_in_time LIMIT 1", [userId])
-
-		return response.rows[0]?.log_in_time
+	static async deleteOldestRefreshSessionByUserId(userId) {
+		 await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1 ORDER BY log_in_time LIMIT 1", [userId])
 	}
 
 	static async isRefreshSessionDouble(deviceId) {
@@ -57,7 +50,7 @@ class RefreshSessionRepository {
 	}
 
 	static async getRefreshSessionsWithLogOutTime() {
-		const response = await queryDB("SELECT sess_id, user_id, device_id, log_out_time FROM refresh_sessions WHERE log_out_time < now()")
+		const response = await queryDB("SELECT sess_id, user_id, device_id, log_out_time FROM refresh_sessions WHERE log_out_time < $1", [getTime().toString()])
 
 		return response?.rows
 	}

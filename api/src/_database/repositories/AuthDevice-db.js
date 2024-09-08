@@ -1,6 +1,5 @@
-
-import queryDB from '../../../utils/queryDB.js'
-import getBrowserAndOs from '../../../utils/getBrowserAndOs.js'
+import queryDB from '../../utils/queryDB.js'
+import getBrowserAndOs from '../../utils/getBrowserAndOs.js'
 
 
 
@@ -14,7 +13,7 @@ class AuthDeviceRepository {
 				deviceType,
 				bVersion,
 				os,
-				regTime,
+				regTime.toString(),
 				fingerprint.hash,
 				deviceIP,
 			])

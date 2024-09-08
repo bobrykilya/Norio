@@ -1,0 +1,1 @@
+export const LOGOUT_STORAGE_KEY = "lastLogout"

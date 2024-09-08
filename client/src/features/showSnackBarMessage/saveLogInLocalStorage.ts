@@ -1,12 +1,12 @@
 import blockDevice from '../blockDevice/blockDevice'
-import { getLastTime } from '../../utils/getTime'
-import { ISnack } from './showSnackBarMessage'
+import {getLastTime} from '../../utils/getTime'
+import {ISnack} from './showSnackBarMessage'
 // import { useBlockError } from '../../stores/Global-store';
 
 
 
-const recentlyTime = 0.1 //* Time of error counting in minutes
-const sameErrsQuantity = 3 //* Limit of possible error quantity recently
+const recentlyTime = 20 //* Time of error counting in seconds
+const sameErrsQuantity = 2 //* Limit of possible error quantity recently
 const userErrStorageTime = 24 //* User error storage time in hours
 
 
@@ -18,10 +18,10 @@ const checkErrsQuantityForRecently = (list: ISnack[]) => {
 
 	let result = false
 
-	list = list.filter(err => err.type === 'e' && getLastTime(err.snackTime, 'minute') < recentlyTime)
+	const filteredErrsList = list.filter(err => err.type === 'e' && getLastTime(err.snackTime, 'second') < recentlyTime)
 	const countObject = {}
 	
-	for (let err of list) {
+	for (let err of filteredErrsList) {
 		if (!countObject[err.message]) {
 			countObject[err.message] = 1
 		} else {

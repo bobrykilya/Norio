@@ -1,24 +1,27 @@
-import { Server } from 'socket.io'
+import {Server} from 'socket.io'
 
 
 
 let io
 
-export const socketConnection = (PORT) => {
-    io = new Server(PORT, {
+export const socketConnection = (HTTPServer) => {
+    io = new Server(HTTPServer, {
         cors: {
             origin: "*",
             methods: ["GET", "POST"],
+            allowedHeaders: ['custom-header'],
+            credentials: true
         }
     })
 
 
     io.on('connection', (socket) => {
         // console.log('Socket connected')
-        // console.log(socket.rooms)
+
         socket.on('join', ({ userId, deviceId }) => {
-            // console.log('Joined to room: ' + userId + deviceId)
-            socket.join(userId + deviceId)
+            console.log('Joined to room: ' + userId + deviceId)
+            socket.join(userId.toString() + deviceId.toString())
+            console.log(socket.rooms)
         })
     
         socket.on('disconnect', () => {
@@ -29,7 +32,7 @@ export const socketConnection = (PORT) => {
 
 
 export const sendToClient = ({ room, event, payload }) => {
-    // console.log('Leaved from room: ' + room.userId + room.deviceId)
-    io.to(room.userId + room.deviceId).emit(event, payload)
+    console.log('Leaved from room: ' + room.userId + room.deviceId)
+    io.to(room.userId.toString() + room.deviceId.toString()).emit(event, payload)
 }
 export const getRooms = () => io.sockets.adapter.rooms

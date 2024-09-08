@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "es2020",
+		"moduleResolution": "node",
+		"lib": [ "es2017", "dom" ],
+		"jsx": "react",
+		"allowSyntheticDefaultImports": true
+	}
+}
