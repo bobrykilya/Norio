@@ -1,4 +1,4 @@
-import queryDB from '../../../utils/queryDB.js'
+import queryDB from '../../utils/queryDB.js'
 
 
 
@@ -9,7 +9,7 @@ class LogAuthRepository {
 			interCode, 
 			userId, 
 			deviceId, 
-			logTime, 
+			logTime.toString(),
 		])
 	}
 

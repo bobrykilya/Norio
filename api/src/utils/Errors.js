@@ -1,6 +1,6 @@
-import _logErrorRepository from '../src/_database/repositories/_logError-db.js'
 // import UserRepository from '../src/_database/repositories/User.js'
 // import AuthDeviceRepository from '../src/_database/repositories/AuthDevice.js'
+import {getTime} from "./getTime.js"
 
 
 
@@ -56,7 +56,7 @@ export class BlockDevice extends WebError {
 }
 
 class ErrorUtils {
-	static async catchError({ interCode, req, res, err, username, fingerprint, queryTimeString }) {
+	static async catchError({ interCode, req, res, err, username, fingerprint }) {
 		// console.log(err)
 		if (err instanceof WebError) {
 			const status = err.status
@@ -64,7 +64,7 @@ class ErrorUtils {
 			const error = {
 				type: status === 900 ? 'b' : 'e',
 				message: err.message,
-				snackTime: Date.now(),
+				snackTime: getTime(),
 				detail: {
 					action: req.route.stack[0]?.name,
 					req: {
@@ -82,9 +82,9 @@ class ErrorUtils {
 				const { unlockTime, description, infinityBlock, interCode } = err.message
 
 				if (!infinityBlock) {
-					error.message = `${description}.<br><span class='info'>Устройство будет разблокировано в <span class='bold'>${''}</span></span>`
+					error.message = `${description}.<br><span class='info'> Устройство будет разблокировано в <span class='bold'>${'getTimeInShortString(unlockTime)'}</span></span>`
 				}else {
-					error.message = 'Устройство будет разблокировано. Обратитесь к администратору'
+					error.message = 'Устройство заблокировано. Обратитесь к администратору'
 				}
 				error.detail.res = { ...error.detail.res, unlockTime, interCode }
 			}
@@ -100,9 +100,8 @@ class ErrorUtils {
 			
 			if (!(err instanceof Unauthorized)) {
 				console.log(error)
-				console.log()
 			}
-			
+
 			// const queryTimeString = queryTime.toLocaleString()
 			// const userData = username ? await UserRepository.getUserData(username) : null
 			// const deviceId = fingerprint ? await AuthDeviceRepository.getDeviceId(fingerprint.hash) : null

@@ -1,4 +1,4 @@
-import queryDB from '../../../utils/queryDB.js'
+import queryDB from '../../utils/queryDB.js'
 
 
 

@@ -1,19 +1,14 @@
 import DeviceService from '../../services/Device-service.js'
-import { showSnackBarMessage } from '../showSnackBarMessage/showSnackBarMessage.jsx'
+import {showSnackBarMessage} from '../showSnackBarMessage/showSnackBarMessage.jsx'
 import inMemoryJWT from '../../services/inMemoryJWT-service.js'
-import { getEndTime } from '../../utils/getTime.js'
-// import useGetTimeShort from '../../../../api/hooks/useGetTimeShort.js'
-import { IBlockDevice, IBlockDeviceService } from '../../types/Device-types.js'
-import { useBlockError } from '../../stores/Global-store.js'
+import {getEndTime} from '../../utils/getTime.js'
+import {IBlockDevice} from '../../types/Device-types.js'
 
 
 const blockDurationInMinutes = 2
 
 
-type IGetErrorMessage = Required<Omit<IBlockDevice, "logTime">> & {
-    lockTime: Date;
-}
-const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: IGetErrorMessage) => {
+const getErrorMessage = ({ logTime, infinityBlock, unlockTimeDB, interCode }: IBlockDevice) => {
     // console.log(infinityBlock)
     if (!infinityBlock) {
 
@@ -22,7 +17,7 @@ const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: I
         let unlockTime: string
 
         if (!unlockTimeDB) {
-            endTimeString = getEndTime({ startTime: lockTime, duration: blockDurationInMinutes })
+            endTimeString = getEndTime({ startTime: logTime, duration: blockDurationInMinutes })
             unlockTimeShort = useGetTimeShort( endTimeString)
             unlockTime = endTimeString
         } else {
@@ -47,9 +42,8 @@ const getErrorMessage = ({ lockTime, infinityBlock, unlockTimeDB, interCode }: I
 
 
 const blockDevice = ({ logTime, infinityBlock=false, unlockTimeDB=null, interCode=null }: IBlockDevice) => {
-    
-    const lockTime = new Date(logTime)
-    const { err_mess, unlockTime, newInterCode } = getErrorMessage({ lockTime, infinityBlock, unlockTimeDB, interCode })
+
+    const { err_mess, unlockTime, newInterCode } = getErrorMessage({ logTime, infinityBlock, unlockTimeDB, interCode })
     // const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
     // console.log(err_mess)
     

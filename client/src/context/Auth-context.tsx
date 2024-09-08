@@ -1,26 +1,36 @@
-import React, { createContext, useEffect, useRef, useState } from "react"
+import React, {createContext, useEffect, useState} from "react"
 import CircularProgress from '@mui/joy/CircularProgress'
 import inMemoryJWT from '../services/inMemoryJWT-service'
-import config from "../config"
+import {LOGOUT_STORAGE_KEY} from "../../constants"
 import AuthService from "../services/Auth-service"
-import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
-import { CoverPanelOptions, IAvatarListElement, IHandleCheckUser, IHandleSignIn, IUserInfo, ILoginServiceResp, ISignUpServiceReq, IHandleLogOut, IUserNameInfo } from "../types/Auth-types"
+import {showSnackBarMessage} from "../features/showSnackBarMessage/showSnackBarMessage"
+import {
+	CoverPanelOptions,
+	IAvatarListElement,
+	IHandleCheckUser,
+	IHandleLogOut,
+	IHandleSignIn,
+	ILoginServiceResp,
+	ISignUpServiceReq,
+	IUserInfo,
+	IUserNameInfo,
+} from "../types/Auth-types"
 import io from "socket.io-client"
 
 
-
 export const AuthContext = createContext({})
-export const socket = io(config.API_URL)
+export const socket = io(import.meta.env.VITE_API_URL)
 
 
 const AuthProvider = ({ children }) => {
-	const [data, setData] = useState<Record<string, any> | null>(null)
+	// const [data, setData] = useState<Record<string, any> | null>(null)
 	const [isAppReady, setIsAppReady] = useState(false)
 	const [isUserLogged, setIsUserLogged] = useState(false)
 	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<IAvatarListElement[]>([])
 	const [coverPanelState, setCoverPanelState] = useState<CoverPanelOptions>('sign_in')
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
+	const [socketSessId, setSocketSessId] = useState('')
 	
 
 	const getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
@@ -67,7 +77,7 @@ const AuthProvider = ({ children }) => {
 		}
 	}
 
-	const loginUser = async ({ accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp) => {
+	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp) => {
 		saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		userHasLogged()
 	}
@@ -136,25 +146,26 @@ const AuthProvider = ({ children }) => {
 
 	//* Refresh handling
 	useEffect(() => {
-			const refresh = async () => {
-				try {
-					// console.log('refresh')
-					const lsDeviceId = Number(localStorage.getItem('deviceId'))
+		const refresh = async () => {
+			try {
+				// console.log('refresh')
+				const lsDeviceId = Number(localStorage.getItem('deviceId'))
 
-					const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp = await AuthService.refresh({ lsDeviceId })
-					
-					saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
-	
-					setIsAppReady(true)
-					setIsUserLogged(true)
+				const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp = await AuthService.refresh({ lsDeviceId })
 
-				} catch (err) {
-					localStorage.removeItem('blockDevice')
-					setIsAppReady(true)
-					setIsUserLogged(false)
-					resetSignInVariables()
-				}
+				saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
+
+				setIsAppReady(true)
+				setIsUserLogged(true)
+
+			} catch (err) {
+				localStorage.removeItem('blockDevice')
+				setIsAppReady(true)
+				setIsUserLogged(false)
+				resetSignInVariables()
 			}
+		}
+
 		refresh()
 	}, [])
 
@@ -162,7 +173,7 @@ const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		const handlePersistedLogOut = (event: StorageEvent) => {
 			// console.log(event.key)
-			if (event.key === config.LOGOUT_STORAGE_KEY) {
+			if (event.key === LOGOUT_STORAGE_KEY) {
 				inMemoryJWT.deleteToken()
 				setIsUserLogged(false)
 			}
@@ -178,7 +189,7 @@ const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		const checkForBlock = () => {
 			try {
-				//! ////////////////////
+				//TODO: Delete localStorage for block
 				if (localStorage.getItem('blockDevice')) {
 					setTimeout(() => handleLogOut(), 300)
 				}
@@ -193,7 +204,12 @@ const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const socketEvents = () => {
+			socket.on('connect', () => {
+				setSocketSessId(socket.id)
+				// console.log(socket.id)
+			})
 			socket.on('autoLogOut', ({ isLogOut, userNameInfo }) => {
+				console.log(isLogOut)
 				if (isLogOut) autoLogOut(userNameInfo)
 			})
 		}
@@ -203,7 +219,7 @@ const AuthProvider = ({ children }) => {
 	return (
 		<AuthContext.Provider
 			value={{
-				data,
+				// data,
 				coverPanelState,
                 setCoverPanelState,
 				handleReturnToSignUp,
@@ -215,7 +231,6 @@ const AuthProvider = ({ children }) => {
 				isUserLogged,
 				isAppReady,
 				listOfUsedAvatars,
-				socket,
 			}}
 		>
 			{isAppReady ? (

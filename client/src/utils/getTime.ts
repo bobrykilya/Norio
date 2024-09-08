@@ -1,11 +1,13 @@
-type TypeOptions = 'hour' | 'minute' | 'second';
+export const getTime = () => {
 
-export const getLastTime = (timestamp: string, type: TypeOptions): number => {
+    return Date.now()
+}
+
+
+type TypeOptions = 'hour' | 'minute' | 'second';
+export const getLastTime = (timestamp: number, type: TypeOptions): number => {
     try {
-        const nowTime = new Date()
-        const timestampTime = new Date(timestamp)
-        const timeDiff = (nowTime.valueOf() - timestampTime.valueOf()) / 1000 //* Time in seconds
-        // console.log({ timestamp, nowTime, timestampTime, timeDiff })
+        const timeDiff = (getTime() - timestamp) / 1000 //* Time in seconds
         // console.log(timeDiff)
     
         switch (type) {
@@ -14,9 +16,9 @@ export const getLastTime = (timestamp: string, type: TypeOptions): number => {
             case 'second': return timeDiff
         }
     } catch (err) {
-        console.log('Ошибка даты при сохранении в ErrsList в LocalStorage')
+        console.log('Ошибка даты при сохранении в ErrsList в LocalStorage (getLastTime)')
         console.error(err)
-        throw new Error('Ошибка даты при сохранении в ErrsList в LocalStorage')
+        throw new Error('Ошибка даты при сохранении в ErrsList в LocalStorage (getLastTime)')
     }
 }
 

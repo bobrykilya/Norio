@@ -1,17 +1,15 @@
 import ky from "ky"
-import config from "../config.ts"
 import inMemoryJWTService from '../services/inMemoryJWT-service.js'
 
 
-
 const $apiAuth = ky.extend({
-	prefixUrl: `${config.API_URL}/auth`,
+	prefixUrl: `${import.meta.env.VITE_API_URL}/auth`,
 	cache: 'no-store', 
 	credentials: 'include',
 })
 
 const $apiSecureResource = ky.extend({
-	prefixUrl: `${config.API_URL}/resource`,
+	prefixUrl: `${import.meta.env.VITE_API_URL}/resource`,
 	hooks: {
 		beforeRequest: [
 		  (req) => {

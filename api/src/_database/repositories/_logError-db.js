@@ -1,9 +1,9 @@
-import queryDB from '../../../utils/queryDB.js'
+import queryDB from '../../utils/queryDB.js'
 
 
 
 class LogErrorRepository {
-	static async createLogError({ interCode, req=null, res=null, err, userId=null, deviceId=null, queryTimeString }) {
+	static async createLogError({ interCode, req=null, res=null, err, userId=null, deviceId=null, logTime }) {
 		err.myOperationCode = interCode
 		delete err.length
 		delete err.name
@@ -18,8 +18,8 @@ class LogErrorRepository {
 			JSON.stringify(res), 
 			JSON.stringify(err), 
 			userId, 
-			deviceId, 
-			queryTimeString, 
+			deviceId,
+            logTime.toString(),
 		])
 
 		return response.rows[0]?.id

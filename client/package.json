@@ -13,7 +13,6 @@
     "@emotion/styled": "^11.11.5",
     "@mui/joy": "5.0.0-beta.32",
     "@tanstack/react-query": "^5.29.2",
-    "dotenv": "^16.4.5",
     "framer-motion": "^11.2.4",
     "ky": "^1.2.3",
     "react": "^18.2.0",
@@ -26,12 +25,13 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
+    "@types/node": "^22.5.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.2.1",
     "sass": "^1.69.5",
     "typescript": "^5.5.4",
-    "vite": "^5.0.8"
+    "vite": "5.2.6"
   },
   "packageManager": "yarn@4.0.2"
 }

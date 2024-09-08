@@ -1,17 +1,16 @@
-import { IUserInfo } from "./Auth-types";
-
+import {IUserInfo} from "./Auth-types";
 
 
 export type IBlockDevice = {
-    logTime: string;
+    logTime: number;
     infinityBlock?: boolean;
-    unlockTimeDB?: string | null;
+    unlockTimeDB?: number | null;
     interCode?: number | null;
 }
 
 export type IBlockDeviceService = { 
-    logTime: string;
-    unlockTime: string | null;
+    logTime: number;
+    unlockTime: number | null;
     userInfo: IUserInfo;
     deviceId: number;
     interCode: number | null;
