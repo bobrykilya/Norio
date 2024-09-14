@@ -19,7 +19,7 @@ class LogErrorRepository {
 			JSON.stringify(err), 
 			userId, 
 			deviceId,
-            logTime.toString(),
+            logTime,
 		])
 
 		return response.rows[0]?.id

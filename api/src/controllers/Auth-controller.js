@@ -1,7 +1,7 @@
 import AuthService from "../services/Auth-service.js"
 import ErrorsUtils from "../utils/errors.js"
-import {COOKIE_SETTINGS} from "../../constants.js"
-import {getTime} from "../utils/getTime.js"
+import { COOKIE_SETTINGS } from "../../constants.js"
+import { getTime } from "../utils/getTime.js"
 
 
 
@@ -95,8 +95,9 @@ class AuthController {
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } =
 				await AuthService.refresh({
-					currentRefreshToken,
 					fingerprint,
+					currentRefreshToken,
+                    queryTime,
 					lsDeviceId,
 				})
 

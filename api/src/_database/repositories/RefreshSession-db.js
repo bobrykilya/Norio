@@ -1,5 +1,5 @@
 import queryDB from '../../utils/queryDB.js'
-import {getTime} from "../../utils/getTime.js"
+import { getTime } from "../../utils/getTime.js"
 
 
 
@@ -8,9 +8,9 @@ class RefreshSessionRepository {
 		await queryDB("INSERT INTO refresh_sessions (user_id, device_id, auth_time, log_in_time, log_out_time, refresh_token) VALUES ($1, $2, $3, $4, $5, $6)", [
 			userId,
 			deviceId,
-            getTime().toString(), //* auth_time
-			logInTime.toString(),
-            logOutTime ? logOutTime.toString() : null,
+            getTime(), //* auth_time
+			logInTime,
+            logOutTime,
 			refreshToken,
 		])
 	}
@@ -50,7 +50,7 @@ class RefreshSessionRepository {
 	}
 
 	static async getRefreshSessionsWithLogOutTime() {
-		const response = await queryDB("SELECT sess_id, user_id, device_id, log_out_time FROM refresh_sessions WHERE log_out_time < $1", [getTime().toString()])
+		const response = await queryDB("SELECT sess_id, user_id, device_id, log_out_time FROM refresh_sessions WHERE log_out_time < $1", [getTime()])
 
 		return response?.rows
 	}

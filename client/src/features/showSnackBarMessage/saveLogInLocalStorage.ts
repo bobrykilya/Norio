@@ -1,20 +1,20 @@
-import blockDevice from '../blockDevice/blockDevice'
-import {getLastTime} from '../../utils/getTime'
-import {ISnack} from './showSnackBarMessage'
+import { getLastTime } from '../../utils/getTime'
+import { ISnackWithTime } from './showSnackBarMessage'
+import DeviceService from "../../services/Device-service"
 // import { useBlockError } from '../../stores/Global-store';
 
 
 
 const recentlyTime = 20 //* Time of error counting in seconds
 const sameErrsQuantity = 2 //* Limit of possible error quantity recently
-const userErrStorageTime = 24 //* User error storage time in hours
+const localErrStorageTime = 24 //* User error storage time in hours
 
 
-const filterErrsListByTime = (err: ISnack) => {	
-	return err.snackTime ? getLastTime(err.snackTime, 'hour') < userErrStorageTime : false
+const filterErrsListByTime = (err: ISnackWithTime) => {
+	return err.snackTime ? getLastTime(err.snackTime, 'hour') < localErrStorageTime : false
 }
 
-const checkErrsQuantityForRecently = (list: ISnack[]) => {
+const checkErrsQuantityForRecently = (list: ISnackWithTime[]) => {
 
 	let result = false
 
@@ -40,28 +40,28 @@ const checkErrsQuantityForRecently = (list: ISnack[]) => {
 }
 
 
-const saveLogInLocalStorage = (err: ISnack) => {
+const saveLogInLocalStorage = (snack: ISnackWithTime) => {
 	
-    let errsList: ISnack[] = JSON.parse(localStorage.getItem('userErrsList') || '[]')
+    let errsList: ISnackWithTime[] = JSON.parse(localStorage.getItem('localErrsList') || '[]')
 	if (errsList[0]) errsList = errsList.filter(filterErrsListByTime) || []
 
-	//! Save userInfo with err ???
-	// const userId = JSON.parse(localStorage.getItem('userInfo') || '[]')?.user_id || undefined
-	// if (userId && err.detail?.req) {
-	// 	err.detail!.req.userId = userId
-	// }
 
-	// console.log(err)
-	errsList.push(err)
+	// console.log(snack)
+	errsList.push(snack)
 	
 	// console.log(errsList)
-	localStorage.setItem('userErrsList', JSON.stringify(errsList))
+	localStorage.setItem('localErrsList', JSON.stringify(errsList))
 	
 	//* Error counting for short time blocking
-	if (errsList.length < sameErrsQuantity || err.type === 'b') return
+	if (errsList.length < sameErrsQuantity || snack.type === 'b') return
 	if (checkErrsQuantityForRecently(errsList)) {
-		// console.log('Blocked')
-        blockDevice({ logTime: err.snackTime })
+
+		DeviceService.blockDeviceInDB({
+			logTime: snack.snackTime,
+			userId: Number(JSON.parse(localStorage.getItem('userInfo'))?.user_id) || null,
+			deviceId: Number(localStorage.getItem('deviceId')),
+			interCode: 807,
+		})
 	}
 }
 

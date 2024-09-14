@@ -1,6 +1,6 @@
 // import UserRepository from '../src/_database/repositories/User.js'
 // import AuthDeviceRepository from '../src/_database/repositories/AuthDevice.js'
-import {getTime} from "./getTime.js"
+import { getTime, getTimeInShortString } from "./getTime.js"
 
 
 
@@ -73,22 +73,11 @@ class ErrorUtils {
 					res: {
 						status,
 						title: err.title,
+
 					}
 				}
 			}
 
-			//* Block handling
-			if (status === 900) {
-				const { unlockTime, description, infinityBlock, interCode } = err.message
-
-				if (!infinityBlock) {
-					error.message = `${description}.<br><span class='info'> Устройство будет разблокировано в <span class='bold'>${'getTimeInShortString(unlockTime)'}</span></span>`
-				}else {
-					error.message = 'Устройство заблокировано. Обратитесь к администратору'
-				}
-				error.detail.res = { ...error.detail.res, unlockTime, interCode }
-			}
-			
 			//* Request description
 			if (req._body) {
 				delete req.body.password
@@ -97,7 +86,23 @@ class ErrorUtils {
 				error.detail.req = req.body
 			}
 
-			
+			//* Block handling (err.message is Object)
+			if (status === 900) {
+				const { interCode, description, unlockTime } = err.message
+
+				if (!(unlockTime === 0)) {
+					error.message = `${description}.<br><span class='info'> Устройство будет разблокировано в <span class='bold'>${getTimeInShortString(unlockTime)}</span></span>`
+				}else {
+					error.message = 'Устройство заблокировано. Обратитесь к администратору'
+				}
+
+                error.detail = {
+                    ...error.detail,
+                    interCode,
+                    unlockTime,
+                }
+			}
+
 			if (!(err instanceof Unauthorized)) {
 				console.log(error)
 			}

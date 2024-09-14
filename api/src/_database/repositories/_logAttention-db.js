@@ -29,21 +29,18 @@ const getInsertData = ({ interCode, userId }) => {
 class LogAttentionRepository {
 	static async createLogAttention({ interCode, userId, deviceId, logTime }) {
 
-		const { receiver_user_id, receiver_user_role } = getInsertData({ interCode, userId })
+		// const { receiver_user_id, receiver_user_role } = getInsertData({ interCode, userId })
 
 		// await queryDB("INSERT INTO _log_Attention (inter_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
 		// 	interCode,
 		// 	userId,
 		// 	deviceId,
-		// 	logTime.toString(),
+		// 	logTime,
 		// 	receiver_user_id,
 		// 	receiver_user_role
 		// ])
 	}
-
-	//   static async createUserInfo(id) {
-	//     const response = await pool.query("SELECT * FROM _log_Attention WHERE user_id=$1", [id])
-	//   }
+    
 
 	static async getLogsAttention() {
 		const response = await queryDB("SELECT * FROM _log_Attention")

@@ -1,16 +1,17 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import NavBarCard from '../../components/Cards/NavBarCard/NavBarCard'
 import NotificationCard from '../../components/Cards/NotificationCard/NotificationCard'
 import TaskCard from '../../components/Cards/TaskCard/TaskCard'
 import AccountInfoCard from '../../components/Cards/AccountInfoCard/AccountInfoCard'
-import {ClassicAnim} from '../../utils/pageTransitions'
-import {socket} from '../../context/Auth-context'
+import { ClassicAnim } from '../../utils/pageTransitions'
+import { socket } from '../../context/Auth-context'
 
 
 type HomePageProps = {
     isUserLogged: boolean;
 }
 const HomePage = ({ isUserLogged }: HomePageProps) => {
+
 
     const { user_id } = JSON.parse(localStorage.getItem('userInfo') || '{}')
     const deviceId = Number(localStorage.getItem('deviceId'))

@@ -13,7 +13,7 @@ class AuthDeviceRepository {
 				deviceType,
 				bVersion,
 				os,
-				regTime.toString(),
+				regTime,
 				fingerprint.hash,
 				deviceIP,
 			])

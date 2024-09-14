@@ -1,7 +1,6 @@
-import { showSnackBarMessage } from '../features/showSnackBarMessage/showSnackBarMessage'
 import { $apiAuth, $apiIpInfo } from '../http/http'
 import { IBlockDeviceService } from '../types/Device-types'
-
+import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
 
 
 type IApiIpInfoResponse = {
@@ -17,16 +16,19 @@ const getUserIPAddress = async () => {
 
 class DeviceService {
     static blockDeviceInDB = async (data: IBlockDeviceService) => {
-        if (!data.unlockTime) data.deviceIP = await getUserIPAddress()
+        data.deviceIP = await getUserIPAddress()
         // console.log(data)
 
         try {
-            $apiAuth.post("block", { json: data }).json()
+            await $apiAuth.post("block", { json: data }).json()
 
             // return res
         } catch (err) {
             showSnackBarMessage(err)
-            throw new Error('BlockDevice service error')
+            if (err.response.status !== 900) {
+                showSnackBarMessage({type: 'w', message: 'Device-service error'})
+                throw new Error(`Device-service error: ${err}`)
+            }
         }
     }
 }

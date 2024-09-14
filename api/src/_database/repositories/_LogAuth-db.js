@@ -9,7 +9,7 @@ class LogAuthRepository {
 		// 	interCode,
 		// 	userId,
 		// 	deviceId,
-		// 	logTime.toString(),
+		// 	logTime,
 		// ])
 	}
 

@@ -7,8 +7,7 @@ class DeviceController {
     static async blockDevice(req, res) {
         const { 
             logTime,
-            unlockTime,
-            userInfo,
+            userId,
             deviceId,
             deviceIP,
             interCode,
@@ -18,8 +17,7 @@ class DeviceController {
         try {
             await DeviceService.blockDevice({ 
                 logTime,
-                unlockTime,
-                userInfo,
+                userId,
                 deviceId,
                 deviceIP,
                 fingerprint,
@@ -28,7 +26,7 @@ class DeviceController {
 
             return res.status(200)
         } catch (err) {
-            return ErrorsUtils.catchError({ interCode: 900, req, res, err, username: userInfo?.username, fingerprint, queryTimeString: logTime })
+            return ErrorsUtils.catchError({ interCode: 900, req, res, err, fingerprint, queryTimeString: logTime })
         }
     }
 }

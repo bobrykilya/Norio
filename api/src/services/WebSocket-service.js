@@ -1,4 +1,4 @@
-import {Server} from 'socket.io'
+import { Server } from 'socket.io'
 
 
 
@@ -23,7 +23,7 @@ export const socketConnection = (HTTPServer) => {
             socket.join(userId.toString() + deviceId.toString())
             console.log(socket.rooms)
         })
-    
+        
         socket.on('disconnect', () => {
             // console.log('Socket disconnected')
         })

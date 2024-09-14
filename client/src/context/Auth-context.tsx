@@ -16,6 +16,7 @@ import {
 	IUserNameInfo,
 } from "../types/Auth-types"
 import io from "socket.io-client"
+import { useBlockError } from "../stores/Global-store"
 
 
 export const AuthContext = createContext({})
@@ -31,6 +32,7 @@ const AuthProvider = ({ children }) => {
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
 	const [socketSessId, setSocketSessId] = useState('')
+	const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
 	
 
 	const getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
@@ -159,7 +161,8 @@ const AuthProvider = ({ children }) => {
 				setIsUserLogged(true)
 
 			} catch (err) {
-				localStorage.removeItem('blockDevice')
+				// setBlockErrorMessage('')
+				// sessionStorage.removeItem('blockDevice')
 				setIsAppReady(true)
 				setIsUserLogged(false)
 				resetSignInVariables()

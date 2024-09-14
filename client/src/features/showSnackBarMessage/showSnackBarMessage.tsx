@@ -6,7 +6,8 @@ import { TbLockSquareRounded } from "react-icons/tb"
 import { FiCheckCircle } from "react-icons/fi"
 import { LuBadgeInfo } from "react-icons/lu"
 import saveLogInLocalStorage from './saveLogInLocalStorage'
-import { getTime } from "../../utils/getTime";
+import { getTime } from "../../utils/getTime"
+import blockDevice from "../blockDevice/blockDevice"
 
 
 export type SnackBarTypeOptions = 'e' | 'i' |'w' | 'b' | 's'
@@ -18,7 +19,7 @@ type IGetTypeDecoding = {
     toastDuration: number;
 }
 
-export type ISnack = {
+export type ISnackWithTime = {
 	type: SnackBarTypeOptions;
 	message: string;
 	snackTime: number;
@@ -30,14 +31,12 @@ export type ISnack = {
 		res: {
 			status: number;
 			title: string;
+			unlockTime?: number;
+			interCode?: number;
 		}
-		infinityBlock?: boolean;
-		unlockTime?: string;
-		deviceIP?: string;
-		interCode?: number;
 	}
 }
-export type ISnackWithoutTime = Omit<ISnack, 'snackTime'> & {
+export type ISnack = Omit<ISnackWithTime, 'snackTime'> & {
 	snackTime?: number;
 }
 const showAllSnacksDev = () => {
@@ -51,6 +50,7 @@ const showAllSnacksDev = () => {
 			duration: Infinity,
 		})
 	})
+	return
 }
 
 const getTypeDecoding = (type: SnackBarTypeOptions): IGetTypeDecoding => {
@@ -71,39 +71,39 @@ const messagePreprocessing = (message: string) => {
     }
 }
 
-export const showSnackBarMessage = (snack: ISnackWithoutTime) => {
-	// console.log(snack.message)
-	
+export const showSnackBarMessage = (snack: ISnack) => {
+	// console.log(snack)
+	// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
+
+	//* Refresh errs ban
+	if (snack?.type !== 'b' && snack?.detail?.action === 'refresh') return
+
 	//* Response-snack handling
 	if (!snack.type && snack.response) {
 		try {
-			if (snack.response) 
-				snack.response.json().then((snack: ISnack) => showSnackBarMessage(snack))
+			if (snack.response)
+				snack.response.json()
+					.then((snack: ISnack) => showSnackBarMessage(snack))
 		}catch {
 			// if (messagePreprocessing())
 			showSnackBarMessage({ type: 'w', message: snack.message || 'Непредвиденная ошибка', snackTime: snack.snackTime })
 		}
 		return
 	}
+
 	// console.log(snack)
-	
-	//* Refresh errs ban
-	if (snack?.detail?.action === 'refresh') return
-	
-	//* Missing elements adding (snackTime)
-	const snackWithTime: ISnack = {
+
+	//* Block handling
+	if (snack?.type === 'b') {
+		blockDevice({ logTime: snack.snackTime, interCode: snack.detail.res.interCode, errMessage: snack.message })
+		// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
+	}
+
+	//* SnackTime adding
+	const snackWithTime: ISnackWithTime = {
 		...structuredClone(snack),
 		snackTime: snack.snackTime || getTime()
 	}
-
-
-	//* Block handling
-	// if (snackWithTime.status === 900) { 
-	// 	blockDevice({ logTime: snackWithTime.snackTime, infinityBlock: snackWithTime.detail?.infinityBlock, unlockTimeDB: snackWithTime.detail?.unlockTime, interCode: snackWithTime.detail?.interCode })
-	// 	// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
-	// }
-
-	
 
 	const { snackType, title, icon, toastDuration } = getTypeDecoding(snackWithTime.type || 'e')
 	const newMessage = messagePreprocessing(snack.message)
@@ -119,10 +119,7 @@ export const showSnackBarMessage = (snack: ISnackWithoutTime) => {
 	})
 	// showAllSnacksDev()
 
-	// console.log(err)
 	if (localStorage.getItem('blockDevice')) return
-	// const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
-	// if (blockErrorMessage) return
 	
 	if (!['s'].includes(snackType)) 
 		saveLogInLocalStorage(snackWithTime)

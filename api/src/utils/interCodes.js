@@ -68,18 +68,18 @@ const getCodeDescription = (interCode) => {
             interCode,
             name: 'Hacking attempt',
             description: 'Попытка несанкционированного обновления токенов',
+            message: 'Попытка несанкционированного обновления токенов',
             notifForAdmin: true,
             notifForUser: false,
-            message: 'Попытка несанкционированного обновления токенов',
         }
         case 802 : return {
             interCode,
             name: 'Hacking attempt & block',
             description: 'Попытка несанкционированного обновления токенов с нового устройства. Блокировка нового девайса',
+            lockDuration: 0,
+            message: 'Попытка несанкционированного обновления токенов',
             notifForAdmin: true,
             notifForUser: false,
-            message: 'Попытка несанкционированного обновления токенов',
-            infinityBlock: true,
         }
         case 803 : return {
             interCode,
@@ -92,10 +92,10 @@ const getCodeDescription = (interCode) => {
             interCode,
             name: 'DeviceId changing & block',
             description: 'Попытка несанкционированной подмены id ранее зарегистрированного устройства. Блокировка девайса',
+            lockDuration: 0,
+            message: 'Попытка несанкционированной подмены id устройства',
             notifForAdmin: true,
             notifForUser: false,
-            message: 'Попытка несанкционированной подмены id устройства',
-            infinityBlock: true,
         }
         case 805 : return {
             interCode,
@@ -108,17 +108,18 @@ const getCodeDescription = (interCode) => {
             interCode,
             name: 'DeviceId in db with other browser & block',
             description: 'Попытка несанкционированной подмены id неизвестного устройства. Блокировка девайса',
+            lockDuration: 0,
             notifForAdmin: true,
             notifForUser: false,
-            infinityBlock: true,
         }
         case 807 : return {
             interCode,
             name: 'Many similar errors in a short period & temporary block',
             description: 'Большое количество однотипных ошибок за короткий срок. Временная блокировка девайса',
+            lockDuration: 5,
+            message: 'Было получено большое количество однотипных ошибок за короткий срок',
             notifForAdmin: false,
             notifForUser: false,
-            message: 'Большое количество однотипных ошибок за короткий срок',
         }
     }
 }

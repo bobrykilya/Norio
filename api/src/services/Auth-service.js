@@ -7,7 +7,7 @@ import UserRepository from "../_database/repositories/User-db.js"
 import AuthDeviceRepository from '../_database/repositories/AuthDevice-db.js'
 import _logAttentionRepository from '../_database/repositories/_logAttention-db.js'
 import _logAuthRepository from '../_database/repositories/_LogAuth-db.js'
-import getCodeDescription from '../utils/Inter_codes.js'
+import getCodeDescription from '../utils/interCodes.js'
 import DeviceService from './Device-service.js'
 import { sendToClient } from './WebSocket-service.js'
 import { getEndTime } from '../utils/getTime.js'
@@ -161,6 +161,14 @@ class AuthService {
 	static async refresh({ fingerprint, currentRefreshToken, queryTime, lsDeviceId }) {
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint })
+        // await deviceService.blockDevice({
+        //     interCode: 804,
+        //     userId: 9,
+        //     deviceId: 1,
+        //     logTime: queryTime,
+        //     deviceIP: null,
+        //     fingerprint
+        // })
 		
 		if (!currentRefreshToken) {
 			throw new Unauthorized()
@@ -185,19 +193,18 @@ class AuthService {
 		
 		if (Number(refreshSession.device_id) !== Number(deviceId)) {
 
-			let interCodeAttention = 801
+			const interCodeAttention = deviceId ? 801 : 802
 			if (!deviceId) {
 				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTime, deviceType: 'Unknown' })
-				interCodeAttention = 802
 				
 				await _logAttentionRepository.createLogAttention({ interCode: interCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTime })
 				await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
-				throw new BlockDevice(getCodeDescription(interCodeAttention))
+				throw new BlockDevice(getCodeDescription(interCodeAttention).message)
 			}
 
 			await _logAttentionRepository.createLogAttention({ interCode: interCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTime })
 			await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
-			throw new BlockDevice(getCodeDescription(interCodeAttention))
+			throw new BlockDevice(getCodeDescription(interCodeAttention).message)
 		}
 
 		await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
@@ -277,7 +284,7 @@ class AuthService {
 							userNameInfo: { 
 								lastName: last_name,
 								firstName: first_name,
-								username
+                                username: username,
 							}
 						}
 					})
@@ -286,7 +293,6 @@ class AuthService {
 	}
 	static async intervalTestFunc() {
 		await AuthService.sessionsAutoLogOut()
-
 	}
 }
 
