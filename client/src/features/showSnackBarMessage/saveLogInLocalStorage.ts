@@ -1,13 +1,9 @@
 import { getLastTime } from '../../utils/getTime'
 import { ISnackWithTime } from './showSnackBarMessage'
 import DeviceService from "../../services/Device-service"
-// import { useBlockError } from '../../stores/Global-store';
+import { localErrStorageTime, recentlyTime, sameErrsQuantity } from "../../../constants"
+// import { useBlockError } from '../../stores/Global-store'
 
-
-
-const recentlyTime = 20 //* Time of error counting in seconds
-const sameErrsQuantity = 2 //* Limit of possible error quantity recently
-const localErrStorageTime = 24 //* User error storage time in hours
 
 
 const filterErrsListByTime = (err: ISnackWithTime) => {

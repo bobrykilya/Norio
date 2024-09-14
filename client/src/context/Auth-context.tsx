@@ -19,6 +19,7 @@ import io from "socket.io-client"
 import { useBlockError } from "../stores/Global-store"
 
 
+
 export const AuthContext = createContext({})
 export const socket = io(import.meta.env.VITE_API_URL)
 

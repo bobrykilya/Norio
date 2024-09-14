@@ -2,6 +2,7 @@ export type IBlockDevice = {
     logTime: number;
     interCode: number;
     errMessage: string;
+    unlockTime: number;
     // setBlockErrorMessage: (blockErrorMessage: string) => void,
 }
 

@@ -1,6 +1,14 @@
 import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
-import { $apiAuth, $apiSecureResource, $apiIpInfo } from "../http/http"
-import { ILoginServiceResp, IHandleCheckUser, IHandleSignIn, ISignUpServiceReq, ICheckUserServiceResp, IHandleLogOut } from '../types/Auth-types'
+import { $apiAuth, getApiInfo } from "../http/http"
+import {
+    ICheckUserServiceResp,
+    IHandleCheckUser,
+    IHandleLogOut,
+    IHandleSignIn,
+    ILoginServiceResp,
+    ISignUpServiceReq,
+} from '../types/Auth-types'
+import { PERMITTED_COUNTRIES } from "../../constants"
 
 
 
@@ -8,11 +16,6 @@ type IProcessedRequestLoginService<T> = T & {
     deviceIP?: string;
     lsDeviceId?: number;
     deviceType?: string;
-}
-
-type IApiIpInfoResponse = {
-    country_code: string;
-    ip: string;
 }
 
 const getDeviceType = () => {
@@ -26,24 +29,20 @@ const getDeviceType = () => {
 }
 
 const checkCountryCode = async () => {
-        const res = await $apiIpInfo.get("").json<IApiIpInfoResponse>()
-        // console.log(res)
-        if (!res) {
-            showSnackBarMessage({type: 'w', message: 'Ошибка обращения к сервису apiIpInfo (checkCountryCode function)'})
-            console.log('Ошибка обращения к сервису apiIpInfo')
-            return undefined
-        }
+    const res = await getApiInfo()
+    // console.log(res)
 
-        if (!['BY', 'PL'].includes(res.country_code)) {
-            showSnackBarMessage({ type: 'e', message: 'Приложение работает только на территории РБ (И временно Польши)' })
-            throw new Error('СheckCountryCode error')
-        }
-        return res.ip
+    if (!res) return undefined
+
+    if (!PERMITTED_COUNTRIES.includes(res.country_code)) {
+        showSnackBarMessage({ type: 'e', message: 'Приложение работает только на территории РБ (И временно Польши)' })
+        throw new Error('СheckCountryCode error')
+    }
+    return res.ip
 }
 
 const preRequest = async <T>(data: IProcessedRequestLoginService<T>) => {
-	const deviceIP = await checkCountryCode()
-    data.deviceIP = deviceIP
+    data.deviceIP = await checkCountryCode()
     
     const lsDeviceId = Number(localStorage.getItem('deviceId'))
 

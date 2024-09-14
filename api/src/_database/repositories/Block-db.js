@@ -20,8 +20,8 @@ class BlockRepository {
 		return response.rows[0]
 	}
 
-	static async getBlockedDeviceInfo({ deviceId=false, fingerprintHash, deviceIP=false }) {
-		const response = await queryDB("SELECT unlock_time, inter_code FROM blocks WHERE is_active=true AND device_id=$1 OR finger_print=$2 OR ip=$3",
+	static async getBlockedDeviceInfo({ deviceId=0, fingerprintHash, deviceIP='' }) {
+		const response = await queryDB("SELECT block_id, unlock_time, inter_code FROM blocks WHERE is_active=true AND (device_id=$1 OR finger_print=$2 OR ip=$3)",
 			[
 				deviceId, 
 				fingerprintHash, 
@@ -30,6 +30,10 @@ class BlockRepository {
 
 		return response.rows[0]
 	}
+
+    static async setIsActiveStatusByBlockId({ blockId, status }) {
+        await queryDB("UPDATE blocks SET is_active=$1 WHERE block_id=$2", [status, blockId])
+    }
 
 	static async setUnlockTime({ deviceId, unlockTime }) {
 		await queryDB("UPDATE blocks SET unlock_time=$1 WHERE device_id=$2", [unlockTime, deviceId])

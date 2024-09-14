@@ -1,3 +1,7 @@
+import { DEFAULT_BLOCK_DURATION } from "../../constants.js"
+
+
+
 const getCodeDescription = (interCode) => {
 
     switch (interCode) {
@@ -76,7 +80,7 @@ const getCodeDescription = (interCode) => {
             interCode,
             name: 'Hacking attempt & block',
             description: 'Попытка несанкционированного обновления токенов с нового устройства. Блокировка нового девайса',
-            lockDuration: 0,
+            lockDuration: 0, //* Infinity lock
             message: 'Попытка несанкционированного обновления токенов',
             notifForAdmin: true,
             notifForUser: false,
@@ -92,7 +96,7 @@ const getCodeDescription = (interCode) => {
             interCode,
             name: 'DeviceId changing & block',
             description: 'Попытка несанкционированной подмены id ранее зарегистрированного устройства. Блокировка девайса',
-            lockDuration: 0,
+            lockDuration: 0, //* Infinity lock
             message: 'Попытка несанкционированной подмены id устройства',
             notifForAdmin: true,
             notifForUser: false,
@@ -108,7 +112,7 @@ const getCodeDescription = (interCode) => {
             interCode,
             name: 'DeviceId in db with other browser & block',
             description: 'Попытка несанкционированной подмены id неизвестного устройства. Блокировка девайса',
-            lockDuration: 0,
+            lockDuration: 0, //* Infinity lock
             notifForAdmin: true,
             notifForUser: false,
         }
@@ -116,7 +120,7 @@ const getCodeDescription = (interCode) => {
             interCode,
             name: 'Many similar errors in a short period & temporary block',
             description: 'Большое количество однотипных ошибок за короткий срок. Временная блокировка девайса',
-            lockDuration: 5,
+            lockDuration: DEFAULT_BLOCK_DURATION,
             message: 'Было получено большое количество однотипных ошибок за короткий срок',
             notifForAdmin: false,
             notifForUser: false,

@@ -22,7 +22,7 @@ CREATE TABLE auth_devices(
     os VARCHAR(15) NOT NULL,
     reg_time BIGINT NOT NULL,
     finger_print VARCHAR(32) UNIQUE NOT NULL,
-    ip_reg VARCHAR(13) NOT NULL
+    ip_reg VARCHAR(13)
 )
 
 CREATE TABLE blocks(

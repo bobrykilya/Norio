@@ -96,10 +96,11 @@ class ErrorUtils {
 					error.message = 'Устройство заблокировано. Обратитесь к администратору'
 				}
 
-                error.detail = {
-                    ...error.detail,
+                error.detail.res = {
+                    ...error.detail.res,
                     interCode,
                     unlockTime,
+                    description,
                 }
 			}
 

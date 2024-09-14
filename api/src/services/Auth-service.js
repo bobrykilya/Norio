@@ -18,7 +18,7 @@ class AuthService {
 
 	static async signIn({ username, password, fingerprint, fastSession, queryTime, deviceType, lsDeviceId, deviceIP }) {
 		
-		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP })
+		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP, queryTime })
 
 		const userData = await UserRepository.getUserData(username)
 		
@@ -80,7 +80,7 @@ class AuthService {
 
 	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, deviceType, lsDeviceId, deviceIP }) {
 
-		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP })
+		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP, queryTime })
 
 		//TODO: Change role, is_store
 		const role = 1
@@ -160,7 +160,7 @@ class AuthService {
 
 	static async refresh({ fingerprint, currentRefreshToken, queryTime, lsDeviceId }) {
 
-		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint })
+		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, queryTime })
         // await deviceService.blockDevice({
         //     interCode: 804,
         //     userId: 9,

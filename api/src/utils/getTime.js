@@ -13,5 +13,5 @@ export const getEndTime = ({ startTime, duration, durationType=null }) => {
 
 export const getTimeInShortString = (time) => {
     const date = new Date(time)
-    return date.getHours() + ':' + date.getMinutes()
+    return date.toLocaleString().split(',')[1]
 }

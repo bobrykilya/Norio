@@ -8,6 +8,8 @@ import { LuBadgeInfo } from "react-icons/lu"
 import saveLogInLocalStorage from './saveLogInLocalStorage'
 import { getTime } from "../../utils/getTime"
 import blockDevice from "../blockDevice/blockDevice"
+import timeout from "../../utils/timeout"
+
 
 
 export type SnackBarTypeOptions = 'e' | 'i' |'w' | 'b' | 's'
@@ -33,6 +35,7 @@ export type ISnackWithTime = {
 			title: string;
 			unlockTime?: number;
 			interCode?: number;
+			description?: string;
 		}
 	}
 }
@@ -71,12 +74,14 @@ const messagePreprocessing = (message: string) => {
     }
 }
 
-export const showSnackBarMessage = (snack: ISnack) => {
+
+export const showSnackBarMessage = async (snack: ISnack) => {
 	// console.log(snack)
 	// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
 
 	//* Refresh errs ban
 	if (snack?.type !== 'b' && snack?.detail?.action === 'refresh') return
+	// console.log(snack)
 
 	//* Response-snack handling
 	if (!snack.type && snack.response) {
@@ -91,11 +96,9 @@ export const showSnackBarMessage = (snack: ISnack) => {
 		return
 	}
 
-	// console.log(snack)
-
 	//* Block handling
 	if (snack?.type === 'b') {
-		blockDevice({ logTime: snack.snackTime, interCode: snack.detail.res.interCode, errMessage: snack.message })
+		blockDevice({ logTime: snack.snackTime, interCode: snack.detail.res.interCode, errMessage: snack.message, unlockTime: snack.detail.res.unlockTime })
 		// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
 	}
 
@@ -111,15 +114,17 @@ export const showSnackBarMessage = (snack: ISnack) => {
 		snackWithTime.message = newMessage
 	}
 
-    toast.custom((toastElem) => (
+	if (snack?.type === 'b') await timeout(100)
+
+	toast.custom((toastElem) => (
 		<SnackBar title={title} icon={icon} message={snackWithTime.message || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackType} />
-    ), {
+	), {
 		duration: snackWithTime.duration || toastDuration,
 		// duration: Infinity,
 	})
 	// showAllSnacksDev()
 
-	if (localStorage.getItem('blockDevice')) return
+	// if (sessionStorage.getItem('blockDevice')) return
 	
 	if (!['s'].includes(snackType)) 
 		saveLogInLocalStorage(snackWithTime)

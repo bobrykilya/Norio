@@ -1,5 +1,8 @@
 import ky from "ky"
 import inMemoryJWTService from '../services/inMemoryJWT-service.js'
+import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
+import { CHECK_IP_AND_COUNTRY } from "../../constants"
+
 
 
 const $apiAuth = ky.extend({
@@ -26,6 +29,41 @@ const $apiIpInfo = ky.extend({
 	prefixUrl: `https://ipapi.co/json`,
 })
 
+const $apiIpInfoReserve = ky.extend({
+	prefixUrl: `http://ip-api.com/json`,
+})
 
-export { $apiAuth, $apiSecureResource, $apiIpInfo }
+
+type IApiIpInfoResponse = {
+	ip: string;
+	country_code: string;
+}
+type IApiIpInfoReserveResponse = {
+	query: string;
+	countryCode: string;
+}
+
+const getApiInfo = async () => {
+	try {
+		if (!CHECK_IP_AND_COUNTRY) return undefined
+
+		return await $apiIpInfo.get("").json<IApiIpInfoResponse>()
+	} catch {
+		console.error('Ошибка обращения к сервису ipapi.co')
+		try {
+			const res = await $apiIpInfoReserve.get("").json<IApiIpInfoReserveResponse>()
+			return {
+				country_code: res.countryCode,
+				ip: res.query,
+			}
+		} catch {
+			showSnackBarMessage({ type: 'w', message: 'Ошибка обращения к сервисам ipapi.co, ip-api.com' })
+			console.error('Ошибка обращения к сервисам ipapi.co, ip-api.com')
+			return undefined
+		}
+	}
+}
+
+
+export { $apiAuth, $apiSecureResource, $apiIpInfo, $apiIpInfoReserve, getApiInfo }
 

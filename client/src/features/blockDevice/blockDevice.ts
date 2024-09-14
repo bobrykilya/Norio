@@ -1,21 +1,18 @@
 import inMemoryJWT from '../../services/inMemoryJWT-service.js'
 import { IBlockDevice } from '../../types/Device-types.js'
+import { setUnlockTimer } from "./unlockDevice"
 
 
-const blockDevice = ({ logTime, interCode, errMessage }: IBlockDevice) => {
+const blockDevice = ({ logTime, interCode, errMessage, unlockTime }: IBlockDevice) => {
     // console.log({ logTime, interCode, errMessage })
 
     inMemoryJWT.deleteToken()
-    if (errMessage){
-        // setTimeout(() => {
-        //     // setBlockErrorMessage(errMessage)
-        //     // sessionStorage.setItem('blockDevice', errMessage)
-        //     // setBlockErrorMessage(errMessage)
-        //     showSnackBarMessage({ type: 'b', message: errMessage })
-        // }, 300)
-        return
+    // sessionStorage.setItem('blockDevice', errMessage)
+    // setBlockErrorMessage(errMessage)
+    
+    if (unlockTime !== 0) {
+        setUnlockTimer(unlockTime)
     }
-
 }
 
 export default blockDevice

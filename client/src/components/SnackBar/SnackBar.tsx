@@ -1,9 +1,8 @@
-import React from 'react'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import toast, { useToasterStore } from 'react-hot-toast'
 import { IoCloseCircleOutline } from 'react-icons/io5'
 import { SnackBarTypeOptions } from '../../features/showSnackBarMessage/showSnackBarMessage';
-
+import { TOAST_LIMIT } from "../../../constants"
 
 
 type ISnack = {
@@ -21,7 +20,6 @@ type SnackBarProps = {
 const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
     const { toasts } = useToasterStore()
-    const TOAST_LIMIT = 3 //* Max toasts quantity limit
     // console.log(snack)
 
     useEffect(() => {

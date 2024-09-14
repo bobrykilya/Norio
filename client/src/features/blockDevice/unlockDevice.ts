@@ -1,11 +1,11 @@
-import { useRef } from 'react'
-
-
-
 // const refSetTimeout = useRef(null)
+import { getTime } from "../../utils/getTime"
 
-const setUnlockTimer = (logOutTime: string) => {
-    const timeOutTime = new Date(logOutTime).getTime() - new Date().getTime()
+
+
+const setUnlockTimer = (logOutTime: number) => {
+    const timeOutTime = logOutTime - getTime() + 1000 //* Until logout time in milliseconds
+    // console.log(timeOutTime)
     if (!timeOutTime) return
 
     setTimeout(() => {
@@ -14,7 +14,8 @@ const setUnlockTimer = (logOutTime: string) => {
 }
 
 const unlockDevice = () => {
-    localStorage.removeItem('blockDevice')
+    location.reload()
+    // sessionStorage.removeItem('blockDevice')
 }
 
 export { setUnlockTimer }

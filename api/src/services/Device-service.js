@@ -72,17 +72,27 @@ class DeviceService {
         return deviceId
     }
 
-    static async checkDeviceForBlock({ deviceId, fingerprint, deviceIP }) {
+    static async checkDeviceForBlock({ deviceId, fingerprint, deviceIP, queryTime }) {
         // console.log({ deviceId, fingerprint, deviceIP })
 
         const blockedDeviceInfo = await BlockRepository.getBlockedDeviceInfo({ deviceId, fingerprintHash: fingerprint.hash, deviceIP })
         // console.log(blockedDeviceInfo)
+        if (!blockedDeviceInfo) return
 
-        if (blockedDeviceInfo?.inter_code) {
+        const { block_id, unlock_time, inter_code } = blockedDeviceInfo
+
+        //* Unblock handling
+        if (Number(unlock_time) !== 0 && Number(unlock_time) < queryTime) {
+            await BlockRepository.setIsActiveStatusByBlockId({ blockId: block_id, status: false })
+            return
+        }
+
+        //* Block notify for Client
+        if (inter_code) {
             throw new BlockDevice({
-                interCode: blockedDeviceInfo.inter_code,
-                description: getCodeDescription(blockedDeviceInfo.inter_code).message,
-                unlockTime: Number(blockedDeviceInfo?.unlock_time) || 0,
+                interCode: inter_code,
+                description: getCodeDescription(inter_code).message,
+                unlockTime: Number(unlock_time),
             })
         }
     }
