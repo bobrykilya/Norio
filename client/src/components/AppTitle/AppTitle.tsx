@@ -1,12 +1,12 @@
 import React from 'react'
-import ToolTip from './../ToolTip/ToolTip'
+import { APP_TITLE } from "../../../constants"
 
 
 
 const AppTitle = () => {
     return ( 
         <div className='app_title-cont'>
-            <p className='app_title_name'>NORIO</p>
+            <p className='app_title_name'>{APP_TITLE}</p>
         </div>
     )
 }

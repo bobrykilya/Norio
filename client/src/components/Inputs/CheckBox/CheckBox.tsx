@@ -2,7 +2,12 @@ import React from "react"
 
 
 
-const CheckBox = ({checked, onChange}) => {
+type CheckBoxProps = {
+    checked: boolean;
+    onChange: () => void;
+    disabled: boolean;
+}
+const CheckBox = ({ checked, onChange, disabled }: CheckBoxProps) => {
 
     const handleChangeChecked = () => {
         onChange()
@@ -17,6 +22,7 @@ const CheckBox = ({checked, onChange}) => {
                 // tabIndex={-1}
                 checked={checked} 
                 onChange={handleChangeChecked}
+                disabled={disabled}
             />
             <label className="tgl-btn" htmlFor="cb2-7"></label>
         </div>  

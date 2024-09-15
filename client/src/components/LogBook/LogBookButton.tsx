@@ -3,8 +3,9 @@ import { BiError } from "react-icons/bi"
 import LogBookList from './LogBookList'
 import ToolTip from '../ToolTip/ToolTip'
 import toast, { useToasterStore } from 'react-hot-toast'
-import { showSnackBarMessage } from '../../features/showSnackBarMessage/showSnackBarMessage'
-import { useBlockError } from "../../stores/Global-store"
+import { useBlockError } from "../../stores/Device-store"
+import { showSnack } from "../../features/showSnackMessage/showSnackMessage"
+
 
 
 const LogBookButton = () => {
@@ -27,7 +28,7 @@ const LogBookButton = () => {
     const closeLogList = () => {
         // console.log(blockErrorMessage)
         if (blockErrorMessage) {
-            showSnackBarMessage({ type: 'b', message: blockErrorMessage })
+            showSnack({ type: 'b', message: blockErrorMessage })
         }
         setIsLogListOpened(false)
     }

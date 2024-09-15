@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput';
 import { AuthContext } from "../../../../../context/Auth-context"
@@ -8,7 +8,7 @@ import CheckBox from '../../../../Inputs/CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { BiLogInCircle } from "react-icons/bi"
 import { FaUser } from "react-icons/fa"
-import ToolTip from '../../../../ToolTip/ToolTip' 
+import ToolTip from '../../../../ToolTip/ToolTip'
 import { IHandleSignIn } from '../../../../../types/Auth-types';
 
 
@@ -16,7 +16,7 @@ import { IHandleSignIn } from '../../../../../types/Auth-types';
 interface SignInFormProps {
     isFormBlur: boolean;
 }
-const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
+const SignInForm = ({ isFormBlur }: SignInFormProps) => {
     // console.log('SignIn')
     const { handleSignIn } = useContext(AuthContext)
     const [notSaveUser, setNotSaveUser] = useState(false)
@@ -94,13 +94,14 @@ const SignInForm = ({ isFormBlur=false }: SignInFormProps) => {
                     disabled={isFormBlur}
                 />
                 <label id='checkbox-cont' className='cont'>
-                    <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser}/>
+                    <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser} disabled={isFormBlur}/>
                     <span>Быстрая сессия</span>
                     <ToolTip text='Длительность сессии - 10мин. Пароль не сохраняется автоматически' />
                 </label>
             </div>
             <SubmitBut
                 icon={<BiLogInCircle className='fa-icon'/>}
+                blur={isFormBlur}
                 notSaveUser={notSaveUser}
                 onClick={handleSubmit(onSubmitNotSave)}
                 isLoading={isLoading}

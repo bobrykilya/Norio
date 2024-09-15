@@ -13,7 +13,12 @@ import { LuCheckCircle } from "react-icons/lu"
 import { FaUser } from "react-icons/fa"
 
 
-const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
+
+type SignUpFormProps = {
+    isFormBlur: boolean;
+    isSubmitButBlur: boolean;
+}
+const SignUpForm = ({ isFormBlur, isSubmitButBlur }: SignUpFormProps) => {
     // console.log('SignUp')
     // console.log(isFormBlur)
     
@@ -99,7 +104,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }) => {
             </div>
             <SubmitBut 
                 icon={<FaArrowRightLong className='fa-icon'/>}
-                disabled={isSubmitButBlur}
+                disabled={isFormBlur || isSubmitButBlur}
                 isLoading={isLoading}
                 title='Продолжить регистрацию'
             />

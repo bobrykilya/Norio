@@ -1,7 +1,7 @@
 import ky from "ky"
 import inMemoryJWTService from '../services/inMemoryJWT-service.js'
-import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
 import { CHECK_IP_AND_COUNTRY } from "../../constants"
+import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 
 
 
@@ -57,7 +57,7 @@ const getApiInfo = async () => {
 				ip: res.query,
 			}
 		} catch {
-			showSnackBarMessage({ type: 'w', message: 'Ошибка обращения к сервисам ipapi.co, ip-api.com' })
+			showSnackMessage({ type: 'w', message: 'Ошибка обращения к сервисам ipapi.co, ip-api.com' })
 			console.error('Ошибка обращения к сервисам ipapi.co, ip-api.com')
 			return undefined
 		}

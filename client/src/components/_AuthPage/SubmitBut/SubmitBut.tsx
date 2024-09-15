@@ -1,6 +1,7 @@
 import React from 'react'
 import ToolTip from '../../ToolTip/ToolTip'
 import CircularProgress from '@mui/joy/CircularProgress'
+
 // import ConfirmButBgImg from '../../../assets/confirm_but_bg.jpg'
 
 
@@ -10,14 +11,15 @@ interface SubmitButProps {
     notSaveUser?: boolean;
     onClick?: () => void;
     disabled?: boolean;
+    blur?: boolean;
     isLoading: boolean;
     title: string;
 }
-const SubmitBut = ({icon, notSaveUser=false, onClick, disabled=false, isLoading, title}: SubmitButProps) => {
+const SubmitBut = ({ icon, notSaveUser=false, onClick, disabled=false, blur=false, isLoading, title }: SubmitButProps) => {
 
     return (
         <button
-            className='submit-but cont'
+            className={`submit-but cont ${blur && 'blur'}`}
             type={notSaveUser ? 'button' : 'submit'}
             tabIndex={-1}
             disabled={disabled ? true : isLoading}

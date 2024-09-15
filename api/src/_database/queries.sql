@@ -29,7 +29,7 @@ CREATE TABLE blocks(
     block_id SMALLSERIAL PRIMARY KEY,
     inter_code SMALLINT NOT NULL,
     user_id SMALLINT REFERENCES users(user_id) ON DELETE RESTRICT,
-    device_id SMALLINT REFERENCES auth_devices(device_id) ON DELETE RESTRICT,
+    device_id SMALLINT,
     lock_time BIGINT NOT NULL,
     unlock_time BIGINT,
     ip VARCHAR(13),

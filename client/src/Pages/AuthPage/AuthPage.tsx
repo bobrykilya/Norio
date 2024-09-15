@@ -8,26 +8,33 @@ import LogBookButton from '../../components/LogBook/LogBookButton'
 import { AuthContext } from '../../context/Auth-context'
 import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
-
+import { useBlockError } from "../../stores/Device-store"
+import { APP_TITLE } from "../../../constants"
 
 
 
 const AuthPage = () => {
-    const { coverPanelState, blockAuthPage } = useContext(AuthContext)
+    const { coverPanelState } = useContext(AuthContext)
+    const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
     // console.log(coverPanelState)
 
-    return ( 
+    return (
         <>
             <AppTitle />
             <LogBookButton />
+            <div className={`coverAppTitle cont ${blockErrorMessage ? 'active' : 'inactive'}`}>
+                {APP_TITLE}
+            </div>
             <AuthPageAnim>
-                <div id='auth_panel-cont' className={`cont ${blockAuthPage && 'block'}`}>
-                    <div id='signs-cont' className='cont'>
-                        <SignInCont act_form={ coverPanelState }/>
-                        <SignUpCont act_form={ coverPanelState } />
-                        {coverPanelState !== 'sign_in' && <SignUpInfoCont act_form={ coverPanelState } />}
+                <div id="auth_panel-cont" className={`cont ${blockErrorMessage && 'block'}`}>
+                    <div id="signs-cont" className="cont">
+                        <SignInCont act_form={coverPanelState} blur_form={!!blockErrorMessage} />
+                        <SignUpCont act_form={coverPanelState} blur_form={!!blockErrorMessage} />
+                        {coverPanelState !== 'sign_in' &&
+                            <SignUpInfoCont act_form={coverPanelState} blur_form={!!blockErrorMessage} />
+                        }
                     </div>
-                    <CoverPanel />
+                    <CoverPanel disabled={!!blockErrorMessage} />
                 </div>
             </AuthPageAnim>
         </>

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import toast, { useToasterStore } from 'react-hot-toast'
 import { IoCloseCircleOutline } from 'react-icons/io5'
-import { SnackBarTypeOptions } from '../../features/showSnackBarMessage/showSnackBarMessage';
+import { SnackBarTypeOptions } from '../../features/showSnackMessage/showSnackMessage';
 import { TOAST_LIMIT } from "../../../constants"
+
 
 
 type ISnack = {

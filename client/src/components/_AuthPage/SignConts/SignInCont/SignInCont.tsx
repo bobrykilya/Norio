@@ -4,11 +4,12 @@ import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
 import NameTag from '../../NameTag/NameTag'
 
 
+
 interface SignInContProps {
     act_form: string;
+    blur_form: boolean;
 }
-
-const SignInCont = ({ act_form }: SignInContProps) => {
+const SignInCont = ({ act_form, blur_form }: SignInContProps) => {
 
     return ( 
         <section 
@@ -18,8 +19,8 @@ const SignInCont = ({ act_form }: SignInContProps) => {
             <div className='enter_text-cont cont'>
                 <h1>Авторизация</h1>
             </div>
-            <ButtonsCont />
-            <SignInForm isFormBlur={act_form !== 'sign_in'} />
+            <ButtonsCont disabled={blur_form} />
+            <SignInForm isFormBlur={blur_form || act_form !== 'sign_in'} />
             <NameTag />
         </section>
      )

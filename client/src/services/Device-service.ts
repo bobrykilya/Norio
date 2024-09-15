@@ -1,6 +1,6 @@
 import { $apiAuth, getApiInfo } from '../http/http'
 import { IBlockDeviceService } from '../types/Device-types'
-import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
+import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 
 
 
@@ -22,9 +22,9 @@ class DeviceService {
 
             // return res
         } catch (err) {
-            showSnackBarMessage(err)
+            showSnackMessage(err)
             if (err.response.status !== 900) {
-                showSnackBarMessage({type: 'w', message: 'Device-service error'})
+                showSnackMessage({type: 'w', message: 'Device-service error'})
                 throw new Error(`Device-service error: ${err}`)
             }
         }

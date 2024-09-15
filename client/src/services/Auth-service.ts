@@ -1,4 +1,4 @@
-import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
+import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import { $apiAuth, getApiInfo } from "../http/http"
 import {
     ICheckUserServiceResp,
@@ -35,7 +35,7 @@ const checkCountryCode = async () => {
     if (!res) return undefined
 
     if (!PERMITTED_COUNTRIES.includes(res.country_code)) {
-        showSnackBarMessage({ type: 'e', message: 'Приложение работает только на территории РБ (И временно Польши)' })
+        showSnackMessage({ type: 'e', message: 'Приложение работает только на территории РБ (И временно Польши)' })
         throw new Error('СheckCountryCode error')
     }
     return res.ip
@@ -60,22 +60,18 @@ class AuthService {
         // console.log(data)
         try {
             const newData = await preRequest(data)
-            const res = await $apiAuth.post("sign-in", { json: newData }).json<ILoginServiceResp>()
-
-            return res
+            return await $apiAuth.post("sign-in", { json: newData }).json<ILoginServiceResp>()
         } catch (err) {
-            showSnackBarMessage(err)
+            showSnackMessage(err)
             throw new Error('SignIn error')
         }
     }
 
     static async checkUser(data: IHandleCheckUser) {
         try {
-            const res = await $apiAuth.post("check-user", { json: data }).json<ICheckUserServiceResp>()
-
-            return res
+            return await $apiAuth.post("check-user", { json: data }).json<ICheckUserServiceResp>()
         } catch (err) {
-            showSnackBarMessage(err)
+            showSnackMessage(err)
             throw new Error('CheckUser error')
         }
     }
@@ -83,12 +79,10 @@ class AuthService {
     static async signUp(data: ISignUpServiceReq) {
         try {
             const newData = await preRequest(data)
-            
-            const res = await $apiAuth.post("sign-up", { json: newData }).json<ILoginServiceResp>()
-            
-            return res
+
+            return await $apiAuth.post("sign-up", { json: newData }).json<ILoginServiceResp>()
         } catch (err) {
-            showSnackBarMessage(err)
+            showSnackMessage(err)
             throw new Error('SignUp error')
         }
     }
@@ -99,29 +93,25 @@ class AuthService {
 
         } catch (err) {
             console.log(err)
-            showSnackBarMessage(err)
+            showSnackMessage(err)
         }
     }
 
     static async refresh(data: { lsDeviceId?: number } = {}) {
         try {
-            const res = await $apiAuth.post("refresh", { json: data })?.json<ILoginServiceResp>()
-
-            return res
+            return await $apiAuth.post("refresh", { json: data })?.json<ILoginServiceResp>()
         } catch (err) {
             // console.log(err)
-            showSnackBarMessage(err)
+            showSnackMessage(err)
             throw new Error('Token refresh error')
         }
     }
 
     // static fetchProtected() {
     //     try {
-    //         const res = $apiSecureResource.get("protected").json()
-
-    //         return res
+    //         return $apiSecureResource.get("protected").json()
     //     } catch (err) {
-    //         showSnackBarMessage(err)
+    //         showSnackMessage(err)
     //         throw new Error('FetchProtected error')
     //     }
         

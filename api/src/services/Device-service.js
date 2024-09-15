@@ -88,13 +88,11 @@ class DeviceService {
         }
 
         //* Block notify for Client
-        if (inter_code) {
-            throw new BlockDevice({
-                interCode: inter_code,
-                description: getCodeDescription(inter_code).message,
-                unlockTime: Number(unlock_time),
-            })
-        }
+        throw new BlockDevice({
+            interCode: inter_code,
+            description: getCodeDescription(inter_code).message,
+            unlockTime: Number(unlock_time),
+        })
     }
 
     static async blockDevice({ interCode, userId, deviceId, logTime, deviceIP, fingerprint }) {

@@ -3,7 +3,7 @@ import CircularProgress from '@mui/joy/CircularProgress'
 import inMemoryJWT from '../services/inMemoryJWT-service'
 import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "../services/Auth-service"
-import { showSnackBarMessage } from "../features/showSnackBarMessage/showSnackBarMessage"
+import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import {
 	CoverPanelOptions,
 	IAvatarListElement,
@@ -16,7 +16,6 @@ import {
 	IUserNameInfo,
 } from "../types/Auth-types"
 import io from "socket.io-client"
-import { useBlockError } from "../stores/Global-store"
 
 
 
@@ -33,7 +32,6 @@ const AuthProvider = ({ children }) => {
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
 	const [socketSessId, setSocketSessId] = useState('')
-	const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
 	
 
 	const getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
@@ -41,7 +39,7 @@ const AuthProvider = ({ children }) => {
 	}
 	const autoLogOut = (userNameInfo: IUserNameInfo) => {
 		// console.log('Auto logOut')
-		showSnackBarMessage({ type: 'w', message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`})
+		showSnackMessage({ type: 'w', message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`})
 		handleLogOut({ interCode: 204 })
 	}
 	
@@ -69,7 +67,7 @@ const AuthProvider = ({ children }) => {
 			const { username, last_name, first_name }: IUserInfo = JSON.parse(userInfo || '{}') //* Old user info
 
 			if (newUsername !== username) {
-				showSnackBarMessage({ 
+				showSnackMessage({
 					type: 'i',
 					message: `Был выполнен фоновый выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo({ lastName: last_name, firstName: first_name, username })}</span>`
 				})
@@ -162,8 +160,6 @@ const AuthProvider = ({ children }) => {
 				setIsUserLogged(true)
 
 			} catch (err) {
-				// setBlockErrorMessage('')
-				// sessionStorage.removeItem('blockDevice')
 				setIsAppReady(true)
 				setIsUserLogged(false)
 				resetSignInVariables()
@@ -189,23 +185,7 @@ const AuthProvider = ({ children }) => {
 		}
 	}, [])
 
-	//* Check for block on Front
-	useEffect(() => {
-		const checkForBlock = () => {
-			try {
-				//TODO: Delete localStorage for block
-				if (localStorage.getItem('blockDevice')) {
-					setTimeout(() => handleLogOut(), 300)
-				}
-			} catch {
-				setIsAppReady(true)
-				setIsUserLogged(false)
-				resetSignInVariables()
-			}
-		}
-		checkForBlock()
-	}, [])
-
+	//* Socket events handling
 	useEffect(() => {
 		const socketEvents = () => {
 			socket.on('connect', () => {

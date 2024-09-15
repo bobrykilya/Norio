@@ -1,4 +1,3 @@
-// const refSetTimeout = useRef(null)
 import { getTime } from "../../utils/getTime"
 
 
@@ -14,8 +13,8 @@ const setUnlockTimer = (logOutTime: number) => {
 }
 
 const unlockDevice = () => {
+    localStorage.removeItem('blockDevice')
     location.reload()
-    // sessionStorage.removeItem('blockDevice')
 }
 
 export { setUnlockTimer }

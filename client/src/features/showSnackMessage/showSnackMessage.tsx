@@ -9,6 +9,7 @@ import saveLogInLocalStorage from './saveLogInLocalStorage'
 import { getTime } from "../../utils/getTime"
 import blockDevice from "../blockDevice/blockDevice"
 import timeout from "../../utils/timeout"
+import { useBlockError } from "../../stores/Device-store"
 
 
 
@@ -21,10 +22,10 @@ type IGetTypeDecoding = {
     toastDuration: number;
 }
 
-export type ISnackWithTime = {
+export type ISnack = {
 	type: SnackBarTypeOptions;
 	message: string;
-	snackTime: number;
+	snackTime?: number;
 	duration?: number;
 	response?: Response;
 	detail?: {
@@ -39,9 +40,7 @@ export type ISnackWithTime = {
 		}
 	}
 }
-export type ISnack = Omit<ISnackWithTime, 'snackTime'> & {
-	snackTime?: number;
-}
+
 const showAllSnacksDev = () => {
 	
 	const ALL_SNACKS = [getTypeDecoding('e'), getTypeDecoding('i'), getTypeDecoding('w'), getTypeDecoding('b'), getTypeDecoding('s')]
@@ -51,6 +50,7 @@ const showAllSnacksDev = () => {
 			<SnackBar title={snack.title} icon={snack.icon} message={'Тест уведомления. У тебя всё будет хорошо, красавчик'} toastElem={toastElem} type={snack.snackType} />
 		), {
 			duration: Infinity,
+			className: snack.snackType,
 		})
 	})
 	return
@@ -74,10 +74,28 @@ const messagePreprocessing = (message: string) => {
     }
 }
 
+export const showSnack = async (snack: ISnack) => {
+	const { snackType, title, icon, toastDuration } = getTypeDecoding(snack.type || 'e')
+	const newMessage = messagePreprocessing(snack.message)
+	if (newMessage) {
+		snack.message = newMessage
+	}
 
-export const showSnackBarMessage = async (snack: ISnack) => {
+	if (snack?.type === 'b') await timeout(100)
+	toast.custom((toastElem) => (
+		<SnackBar title={title} icon={icon} message={snack.message || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackType} />
+	), {
+		duration: snack.duration || toastDuration,
+		className: snackType,
+		// duration: Infinity,
+	})
+	// showAllSnacksDev()
+}
+
+export const showSnackMessage = (snack: ISnack) => {
 	// console.log(snack)
-	// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
+	
+	if (useBlockError.getState().blockErrorMessage) return
 
 	//* Refresh errs ban
 	if (snack?.type !== 'b' && snack?.detail?.action === 'refresh') return
@@ -88,44 +106,28 @@ export const showSnackBarMessage = async (snack: ISnack) => {
 		try {
 			if (snack.response)
 				snack.response.json()
-					.then((snack: ISnack) => showSnackBarMessage(snack))
+					.then((snack: ISnack) => showSnackMessage(snack))
 		}catch {
 			// if (messagePreprocessing())
-			showSnackBarMessage({ type: 'w', message: snack.message || 'Непредвиденная ошибка', snackTime: snack.snackTime })
+			showSnackMessage({ type: 'w', message: snack.message || 'Непредвиденная ошибка', snackTime: snack.snackTime })
 		}
 		return
 	}
 
 	//* Block handling
-	if (snack?.type === 'b') {
-		blockDevice({ logTime: snack.snackTime, interCode: snack.detail.res.interCode, errMessage: snack.message, unlockTime: snack.detail.res.unlockTime })
-		// const setBlockErrorMessage = useBlockError(s => s.setBlockErrorMessage)
+	if (snack?.detail?.res?.status === 900) {
+		blockDevice({ errMessage: snack.message, unlockTime: snack.detail.res.unlockTime })
 	}
 
 	//* SnackTime adding
-	const snackWithTime: ISnackWithTime = {
+	const snackWithTime: ISnack = {
 		...structuredClone(snack),
 		snackTime: snack.snackTime || getTime()
 	}
 
-	const { snackType, title, icon, toastDuration } = getTypeDecoding(snackWithTime.type || 'e')
-	const newMessage = messagePreprocessing(snack.message)
-	if (newMessage) {
-		snackWithTime.message = newMessage
-	}
+	showSnack(snackWithTime)
 
-	if (snack?.type === 'b') await timeout(100)
-
-	toast.custom((toastElem) => (
-		<SnackBar title={title} icon={icon} message={snackWithTime.message || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackType} />
-	), {
-		duration: snackWithTime.duration || toastDuration,
-		// duration: Infinity,
-	})
-	// showAllSnacksDev()
-
-	// if (sessionStorage.getItem('blockDevice')) return
-	
-	if (!['s'].includes(snackType)) 
+	if (localStorage.getItem('blockDevice')) return
+	if (!['s'].includes(snackWithTime.type))
 		saveLogInLocalStorage(snackWithTime)
 }

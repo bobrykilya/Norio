@@ -1,16 +1,18 @@
-import React from 'react'
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 import { AuthContext } from '../../../context/Auth-context'
 import SignUpImg from '../../../assets/AuthPage/sign_up.png'
-import SignInImg from '../../../assets/AuthPage/sign_in.png' 
+import SignInImg from '../../../assets/AuthPage/sign_in.png'
 import { IoArrowBackCircleOutline } from "react-icons/io5"
 import ToolTip from '../../ToolTip/ToolTip'
 // import CoverBgImg from '../../../assets/cover_bg.jpg'
 
 
 
-const CoverPanel = () => {
-
+type CoverPanelProps = {
+    disabled: boolean;
+}
+const CoverPanel = ({ disabled }: CoverPanelProps) => {
+    
     const { coverPanelState, setCoverPanelState, handleReturnToSignUp } = useContext(AuthContext)
 
     return ( 
@@ -26,6 +28,7 @@ const CoverPanel = () => {
                             type='button'
                             onClick={() => setCoverPanelState('sign_up')}
                             tabIndex={-1}
+                            disabled={disabled}
                         >
                             <label htmlFor="open_sign_up-but">
                                 Регистрация
@@ -41,6 +44,7 @@ const CoverPanel = () => {
                             type='button'
                             onClick={() => setCoverPanelState('sign_in')}
                             tabIndex={-1}
+                            disabled={disabled}
                         >
                             <label htmlFor="open_sign_in-but">
                                 Авторизация
@@ -54,6 +58,7 @@ const CoverPanel = () => {
                     type='button'
                     tabIndex={-1}
                     onClick={() => handleReturnToSignUp()}
+                    disabled={disabled}
                 >
                     <IoArrowBackCircleOutline className='fa-icon'/>
                 </button>
