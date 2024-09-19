@@ -76,6 +76,7 @@ const messagePreprocessing = (message: string) => {
 
 export const showSnack = async (snack: ISnack) => {
 	const { snackType, title, icon, toastDuration } = getTypeDecoding(snack.type || 'e')
+	// console.log(snack.message)
 	const newMessage = messagePreprocessing(snack.message)
 	if (newMessage) {
 		snack.message = newMessage
@@ -109,7 +110,7 @@ export const showSnackMessage = (snack: ISnack) => {
 					.then((snack: ISnack) => showSnackMessage(snack))
 		}catch {
 			// if (messagePreprocessing())
-			showSnackMessage({ type: 'w', message: snack.message || 'Непредвиденная ошибка', snackTime: snack.snackTime })
+			showSnackMessage({ type: 'w', message: snack.message || 'Непредвиденная ошибка', snackTime: getTime() })
 		}
 		return
 	}
@@ -125,9 +126,15 @@ export const showSnackMessage = (snack: ISnack) => {
 		snackTime: snack.snackTime || getTime()
 	}
 
+	//* Connection errors handling
+	if (!snackWithTime?.message) {
+		snackWithTime.message = snack.message
+		snackWithTime.type = 'e'
+	}
+
 	showSnack(snackWithTime)
 
 	if (localStorage.getItem('blockDevice')) return
-	if (!['s'].includes(snackWithTime.type))
+	// if (!['s'].includes(snackWithTime.type))
 		saveLogInLocalStorage(snackWithTime)
 }

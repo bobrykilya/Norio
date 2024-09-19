@@ -1,28 +1,25 @@
-import React, { useState, useRef, MutableRefObject } from 'react'
+import React, { MutableRefObject, useRef, useState } from 'react'
 import InputsCleaner from '../Inputs/InputsCleaner/InputsCleaner'
 import InputsError from '../Inputs/InputsError/InputsError'
 import { PiUserThin } from "react-icons/pi"
-// import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5"
-// import { LuArrowUpToLine, LuArrowDownToLine } from "react-icons/lu"
 import ToolTip from '../../ToolTip/ToolTip'
 import AvatarList from './AvatarList'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
+import { IReactHookForm } from "../../../types/Auth-types"
 
 
 
 export type IHandleClickButtonWithId = React.MouseEvent<HTMLButtonElement, MouseEvent> & {
-    target: {
+target: {
         id: string;
     }
 }
-type AvatarButtonProps = {
+type AvatarButtonProps = IReactHookForm & {
     LIST: IDataListElement[];
     avatar: string | null;
-    setAvatar: React.Dispatch<React.SetStateAction<string>>;
-    error: { message: string };
-    setError: React.Dispatch<React.SetStateAction<{ message: string } | null>>;
-    disabled: boolean;
-    isFormBlur: boolean;
+    setAvatar: (avatar: string) => void;
+    disabled?: boolean;
+    isFormBlur?: boolean;
 }
 const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false, isFormBlur=false }: AvatarButtonProps) => {
 

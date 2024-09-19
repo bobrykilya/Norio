@@ -1,7 +1,3 @@
-import { FieldErrors, UseFormProps, UseFormRegister, UseFormResetField } from 'react-hook-form'
-
-
-
 export type CoverPanelOptions = 'sign_in' | 'sign_up' | 'sign_up_info';
 
 export type IAvatarListElement = { 
@@ -55,18 +51,33 @@ export type IHandleLogOut = {
     interCode?: number;
 }
 
-type ISignFormInput = {
+type UserFormFields = {
+    username: string;
+    password: string;
+    phone: string;
+    store: string;
+    job: string;
+    last_name: string;
+    first_name: string;
+    middle_name: string;
+}
+
+export type IReactHookForm = {
+    error?: any;
+    reset?: any;
+    watch?: any
+    setError?: any;
+    setValue?: any;
+    register?: any;
+}
+export type ISignFormInput = IReactHookForm & {
     name: string;
-    register: UseFormRegister<TFieldValues>;
-    error: FieldErrors<TFieldValues>;
-    reset: UseFormResetField<UseFormProps>;
     disabled: boolean;
+    notSaveUser?: boolean;
+    inputType?: AvailableSignFormInputTypes;
 }
-export type ISignFormStringInput = ISignFormInput & {
-    type: AvailableSignFromTypes;
-    notSaveUser: boolean;
-}
-export type AvailableSignFromTypes = 'sign_in' | 'sign_up' | 'name'
+
+export type AvailableSignFormInputTypes = 'sign_in' | 'sign_up' | 'name' | 'confirm'
 
 export type IUserNameInfo = {
 	lastName: string; 

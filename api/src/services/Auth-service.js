@@ -9,7 +9,7 @@ import _logAttentionRepository from '../_database/repositories/_logAttention-db.
 import _logAuthRepository from '../_database/repositories/_LogAuth-db.js'
 import getCodeDescription from '../utils/interCodes.js'
 import DeviceService from './Device-service.js'
-import { sendToClient } from './WebSocket-service.js'
+import { sendToClient } from './Socket-service.js'
 import { getEndTime } from '../utils/getTime.js'
 
 

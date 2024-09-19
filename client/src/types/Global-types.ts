@@ -4,3 +4,5 @@ interface ImportMeta {
 		VITE_CLIENT_PORT: string;
 	};
 }
+
+type IDurationType = 'second' | 'minute' | 'hour' | null

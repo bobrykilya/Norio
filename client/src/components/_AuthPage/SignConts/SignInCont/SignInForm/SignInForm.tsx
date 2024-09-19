@@ -86,7 +86,7 @@ const SignInForm = ({ isFormBlur }: SignInFormProps) => {
                 /> 
                 <PasswordInput
                     name='password'
-                    type='sign_in'
+                    inputType='sign_in'
                     register={register}
                     reset={resetField}
                     watch={watch}
@@ -94,9 +94,9 @@ const SignInForm = ({ isFormBlur }: SignInFormProps) => {
                     disabled={isFormBlur}
                 />
                 <label id='checkbox-cont' className='cont'>
-                    <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser} disabled={isFormBlur}/>
+                    <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser} disabled={isFormBlur} />
                     <span>Быстрая сессия</span>
-                    <ToolTip text='Длительность сессии - 10мин. Пароль не сохраняется автоматически' />
+                    <ToolTip text='Длительность сессии ограничена. Пароль не сохраняется автоматически' />
                 </label>
             </div>
             <SubmitBut

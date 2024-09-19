@@ -1,13 +1,20 @@
-import { useState, useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { focusInput } from "../../../../utils/focusInput"
 import { capitalize } from '../../../../utils/capitalize'
 import { useClickOutside } from "../../../../hooks/useClickOutside"
 import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
+import { IDataListElement } from "../../../../assets/AuthPage/AuthPage-data"
+import { ISignFormInput } from "../../../../types/Auth-types"
 
 
 
-const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=null, reset, setValue, setError, watch, disabled=false }) => {
+type DropDownSearchInputProps = ISignFormInput & {
+    LIST: IDataListElement[];
+    placeholder: string;
+    icon: React.ReactElement;
+}
+const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=null, reset, setValue, setError, watch, disabled=false }: DropDownSearchInputProps) => {
 
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -18,33 +25,30 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     
     const filterAndSortList = ({ search, list }) => {
         const val = search.toLowerCase().trim()
-        const filtered_list = list.filter(el => el.title.toLowerCase().includes(val))
-        const filtered_sorted_list = filtered_list.sort(
-            (el_1, el_2) => el_1.title.toLowerCase().indexOf(val) > el_2.title.toLowerCase().indexOf(val) ? 1 : -1
+        const filtered_list = list.filter((el: IDataListElement) => el.title.toLowerCase().includes(val))
+        return filtered_list.sort(
+            (el_1: IDataListElement, el_2: IDataListElement) => el_1.title.toLowerCase().indexOf(val) > el_2.title.toLowerCase().indexOf(val) ? 1 : -1
         )
-        // console.log(filtered_sorted_list)
-        return filtered_sorted_list
     }
         
     const LIST_FILTERED = watch(name) ? filterAndSortList({ search: watch(name), list: LIST }) : LIST
     // console.log(error)
     
-    const handleChangeInput = (e) => {
-        // console.log(e.target.value)
+    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/, '')
         e.target.value = capitalize(e.target.value)
+
         if (/[^а-яА-ЯёЁ ]/.test(e.target.value)) {
-            // console.log('close')
             toggleDropDown(false)
         }else if (isValueInList(e.target.value)) {
             toggleDropDown(false)
         }else {
-            // console.log('open')
             !isDropDownOpened && e.target.value ? toggleDropDown(true) : null
         }
+
         e.target.value ? changeInput() : clearInput()
     }
-    const toggleDropDown = (pos) => {
+    const toggleDropDown = (pos: boolean) => {
         if (pos) {
             if (error?.type === 'isNotLatin') return
             setIsDropDownOpened(true)
@@ -57,9 +61,11 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         setIsCleanerOpened(true)
     }
 
-    const handleSetElemName = (e) => {
+    const handleSetElemName = (e:  React.MouseEvent<HTMLUListElement, MouseEvent>) => {
         // console.log(e.target)
+        // @ts-ignore
         if (e.target.tagName === 'BUTTON' && isDropDownOpened) {
+            // @ts-ignore
             setValue(name, e.target.textContent)
             toggleDropDown(false)
             setIsCleanerOpened(true)
@@ -71,19 +77,19 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         toggleDropDown(false)
     }, inputRef)
 
-    const clearInput = () => {
+    const clearInput = async () => {
         // console.log('clear')
         reset(name)
         setIsCleanerOpened(false)
-        focusInput(inputRef)
+        await focusInput(inputRef)
         setError(name, null)
     }
 
-    const isValueInList = (val, list=LIST) =>{
+    const isValueInList = (val: string, list=LIST) =>{
         return list.some(el => el.title.toLowerCase() === val.trim().toLowerCase())
     }
     
-    const handleClickInput = (e) => {
+    const handleClickInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
 
         if (!isDropDownOpened) {
             switch(e.code) {
@@ -104,10 +110,10 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                     break
                 case 'ArrowDown':
                     e.preventDefault()
-                    focusJumping('next')
+                    await focusJumping('next')
                     break
                 case 'Enter':
-                    focusJumping('next')
+                    await focusJumping('next')
                     break
                 case 'Escape':
                     toggleDropDown(false)
@@ -117,64 +123,64 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
     }
 
-    const handleClickElem = (e) => {
-        // console.log(e.code)
+    const handleClickElem = async (e: React.KeyboardEvent<HTMLButtonElement>) => {
         if (e.code.includes('Arrow'))  
-            e.preventDefault() 
-        // else return
+            e.preventDefault()
 
         switch(e.code) {
             case 'ArrowUp': 
-                focusJumping('prev')
+                await focusJumping('prev')
                 break
-            case 'ArrowDown': 
-                focusJumping('next')
+            case 'ArrowDown':
+                await focusJumping('next')
                 break
-            case 'ArrowLeft': 
-                focusJumping('prev')
+            case 'ArrowLeft':
+                await focusJumping('prev')
                 break
-            case 'ArrowRight': 
-                focusJumping('next')
+            case 'ArrowRight':
+                await focusJumping('next')
                 break
             case 'Escape':
-                focusInput(inputRef)
+                await focusInput(inputRef)
                 toggleDropDown(false)
                 break
             case 'Enter':
                 break
             default:
-                focusInput(inputRef)
+                await focusInput(inputRef)
                 setTimeout(() => (focusInput(inputRef)), 10)
                 break
         }
     }
 
-    const focusJumping = (route) => { 
+    const focusJumping = async (route: 'next' | 'prev') => {
         const active = document.activeElement
         switch(route) {
             case 'next':
                 active.tagName === 'INPUT' ? dropDownRef.current.firstChild?.focus() :
+                    // @ts-ignore
                     active.nextElementSibling?.focus()
                 break
             case 'prev':
                 try {
+                    // @ts-ignore
                     active.previousElementSibling.focus()
                 }catch {
-                    focusInput(inputRef)
+                    await focusInput(inputRef)
                 }
                 break
         }
     }
 
-    const { ref, ... rest_register } = register(name, { 
+    const { ref, ... rest_register } = register(name, {
         required: true,
         validate: {
-            isNotLatin: (val) => !/[a-zA-Z]/.test(val) || 
+            isNotLatin: (val: string) => !/[a-zA-Z]/.test(val) ||
                 `Поле '${placeholder}' должно содержать лишь кириллицу`,
-            isInList: (val) => isValueInList(val) ||
+            isInList: (val: string) => isValueInList(val) ||
                 `Введена неизвестная ${placeholder.toLowerCase()}`
         },
-        onChange: (e) => {
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
             handleChangeInput(e)
         },
     })
@@ -218,7 +224,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 {
                     !LIST_FILTERED[0] ?
                         <span className='cont'>Такого значения нет в базе</span> :
-                        LIST_FILTERED.map((el) => {
+                        LIST_FILTERED.map((el: IDataListElement) => {
                             // console.log(LIST_FILTERED.indexOf(el))
                             return <button 
                                         key={el.id} 

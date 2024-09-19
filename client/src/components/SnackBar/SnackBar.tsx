@@ -6,7 +6,7 @@ import { TOAST_LIMIT } from "../../../constants"
 
 
 
-type ISnack = {
+type ISnackElem = {
     visible: boolean;
     id: string;
 }
@@ -15,7 +15,7 @@ type SnackBarProps = {
     title: string;
     icon: React.ReactElement;
     message: string; 
-    toastElem: ISnack;
+    toastElem: ISnackElem;
     type: SnackBarTypeOptions;
 }
 const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {

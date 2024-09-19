@@ -24,19 +24,14 @@ export const getLastTime = (timestamp: number, type: TypeOptions): number => {
     }
 }
 
-
 type IUseGetEndTime = {
-    startTime: Date;
+    startTime: number;
     duration: number;
+    durationType: IDurationType;
 }
-//* Getting timestamp (LocalString) and time-string after duration time (in minutes)
-export const getEndTime = ({ startTime, duration }: IUseGetEndTime): string => {
-
-    const time = new Date(startTime)
-    time.setMinutes(time.getMinutes() + duration)
-    // console.log(time.toUTCString())
-    // const time_2 = new Date(time.toUTCString())
-    // console.log(time_2.toUTCString())
-
-    return time.toUTCString()
+export const getEndTime = ({ startTime, duration, durationType=null }: IUseGetEndTime) => {
+    switch (durationType) {
+        case 'minute': return startTime + duration * 1000 * 60
+        default: return startTime + duration * 1000
+    }
 }

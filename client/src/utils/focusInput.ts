@@ -1,4 +1,5 @@
 import { RefObject } from "react"
+import timeout from "./timeout"
 
 
 
@@ -10,12 +11,6 @@ export const focusInput = async (ref: RefObject<HTMLInputElement> ) => {
 
     //* Moving cursor to the input's end
     const length = ref.current.value.length
-    await wait(1)
+    await timeout(10)
     ref?.current?.setSelectionRange(length, length)
-}
-
-function wait(ms: number) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms)
-    })
 }

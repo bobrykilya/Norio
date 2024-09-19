@@ -1,8 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 
 
-const InputsError = ({ error, onClick }) => {
+type InputsErrorProps = {
+    error: {
+        message: string;
+    };
+    onClick: () => void;
+}
+const InputsError = ({ error, onClick }: InputsErrorProps) => {
 
     const [errorMess, setErrorMess] = useState('')
     const [isErrorOpened, setIsErrorOpened] = useState(false)

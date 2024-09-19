@@ -5,8 +5,7 @@ import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSea
 import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { HiOutlineHome } from "react-icons/hi"
-import { GrUserWorker } from "react-icons/gr"
-import { GrUserExpert } from "react-icons/gr";
+import { GrUserExpert, GrUserWorker } from "react-icons/gr"
 // import { TiArrowRightOutline } from "react-icons/ti"
 import { BiLogInCircle } from "react-icons/bi"
 import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
@@ -30,7 +29,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
     const [avatar, setAvatar] = useState<string>('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const inputRefPhone = useRef(null)
+    const inputRefPhone = useRef<HTMLInputElement>(null)
     const name_input_icon = <GrUserExpert className='input-icon' />
 
     const {
@@ -114,7 +113,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     name='last_name'
                     placeholder='Фамилия'
                     icon={name_input_icon}
-                    type='name'
+                    inputType='name'
                     register={register}
                     error={errors?.last_name}
                     reset={resetField}
@@ -125,7 +124,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     name='first_name'
                     placeholder='Имя'
                     icon={name_input_icon}
-                    type='name'
+                    inputType='name'
                     register={register}
                     error={errors?.first_name}
                     reset={resetField}
@@ -135,7 +134,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     name='middle_name'
                     placeholder='Отчество'
                     icon={name_input_icon}
-                    type='name'
+                    inputType='name'
                     register={register}
                     error={errors?.middle_name}
                     reset={resetField}

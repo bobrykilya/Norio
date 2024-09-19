@@ -24,12 +24,6 @@ const ButtonsCont = ({ disabled }: ButtonsContProps) => {
 
     return (
         <div className='buts-cont cont'>
-            {/* <button
-                id='new-user-but'
-                title='Создать заявку на регистрацию нового пользователя'
-                className='cont'>
-                    <i className="fa-regular fa-address-card"></i>
-            </button> */}
                 <button 
                     className='pwa-but'
                     tabIndex={-1}

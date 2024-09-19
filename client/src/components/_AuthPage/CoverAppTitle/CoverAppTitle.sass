@@ -1,0 +1,43 @@
+.coverAppTitle
+    position: absolute
+    font-family: "Righteous", serif
+    font-size: 100vh
+    font-weight: 800
+    z-index: 1
+    letter-spacing: -17vh
+    color: white
+    pointer-events: none
+    filter: blur(4px)
+    opacity: 0.015
+    transition-duration: 3s
+    animation: fadeInAppTitle 1s ease
+    &.block
+        animation: fadeInBlurAppTitle 1s ease-out
+        display: flex
+        filter: blur(6px)
+        opacity: 0.05
+        transform: scale(1.05)
+
+
+@keyframes fadeInAppTitle
+    0%
+        filter: blur(0)
+        opacity: 0
+        font-size: 92vh
+        letter-spacing: -22vh
+    100%
+        filter: blur(4px)
+        opacity: 0.015
+        //transform: scale(1)
+        font-size: 100vh
+        letter-spacing: -17vh
+
+@keyframes fadeInBlurAppTitle
+    0%
+        filter: blur(4px)
+        opacity: 0.015
+        transform: scale(1)
+    100%
+        filter: blur(6px)
+        opacity: 0.05
+        transform: scale(1.05)

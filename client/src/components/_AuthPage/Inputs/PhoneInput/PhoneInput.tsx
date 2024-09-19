@@ -3,19 +3,20 @@ import InputsError from '../InputsError/InputsError'
 import InputsCleaner from '../InputsCleaner/InputsCleaner'
 import { FiPhoneCall } from "react-icons/fi";
 import { focusInput } from "../../../../utils/focusInput"
-import { ISignFormStringInput } from '../../../../types/Auth-types'
+import { ISignFormInput } from '../../../../types/Auth-types'
 
 
-type PhoneInputProps = ISignFormStringInput & { 
-    // inputRefPhone: ;
+
+type PhoneInputProps = ISignFormInput & {
+    inputRefPhone:  React.MutableRefObject<HTMLInputElement>;
 }
-const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRefPhone }) => {
+const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRefPhone }: PhoneInputProps) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    const [number, setNumber] = useState(false)
+    const [number, setNumber] = useState<string | false>(null)
 
-    const handleChangePhone = (e) => {
+    const handleChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '')
         e.target.value ? changeInput() : clearInput()
     }
@@ -24,17 +25,17 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
         setIsCleanerOpened(true)
     }
 
-    const handleBlurPhone = (e) => {
+    const handleBlurPhone = (e: React.FocusEvent<HTMLInputElement>) => {
         setNumber(e.target.value)
         e.target.value = e.target.value.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4')
     }
-    const handleFocusPhone = (e) => {
-        number ? e.target.value = number : null
+    const handleFocusPhone = (e: React.FocusEvent<HTMLInputElement>) => {
+        number ? e.target.value = String(number) : null
     }
 
-    const handleClickCleaner = () => {
-        setNumber(false)
-        focusInput(inputRefPhone)
+    const handleClickCleaner = async () => {
+        setNumber(null)
+        await focusInput(inputRefPhone)
         clearInput()
     }
 
@@ -51,23 +52,23 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
             message: `Номер должен содержать код и 7 цифр`
         },
         validate: {
-            isCorrectCode: (val) => {
+            isCorrectCode: (val: string) => {
                 // console.log(val.length)
                 const code_list = ['29', '33', '44', '25']
                 const message = 'Неизвестный код оператора связи'
                 if (val.length >= 10) {
                     // console.log(val.substr(1,2))
-                    return (code_list.includes(val.substr(1,2)) || message)
+                    return (code_list.includes(val.substring(1,2)) || message)
                 }else if (val.length === 9){
                     // console.log(val.substr(0,2))
-                    return (code_list.includes(val.substr(0,2)) || message)
+                    return (code_list.includes(val.substring(0,2)) || message)
                 }else return true
             },
         },
-        onChange: (e) => {
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
             handleChangePhone(e)
         },
-        onBlur: (e) => {
+        onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
             handleBlurPhone(e)
         }
     })

@@ -14,24 +14,6 @@
     right: 0.7rem
     .fa-icon
         color: #ffffff28
-.coverAppTitle
-    position: absolute
-    font-family: "Righteous", serif
-    font-size: 100vh
-    font-weight: 800
-    z-index: 1
-    letter-spacing: -17vh
-    color: white
-    pointer-events: none
-    filter: blur(4px)
-    opacity: 0.015
-    transition-duration: 3s
-    &.active
-        display: flex
-        animation: fadeInAppTitle 1s ease-out
-        filter: blur(6px)
-        opacity: 0.05
-        transform: scale(1.05)
 #auth_panel-cont
     // border: 2px solid orange
     margin-top: -1rem
@@ -59,16 +41,6 @@
         background-color: $color-backgr
 
 
-
-@keyframes fadeInAppTitle
-    0%
-        filter: blur(4px)
-        opacity: 0.015
-        transform: scale(1)
-    100%
-        filter: blur(6px)
-        opacity: 0.05
-        transform: scale(1.05)
 
 // @media ( max-width: 900px )
 //     #auth_panel-cont

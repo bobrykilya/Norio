@@ -9,7 +9,7 @@ import { AuthContext } from '../../context/Auth-context'
 import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
 import { useBlockError } from "../../stores/Device-store"
-import { APP_TITLE } from "../../../constants"
+import CoverAppTitle from "../../components/_AuthPage/CoverAppTitle/CoverAppTitle"
 
 
 
@@ -22,9 +22,7 @@ const AuthPage = () => {
         <>
             <AppTitle />
             <LogBookButton />
-            <div className={`coverAppTitle cont ${blockErrorMessage ? 'active' : 'inactive'}`}>
-                {APP_TITLE}
-            </div>
+            <CoverAppTitle block={!!blockErrorMessage}/>
             <AuthPageAnim>
                 <div id="auth_panel-cont" className={`cont ${blockErrorMessage && 'block'}`}>
                     <div id="signs-cont" className="cont">

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput'
 import { AuthContext } from '../../../../../context/Auth-context'
@@ -7,9 +7,6 @@ import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { LuCheckCircle } from "react-icons/lu"
-// import { BsFillCloudCheckFill } from "react-icons/bs"
-// import { BsFillPatchCheckFill } from "react-icons/bs"
-// import { BsShieldFillCheck } from "react-icons/bs"
 import { FaUser } from "react-icons/fa"
 
 
@@ -20,7 +17,6 @@ type SignUpFormProps = {
 }
 const SignUpForm = ({ isFormBlur, isSubmitButBlur }: SignUpFormProps) => {
     // console.log('SignUp')
-    // console.log(isFormBlur)
     
     const { handleCheckUser } = useContext(AuthContext)
     const [isLoading, setIsLoading] = useState(false)
@@ -64,7 +60,6 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }: SignUpFormProps) => {
                 focusInput(inputRefLogin)
             })
             .finally(() => setIsLoading(false))
-        // alert(JSON.stringify(data))
     }
 
     return (
@@ -74,7 +69,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }: SignUpFormProps) => {
                     name='username'
                     placeholder='Логин'
                     icon={<FaUser className='input-icon'/>}
-                    type='sign_up'
+                    inputType='sign_up'
                     register={register}
                     error={errors?.username}
                     reset={resetField}
@@ -83,7 +78,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }: SignUpFormProps) => {
                 />
                 <PasswordInput
                     name='password'
-                    type='sign_up'
+                    inputType='sign_up'
                     register={register}
                     error={errors?.password}
                     reset={resetField}
@@ -91,7 +86,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }: SignUpFormProps) => {
                 />
                 <PasswordInput
                     name='confirm_password'
-                    type='confirm'
+                    inputType='confirm'
                     register={register}
                     error={errors?.confirm_password}
                     reset={resetField}

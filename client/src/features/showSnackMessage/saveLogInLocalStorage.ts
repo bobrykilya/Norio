@@ -21,7 +21,9 @@ const checkLogQuantityForRecently = (list: ISnack[]) => {
 		if (!countObject[err.message]) {
 			countObject[err.message] = 1
 		} else {
-			countObject[err.message]++
+			if (err.message !== 'Ошибка подключения к серверу') {
+				countObject[err.message]++
+			}
 		}
 	}
 	// console.log(countObject)

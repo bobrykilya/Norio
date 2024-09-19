@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser"
 import Fingerprint from "express-fingerprint"
 import AuthRootRouter from "./src/routers/Global-router.js"
 import TokenService from "./src/services/Token-service.js"
-import { socketConnection } from './src/services/WebSocket-service.js'
+import { socketConnection } from './src/services/Socket-service.js'
 import AuthService from './src/services/Auth-service.js'
 import { AUTO_LOGOUT_INTERVAL } from './constants.js'
 

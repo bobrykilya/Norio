@@ -1,10 +1,14 @@
 import { IoCloseCircleOutline } from "react-icons/io5"
 import ToolTip from '../../../ToolTip/ToolTip'
-// import { FaXmark } from "react-icons/fa6"
+import React from "react";
 
 
 
-const InputsCleaner = ({opened, onClick}) => {
+type InputsCleanerProps = {
+    opened: boolean;
+    onClick: () => void;
+}
+const InputsCleaner = ({ opened, onClick }: InputsCleanerProps) => {
 
     return ( 
         <button 

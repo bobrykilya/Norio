@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 import { AuthContext } from '../../../context/Auth-context'
+// @ts-ignore
 import SignUpImg from '../../../assets/AuthPage/sign_up.png'
+// @ts-ignore
 import SignInImg from '../../../assets/AuthPage/sign_in.png'
 import { IoArrowBackCircleOutline } from "react-icons/io5"
 import ToolTip from '../../ToolTip/ToolTip'
