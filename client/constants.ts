@@ -6,7 +6,7 @@ export const APP_TITLE = 'NORIO'
 
 //* LocalErrStorage settings
 	export const RECENTLY_TIME = 20 						//* Time of error counting in seconds
-	export const SAME_LOGS_QUANTITY = 2 					//* Limit of possible error quantity recently
+	export const SAME_LOGS_QUANTITY = 7 					//* Limit of possible error quantity recently
 	export const LOCAL_LOG_STORAGE_TIME = 24 				//* User error storage time in hours
 
 //* Services settings

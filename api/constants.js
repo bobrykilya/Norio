@@ -12,4 +12,4 @@
 
     export const FAST_SESSION_DURATION = 10     //* Fast session duration in seconds (default: 600)
     export const AUTO_LOGOUT_INTERVAL = 60      //* AutoLogout checking interval in seconds
-    export const DEFAULT_BLOCK_DURATION = 5       //* Block duration in minutes
+    export const DEFAULT_BLOCK_DURATION = 3     //* Block duration in minutes

@@ -4,11 +4,11 @@ import React from "react";
 
 
 
-type InputsCleanerProps = {
+type InputCleanerProps = {
     opened: boolean;
     onClick: () => void;
 }
-const InputsCleaner = ({ opened, onClick }: InputsCleanerProps) => {
+const InputCleaner = ({ opened, onClick }: InputCleanerProps) => {
 
     return ( 
         <button 
@@ -23,4 +23,4 @@ const InputsCleaner = ({ opened, onClick }: InputsCleanerProps) => {
      )
 }
  
-export default InputsCleaner
+export default InputCleaner

@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { FaKey } from "react-icons/fa"
 import { VscEye, VscEyeClosed } from "react-icons/vsc"
-import InputsError from '../InputsError/InputsError'
-import InputsCleaner from '../InputsCleaner/InputsCleaner'
+import InputError from '../InputError/InputError'
+import InputCleaner from '../InputCleaner/InputCleaner'
 import { focusInput } from "../../../../utils/focusInput"
 import { useClickOutside } from "../../../../hooks/useClickOutside"
 import ToolTip from '../../../ToolTip/ToolTip'
@@ -145,8 +145,8 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
                 <span>CAPS</span>
                 <ToolTip text='Включён Caps-Lock' />
             </div>
-            <InputsError error={error} onClick={() => focusInput(inputRef)} />
-            <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
+            <InputError error={error} onClick={() => focusInput(inputRef)} />
+            <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
                 <button 
                     className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
                     type='button'

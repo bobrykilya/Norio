@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput';
 import { AuthContext } from "../../../../../context/Auth-context"
-import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
+import UserNameInput from '../../../Inputs/NameInput/NameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import CheckBox from '../../../../Inputs/CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'

@@ -42,7 +42,6 @@
         button
             // border: 1px solid #acabab24
             position: relative
-            scroll-snap-align: top
             display: inline-block
             border-radius: 15px
             box-shadow: 1px 2px 5px #0000001c
@@ -52,12 +51,20 @@
             margin: 4px 3px
             width: auto
             transition: 0.15s ease 
-            &:hover, &:focus
+            &:focus, &.active
                 transform: none
-                // border: 1px solid #9c9a9a9b
-                // color: $color-backgr
-                background-color: #cecece82
                 box-shadow: none
                 border: none
+                background-color: rgba(206, 206, 206, 0.36)
+                // color: $color-backgr
+            &:hover
+                transition-duration: 0s
+                transform: none
+                box-shadow: none
+                border: none
+                outline: 1px solid rgba(0, 0, 0, 0.24)
+                //box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.37)
+                //border-inline: 1px solid rgba(206, 206, 206, 0.36)
+                //background-color: rgba(206, 206, 206, 0.18)
             &:active
                 transform: scale(0.9)

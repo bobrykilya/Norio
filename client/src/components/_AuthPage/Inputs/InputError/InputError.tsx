@@ -2,20 +2,21 @@ import React, { useEffect, useRef, useState } from 'react'
 
 
 
-type InputsErrorProps = {
+type InputErrorProps = {
     error: {
         message: string;
     };
     onClick: () => void;
 }
-const InputsError = ({ error, onClick }: InputsErrorProps) => {
+const InputError = ({ error, onClick }: InputErrorProps) => {
 
     const [errorMess, setErrorMess] = useState('')
     const [isErrorOpened, setIsErrorOpened] = useState(false)
-    const refSetTimeout = useRef(null)
+    const refSetTimeout = useRef<number | null>(null)
 
     useEffect(() => {
         // console.log(`error: ${error?.message}`)
+        window.clearTimeout(refSetTimeout.current)
 
         //* Error opening
         if (error?.message && !errorMess) {
@@ -28,10 +29,10 @@ const InputsError = ({ error, onClick }: InputsErrorProps) => {
 
         //* Error swapping
         if (error?.message && errorMess && error?.message !== errorMess) {
-            // console.log('Swap')
 
             setIsErrorOpened(false)
-            refSetTimeout.current = setTimeout(() => {
+            refSetTimeout.current = window.setTimeout(() => {
+                // console.log('Swap')
                 setErrorMess(error?.message)
                 setIsErrorOpened(true)
             }, 300)
@@ -40,10 +41,10 @@ const InputsError = ({ error, onClick }: InputsErrorProps) => {
 
         //* Error closing
         if (!error || !error?.message) {
-            // console.log('Close')
-            
+
             setIsErrorOpened(false)
-            refSetTimeout.current = setTimeout(() => {
+            refSetTimeout.current = window.setTimeout(() => {
+                // console.log('Close')
                 setErrorMess('')
             }, 300)
             return
@@ -53,7 +54,6 @@ const InputsError = ({ error, onClick }: InputsErrorProps) => {
         if (error?.message && error?.message === errorMess) {
             // console.log('Intercept')
 
-            clearTimeout(refSetTimeout.current)
             setIsErrorOpened(true)
             return
         }
@@ -66,4 +66,4 @@ const InputsError = ({ error, onClick }: InputsErrorProps) => {
      )
 }
  
-export default InputsError
+export default InputError

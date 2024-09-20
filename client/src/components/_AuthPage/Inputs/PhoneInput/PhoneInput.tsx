@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import InputsError from '../InputsError/InputsError'
-import InputsCleaner from '../InputsCleaner/InputsCleaner'
+import InputError from '../InputError/InputError'
+import InputCleaner from '../InputCleaner/InputCleaner'
 import { FiPhoneCall } from "react-icons/fi";
 import { focusInput } from "../../../../utils/focusInput"
 import { ISignFormInput } from '../../../../types/Auth-types'
@@ -99,8 +99,8 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
             />
             <span className='phone_mask'>+375</span>
             <FiPhoneCall className='input-icon' />
-            <InputsError error={error} onClick={() => focusInput(inputRefPhone)} />
-            <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
+            <InputError error={error} onClick={() => focusInput(inputRefPhone)} />
+            <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
      )
 }

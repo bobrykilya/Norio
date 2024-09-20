@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
-import InputsError from '../InputsError/InputsError'
-import InputsCleaner from '../InputsCleaner/InputsCleaner'
+import InputError from '../InputError/InputError'
+import InputCleaner from '../InputCleaner/InputCleaner'
 import { focusInput } from '../../../../utils/focusInput'
 import { capitalize } from '../../../../utils/capitalize'
 import { AvailableSignFormInputTypes, ISignFormInput } from '../../../../types/Auth-types'
@@ -106,8 +106,8 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
                 autoFocus
             />
             {icon}
-            <InputsError error={error} onClick={() => focusInput(inputRef)} />
-            <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
+            <InputError error={error} onClick={() => focusInput(inputRef)} />
+            <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
     )
 }

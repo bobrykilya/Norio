@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput'
 import { AuthContext } from '../../../../../context/Auth-context'
 import { FaArrowRightLong } from "react-icons/fa6"
-import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
+import UserNameInput from '../../../Inputs/NameInput/NameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { LuCheckCircle } from "react-icons/lu"

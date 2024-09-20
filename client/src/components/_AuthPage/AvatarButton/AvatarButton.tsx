@@ -1,6 +1,6 @@
 import React, { MutableRefObject, useRef, useState } from 'react'
-import InputsCleaner from '../Inputs/InputsCleaner/InputsCleaner'
-import InputsError from '../Inputs/InputsError/InputsError'
+import InputCleaner from '../Inputs/InputCleaner/InputCleaner'
+import InputError from '../Inputs/InputError/InputError'
 import { PiUserThin } from "react-icons/pi"
 import ToolTip from '../../ToolTip/ToolTip'
 import AvatarList from './AvatarList'
@@ -78,8 +78,8 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
                 {avatar && <img src={createPathToAvatars(avatar)} alt='Avatar error 2' />}
                 <ToolTip text='Выбрать аватар пользователя' />
             </button>
-            <InputsError error={error} onClick={handleClickAvatarButton} />
-            <InputsCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
+            <InputError error={error} onClick={handleClickAvatarButton} />
+            <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
         </div>
      )
 }

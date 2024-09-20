@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { AuthContext } from '../../../../../context/Auth-context'
 import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
-import UserNameInput from '../../../Inputs/UserNameInput/UserNameInput'
+import UserNameInput from '../../../Inputs/NameInput/NameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { HiOutlineHome } from "react-icons/hi"
 import { GrUserExpert, GrUserWorker } from "react-icons/gr"

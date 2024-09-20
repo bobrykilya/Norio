@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react'
 import { focusInput } from "../../../../utils/focusInput"
 import { capitalize } from '../../../../utils/capitalize'
 import { useClickOutside } from "../../../../hooks/useClickOutside"
-import InputsError from '../InputsError/InputsError'
-import InputsCleaner from '../InputsCleaner/InputsCleaner'
+import InputError from '../InputError/InputError'
+import InputCleaner from '../InputCleaner/InputCleaner'
 import { IDataListElement } from "../../../../assets/AuthPage/AuthPage-data"
 import { ISignFormInput } from "../../../../types/Auth-types"
 
@@ -58,18 +58,25 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
 
     const changeInput = () => {
-        setIsCleanerOpened(true)
+        if (!isCleanerOpened)
+            setIsCleanerOpened(true)
     }
 
-    const handleSetElemName = (e:  React.MouseEvent<HTMLUListElement, MouseEvent>) => {
+    const setInputValue = (value: string)=> {
+        setValue(name, value)
+        toggleDropDown(false)
+        setIsCleanerOpened(true)
+        setError(name, null)
+    }
+
+    const handleClickElem = async (e:  React.MouseEvent<HTMLUListElement, MouseEvent>) => {
         // console.log(e.target)
         // @ts-ignore
         if (e.target.tagName === 'BUTTON' && isDropDownOpened) {
+            e.preventDefault()
             // @ts-ignore
-            setValue(name, e.target.textContent)
-            toggleDropDown(false)
-            setIsCleanerOpened(true)
-            setError(name, null)
+            setInputValue(e.target.textContent)
+            await focusInput(inputRef)
         }
     }
     
@@ -88,32 +95,44 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     const isValueInList = (val: string, list=LIST) =>{
         return list.some(el => el.title.toLowerCase() === val.trim().toLowerCase())
     }
+
+
+    const handleFocusInput = () => {
+        if (watch(name) && !isValueInList(watch(name)) && !isDropDownOpened)
+            toggleDropDown(true)
+        dropDownRef.current.firstChild.classList.add('active')
+    }
+    const handleBlurInput = () => {
+        dropDownRef.current.firstChild.classList.remove('active')
+    }
     
-    const handleClickInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDownOnInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+        // console.log(e.code)
 
         if (!isDropDownOpened) {
             switch(e.code) {
                 case 'ArrowDown':
-                    e.preventDefault()
                     toggleDropDown(true)
-                    break
-                case 'Enter':
-                    e.preventDefault()
                     break
                 default:
                     return
             }
-        }else {
+        } else {
             switch(e.code) {
-                case 'Tab': 
-                    toggleDropDown(false)
+                case 'Tab':
+                    e.preventDefault()
+                    setInputValue(dropDownRef.current.firstChild.innerHTML)
                     break
                 case 'ArrowDown':
                     e.preventDefault()
-                    await focusJumping('next')
+                    const firstElem = dropDownRef.current.firstChild
+                    if (firstElem) {
+                        firstElem.classList.remove("active")
+                        firstElem.nextElementSibling?.focus()  //* second element focus
+                    }
                     break
                 case 'Enter':
-                    await focusJumping('next')
+                    setInputValue(dropDownRef.current.firstChild.innerHTML)
                     break
                 case 'Escape':
                     toggleDropDown(false)
@@ -123,8 +142,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
     }
 
-    const handleClickElem = async (e: React.KeyboardEvent<HTMLButtonElement>) => {
-        if (e.code.includes('Arrow'))  
+    const handleKeyDownOnElem = async (e: React.KeyboardEvent<HTMLButtonElement>) => {
+        // console.log(e.code)
+        if (e.code.includes('Arrow') || e.code === 'Tab')
             e.preventDefault()
 
         switch(e.code) {
@@ -146,9 +166,12 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 break
             case 'Enter':
                 break
+            case 'Tab':
+                setInputValue(document.activeElement.innerHTML)
+                await focusInput(inputRef)
+                break
             default:
                 await focusInput(inputRef)
-                setTimeout(() => (focusInput(inputRef)), 10)
                 break
         }
     }
@@ -157,15 +180,15 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         const active = document.activeElement
         switch(route) {
             case 'next':
-                active.tagName === 'INPUT' ? dropDownRef.current.firstChild?.focus() :
-                    // @ts-ignore
-                    active.nextElementSibling?.focus()
+                // @ts-ignore
+                active.nextElementSibling?.focus()
                 break
             case 'prev':
-                try {
+                const elem = active.previousElementSibling
+                if (elem.previousElementSibling) {
                     // @ts-ignore
-                    active.previousElementSibling.focus()
-                }catch {
+                    elem.focus()
+                } else {
                     await focusInput(inputRef)
                 }
                 break
@@ -204,36 +227,34 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 className='dropdown_input'
                 placeholder={placeholder}
                 autoComplete='none'
-                onKeyDown={handleClickInput}
-                onFocus={ () => {
-                    if (watch(name) && !isValueInList(watch(name)))
-                        toggleDropDown(true)
-                }}
+                onKeyDown={handleKeyDownOnInput}
+                onFocus={handleFocusInput}
+                onBlur={handleBlurInput}
                 disabled={disabled}
             />
             {icon}
-            <InputsError error={error} onClick={() => focusInput(inputRef)} />
-            <InputsCleaner opened={isCleanerOpened} onClick={clearInput} />
+            <InputError error={error} onClick={() => focusInput(inputRef)} />
+            <InputCleaner opened={isCleanerOpened} onClick={clearInput} />
             <ul
                 id='dropdown-cont'
                 className={`${isDropDownOpened ? 'opened' : ''}`}
-                onClick={handleSetElemName}
+                onClick={handleClickElem}
                 tabIndex={-1}
                 ref={dropDownRef}
             >
                 {
                     !LIST_FILTERED[0] ?
                         <span className='cont'>Такого значения нет в базе</span> :
-                        LIST_FILTERED.map((el: IDataListElement) => {
-                            // console.log(LIST_FILTERED.indexOf(el))
-                            return <button 
-                                        key={el.id} 
-                                        tabIndex={-1} 
-                                        onKeyDown={handleClickElem}
-                                        disabled={disabled}
-                                    >
-                                        {el.title}
-                                    </button>
+                        LIST_FILTERED.map((el: IDataListElement, i: number) => {
+                            return <button
+                                key={el.id}
+                                tabIndex={-1}
+                                onKeyDown={handleKeyDownOnElem}
+                                disabled={disabled}
+                                className={i===0 ? `active` : null}
+                            >
+                                {el.title}
+                            </button>
                         })
                 }
             </ul>
