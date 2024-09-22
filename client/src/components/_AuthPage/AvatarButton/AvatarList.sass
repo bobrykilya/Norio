@@ -6,21 +6,19 @@
         &.opened
             .jumping_list-cont
                 .avatar-list
-                    li
+                    button
                         opacity: 1
                         transform: none
                 //* Avatars flying out animation delay
-                        // @for $i from 1 through 100
-                        //     &:nth-child(#{$i}n)
-                        //         transition-delay: #{$i * 0.025}s
+                         @for $i from 1 through 100
+                             &:nth-child(#{$i}n)
+                                 transition-delay: #{$i * 0.025}s
         .jumping_list-cont
             width: 850px
             .avatar-list
-                // border: 2px solid red
+                //border: 2px solid red
                 flex-direction: row
-                padding-bottom: 4rem
                 padding: 1.5rem
-                // border-radius: 150px
                 align-items: flex-start
                 flex-wrap: wrap
                 overflow-y: scroll
@@ -29,52 +27,58 @@
                 -ms-overflow-style: none
                 scrollbar-width: none
                 &::-webkit-scrollbar 
-                    display: none 
-                li
-                    // border: 2px solid orange
-                    margin: 0.8rem
-                    margin-bottom: 0.7rem
-                    // scroll-snap-align: center
+                    display: none
+                button
+                    //border: 2px solid orange
+                    margin: 0.8rem 0.8rem 2.1rem
                     $size-avatar-elem: 6rem
                     width: $size-avatar-elem
-                    height: $size-avatar-elem + 1.4rem
+                    height: $size-avatar-elem
                     justify-content: flex-start
                     overflow: visible
-                    transition-duration: 0.7s
-                    transform-style: ease
-                    transition-delay: 0
+                    border-radius: 50%
+                    transition: all 0.7s ease
                     opacity: 0
                     transform: translateY(200px)
-                    button
-                        // border: 1px solid black
-                        height: $size-avatar-elem
-                        width: $size-avatar-elem
-                        border-radius: 50%
-                        overflow: hidden
-                        box-shadow: 2px 3px 7px #0000003a
-                        &:hover
-                            border-radius: 45%
+                    &:hover
+                        .avatar_list_img-cont
                             transform: translateY(calc($height-but-act-jump * 3))
+                            border-radius: 45%
                             box-shadow: 2px 3px 7px #0000005d
                             img
                                 border-radius: 45%
-                        &:active
-                            transform: translateY(calc($height-but-act-jump * 3)) scale(0.95)
-                        &.active
-                            border: 3px solid $color-cover-light
-                            padding: 3px
+                    &:active
+                        .avatar_list_img-cont
+                            transform: translateY(calc($height-but-act-jump * 3)) scale(0.98)
+                    &:focus
+                        .avatar_list_img-cont
+                            box-shadow: 2px 3px 7px #0000005d
+                            border-radius: 45%
+                            img
+                                padding: 3px
+                                border: 3px solid $color-cover-light
+                                border-radius: 45%
+                    .avatar_list_img-cont
+                        height: $size-avatar-elem
+                        width: $size-avatar-elem
+                        border-radius: 50%
+                        box-shadow: 2px 3px 7px #0000003a
+                        transition: all 0.2s ease, border-radius 0.1s ease-out
+                        pointer-events: none
                         img
                             border-radius: 50%
                             width: 100%
                             height: 100%
                             object-fit: cover
                             z-index: -2
-                            transition: all 0.2s ease
+                            transition: all 0.1s ease-out
                     label
-                        // border: 1px solid black
+                        //border: 1px solid black
                         margin-top: -0.4rem
                         padding-top: 1rem
                         text-align: center
+                        font-size: $size-main-text
+                        color: $color-main-text
                 .empty_list-message
                     line-height: 1.7rem
                     font-size: 1rem
@@ -100,7 +104,7 @@
                 .avatar_list_down-but
                     transition: all 0.7s 0.4s $trans-bounce-style
             button
-                // border: 1px solid black
+                //border: 1px solid black
                 width: $size-scroll-but
                 height: $size-scroll-but
                 border-radius: 50%

@@ -6,6 +6,7 @@ import ToolTip from '../../ToolTip/ToolTip'
 import AvatarList from './AvatarList'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import { IReactHookForm } from "../../../types/Auth-types"
+import { useAvatarList } from "../../../stores/Auth-store"
 
 
 
@@ -23,11 +24,12 @@ type AvatarButtonProps = IReactHookForm & {
 }
 const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false, isFormBlur=false }: AvatarButtonProps) => {
 
+    const { isAvatarListOpened, setIsAvatarListOpened } = useAvatarList()
     const [isNoAvatarOpened, setIsNoAvatarOpened] = useState(true)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    const [isAvatarListOpened, setIsAvatarListOpened] = useState(false)
     const [isArrowButsActive, setIsArrowButsActive] = useState(false)
-    const refSetTimeout = useRef<ReturnType<typeof setTimeout>>(null) as MutableRefObject<ReturnType<typeof setTimeout>>
+    const setTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null) as MutableRefObject<ReturnType<typeof setTimeout>>
+    const avatarButtonRef = useRef<HTMLButtonElement>(null)
 
     const createPathToAvatars = (name: string) => {
         return `/avatars/${name}.jpg`
@@ -36,7 +38,9 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
     const handleClickAvatarButton = () => {
         if (error) setError(null)
         setIsAvatarListOpened(true)
-        refSetTimeout.current = setTimeout(() => {setIsArrowButsActive(true)}, 1100)
+        setTimeoutRef.current = setTimeout(() => {
+            setIsArrowButsActive(true)
+        }, 1100)
     }
 
     const handleClickCleaner = () => {
@@ -46,9 +50,8 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
         if (error) setError(null)
     }
 
-    const handleClickElem = (e: IHandleClickButtonWithId) => {
-        // console.log(e.target.id)
-        setAvatar(e.target.id.split('-')[0])
+    const handleClickElem = (avatar: string) => {
+        setAvatar(avatar)
         setIsCleanerOpened(true)
         closeAvatarList()
         if (isNoAvatarOpened) {
@@ -58,19 +61,31 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
 
     const closeAvatarList = () => {
         setIsAvatarListOpened(false)
-        clearTimeout(refSetTimeout.current)
+        clearTimeout(setTimeoutRef.current)
         setIsArrowButsActive(false)
+        avatarButtonRef.current.focus()
     }
 
     return (
         <div className='avatar-cont cont'>
             {!isFormBlur && 
-                <AvatarList LIST={LIST} avatar={avatar} isAvatarListOpened={isAvatarListOpened} closeAvatarList={closeAvatarList} handleClickElem={handleClickElem} isArrowButsActive={isArrowButsActive} disabled={disabled} createPathToAvatars={createPathToAvatars} />
+                <AvatarList
+                    LIST={LIST}
+                    avatar={avatar}
+                    isAvatarListOpened={isAvatarListOpened}
+                    closeAvatarList={closeAvatarList}
+                    handleClickElem={handleClickElem}
+                    isArrowButsActive={isArrowButsActive}
+                    disabled={disabled}
+                    createPathToAvatars={createPathToAvatars}
+                />
             }
             <button
                 className={`avatar-but ${error?.message ? 'error' : ''}`}
                 type='button'
+                tabIndex={!isFormBlur ? 0 : -1}
                 onClick={handleClickAvatarButton}
+                ref={avatarButtonRef}
             >
                 <div className={`no_avatar-cont cont ${isNoAvatarOpened ? 'opened' : ''}`}>
                     <PiUserThin className='fa-icon' />

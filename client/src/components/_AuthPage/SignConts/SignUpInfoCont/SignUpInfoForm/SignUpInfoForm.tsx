@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { AuthContext } from '../../../../../context/Auth-context'
 import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
@@ -13,6 +13,7 @@ import AvatarButton from '../../../AvatarButton/AvatarButton'
 import { focusInput } from '../../../../../utils/focusInput'
 import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
 import { IHandleSignUp } from '../../../../../types/Auth-types'
+import { useAvatarList } from "../../../../../stores/Auth-store"
 
 
 
@@ -25,12 +26,13 @@ type SignUpInfoFormProps = {
 const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: SignUpInfoFormProps) => {
     // console.log('SignUpInfoForm')
 
-    const { handleSignUp } = useContext(AuthContext)
+    const { handleSignUp, handleReturnToSignUp } = useContext(AuthContext)
     const [avatar, setAvatar] = useState<string>('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef<HTMLInputElement>(null)
     const name_input_icon = <GrUserExpert className='input-icon' />
+    const isAvatarListOpened = useAvatarList(s => s.isAvatarListOpened)
 
     const {
         register,
@@ -56,6 +58,23 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
     const checkAvatar: SubmitHandler<IHandleSignUp> = (data) => {
         avatar ? onSubmit(data) : setErrorAvatar({ message: 'Выберите аватар пользователя' })
     }
+
+    const closeOnEsc = (e: KeyboardEvent) => {
+        if (e.code === 'Escape') {
+            handleReturnToSignUp()
+        }
+    }
+
+    //* Esc keyDown handling
+    useEffect(() => {
+        if (!isFormBlur && !isAvatarListOpened) {
+            window.addEventListener("keydown", closeOnEsc)
+
+            return () => {
+                window.removeEventListener("keydown", closeOnEsc)
+            }
+        }
+    }, [isFormBlur, isAvatarListOpened])
     
     const onSubmit = (data: IHandleSignUp) => {
         data.phone = '+375' + data.phone
@@ -154,6 +173,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     icon={<BiLogInCircle className='fa-icon'/>}
                     disabled={isFormBlur}
                     isLoading={isLoading}
+                    tabIndex={0}
                     title='Завершить регистрацию и выполнить вход'
                 />
             </div>

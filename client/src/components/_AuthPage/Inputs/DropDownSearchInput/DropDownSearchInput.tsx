@@ -40,9 +40,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
         if (/[^а-яА-ЯёЁ ]/.test(e.target.value)) {
             toggleDropDown(false)
-        }else if (isValueInList(e.target.value)) {
+        } else if (isValueInList(e.target.value)) {
             toggleDropDown(false)
-        }else {
+        } else {
             !isDropDownOpened && e.target.value ? toggleDropDown(true) : null
         }
 
@@ -53,7 +53,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             if (error?.type === 'isNotLatin') return
             setIsDropDownOpened(true)
             dropDownRef.current.scrollTo({ top: 0, behavior: 'smooth'})
-        }else
+        } else
             setIsDropDownOpened(false)
     }
 
@@ -98,8 +98,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
 
     const handleFocusInput = () => {
-        if (watch(name) && !isValueInList(watch(name)) && !isDropDownOpened)
+        if (watch(name) && !isValueInList(watch(name)) && !isDropDownOpened) {
             toggleDropDown(true)
+        }
         dropDownRef.current.firstChild.classList.add('active')
     }
     const handleBlurInput = () => {
@@ -144,8 +145,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
     const handleKeyDownOnElem = async (e: React.KeyboardEvent<HTMLButtonElement>) => {
         // console.log(e.code)
-        if (e.code.includes('Arrow') || e.code === 'Tab')
+        if (e.code.includes('Arrow') || e.code === 'Tab') {
             e.preventDefault()
+        }
 
         switch(e.code) {
             case 'ArrowUp': 

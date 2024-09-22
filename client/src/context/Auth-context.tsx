@@ -5,7 +5,6 @@ import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "../services/Auth-service"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import {
-	CoverPanelOptions,
 	IAvatarListElement,
 	IHandleCheckUser,
 	IHandleLogOut,
@@ -16,6 +15,7 @@ import {
 	IUserNameInfo,
 } from "../types/Auth-types"
 import io from "socket.io-client"
+import { useCoverPanelState } from "../stores/Auth-store"
 
 
 
@@ -28,7 +28,7 @@ const AuthProvider = ({ children }) => {
 	const [isAppReady, setIsAppReady] = useState(false)
 	const [isUserLogged, setIsUserLogged] = useState(false)
 	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<IAvatarListElement[]>([])
-	const [coverPanelState, setCoverPanelState] = useState<CoverPanelOptions>('sign_in')
+	const setCoverPanelState = useCoverPanelState(s => s.setCoverPanelState)
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
 	const [socketSessId, setSocketSessId] = useState('')
@@ -204,8 +204,6 @@ const AuthProvider = ({ children }) => {
 		<AuthContext.Provider
 			value={{
 				// data,
-				coverPanelState,
-                setCoverPanelState,
 				handleReturnToSignUp,
 				handleCheckUser,
 				// handleFetchProtected,

@@ -21,7 +21,6 @@ type SnackBarProps = {
 const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
     const { toasts } = useToasterStore()
-    // console.log(snack)
 
     useEffect(() => {
         toasts
@@ -29,6 +28,28 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
           .filter((_, i) => i >= TOAST_LIMIT - 1)
           .forEach(t => toast.dismiss(t.id))
       }, [toasts])
+
+    const closeOnEsc = (e: KeyboardEvent) => {
+        if (e.code === 'Escape') {
+            if (toasts.find(t => t.visible && t.duration !== Infinity)) {
+                e.preventDefault()
+                toasts
+                    .filter(t => t.visible && t.duration !== Infinity)
+                    .forEach(t => toast.dismiss(t.id))
+            }
+        }
+    }
+
+    //* Esc keyDown handling
+    useEffect(() => {
+        if (toasts[0]) {
+            window.addEventListener("keydown", closeOnEsc)
+
+            return () => {
+                window.removeEventListener("keydown", closeOnEsc)
+            }
+        }
+    }, [toasts])
 
     return ( 
         <button

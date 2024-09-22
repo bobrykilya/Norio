@@ -6,6 +6,7 @@ import SignUpImg from '../../../assets/AuthPage/sign_up.png'
 import SignInImg from '../../../assets/AuthPage/sign_in.png'
 import { IoArrowBackCircleOutline } from "react-icons/io5"
 import ToolTip from '../../ToolTip/ToolTip'
+import { useCoverPanelState } from "../../../stores/Auth-store"
 // import CoverBgImg from '../../../assets/cover_bg.jpg'
 
 
@@ -15,7 +16,8 @@ type CoverPanelProps = {
 }
 const CoverPanel = ({ disabled }: CoverPanelProps) => {
     
-    const { coverPanelState, setCoverPanelState, handleReturnToSignUp } = useContext(AuthContext)
+    const { handleReturnToSignUp } = useContext(AuthContext)
+    const { coverPanelState, setCoverPanelState } = useCoverPanelState()
 
     return ( 
         <div id='cover_and_img-cont' className={`cont opened_${coverPanelState}`}>
@@ -29,7 +31,7 @@ const CoverPanel = ({ disabled }: CoverPanelProps) => {
                             id='open_sign_up-but'
                             type='button'
                             onClick={() => setCoverPanelState('sign_up')}
-                            tabIndex={-1}
+                            tabIndex={coverPanelState === 'sign_in' ? 0 : -1}
                             disabled={disabled}
                         >
                             <label htmlFor="open_sign_up-but">

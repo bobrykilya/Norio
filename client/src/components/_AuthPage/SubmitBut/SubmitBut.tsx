@@ -6,20 +6,21 @@ import CircularProgress from '@mui/joy/CircularProgress'
 
 interface SubmitButProps {
     icon: React.ReactElement;
+    isLoading: boolean;
+    title: string;
     notSaveUser?: boolean;
     onClick?: () => void;
     disabled?: boolean;
     blur?: boolean;
-    isLoading: boolean;
-    title: string;
+    tabIndex?: number;
 }
-const SubmitBut = ({ icon, notSaveUser=false, onClick, disabled=false, blur=false, isLoading, title }: SubmitButProps) => {
+const SubmitBut = ({ icon, isLoading, notSaveUser=false, onClick, disabled=false, blur=false, title, tabIndex=-1 }: SubmitButProps) => {
 
     return (
         <button
             className={`submit-but cont ${blur && 'blur'}`}
             type={notSaveUser ? 'button' : 'submit'}
-            tabIndex={-1}
+            tabIndex={tabIndex}
             disabled={disabled ? true : isLoading}
             onClick={notSaveUser ? onClick : () => null}
         >

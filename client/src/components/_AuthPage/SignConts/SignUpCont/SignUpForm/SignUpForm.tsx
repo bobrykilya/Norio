@@ -8,6 +8,8 @@ import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { LuCheckCircle } from "react-icons/lu"
 import { FaUser } from "react-icons/fa"
+import { useCoverPanelState } from "../../../../../stores/Auth-store"
+import { IHandleCheckUser } from "../../../../../types/Auth-types"
 
 
 
@@ -19,6 +21,7 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }: SignUpFormProps) => {
     // console.log('SignUp')
     
     const { handleCheckUser } = useContext(AuthContext)
+    const setCoverPanelState = useCoverPanelState(s => s.setCoverPanelState)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefLogin = useRef(null)
 
@@ -51,7 +54,24 @@ const SignUpForm = ({ isFormBlur, isSubmitButBlur }: SignUpFormProps) => {
         }
     }, [watch('password'), watch('confirm_password')])
 
-    const onSubmit = async (data) => {
+    const closeOnEsc = (e: KeyboardEvent) => {
+        if (e.code === 'Escape') {
+            setCoverPanelState('sign_in')
+        }
+    }
+
+    //* Esc keyDown handling
+    useEffect(() => {
+        if (!isFormBlur) {
+            window.addEventListener("keydown", closeOnEsc)
+
+            return () => {
+                window.removeEventListener("keydown", closeOnEsc)
+            }
+        }
+    }, [isFormBlur])
+
+    const onSubmit = async (data: IHandleCheckUser & { confirm_password: string }) => {
         delete data.confirm_password
 
         setIsLoading(true)
