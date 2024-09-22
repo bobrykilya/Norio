@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { AuthContext } from '../../../../../context/Auth-context'
 import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
@@ -13,7 +13,7 @@ import AvatarButton from '../../../AvatarButton/AvatarButton'
 import { focusInput } from '../../../../../utils/focusInput'
 import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
 import { IHandleSignUp } from '../../../../../types/Auth-types'
-import { useAvatarList } from "../../../../../stores/Auth-store"
+import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
 
 
 
@@ -21,9 +21,11 @@ type SignUpInfoFormProps = {
     STORES_LIST: IDataListElement[];
     JOBS_LIST: IDataListElement[];
     AVATARS_LIST: IDataListElement[];
-    isFormBlur: boolean;
+    isFormDisabled: boolean;
+    isAvatarButDisabled: boolean;
+    isAnyCoverModalOpened: boolean;
 }
-const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: SignUpInfoFormProps) => {
+const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled, isAvatarButDisabled, isAnyCoverModalOpened }: SignUpInfoFormProps) => {
     // console.log('SignUpInfoForm')
 
     const { handleSignUp, handleReturnToSignUp } = useContext(AuthContext)
@@ -32,7 +34,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef<HTMLInputElement>(null)
     const name_input_icon = <GrUserExpert className='input-icon' />
-    const isAvatarListOpened = useAvatarList(s => s.isAvatarListOpened)
+
 
     const {
         register,
@@ -59,37 +61,24 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
         avatar ? onSubmit(data) : setErrorAvatar({ message: 'Выберите аватар пользователя' })
     }
 
-    const closeOnEsc = (e: KeyboardEvent) => {
-        if (e.code === 'Escape') {
-            handleReturnToSignUp()
-        }
-    }
-
-    //* Esc keyDown handling
-    useEffect(() => {
-        if (!isFormBlur && !isAvatarListOpened) {
-            window.addEventListener("keydown", closeOnEsc)
-
-            return () => {
-                window.removeEventListener("keydown", closeOnEsc)
-            }
-        }
-    }, [isFormBlur, isAvatarListOpened])
+    //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
+    useCloseOnEsc({
+        conditionsList: [isFormDisabled, isAnyCoverModalOpened],
+        successFun: () => handleReturnToSignUp()
+    })
     
-    const onSubmit = (data: IHandleSignUp) => {
+    const onSubmit = async (data: IHandleSignUp) => {
         data.phone = '+375' + data.phone
         data.avatar = avatar
-        
-        setTimeout(async () => {
-            setIsLoading(true)
-            await handleSignUp(data)
+
+        setIsLoading(true)
+        await handleSignUp(data)
             .catch(() => {
                 focusInput(inputRefPhone)
             })
             .finally(() => setIsLoading(false))
-            // alert(JSON.stringify(data))
-        }, 100)
     }
+
 
     return ( 
         <form onSubmit={handleSubmit(checkAvatar)} id='sign_up_info-form' className='form cont'>
@@ -99,7 +88,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     register={register}
                     error={errors?.phone}
                     reset={resetField}
-                    disabled={isFormBlur}
+                    disabled={isFormDisabled}
                     inputRefPhone={inputRefPhone}
                 />
                 <DropDownSearchInput 
@@ -113,7 +102,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     setValue={setValue}
                     setError={setError}
                     watch={watch}
-                    disabled={isFormBlur}
+                    disabled={isFormDisabled}
                 />
                 <DropDownSearchInput 
                     LIST={JOBS_LIST}
@@ -126,7 +115,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     setValue={setValue}
                     setError={setError}
                     watch={watch}
-                    disabled={isFormBlur}
+                    disabled={isFormDisabled}
                 />
                 <UserNameInput
                     name='last_name'
@@ -137,7 +126,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     error={errors?.last_name}
                     reset={resetField}
                     inputMaxLength={25}
-                    disabled={isFormBlur}
+                    disabled={isFormDisabled}
                 />
                 <UserNameInput
                     name='first_name'
@@ -147,7 +136,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     register={register}
                     error={errors?.first_name}
                     reset={resetField}
-                    disabled={isFormBlur}
+                    disabled={isFormDisabled}
                 />
                 <UserNameInput
                     name='middle_name'
@@ -157,7 +146,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     register={register}
                     error={errors?.middle_name}
                     reset={resetField}
-                    disabled={isFormBlur}
+                    disabled={isFormDisabled}
                 />
             </div>
             <div className='avatar_and_submit_buts-cont cont'>
@@ -167,11 +156,12 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormBlur }: S
                     setAvatar={setAvatar}
                     error={errorAvatar}
                     setError={setErrorAvatar}
-                    isFormBlur={isFormBlur}
+                    disabled={isAvatarButDisabled}
+                    isAvatarButTabDisabled={isFormDisabled}
                 />
                 <SubmitBut
                     icon={<BiLogInCircle className='fa-icon'/>}
-                    disabled={isFormBlur}
+                    disabled={isFormDisabled}
                     isLoading={isLoading}
                     tabIndex={0}
                     title='Завершить регистрацию и выполнить вход'

@@ -28,11 +28,11 @@ const AuthProvider = ({ children }) => {
 	const [isAppReady, setIsAppReady] = useState(false)
 	const [isUserLogged, setIsUserLogged] = useState(false)
 	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<IAvatarListElement[]>([])
-	const setCoverPanelState = useCoverPanelState(s => s.setCoverPanelState)
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
 	const [socketSessId, setSocketSessId] = useState('')
-	
+	const setCoverPanelState = useCoverPanelState(s => s.setCoverPanelState)
+
 
 	const getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
 		return lastName ? `${lastName} ${firstName} "${username}"` : username

@@ -1,5 +1,6 @@
-import React from 'react'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { useAnyJumpingListState } from "../../stores/Global-store"
+import useCloseOnEsc from "../../hooks/useCloseOnEsc"
 
 
 
@@ -11,30 +12,30 @@ type JumpingListProps = {
 }
 const JumpingList = ({ children, isListOpened, closeList, other_children }: JumpingListProps) => {
 
+    const setIsAnyJumpingListOpened = useAnyJumpingListState(s => s.setIsAnyJumpingListOpened)
+
     const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as Element
 
-        try {
-            if (target?.className.includes('jumping_list_cover-cont')) {
-                closeList()
-            }
-        }catch {
-
+        if (target?.className.includes('jumping_list_cover-cont')) {
+            closeList()
         }
     }
-    
-    useEffect(() => {
-        const handleEscapePress = (e: globalThis.KeyboardEvent) => {
-            if (!isListOpened) return
-            if (e.key === 'Escape') {
-                closeList()
-            }
-        }
-        window.addEventListener('keydown', handleEscapePress)
-        return () => {
-            window.removeEventListener('keydown', handleEscapePress)
-        }
+
+    useCloseOnEsc({
+        conditionsList: [!isListOpened],
+        successFun: closeList
     })
+
+    //* For forms Esc blur while JumpingList is opened
+    useEffect(() => {
+        if (isListOpened) {
+            setIsAnyJumpingListOpened(true)
+        } else {
+            setIsAnyJumpingListOpened(false)
+        }
+    }, [isListOpened])
+
 
     return ( 
         <div 

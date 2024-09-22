@@ -23,6 +23,7 @@ const LogBookButton = () => {
         }
         // console.log(blockSnackBarMessageList)
         setIsLogListOpened(true)
+
     }
 
     const closeLogList = () => {
@@ -36,7 +37,7 @@ const LogBookButton = () => {
     return ( 
         <>
             <LogBookList closeLogList={closeLogList} isLogListOpened={isLogListOpened} />
-            <button 
+            <button
                 className='log_book-button cont before_but-hover'
                 onClick={openLogList}
                 type='button'

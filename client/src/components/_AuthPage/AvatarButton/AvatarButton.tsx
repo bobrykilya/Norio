@@ -6,25 +6,20 @@ import ToolTip from '../../ToolTip/ToolTip'
 import AvatarList from './AvatarList'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import { IReactHookForm } from "../../../types/Auth-types"
-import { useAvatarList } from "../../../stores/Auth-store"
+import { useAvatarListState } from "../../../stores/Auth-store"
 
 
 
-export type IHandleClickButtonWithId = React.MouseEvent<HTMLButtonElement, MouseEvent> & {
-target: {
-        id: string;
-    }
-}
 type AvatarButtonProps = IReactHookForm & {
     LIST: IDataListElement[];
     avatar: string | null;
     setAvatar: (avatar: string) => void;
-    disabled?: boolean;
-    isFormBlur?: boolean;
+    disabled: boolean;
+    isAvatarButTabDisabled: boolean;
 }
-const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false, isFormBlur=false }: AvatarButtonProps) => {
-
-    const { isAvatarListOpened, setIsAvatarListOpened } = useAvatarList()
+const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false,  isAvatarButTabDisabled=false }: AvatarButtonProps) => {
+    
+    const { isAvatarListOpened, setIsAvatarListOpened } = useAvatarListState()
     const [isNoAvatarOpened, setIsNoAvatarOpened] = useState(true)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isArrowButsActive, setIsArrowButsActive] = useState(false)
@@ -68,7 +63,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
 
     return (
         <div className='avatar-cont cont'>
-            {!isFormBlur && 
+            {!disabled &&
                 <AvatarList
                     LIST={LIST}
                     avatar={avatar}
@@ -83,7 +78,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
             <button
                 className={`avatar-but ${error?.message ? 'error' : ''}`}
                 type='button'
-                tabIndex={!isFormBlur ? 0 : -1}
+                tabIndex={isAvatarButTabDisabled ? -1 : 0}
                 onClick={handleClickAvatarButton}
                 ref={avatarButtonRef}
             >

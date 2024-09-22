@@ -2,25 +2,26 @@ import React from 'react'
 import SignUpForm from './SignUpForm/SignUpForm'
 import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
 import NameTag from '../../NameTag/NameTag'
+import { SignContProps } from "../../../../types/Auth-types"
 
 
 
-interface SignUpContProps {
-    act_form: string;
-    blur_form: boolean;
-}
-const SignUpCont = ({ act_form, blur_form }: SignUpContProps) => {
-
+const SignUpCont = ({ actForm, isFormDisabled, isAnyCoverModalOpened }: SignContProps) => {
+    
     return (  
         <section 
             id='sign_up-cont'
-            className={`sign-cont cont ${act_form !== 'sign_in' ? 'active' : ''}`}
+            className={`sign-cont cont ${actForm !== 'sign_in' ? 'active' : ''}`}
         >
             <div className='enter_text-cont cont'>
                 <h1>Регистрация</h1>
             </div>
-            <ButtonsCont disabled={blur_form} />
-            <SignUpForm isFormBlur={blur_form || act_form !== 'sign_up'} isSubmitButBlur={act_form === 'sign_up_info'} />
+            <ButtonsCont disabled={isFormDisabled} />
+            <SignUpForm
+                isFormDisabled={isFormDisabled || actForm !== 'sign_up'}
+                isFormBlur={actForm === 'sign_up_info'}
+                isAnyCoverModalOpened={isAnyCoverModalOpened}
+            />
             <NameTag />
         </section>
     )

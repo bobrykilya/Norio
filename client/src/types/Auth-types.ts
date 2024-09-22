@@ -4,6 +4,12 @@ export type IAvatarListElement = {
     title: string;
 }
 
+export type SignContProps = {
+    actForm: string;
+    isFormDisabled: boolean;
+    isAnyCoverModalOpened?: boolean;
+}
+
 export type IHandleSignIn = {
     username: string;
     password: string;
@@ -49,17 +55,6 @@ export type IUserInfo = IHandleSignUp & {
 
 export type IHandleLogOut = { 
     interCode?: number;
-}
-
-type UserFormFields = {
-    username: string;
-    password: string;
-    phone: string;
-    store: string;
-    job: string;
-    last_name: string;
-    first_name: string;
-    middle_name: string;
 }
 
 export type IReactHookForm = {

@@ -6,6 +6,8 @@ import InputError from '../InputError/InputError'
 import InputCleaner from '../InputCleaner/InputCleaner'
 import { IDataListElement } from "../../../../assets/AuthPage/AuthPage-data"
 import { ISignFormInput } from "../../../../types/Auth-types"
+import { useAnyCoverModalState } from "../../../../stores/Global-store"
+import useCloseOnEsc from "../../../../hooks/useCloseOnEsc"
 
 
 
@@ -18,6 +20,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
+    const setIsAnyCoverModalOpened = useAnyCoverModalState(s => s.setIsAnyCoverModalOpened) //* For forms Esc blur while any DropDown is opened
     
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
@@ -51,10 +54,13 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     const toggleDropDown = (pos: boolean) => {
         if (pos) {
             if (error?.type === 'isNotLatin') return
+            setIsAnyCoverModalOpened(true)
             setIsDropDownOpened(true)
             dropDownRef.current.scrollTo({ top: 0, behavior: 'smooth'})
-        } else
+        } else {
+            setIsAnyCoverModalOpened(false)
             setIsDropDownOpened(false)
+        }
     }
 
     const changeInput = () => {
@@ -96,7 +102,6 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         return list.some(el => el.title.toLowerCase() === val.trim().toLowerCase())
     }
 
-
     const handleFocusInput = () => {
         if (watch(name) && !isValueInList(watch(name)) && !isDropDownOpened) {
             toggleDropDown(true)
@@ -133,10 +138,8 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                     }
                     break
                 case 'Enter':
+                    // e.preventDefault()
                     setInputValue(dropDownRef.current.firstChild.innerHTML)
-                    break
-                case 'Escape':
-                    toggleDropDown(false)
                     break
             }
         }
@@ -165,8 +168,6 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             case 'Escape':
                 await focusInput(inputRef)
                 toggleDropDown(false)
-                break
-            case 'Enter':
                 break
             case 'Tab':
                 setInputValue(document.activeElement.innerHTML)
@@ -197,6 +198,11 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         }
     }
 
+    useCloseOnEsc({
+        conditionsList: [!isDropDownOpened],
+        successFun: () => toggleDropDown(false)
+    })
+
     const { ref, ... rest_register } = register(name, {
         required: true,
         validate: {
@@ -210,7 +216,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         },
     })
 
-    // console.log(error)
+
     return ( 
         <div className={`dropdown_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
             <span 

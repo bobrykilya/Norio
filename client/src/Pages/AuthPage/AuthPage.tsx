@@ -1,22 +1,24 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import SignInCont from '../../components/_AuthPage/SignConts/SignInCont/SignInCont'
 import SignUpCont from '../../components/_AuthPage/SignConts/SignUpCont/SignUpCont'
 import SignUpInfoCont from '../../components/_AuthPage/SignConts/SignUpInfoCont/SignUpInfoCont'
 import CoverPanel from '../../components/_AuthPage/CoverPanel/CoverPanel'
 import AppTitle from '../../components/AppTitle/AppTitle'
 import LogBookButton from '../../components/LogBook/LogBookButton'
-import { AuthContext } from '../../context/Auth-context'
 import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
 import { useBlockError } from "../../stores/Device-store"
 import CoverAppTitle from "../../components/_AuthPage/CoverAppTitle/CoverAppTitle"
+import { useCoverPanelState } from "../../stores/Auth-store"
+import { useAnyCoverModalState, useAnyJumpingListState } from "../../stores/Global-store"
 
 
 
 const AuthPage = () => {
-    const { coverPanelState } = useContext(AuthContext)
+    const coverPanelState = useCoverPanelState(s => s.coverPanelState)
     const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
-    // console.log(coverPanelState)
+    const isAnyJumpingListOpened = useAnyJumpingListState(s => s.isAnyJumpingListOpened)
+    const isAnyCoverModalOpened = useAnyCoverModalState(s => s.isAnyCoverModalOpened)
 
     return (
         <>
@@ -26,10 +28,21 @@ const AuthPage = () => {
             <AuthPageAnim>
                 <div id="auth_panel-cont" className={`cont ${blockErrorMessage && 'block'}`}>
                     <div id="signs-cont" className="cont">
-                        <SignInCont act_form={coverPanelState} blur_form={!!blockErrorMessage} />
-                        <SignUpCont act_form={coverPanelState} blur_form={!!blockErrorMessage} />
+                        <SignInCont
+                            actForm={coverPanelState}
+                            isFormDisabled={isAnyJumpingListOpened || !!blockErrorMessage}
+                        />
+                        <SignUpCont
+                            actForm={coverPanelState}
+                            isFormDisabled={isAnyJumpingListOpened || !!blockErrorMessage}
+                            isAnyCoverModalOpened={isAnyCoverModalOpened}
+                        />
                         {coverPanelState !== 'sign_in' &&
-                            <SignUpInfoCont act_form={coverPanelState} blur_form={!!blockErrorMessage} />
+                            <SignUpInfoCont
+                                actForm={coverPanelState}
+                                isFormDisabled={isAnyJumpingListOpened || !!blockErrorMessage}
+                                isAnyCoverModalOpened={isAnyCoverModalOpened}
+                            />
                         }
                     </div>
                     <CoverPanel disabled={!!blockErrorMessage} />

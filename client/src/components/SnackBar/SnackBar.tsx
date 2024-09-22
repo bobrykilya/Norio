@@ -3,6 +3,8 @@ import toast, { useToasterStore } from 'react-hot-toast'
 import { IoCloseCircleOutline } from 'react-icons/io5'
 import { SnackBarTypeOptions } from '../../features/showSnackMessage/showSnackMessage';
 import { TOAST_LIMIT } from "../../../constants"
+import useCloseOnEsc from "../../hooks/useCloseOnEsc"
+import { useAnyCoverModalState } from "../../stores/Global-store"
 
 
 
@@ -21,6 +23,7 @@ type SnackBarProps = {
 const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
     const { toasts } = useToasterStore()
+    const setIsAnyCoverModalOpened = useAnyCoverModalState(s => s.setIsAnyCoverModalOpened)
 
     useEffect(() => {
         toasts
@@ -29,27 +32,29 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
           .forEach(t => toast.dismiss(t.id))
       }, [toasts])
 
-    const closeOnEsc = (e: KeyboardEvent) => {
-        if (e.code === 'Escape') {
+
+    useCloseOnEsc({
+        conditionsList: [!toasts[0]],
+        successFun: () => {
             if (toasts.find(t => t.visible && t.duration !== Infinity)) {
-                e.preventDefault()
                 toasts
                     .filter(t => t.visible && t.duration !== Infinity)
                     .forEach(t => toast.dismiss(t.id))
             }
         }
-    }
+    })
 
-    //* Esc keyDown handling
+    //* For forms Esc blur while any (not Infinity) SnackBar is opened
     useEffect(() => {
         if (toasts[0]) {
-            window.addEventListener("keydown", closeOnEsc)
-
-            return () => {
-                window.removeEventListener("keydown", closeOnEsc)
+            if (toasts.find(t => t.visible && t.duration !== Infinity)) {
+                setIsAnyCoverModalOpened(true)
+            } else {
+                setIsAnyCoverModalOpened(false)
             }
         }
     }, [toasts])
+
 
     return ( 
         <button

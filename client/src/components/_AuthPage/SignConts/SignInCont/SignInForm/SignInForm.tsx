@@ -14,9 +14,9 @@ import { IHandleSignIn } from '../../../../../types/Auth-types';
 
 
 interface SignInFormProps {
-    isFormBlur: boolean;
+    isFormDisabled: boolean;
 }
-const SignInForm = ({ isFormBlur }: SignInFormProps) => {
+const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     // console.log('SignIn')
     const { handleSignIn } = useContext(AuthContext)
     const [notSaveUser, setNotSaveUser] = useState(false)
@@ -81,7 +81,7 @@ const SignInForm = ({ isFormBlur }: SignInFormProps) => {
                     register={register}
                     reset={resetField}
                     notSaveUser={notSaveUser}
-                    disabled={isFormBlur}
+                    disabled={isFormDisabled}
                     inputRefLogin={inputRefLogin}
                 /> 
                 <PasswordInput
@@ -91,17 +91,17 @@ const SignInForm = ({ isFormBlur }: SignInFormProps) => {
                     reset={resetField}
                     watch={watch}
                     notSaveUser={notSaveUser}
-                    disabled={isFormBlur}
+                    disabled={isFormDisabled}
                 />
                 <label id='checkbox-cont' className='cont'>
-                    <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser} disabled={isFormBlur} />
+                    <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser} disabled={isFormDisabled} />
                     <span>Быстрая сессия</span>
                     <ToolTip text='Длительность сессии ограничена. Пароль не сохраняется автоматически' />
                 </label>
             </div>
             <SubmitBut
                 icon={<BiLogInCircle className='fa-icon'/>}
-                blur={isFormBlur}
+                disabled={isFormDisabled}
                 notSaveUser={notSaveUser}
                 onClick={handleSubmit(onSubmitNotSave)}
                 isLoading={isLoading}
