@@ -57,7 +57,10 @@ const SignUpForm = ({ isFormBlur, isFormDisabled, isAnyCoverModalOpened }: SignU
     }, [watch('password'), watch('confirm_password')])
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
-    useCloseOnEsc({ conditionsList: [isFormDisabled, isAnyCoverModalOpened], successFun: () => setCoverPanelState('sign_in') })
+    useCloseOnEsc({
+        successConditionsList: [!isFormDisabled, !isAnyCoverModalOpened],
+        successFun: () => setCoverPanelState('sign_in')
+    })
 
     const onSubmit = async (data: IHandleCheckUser & { confirm_password: string }) => {
         delete data.confirm_password

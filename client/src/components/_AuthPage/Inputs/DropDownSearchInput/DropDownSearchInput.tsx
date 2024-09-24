@@ -199,7 +199,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
 
     useCloseOnEsc({
-        conditionsList: [!isDropDownOpened],
+        successConditionsList: [isDropDownOpened],
         successFun: () => toggleDropDown(false)
     })
 
