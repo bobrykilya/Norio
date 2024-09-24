@@ -10,15 +10,14 @@ import './AuthPage.sass'
 import { useBlockError } from "../../stores/Device-store"
 import CoverAppTitle from "../../components/_AuthPage/CoverAppTitle/CoverAppTitle"
 import { useCoverPanelState } from "../../stores/Auth-store"
-import { useAnyCoverModalState, useAnyJumpingListState } from "../../stores/Global-store"
+import { useAnyCoverModalState } from "../../stores/Global-store"
 
 
 
 const AuthPage = () => {
     const coverPanelState = useCoverPanelState(s => s.coverPanelState)
     const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
-    const isAnyJumpingListOpened = useAnyJumpingListState(s => s.isAnyJumpingListOpened)
-    const isAnyCoverModalOpened = useAnyCoverModalState(s => s.isAnyCoverModalOpened)
+    const { isAnyCoverModalOpened, isAnyJumpingListOpened } = useAnyCoverModalState()
 
     return (
         <>

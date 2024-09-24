@@ -3,10 +3,10 @@ import { useEffect } from "react"
 
 
 type IUseCloseOnEsc = {
-	conditionsList: boolean[];
+	successConditionsList: boolean[];
 	successFun: () => void;
 }
-const useCloseOnEsc = ({ conditionsList, successFun }: IUseCloseOnEsc) => {
+const useCloseOnEsc = ({ successConditionsList, successFun }: IUseCloseOnEsc) => {
 	const closeOnEsc = async (e: KeyboardEvent) => {
 		if (e.code === 'Escape') {
 			successFun()
@@ -15,14 +15,14 @@ const useCloseOnEsc = ({ conditionsList, successFun }: IUseCloseOnEsc) => {
 
 	//* Esc keyDown handling
 	useEffect(() => {
-		if (!conditionsList.includes(false)) return
+		if (successConditionsList.includes(false)) return
 
 		window.addEventListener("keydown", closeOnEsc)
 
 		return () => {
 			window.removeEventListener("keydown", closeOnEsc)
 		}
-	}, conditionsList)
+	}, successConditionsList)
 }
 
 export default useCloseOnEsc

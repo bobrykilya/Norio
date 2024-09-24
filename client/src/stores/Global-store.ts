@@ -2,26 +2,19 @@ import { create } from "zustand"
 
 
 
-type IUseAnyJumpingListState = {
-	isAnyJumpingListOpened: boolean;
-	setIsAnyJumpingListOpened: (state: boolean) => void;
-}
-const useAnyJumpingListState = create<IUseAnyJumpingListState>(set => ({
-	isAnyJumpingListOpened: false,
-	setIsAnyJumpingListOpened: (state: boolean) => set({ isAnyJumpingListOpened: state })
-}))
-
-
 type IUseAnyCoverModalState = {
 	isAnyCoverModalOpened: boolean;
+	isAnyJumpingListOpened: boolean;
 	setIsAnyCoverModalOpened: (state: boolean) => void;
+	setIsAnyJumpingListOpened: (state: boolean) => void;
 }
 const useAnyCoverModalState = create<IUseAnyCoverModalState>(set => ({
 	isAnyCoverModalOpened: false,
-	setIsAnyCoverModalOpened: (state: boolean) => set({ isAnyCoverModalOpened: state })
+	isAnyJumpingListOpened: false,
+	setIsAnyCoverModalOpened: (state: boolean) => set({ isAnyCoverModalOpened: state }),
+	setIsAnyJumpingListOpened: (state: boolean) => set({ isAnyJumpingListOpened: state })
 }))
 
 export {
-	useAnyJumpingListState,
 	useAnyCoverModalState,
 }

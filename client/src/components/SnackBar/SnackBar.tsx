@@ -34,7 +34,7 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
 
     useCloseOnEsc({
-        conditionsList: [!toasts[0]],
+        successConditionsList: [!!toasts[0]],
         successFun: () => {
             if (toasts.find(t => t.visible && t.duration !== Infinity)) {
                 toasts
