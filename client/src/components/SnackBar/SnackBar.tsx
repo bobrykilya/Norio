@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import toast, { useToasterStore } from 'react-hot-toast'
 import { IoCloseCircleOutline } from 'react-icons/io5'
-import { SnackBarTypeOptions } from '../../features/showSnackMessage/showSnackMessage';
+import { SnackBarTypeOptions } from '../../features/showSnackMessage/showSnackMessage'
 import { TOAST_LIMIT } from "../../../constants"
 import useCloseOnEsc from "../../hooks/useCloseOnEsc"
 import { useAnyCoverModalState } from "../../stores/Global-store"

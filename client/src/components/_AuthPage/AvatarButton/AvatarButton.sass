@@ -18,7 +18,7 @@
             .no_avatar-cont
                 transition: all 0.2s ease
                 border: 1.5px solid $color-main-text-act
-                box-shadow: 0 3px 3px rgba(0, 0, 0, 0.11)
+                box-shadow: 0 3px 3px rgba(0, 0, 0, 0.16)
             img
                 border-radius: 40%
                 box-shadow: 0 3px 3px rgba(0, 0, 0, 0.31)
@@ -71,6 +71,12 @@
                 border: 1.5px solid $color-error
                 .fa-icon
                     color: $color-error
+            &:hover, &:focus
+                .no_avatar-cont
+                    border: 1px solid $color-error-dark
+                    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2)
+                    .fa-icon
+                        color: $color-error-dark
     .input_error-cont
         top: $size-main-text - 1.5rem
         // margin-right: -1rem

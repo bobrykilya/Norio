@@ -6,7 +6,6 @@ import UserNameInput from '../../../Inputs/NameInput/NameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { HiOutlineHome } from "react-icons/hi"
 import { GrUserExpert, GrUserWorker } from "react-icons/gr"
-// import { TiArrowRightOutline } from "react-icons/ti"
 import { BiLogInCircle } from "react-icons/bi"
 import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
 import AvatarButton from '../../../AvatarButton/AvatarButton'
@@ -33,7 +32,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef<HTMLInputElement>(null)
-    const name_input_icon = <GrUserExpert className='input-icon' />
+    const nameInputIcon = <GrUserExpert className='input-icon' />
 
 
     const {
@@ -62,6 +61,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
     }
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
+    // console.log({ isFormDisabled, isAnyCoverModalOpened })
     useCloseOnEsc({
         conditionsList: [isFormDisabled, isAnyCoverModalOpened],
         successFun: () => handleReturnToSignUp()
@@ -120,7 +120,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                 <UserNameInput
                     name='last_name'
                     placeholder='Фамилия'
-                    icon={name_input_icon}
+                    icon={nameInputIcon}
                     inputType='name'
                     register={register}
                     error={errors?.last_name}
@@ -131,7 +131,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                 <UserNameInput
                     name='first_name'
                     placeholder='Имя'
-                    icon={name_input_icon}
+                    icon={nameInputIcon}
                     inputType='name'
                     register={register}
                     error={errors?.first_name}
@@ -141,7 +141,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                 <UserNameInput
                     name='middle_name'
                     placeholder='Отчество'
-                    icon={name_input_icon}
+                    icon={nameInputIcon}
                     inputType='name'
                     register={register}
                     error={errors?.middle_name}
