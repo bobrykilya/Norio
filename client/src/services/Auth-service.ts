@@ -1,22 +1,18 @@
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import { $apiAuth, getApiInfo } from "../http/http"
-import {
-    ICheckUserServiceResp,
-    IHandleCheckUser,
-    IHandleLogOut,
-    IHandleSignIn,
-    ILoginServiceResp,
-    ISignUpServiceReq,
-} from '../types/Auth-types'
 import { PERMITTED_COUNTRIES } from "../../constants"
+import {
+    ICheckUserReq,
+    ICheckUserRes,
+    ILoginServiceRes,
+    ILogOutReq,
+    IPreprocessing,
+    IRefreshReq,
+    ISignInReq,
+    ISignUpReq,
+} from "../../../common/types/Auth-types"
 
 
-
-type IProcessedRequestLoginService<T> = T & {
-    deviceIP?: string;
-    lsDeviceId?: number;
-    deviceType?: string;
-}
 
 const getDeviceType = () => {
 	const ua = navigator.userAgent
@@ -41,7 +37,7 @@ const checkCountryCode = async () => {
     return res.ip
 }
 
-const preRequest = async <T>(data: IProcessedRequestLoginService<T>) => {
+const preRequest = async <T>(data: IPreprocessing & T) => {
     data.deviceIP = await checkCountryCode()
     
     const lsDeviceId = Number(localStorage.getItem('deviceId'))
@@ -56,38 +52,38 @@ const preRequest = async <T>(data: IProcessedRequestLoginService<T>) => {
 
 
 class AuthService {
-    static async signIn(data: IHandleSignIn) {
+    static async signIn(data: ISignInReq) {
         // console.log(data)
         try {
             const newData = await preRequest(data)
-            return await $apiAuth.post("sign-in", { json: newData }).json<ILoginServiceResp>()
+            return await $apiAuth.post("sign-in", { json: newData }).json<ILoginServiceRes>()
         } catch (err) {
             showSnackMessage(err)
             throw new Error('SignIn error')
         }
     }
 
-    static async checkUser(data: IHandleCheckUser) {
+    static async checkUser(data: ICheckUserReq) {
         try {
-            return await $apiAuth.post("check-user", { json: data }).json<ICheckUserServiceResp>()
+            return await $apiAuth.post("check-user", { json: data }).json<ICheckUserRes>()
         } catch (err) {
             showSnackMessage(err)
             throw new Error('CheckUser error')
         }
     }
 
-    static async signUp(data: ISignUpServiceReq) {
+    static async signUp(data: ISignUpReq) {
         try {
             const newData = await preRequest(data)
 
-            return await $apiAuth.post("sign-up", { json: newData }).json<ILoginServiceResp>()
+            return await $apiAuth.post("sign-up", { json: newData }).json<ILoginServiceRes>()
         } catch (err) {
             showSnackMessage(err)
             throw new Error('SignUp error')
         }
     }
 
-    static logOut(data: IHandleLogOut) {
+    static logOut(data: ILogOutReq) {
         try {
             $apiAuth.post("logout", { json: data })
 
@@ -97,9 +93,9 @@ class AuthService {
         }
     }
 
-    static async refresh(data: { lsDeviceId?: number } = {}) {
+    static async refresh(data: IRefreshReq) {
         try {
-            return await $apiAuth.post("refresh", { json: data })?.json<ILoginServiceResp>()
+            return await $apiAuth.post("refresh", { json: data })?.json<ILoginServiceRes>()
         } catch (err) {
             // console.log(err)
             showSnackMessage(err)

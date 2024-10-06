@@ -1,10 +1,11 @@
-import queryDB from '../../utils/queryDB.js'
-import { getTime } from "../../utils/getTime.js"
+import queryDB from '../../utils/queryDB'
+import { getTime } from "../../utils/getTime"
+import { IRefreshSessionRepository } from "../../types/DB-types"
 
 
 
 class RefreshSessionRepository {
-	static async createRefreshSession({ userId, deviceId, logInTime, logOutTime=null, refreshToken }) {
+	static async createRefreshSession({ userId, deviceId, logInTime, logOutTime=null, refreshToken }: IRefreshSessionRepository) {
 		await queryDB("INSERT INTO refresh_sessions (user_id, device_id, auth_time, log_in_time, log_out_time, refresh_token) VALUES ($1, $2, $3, $4, $5, $6)", [
 			userId,
 			deviceId,
@@ -15,35 +16,35 @@ class RefreshSessionRepository {
 		])
 	}
 
-	static async getRefreshSession(refreshToken) {
+	static async getRefreshSession(refreshToken: IRefreshSessionRepository['refreshToken']) {
 		const response = await queryDB("SELECT * FROM refresh_sessions WHERE refresh_token=$1", [refreshToken])
 
 		return response?.rows[0]
 	}
 
-	static async deleteRefreshSessionByToken(refreshToken) {
+	static async deleteRefreshSessionByToken(refreshToken: IRefreshSessionRepository['refreshToken']) {
 		await queryDB("DELETE FROM refresh_sessions WHERE refresh_token=$1", [refreshToken])
 	}
 
-	static async deleteRefreshSessionById(sessionId) {
+	static async deleteRefreshSessionById(sessionId: IRefreshSessionRepository['sessionId']) {
 		await queryDB("DELETE FROM refresh_sessions WHERE sess_id=$1", [sessionId])
 	}
 	
-	// static async deleteAllRefreshSessionsByUserId(UserId) {
-	// 	await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1", [UserId])
+	// static async deleteAllRefreshSessionsByUserId(userId: IRefreshSessionRepository['userId']) {
+	// 	await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1", [userId])
 	// }
 	
-	static async getRefreshSessionsQuantity(userId) {
+	static async getRefreshSessionsQuantity(userId: IRefreshSessionRepository['userId']) {
 		const response = await queryDB("SELECT sess_id FROM refresh_sessions WHERE user_id=$1", [userId])
 
 		return response?.rows.length
 	}
 
-	static async deleteOldestRefreshSessionByUserId(userId) {
+	static async deleteOldestRefreshSessionByUserId(userId: IRefreshSessionRepository['userId']) {
 		 await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1 ORDER BY log_in_time LIMIT 1", [userId])
 	}
 
-	static async isRefreshSessionDouble(deviceId) {
+	static async isRefreshSessionDouble(deviceId: IRefreshSessionRepository['deviceId']) {
 		const response = await queryDB("SELECT * FROM refresh_sessions WHERE device_id=$1", [deviceId])
 
 		return response?.rows[0]

@@ -9,8 +9,8 @@ import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { LuCheckCircle } from "react-icons/lu"
 import { FaUser } from "react-icons/fa"
 import { useCoverPanelState } from "../../../../../stores/Auth-store"
-import { IHandleCheckUser } from "../../../../../types/Auth-types"
 import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
+import { ICheckUserReq } from "../../../../../../../common/types/Auth-types"
 
 
 
@@ -40,21 +40,21 @@ const SignUpForm = ({ isFormBlur, isFormDisabled, isAnyCoverModalOpened }: SignU
         defaultValues: {
             username: 'User',
             password: '1234User',
-            confirm_password: '1234User'
+            confirmPassword: '1234User'
         }
     })
 
-    //* Confirm_password's error react validation
+    //* confirmPassword's error react validation
     useEffect(() => {
-        // console.log(watch('password'), watch('confirm_password'))
+        // console.log(watch('password'), watch('confirmPassword'))
         const pass = watch('password')
-        const confirm = watch('confirm_password')
+        const confirm = watch('confirmPassword')
         if (pass && confirm) {
             pass !== confirm ? 
-            setError('confirm_password', {message: 'Пароли не совпадают'}) : 
-            setError('confirm_password', null)
+            setError('confirmPassword', {message: 'Пароли не совпадают'}) : 
+            setError('confirmPassword', null)
         }
-    }, [watch('password'), watch('confirm_password')])
+    }, [watch('password'), watch('confirmPassword')])
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
     useCloseOnEsc({
@@ -62,8 +62,8 @@ const SignUpForm = ({ isFormBlur, isFormDisabled, isAnyCoverModalOpened }: SignU
         successFun: () => setCoverPanelState('sign_in')
     })
 
-    const onSubmit = async (data: IHandleCheckUser & { confirm_password: string }) => {
-        delete data.confirm_password
+    const onSubmit = async (data: ICheckUserReq & { confirmPassword: string }) => {
+        delete data.confirmPassword
 
         setIsLoading(true)
         await handleCheckUser(data)
@@ -97,10 +97,10 @@ const SignUpForm = ({ isFormBlur, isFormDisabled, isAnyCoverModalOpened }: SignU
                     disabled={isFormDisabled}
                 />
                 <PasswordInput
-                    name='confirm_password'
+                    name='confirmPassword'
                     inputType='confirm'
                     register={register}
-                    error={errors?.confirm_password}
+                    error={errors?.confirmPassword}
                     reset={resetField}
                     watch={watch}
                     disabled={isFormDisabled}

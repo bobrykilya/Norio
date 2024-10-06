@@ -1,22 +1,25 @@
 import bcrypt from "bcryptjs"
-import TokenService from "./Token-service.js"
-import { BlockDevice, Conflict, Forbidden, Unauthorized } from "../utils/errors.js"
-import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION } from "../../constants.js"
-import RefreshSessionsRepository from "../_database/repositories/RefreshSession-db.js"
-import UserRepository from "../_database/repositories/User-db.js"
-import AuthDeviceRepository from '../_database/repositories/AuthDevice-db.js'
-import _logAttentionRepository from '../_database/repositories/_logAttention-db.js'
-import _logAuthRepository from '../_database/repositories/_LogAuth-db.js'
-import getCodeDescription from '../utils/interCodes.js'
-import DeviceService from './Device-service.js'
-import { sendToClient } from './Socket-service.js'
-import { getEndTime } from '../utils/getTime.js'
+import TokenService from "./Token-service"
+import { Conflict, Forbidden, Unauthorized } from "../utils/Errors"
+import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION } from "../../constants"
+import RefreshSessionsRepository from "../_database/repositories/RefreshSession-db"
+import UserRepository from "../_database/repositories/User-db"
+import AuthDeviceRepository from '../_database/repositories/AuthDevice-db'
+import _logAttentionRepository from '../_database/repositories/_logAttention-db'
+import _logAuthRepository from '../_database/repositories/_LogAuth-db'
+import DeviceService from './Device-service'
+import { sendToClient } from './Socket-service'
+import { getEndTime } from '../utils/getTime'
+import { IService, ISignInController, ISignUpController } from "../types/Auth-types"
+import { ICheckUserReq, ILogOutReq, IRefreshReq } from "../../../common/types/Auth-types"
+import { IRefreshSessionRepository, IUserRepository } from "../types/DB-types"
+import { ICommonVar } from "../../../common/types/Global-types"
 
 
 
 class AuthService {
 
-	static async signIn({ username, password, fingerprint, fastSession, queryTime, deviceType, lsDeviceId, deviceIP }) {
+	static async signIn({ username, password, fingerprint, fastSession, queryTime, deviceType, lsDeviceId, deviceIP }: IService<ISignInController>) {
 		
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP, queryTime })
 
@@ -78,7 +81,45 @@ class AuthService {
 
 
 
-	static async signUp({ username, hashedPassword, phone, store, job, lastName, firstName, middleName, avatar, fingerprint, queryTime, deviceType, lsDeviceId, deviceIP }) {
+	static async checkUser({ username, password, fingerprint, queryTime }: IService<ICheckUserReq>) {
+
+		await DeviceService.checkDeviceForBlock({ fingerprint, queryTime })
+
+		const salt = bcrypt.genSaltSync(10)
+
+		const userData = await UserRepository.getUserData(username)
+		if (userData) {
+			throw new Conflict("Пользователь с таким логином уже существует")
+		}
+
+		const hashedPassword = bcrypt.hashSync(password, salt)
+		const avatarsList = await UserRepository.getUsedAvatarsList()
+
+		return {
+			username,
+			hashedPassword,
+			avatarsList,
+		}
+	}
+
+
+
+	static async signUp({
+							username,
+							hashedPassword,
+							phone,
+							store,
+							job,
+							lastName,
+							firstName,
+							middleName,
+							avatar,
+							fingerprint,
+							queryTime,
+							deviceType,
+							lsDeviceId,
+							deviceIP
+	}: IService<ISignUpController>) {
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP, queryTime })
 
@@ -87,13 +128,13 @@ class AuthService {
 		const status = 'inactive'
 		const isStore = false
 
-		let userId
-		let userInfo
+		let userId: IUserRepository['userId']
+		let userInfo: IUserRepository
 		const interCode = 205
 
 		try {
 			userInfo = {
-				username, 
+				username,
 				hashedPassword, 
 				role,
 				status,
@@ -108,9 +149,9 @@ class AuthService {
 			}
 			userId = await UserRepository.createUser(userInfo)
 			
-            userInfo.user_id = userId
+            userInfo.userId = userId
 			delete userInfo.hashedPassword
-		}catch {
+		} catch {
 			throw new Conflict("Данный номер телефона уже занят другим пользователем")
 		}
 
@@ -121,7 +162,7 @@ class AuthService {
 
 		const payload = { 
 			userId,
-			username, 
+			username,
 			deviceId,
 		}
 
@@ -146,7 +187,7 @@ class AuthService {
 
 
 
-	static async logOut({ refreshToken, queryTime, interCode }) {
+	static async logOut({ refreshToken, queryTime, interCode }: IService<ILogOutReq> & Pick<ICommonVar, 'refreshToken'>) {
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(refreshToken)
 
 		if (refreshSession){
@@ -158,17 +199,11 @@ class AuthService {
 
 
 
-	static async refresh({ fingerprint, currentRefreshToken, queryTime, lsDeviceId }) {
+	static async refresh({ fingerprint, currentRefreshToken, queryTime, lsDeviceId }: IService<IRefreshReq> & {
+		currentRefreshToken: ICommonVar['refreshToken']
+	}) {
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, queryTime })
-        // await deviceService.blockDevice({
-        //     interCode: 804,
-        //     userId: 9,
-        //     deviceId: 1,
-        //     logTime: queryTime,
-        //     deviceIP: null,
-        //     fingerprint
-        // })
 		
 		if (!currentRefreshToken) {
 			throw new Unauthorized()
@@ -193,23 +228,23 @@ class AuthService {
 		
 		if (Number(refreshSession.device_id) !== Number(deviceId)) {
 
-			const interCodeAttention = deviceId ? 801 : 802
+			const interCode = deviceId ? 801 : 802
 			if (!deviceId) {
 				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTime, deviceType: 'Unknown' })
 				
-				await _logAttentionRepository.createLogAttention({ interCode: interCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTime })
+				await _logAttentionRepository.createLogAttention({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime })
 				await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
-				throw new BlockDevice(getCodeDescription(interCodeAttention).message)
+				await DeviceService.blockDevice({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime, fingerprint })
 			}
 
-			await _logAttentionRepository.createLogAttention({ interCode: interCodeAttention, userId: refreshSession.user_id, deviceId, logTime: queryTime })
+			await _logAttentionRepository.createLogAttention({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime })
 			await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
-			throw new BlockDevice(getCodeDescription(interCodeAttention).message)
+			await DeviceService.blockDevice({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime, fingerprint })
 		}
 
 		await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
 
-		let payload
+		let payload: ICommonVar['payload']
 		try {
 			payload = await TokenService.verifyRefreshToken(currentRefreshToken)
 		} catch (err) {
@@ -243,27 +278,7 @@ class AuthService {
 		}
 	}
 
-
-	
-	static async checkUser({ username, password }) {
-		const salt = bcrypt.genSaltSync(10)
-
-		const userData = await UserRepository.getUserData(username)
-		if (userData) {
-			throw new Conflict("Пользователь с таким логином уже существует")
-		}
-
-		const hashedPassword = bcrypt.hashSync(password, salt)
-		const avatarsList = await UserRepository.getUsedAvatarsList()
-
-		return {
-			userName: username,
-			hashedPassword,
-			avatarsList,
-		}
-	}
-
-	static async sessionsAutoLogOut(sessionInfo) { 
+	static async sessionsAutoLogOut(sessionInfo?: IRefreshSessionRepository) {
 		const sessionsLogOutList = sessionInfo ? [sessionInfo] : await RefreshSessionsRepository.getRefreshSessionsWithLogOutTime()
 		// console.log(sessionsLogOutList)
 
@@ -291,6 +306,9 @@ class AuthService {
 				})
 		})
 	}
+
+
+	
 	static async intervalTestFunc() {
 		await AuthService.sessionsAutoLogOut()
 	}

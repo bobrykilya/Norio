@@ -1,4 +1,5 @@
-import queryDB from '../../utils/queryDB.js'
+import queryDB from '../../utils/queryDB'
+import { IUserRepository } from "../../types/DB-types"
 
 
 
@@ -16,7 +17,7 @@ class UserRepository {
 		middleName,
 		avatar,
 		isStore,
-	}) {
+	}: IUserRepository) {
 
 		const response = await queryDB("INSERT INTO users (username, password, role, status, phone, store, job, last_name, first_name, middle_name, avatar, is_store) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING user_id", [
 			username, 
@@ -36,13 +37,13 @@ class UserRepository {
 		return response.rows[0].user_id
 	}
 
-	static async getUserData(username) {
+	static async getUserData(username: IUserRepository['username']) {
 		const response = await queryDB("SELECT user_id, password FROM users WHERE username=$1", [username])
 
 		return response?.rows[0]
 	}
 
-	static async getUserInfo(userId) {
+	static async getUserInfo(userId: IUserRepository['userId']) {
 		const response = await queryDB("SELECT * FROM users WHERE user_id=$1", [userId])
 
 		delete response?.rows[0].password
@@ -50,7 +51,7 @@ class UserRepository {
 		return response?.rows[0]
 	}
 	
-	static async getUserName(userId) {
+	static async getUserName(userId: IUserRepository['userId']) {
 		const response = await queryDB("SELECT username, last_name, first_name FROM users WHERE user_id=$1", [userId])
 
 		return response.rows[0]
@@ -62,11 +63,11 @@ class UserRepository {
 		return response.rows
 	}
 
-	static async setStatusForUser({ userId, status }) {
+	static async setStatusForUser({ userId, status }: Pick<IUserRepository, 'userId' | 'status'>) {
 		await queryDB("UPDATE users SET status=$1 WHERE user_id=$2", [status, userId])
 	}
 
-	static async deleteUserById(userId) {
+	static async deleteUserById(userId: IUserRepository['userId']) {
 		await queryDB("DELETE FROM users WHERE user_id=$1", [userId])
 	}
 }

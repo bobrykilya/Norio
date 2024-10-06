@@ -1,69 +1,85 @@
-// import UserRepository from '../src/_database/repositories/User.js'
-// import AuthDeviceRepository from '../src/_database/repositories/AuthDevice.js'
-import { getTime, getTimeInShortString } from "./getTime.js"
+// import UserRepository from '../src/_database/repositories/User'
+// import AuthDeviceRepository from '../src/_database/repositories/AuthDevice'
+import { getTime, getTimeInShortString } from "./getTime"
+import { ICommonVar, ISnack } from "../../../common/types/Global-types"
+import { IBlockMessage } from "../types/Device-types"
 
 
 
 class WebError {
-	constructor(status, message, title) {
+	status: number
+	title: string
+	message?: string | IBlockMessage
+
+	constructor(status: number, title: string, message?: string | IBlockMessage) {
 		this.status = status
-		this.message = message
 		this.title = title
+		this.message = message
 		// console.log(this.status)
 	}
 }
 
-export class Unprocessable extends WebError {
-	constructor(message) {
-		super(422, message, 'Unprocessable')
-	}
-}
+// export class Unprocessable extends WebError {
+// 	constructor(message?: string) {
+// 		super(422, 'Unprocessable', message)
+// 	}
+// }
 
 export class Conflict extends WebError {
-	constructor(message) {
-		super(409, message, 'Conflict')
+	constructor(message?: string) {
+		super(409, 'Conflict', message)
 	}
 }
 
-export class NotFound extends WebError {
-	constructor(message) {
-		super(404, message, 'NotFound')
-	}
-}
+// export class NotFound extends WebError {
+// 	constructor(message?: string) {
+// 		super(404, 'NotFound', message)
+// 	}
+// }
 
 export class Forbidden extends WebError {
-	constructor(message) {
-		super(403, message, 'Forbidden')
+	constructor(message?: string) {
+		super(403, 'Forbidden', message)
 	}
 }
 
 export class Unauthorized extends WebError {
-	constructor(message) {
-		super(401, message, 'Unauthorized')
+	constructor(message?: string) {
+		super(401, 'Unauthorized', message)
 	}
 }
 
-export class BadRequest extends WebError {
-	constructor(message) {
-		super(400, message, 'BadRequest')
-	}
-}
+// export class BadRequest extends WebError {
+// 	constructor(message?: string) {
+// 		super(400, 'BadRequest', message)
+// 	}
+// }
 
 export class BlockDevice extends WebError {
-	constructor(message) {
-		super(900, message, 'BlockDevice')
+	constructor(message: IBlockMessage) {
+		super(900, 'BlockDevice', message)
 	}
 }
 
+
+type IErrorUtils = {
+	req: ICommonVar['req'];
+	res: ICommonVar['res'];
+	err: ICommonVar['err'];
+	queryTime: ICommonVar['queryTime'];
+	interCode: ICommonVar['interCode'];
+	fingerprint: ICommonVar['fingerprint'];
+	username?: ICommonVar['username'];
+}
 class ErrorUtils {
-	static async catchError({ interCode, req, res, err, username, fingerprint }) {
+	static async catchError({ req, res, err, queryTime, interCode, fingerprint, username }: IErrorUtils) {
 		// console.log(err)
 		if (err instanceof WebError) {
 			const status = err.status
 
-			const error = {
+			const error: ISnack = {
 				type: status === 900 ? 'b' : 'e',
-				message: err.message,
+				message: status === 900 ? '' : err.message as string,
 				snackTime: getTime(),
 				detail: {
 					action: req.route.stack[0]?.name,
@@ -73,13 +89,12 @@ class ErrorUtils {
 					res: {
 						status,
 						title: err.title,
-
 					}
 				}
 			}
 
 			//* Request description
-			if (req._body) {
+			if (req.body) {
 				delete req.body.password
 				delete req.body.hashedPassword
 				delete req.body.deviceType
@@ -88,6 +103,7 @@ class ErrorUtils {
 
 			//* Block handling (err.message is Object)
 			if (status === 900) {
+				// @ts-ignore
 				const { interCode, description, unlockTime } = err.message
 
 				if (!(unlockTime === 0)) {

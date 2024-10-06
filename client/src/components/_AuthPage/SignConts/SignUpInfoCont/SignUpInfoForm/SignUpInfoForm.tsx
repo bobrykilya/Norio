@@ -11,8 +11,8 @@ import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
 import AvatarButton from '../../../AvatarButton/AvatarButton'
 import { focusInput } from '../../../../../utils/focusInput'
 import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
-import { IHandleSignUp } from '../../../../../types/Auth-types'
 import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
+import { ISignUp } from "../../../../../../../common/types/Auth-types"
 
 
 
@@ -43,20 +43,20 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
         setError,
         setValue,
         formState: { errors }
-    } = useForm<IHandleSignUp>({
+    } = useForm<ISignUp>({
         mode: 'onChange',
         reValidateMode: "onChange",
         defaultValues: {
             phone: '295697981',
             store: 'Офис',
             job: 'Управляющий',
-            last_name: 'Бобрик',
-            first_name: 'Илья', 
-            middle_name: 'Юрьевич',
+            lastName: 'Бобрик',
+            firstName: 'Илья', 
+            middleName: 'Юрьевич',
         }
     })
 
-    const checkAvatar: SubmitHandler<IHandleSignUp> = (data) => {
+    const checkAvatar: SubmitHandler<ISignUp> = (data) => {
         avatar ? onSubmit(data) : setErrorAvatar({ message: 'Выберите аватар пользователя' })
     }
 
@@ -66,7 +66,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
         successFun: () => handleReturnToSignUp()
     })
     
-    const onSubmit = async (data: IHandleSignUp) => {
+    const onSubmit = async (data: ISignUp) => {
         data.phone = '+375' + data.phone
         data.avatar = avatar
 
@@ -117,33 +117,33 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     disabled={isFormDisabled}
                 />
                 <UserNameInput
-                    name='last_name'
+                    name='lastName'
                     placeholder='Фамилия'
                     icon={nameInputIcon}
                     inputType='name'
                     register={register}
-                    error={errors?.last_name}
+                    error={errors?.lastName}
                     reset={resetField}
                     inputMaxLength={25}
                     disabled={isFormDisabled}
                 />
                 <UserNameInput
-                    name='first_name'
+                    name='firstName'
                     placeholder='Имя'
                     icon={nameInputIcon}
                     inputType='name'
                     register={register}
-                    error={errors?.first_name}
+                    error={errors?.firstName}
                     reset={resetField}
                     disabled={isFormDisabled}
                 />
                 <UserNameInput
-                    name='middle_name'
+                    name='middleName'
                     placeholder='Отчество'
                     icon={nameInputIcon}
                     inputType='name'
                     register={register}
-                    error={errors?.middle_name}
+                    error={errors?.middleName}
                     reset={resetField}
                     disabled={isFormDisabled}
                 />

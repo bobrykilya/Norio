@@ -10,36 +10,9 @@ import { getTime } from "../../utils/getTime"
 import blockDevice from "../blockDevice/blockDevice"
 import timeout from "../../utils/timeout"
 import { useBlockError } from "../../stores/Device-store"
+import { ISnack, SnackBarTypeOptions } from "../../../../common/types/Global-types"
 
 
-
-export type SnackBarTypeOptions = 'e' | 'i' |'w' | 'b' | 's'
-
-type IGetTypeDecoding = {
-	snackType: SnackBarTypeOptions;
-    title: string;
-    icon: React.JSX.Element;
-    toastDuration: number;
-}
-
-export type ISnack = {
-	type: SnackBarTypeOptions;
-	message: string;
-	snackTime?: number;
-	duration?: number;
-	response?: Response;
-	detail?: {
-		action: string;
-		req: Record<string, any>;
-		res: {
-			status: number;
-			title: string;
-			unlockTime?: number;
-			interCode?: number;
-			description?: string;
-		}
-	}
-}
 
 const showAllSnacksDev = () => {
 	
@@ -56,7 +29,7 @@ const showAllSnacksDev = () => {
 	return
 }
 
-const getTypeDecoding = (type: SnackBarTypeOptions): IGetTypeDecoding => {
+const getTypeDecoding = (type: SnackBarTypeOptions) => {
     switch (type) {
 		case 'e' : return { snackType: 'e', title: 'Ошибка', icon: <PiWarningCircleBold className='error message-icon fa-icon' />, toastDuration: 4000 }
 		case 'i' : return { snackType: 'i', title: 'Инфо', icon: <LuBadgeInfo className='info message-icon fa-icon' />, toastDuration: 5000 }

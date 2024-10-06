@@ -2,10 +2,15 @@ import { Server } from 'socket.io'
 
 
 
-let io
+let io: any
 
-export const socketConnection = (HTTPServer) => {
-    io = new Server(HTTPServer, {
+export const socketConnection = (HTTPServer: any) => {
+    io = new Server<
+		ClientToServerEvents,
+		ServerToClientEvents,
+		InterServerEvents,
+		SocketData
+	>(HTTPServer, {
         cors: {
             origin: "*",
             methods: ["GET", "POST"],
@@ -15,7 +20,7 @@ export const socketConnection = (HTTPServer) => {
     })
 
 
-    io.on('connection', (socket) => {
+    io.on('connection', (socket: any) => {
         // console.log('Socket connected')
 
         socket.on('join', ({ userId, deviceId }) => {

@@ -5,7 +5,7 @@
             maxAge: 1296e6,                     //* Refresh token maxAge: 15 * 24 * 3600 * 1000 (15 дней)
             secure: true,
             strict: true,
-            sameSite: "strict",                 //* /"lax"
+            // sameSite: "strict",                 //* /"lax"
         },
     }
     export const ACCESS_TOKEN_EXPIRATION = 18e5 //* Access token maxAge: 1800 * 1000 (30 минут)

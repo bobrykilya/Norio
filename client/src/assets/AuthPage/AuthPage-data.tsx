@@ -1,4 +1,4 @@
-export interface IDataListElement {
+export type IDataListElement = {
     id: string;
     title: string;
 }

@@ -4,7 +4,7 @@ import CircularProgress from '@mui/joy/CircularProgress'
 
 
 
-interface SubmitButProps {
+type SubmitButProps = {
     icon: React.ReactElement;
     isLoading: boolean;
     title: string;
@@ -24,7 +24,14 @@ const SubmitBut = ({ icon, isLoading, notSaveUser=false, onClick, disabled=false
             disabled={disabled ? true : isLoading}
             onClick={notSaveUser ? onClick : () => null}
         >
-            {!isLoading ? icon : <CircularProgress color="neutral" size="sm" variant="plain" />}
+            {!isLoading ?
+                icon :
+                <CircularProgress
+                    color="neutral"
+                    size="sm"
+                    variant="plain"
+                />
+            }
             <ToolTip text={title} />
         </button>
     )

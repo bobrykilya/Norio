@@ -1,9 +1,9 @@
-import pool from '../_database/db.js'
-import { Conflict } from './Errors.js'
+import pool from '../_database/db'
+import { Conflict } from './Errors'
 
 
 
-const queryDB = async (query, params) => {
+const queryDB = async (query: string, params?: any[]) => {
     try {
         return await pool.query(query, params)
     } catch (err) {

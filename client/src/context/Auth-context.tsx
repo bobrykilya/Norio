@@ -4,18 +4,11 @@ import inMemoryJWT from '../services/inMemoryJWT-service'
 import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "../services/Auth-service"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
-import {
-	IAvatarListElement,
-	IHandleCheckUser,
-	IHandleLogOut,
-	IHandleSignIn,
-	ILoginServiceResp,
-	ISignUpServiceReq,
-	IUserInfo,
-	IUserNameInfo,
-} from "../types/Auth-types"
+import { IUserNameInfo } from "../types/Auth-types"
 import io from "socket.io-client"
 import { useCoverPanelState } from "../stores/Auth-store"
+import { ICheckUserReq, ILoginServiceRes, ILogOutReq, ISignInReq, ISignUpReq } from "../../../common/types/Auth-types"
+import { ICommonVar } from "../../../common/types/Global-types"
 
 
 
@@ -27,7 +20,7 @@ const AuthProvider = ({ children }) => {
 	// const [data, setData] = useState<Record<string, any> | null>(null)
 	const [isAppReady, setIsAppReady] = useState(false)
 	const [isUserLogged, setIsUserLogged] = useState(false)
-	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<IAvatarListElement[]>([])
+	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<ICommonVar['IAvatarListElement'][]>([])
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
 	const [socketSessId, setSocketSessId] = useState('')
@@ -64,12 +57,12 @@ const AuthProvider = ({ children }) => {
 	const checkSessionDouble = async (newUsername: string) => {
 		const userInfo = localStorage.getItem('userInfo')
 		if (userInfo) {
-			const { username, last_name, first_name }: IUserInfo = JSON.parse(userInfo || '{}') //* Old user info
+			const { username, lastName, firstName }: ILoginServiceRes['userInfo'] = JSON.parse(userInfo || '{}') //* Old user info
 
 			if (newUsername !== username) {
 				showSnackMessage({
 					type: 'i',
-					message: `Был выполнен фоновый выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo({ lastName: last_name, firstName: first_name, username })}</span>`
+					message: `Был выполнен фоновый выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo({ lastName: lastName, firstName: firstName, username })}</span>`
 				})
 				handleLogOut()
 			}else {
@@ -78,12 +71,12 @@ const AuthProvider = ({ children }) => {
 		}
 	}
 
-	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp) => {
+	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes) => {
 		saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		userHasLogged()
 	}
 
-	const saveUserDataOnBrowser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId }: ILoginServiceResp & { lsDeviceId?: number }) => {
+	const saveUserDataOnBrowser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId }: ILoginServiceRes & { lsDeviceId?: number }) => {
 		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 		testAndUpdateLSDeviceId(deviceId, lsDeviceId)
 		localStorage.setItem('userInfo', JSON.stringify(userInfo))
@@ -95,7 +88,7 @@ const AuthProvider = ({ children }) => {
 		if (!lsDeviceId_2 || (lsDeviceId_2 !== deviceId)) localStorage.setItem('deviceId', String(deviceId))
 	}
 
-	const handleSignIn = async (data: IHandleSignIn) => {
+	const handleSignIn = async (data: ISignInReq) => {
 		await checkSessionDouble(data.username)
 			.then(async () => {
 				const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signIn(data)
@@ -103,18 +96,18 @@ const AuthProvider = ({ children }) => {
 			})
 	}
 
-	const handleCheckUser = async (data: IHandleCheckUser) => {
+	const handleCheckUser = async (data: ICheckUserReq) => {
 
-		const { userName, hashedPassword, avatarsList } = await AuthService.checkUser(data)
+		const { username, hashedPassword, avatarsList } = await AuthService.checkUser(data)
 
-		setSignUpUserName(userName)
+		setSignUpUserName(username)
 		setSignUpUserPassword(hashedPassword)
 		setListOfUsedAvatars(avatarsList)
 
 		setCoverPanelState('sign_up_info')
 	}
 
-	const handleSignUp = async (data: ISignUpServiceReq) => {
+	const handleSignUp = async (data: ISignUpReq) => {
 		await checkSessionDouble(data.username)
 			.then(async () => {
 				data.username = signUpUserName
@@ -127,7 +120,7 @@ const AuthProvider = ({ children }) => {
 			})
 	}
 
-	const handleLogOut = ({ interCode }: IHandleLogOut = {}) => {
+	const handleLogOut = ({ interCode }: ILogOutReq = {}) => {
 		// console.log('logOut')
 
 		AuthService.logOut({ interCode })
@@ -150,9 +143,9 @@ const AuthProvider = ({ children }) => {
 		const refresh = async () => {
 			try {
 				// console.log('refresh')
-				const lsDeviceId = Number(localStorage.getItem('deviceId'))
+				const lsDeviceId = Number(localStorage.getItem('deviceId')) || undefined
 
-				const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceResp = await AuthService.refresh({ lsDeviceId })
+				const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId })
 
 				saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
 

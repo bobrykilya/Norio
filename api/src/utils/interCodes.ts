@@ -1,8 +1,9 @@
-import { DEFAULT_BLOCK_DURATION } from "../../constants.js"
+import { DEFAULT_BLOCK_DURATION } from "../../constants"
+import { ICommonVar } from "../../../common/types/Global-types"
 
 
 
-const getCodeDescription = (interCode) => {
+const getCodeDescription = (interCode: ICommonVar['interCode']) => {
 
     switch (interCode) {
         case 102 : return {

@@ -1,9 +1,10 @@
-import queryDB from '../../utils/queryDB.js'
+import queryDB from '../../utils/queryDB'
+import { ILogRepository } from "../../types/DB-types"
 
 
 
 class LogAuthRepository {
-	static async createLogAuth({ interCode, userId, deviceId, logTime }) {
+	static async createLogAuth({ interCode, userId, deviceId, logTime }: ILogRepository) {
 
 		// await queryDB("INSERT INTO _log_Auth (inter_code, user_id, device_id, log_time) VALUES ($1, $2, $3, $4)", [
 		// 	interCode,

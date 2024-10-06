@@ -1,5 +1,5 @@
-import inMemoryJWT from '../../services/inMemoryJWT-service.js'
-import { IBlockDevice } from '../../types/Device-types.js'
+import inMemoryJWT from '../../services/inMemoryJWT-service'
+import { IBlockDevice } from '../../types/Device-types'
 import { setUnlockTimer } from "./unlockDevice"
 import { useBlockError } from "../../stores/Device-store"
 

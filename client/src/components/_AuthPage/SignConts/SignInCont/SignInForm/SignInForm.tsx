@@ -9,11 +9,11 @@ import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { BiLogInCircle } from "react-icons/bi"
 import { FaUser } from "react-icons/fa"
 import ToolTip from '../../../../ToolTip/ToolTip'
-import { IHandleSignIn } from '../../../../../types/Auth-types';
+import { ISignInReq } from "../../../../../../../common/types/Auth-types"
 
 
 
-interface SignInFormProps {
+type SignInFormProps = {
     isFormDisabled: boolean;
 }
 const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
@@ -43,7 +43,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
         setNotSaveUser((prev) => !prev)
     }
 
-    const onSubmitNotSave = async (data: IHandleSignIn) => {
+    const onSubmitNotSave = async (data: ISignInReq) => {
         // console.log('Fast')
         data.fastSession = true
         
@@ -60,7 +60,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
         // alert(JSON.stringify(data))
     }
 
-    const onSubmit = async (data: IHandleSignIn) => {
+    const onSubmit = async (data: ISignInReq) => {
         // console.log(data)
         setIsLoading(true)
         await handleSignIn(data)

@@ -1,21 +1,65 @@
-import AuthDeviceRepository from '../_database/repositories/AuthDevice-db.js'
-import _logAttentionRepository from '../_database/repositories/_logAttention-db.js'
-import getBrowserAndOs from '../utils/getBrowserAndOs.js'
-import { BlockDevice } from '../utils/errors.js'
-import getCodeDescription from '../utils/interCodes.js'
-import BlockRepository from '../_database/repositories/Block-db.js'
-import { getEndTime } from "../utils/getTime.js"
+import AuthDeviceRepository from '../_database/repositories/AuthDevice-db'
+import _logAttentionRepository from '../_database/repositories/_logAttention-db'
+import getBrowserAndOs from '../utils/getBrowserAndOs'
+import { BlockDevice } from '../utils/Errors'
+import getCodeDescription from '../utils/interCodes'
+import BlockRepository from '../_database/repositories/Block-db'
+import { getEndTime } from "../utils/getTime"
+import { ICommonVar } from "../../../common/types/Global-types"
 
 
+
+type IGetDeviceId = {
+	interCode: ICommonVar['interCode'];
+	fingerprint: ICommonVar['fingerprint'];
+	userId: ICommonVar['userId'];
+	queryTime: ICommonVar['queryTime'];
+	deviceType: ICommonVar['deviceType'];
+	lsDeviceId: ICommonVar['lsDeviceId'];
+	deviceIP: ICommonVar['deviceIP'];
+}
+
+type IDeviceIdHandlingAndUpdating = {
+	fingerprint: ICommonVar['fingerprint'];
+	userId: ICommonVar['userId'];
+	queryTime: ICommonVar['queryTime'];
+	lsDeviceId: ICommonVar['lsDeviceId'];
+	deviceIP?: ICommonVar['deviceIP'];
+}
+
+type ICreateNewDeviceWithHandling = {
+	interCode: ICommonVar['interCode'];
+	fingerprint: ICommonVar['fingerprint'];
+	userId: ICommonVar['userId'];
+	queryTime: ICommonVar['queryTime'];
+	deviceType: ICommonVar['deviceType'];
+	deviceIP: ICommonVar['deviceIP'];
+}
+
+type ICheckDeviceForBlock = {
+	fingerprint: ICommonVar['fingerprint'];
+	queryTime: ICommonVar['queryTime'];
+	deviceId?: ICommonVar['deviceId'];
+	deviceIP?: ICommonVar['deviceIP'];
+}
+
+type IBlockDevice = {
+	interCode: ICommonVar['interCode'];
+	userId: ICommonVar['userId'];
+	deviceId: ICommonVar['deviceId'];
+	logTime: ICommonVar['logTime'];
+	fingerprint: ICommonVar['fingerprint'];
+	deviceIP?: ICommonVar['deviceIP'];
+}
 
 class DeviceService {
     
-    static async getDeviceId({ interCode, fingerprint, userId, queryTime, deviceType, lsDeviceId, deviceIP }) {
+    static async getDeviceId({ interCode, fingerprint, userId, queryTime, deviceType, lsDeviceId, deviceIP }: IGetDeviceId) {
         return await this.deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId, queryTime, deviceIP }) ||
             await this.createNewDeviceWithHandling({ interCode, fingerprint, userId, queryTime, deviceType, deviceIP })
     }
 
-    static async deviceIdHandlingAndUpdating ({ lsDeviceId, fingerprint, userId, queryTime, deviceIP }) {
+    static async deviceIdHandlingAndUpdating ({ lsDeviceId, fingerprint, userId, queryTime, deviceIP }: IDeviceIdHandlingAndUpdating) {
 
         // console.log(lsDeviceId)
         if (lsDeviceId) {
@@ -25,7 +69,7 @@ class DeviceService {
             if (savedDeviceIdInDB) {
                 if (savedDeviceIdInDB !== lsDeviceId){
                     //* Handling if db has this fingerprint, but device has other deviceId
-                    await this.blockDevice({ interCode: 804, userId, deviceId: savedDeviceIdInDB, logTime: queryTime, deviceIP, fingerprint  })
+                    await this.blockDevice({ interCode: 804, userId, deviceId: savedDeviceIdInDB, logTime: queryTime, fingerprint, deviceIP  })
                 } else return lsDeviceId
             } else {
                 const deviceInDB = await AuthDeviceRepository.getDeviceById(lsDeviceId)
@@ -51,17 +95,18 @@ class DeviceService {
                     return lsDeviceId
                 } else {
                     //* Handling if db has deviceId with other browser or OS
-                    await this.blockDevice({ interCode: 806, userId, deviceId: lsDeviceId, logTime: queryTime, deviceIP, fingerprint  })
+                    await this.blockDevice({ interCode: 806, userId, deviceId: lsDeviceId, logTime: queryTime, fingerprint, deviceIP })
                 }
             }
 
         } else return null
     }
 
-    static async createNewDeviceWithHandling ({ interCode, fingerprint, userId, queryTime, deviceType, deviceIP }) {
-        let deviceId
+    static async createNewDeviceWithHandling ({ interCode, fingerprint, userId, queryTime, deviceType, deviceIP }: ICreateNewDeviceWithHandling) {
+        let deviceId: ICommonVar['deviceId']
 
         try {
+			//* deviceType = 'Unknown', when device has lsDeviceId, but db doesn't know this device
             deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTime, deviceType: deviceType || 'Unknown', deviceIP  })
             await _logAttentionRepository.createLogAttention({ interCode, userId, deviceId, logTime: queryTime })
         }catch {
@@ -72,8 +117,8 @@ class DeviceService {
         return deviceId
     }
 
-    static async checkDeviceForBlock({ deviceId, fingerprint, deviceIP, queryTime }) {
-        // console.log({ deviceId, fingerprint, deviceIP })
+    static async checkDeviceForBlock({ fingerprint, queryTime, deviceId, deviceIP }: ICheckDeviceForBlock) {
+        // console.log({ fingerprint, queryTime, deviceId, deviceIP })
 
         const blockedDeviceInfo = await BlockRepository.getBlockedDeviceInfo({ deviceId, fingerprintHash: fingerprint.hash, deviceIP })
         // console.log(blockedDeviceInfo)
@@ -95,13 +140,9 @@ class DeviceService {
         })
     }
 
-    static async blockDevice({ interCode, userId, deviceId, logTime, deviceIP, fingerprint }) {
-        // console.log({ interCode, userId, deviceId, logTime, deviceIP, fingerprint })
+    static async blockDevice({ interCode, userId, deviceId, logTime, fingerprint, deviceIP }: IBlockDevice) {
+        // console.log({ interCode, userId, deviceId, logTime, fingerprint, deviceIP })
 
-        // const isBlocked = await BlockRepository.getBlockedDeviceInfo({ deviceId, fingerprintHash: fingerprint.hash, deviceIP })
-
-        // if (!isBlocked) {
-        console.log({ interCode, userId, deviceId, logTime })
         await _logAttentionRepository.createLogAttention({ interCode, userId, deviceId, logTime })
 
         const { lockDuration } = getCodeDescription(interCode)
@@ -121,11 +162,6 @@ class DeviceService {
                     unlockTime: Number(unlock_time),
                 })
             })
-        // .catch(async () => {
-        // 	//* Handling for block-db if device has unknown deviceId
-        // 	await BlockRepository.createBlock({ interCode, deviceId: null, userId, blockTime: logTime, unlockTime, deviceIP, fingerprintHash: fingerprint.hash })
-        // })
-        // }
     }
 }
 

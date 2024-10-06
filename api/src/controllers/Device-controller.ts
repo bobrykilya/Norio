@@ -1,10 +1,11 @@
-import DeviceService from '../services/Device-service.js'
-import ErrorsUtils from "../utils/errors.js"
+import DeviceService from '../services/Device-service'
+import ErrorsUtils from "../utils/Errors"
+import { ICommonVar } from "../../../common/types/Global-types"
 
 
 
 class DeviceController {
-    static async blockDevice(req, res) {
+    static async blockDevice(req: ICommonVar['req'], res: ICommonVar['res']) {
         const { 
             logTime,
             userId,
@@ -16,17 +17,17 @@ class DeviceController {
 
         try {
             await DeviceService.blockDevice({ 
-                logTime,
+                interCode,
                 userId,
                 deviceId,
-                deviceIP,
+                logTime,
                 fingerprint,
-                interCode,
+                deviceIP,
             })
 
             return res.status(200)
         } catch (err) {
-            return ErrorsUtils.catchError({ interCode: 900, req, res, err, fingerprint, queryTimeString: logTime })
+            return ErrorsUtils.catchError({ interCode: 900, req, res, err, fingerprint, queryTime: logTime })
         }
     }
 }

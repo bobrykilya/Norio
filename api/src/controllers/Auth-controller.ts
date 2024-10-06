@@ -1,20 +1,30 @@
-import AuthService from "../services/Auth-service.js"
-import ErrorsUtils from "../utils/errors.js"
-import { COOKIE_SETTINGS } from "../../constants.js"
-import { getTime } from "../utils/getTime.js"
+import AuthService from "../services/Auth-service"
+import ErrorsUtils from "../utils/Errors"
+import { COOKIE_SETTINGS } from "../../constants"
+import { getTime } from "../utils/getTime"
+import { ISignInController, ISignUpController } from "../types/Auth-types"
+import {
+	ICheckUserReq,
+	ICheckUserRes,
+	ILoginServiceRes,
+	ILogOutReq,
+	IRefreshReq,
+} from "../../../common/types/Auth-types"
+import { ICommonVar } from "../../../common/types/Global-types"
 
 
 
 class AuthController {
-	static async signIn(req, res) {
+
+	static async signIn(req: ICommonVar['req'], res: ICommonVar['res']) {
 		// console.log(req)
-		const { username, password, fastSession, deviceType, lsDeviceId, deviceIP } = req.body
+		const { username, password, fastSession, deviceType, lsDeviceId, deviceIP }: ISignInController = req.body
 		const { fingerprint } = req
 		const queryTime = getTime()
 
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signIn({ 
+			const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes & Pick<ICommonVar, 'refreshToken'> = await AuthService.signIn({
 				username,
 				password,
 				fingerprint, 
@@ -34,28 +44,66 @@ class AuthController {
 		}
 	}
 
-	static async signUp(req, res) {
-		const { username, hashedPassword, phone, store, job, last_name, first_name, middle_name, avatar, deviceType, lsDeviceId, deviceIP } = req.body
+
+
+	static async checkUser(req: ICommonVar['req'], res: ICommonVar['res']) {
+		const { username, password }: ICheckUserReq = req.body
+		const { fingerprint } = req
+		const queryTime = getTime()
+
+
+		try {
+			const { username: userName, hashedPassword, avatarsList }: ICheckUserRes = await AuthService.checkUser({ username, password, fingerprint, queryTime })
+
+			return res.status(200).json({ username: userName, hashedPassword, avatarsList })
+		} catch (err) {
+			return ErrorsUtils.catchError({ interCode: 711, req, res, err, username, fingerprint, queryTime })
+		}
+	}
+
+
+
+	static async signUp(req: ICommonVar['req'], res: ICommonVar['res']) {
+		const {
+			username,
+			hashedPassword,
+			phone,
+			store,
+			job,
+			lastName,
+			firstName,
+			middleName,
+			avatar,
+			deviceType,
+			lsDeviceId,
+			deviceIP,
+		}: ISignUpController = req.body
 		const { fingerprint } = req
         const queryTime = getTime()
 
 		
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp({ 
-				username, 
+			const {
+				accessToken,
+				refreshToken,
+				accessTokenExpiration,
+				userInfo,
+				deviceId
+			}: ILoginServiceRes & Pick<ICommonVar, 'refreshToken'> = await AuthService.signUp({
+				username,
 				hashedPassword, 
 				phone, 
 				store, 
 				job, 
-				lastName: last_name,
-				firstName: first_name,
-				middleName: middle_name, 
+				lastName,
+				firstName,
+				middleName,
 				avatar, 
-				fingerprint, 
-				queryTime,
 				deviceType,
 				lsDeviceId,
 				deviceIP,
+				fingerprint,
+				queryTime,
 			})
 			
 			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
@@ -66,9 +114,11 @@ class AuthController {
 		}
 	}
 
-	static async logOut(req, res) {
+
+
+	static async logOut(req: ICommonVar['req'], res: ICommonVar['res']) {
 		const refreshToken = req.cookies.refreshToken
-		const { interCode } = req.body
+		const { interCode }: ILogOutReq = req.body
 		const { fingerprint } = req
         const queryTime = getTime()
 
@@ -85,8 +135,11 @@ class AuthController {
 		}
 	}
 
-	static async refresh(req, res) {
-		const { lsDeviceId } = req.body
+
+
+	
+	static async refresh(req: ICommonVar['req'], res: ICommonVar['res']) {
+		const { lsDeviceId }: IRefreshReq = req.body
 		const { fingerprint } = req
         const queryTime = getTime()
 		const currentRefreshToken = req.cookies.refreshToken
@@ -106,21 +159,6 @@ class AuthController {
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
 		} catch (err) {
 			return ErrorsUtils.catchError({ interCode: 701, req, res, err, fingerprint, queryTime })
-		}
-	}
-
-	static async checkUser(req, res) {
-		const { username, password } = req.body
-		const { fingerprint } = req
-        const queryTime = getTime()
-
-
-		try {
-			const { userName, hashedPassword, avatarsList } = await AuthService.checkUser({ username, password, queryTime })
-
-			return res.status(200).json({ userName, hashedPassword, avatarsList })
-		} catch (err) {
-			return ErrorsUtils.catchError({ interCode: 711, req, res, err, username, fingerprint, queryTime })
 		}
 	}
 }

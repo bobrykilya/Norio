@@ -1,10 +1,13 @@
 {
 	"compilerOptions": {
-		"target": "es5",
-		"module": "es2020",
+		"target": "es6",
+		"module": "es2022",
 		"moduleResolution": "node",
+		"outDir": "dist",
+		"allowSyntheticDefaultImports": true,
 		"lib": [ "es2017", "dom" ],
 		"jsx": "react",
-		"allowSyntheticDefaultImports": true
-	}
+	},
+	"include": ["./src/**/*", "../common/**/*.ts"],
+	"exclude": ["node_modules", "./**/*.spec.ts"]
 }

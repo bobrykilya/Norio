@@ -6,7 +6,7 @@ import InputCleaner from '../InputCleaner/InputCleaner'
 import { focusInput } from "../../../../utils/focusInput"
 import { useClickOutside } from "../../../../hooks/useClickOutside"
 import ToolTip from '../../../ToolTip/ToolTip'
-import { AvailableSignFormInputTypes, ISignFormInput } from '../../../../types/Auth-types'
+import { ISignFormInput, SignFormInputTypesOptions } from '../../../../types/Auth-types'
 
 
 
@@ -62,7 +62,7 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
     }, lockButtonRef)
 
 
-    const getRegister = (type: AvailableSignFormInputTypes) => {
+    const getRegister = (type: SignFormInputTypesOptions) => {
         switch(type) {
             case 'sign_in':  //**** SignIn
                 return register(name, { 
@@ -101,7 +101,7 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
                     required: true,
                     validate: {
                         passwordsMatch: () => {
-                            if (watch('password') != watch('confirm_password')) {
+                            if (watch('password') != watch('confirmPassword')) {
                                 return 'Пароли не совпадают'
                             }
                         }

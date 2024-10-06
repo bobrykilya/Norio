@@ -1,4 +1,5 @@
-import queryDB from '../../utils/queryDB.js'
+import queryDB from '../../utils/queryDB'
+import { ILogRepository } from "../../types/DB-types"
 
 
 
@@ -27,10 +28,10 @@ const getInsertData = ({ interCode, userId }) => {
 }
 
 class LogAttentionRepository {
-	static async createLogAttention({ interCode, userId, deviceId, logTime }) {
+	static async createLogAttention({ interCode, userId, deviceId, logTime }: ILogRepository) {
 
 		// const { receiver_user_id, receiver_user_role } = getInsertData({ interCode, userId })
-
+		//
 		// await queryDB("INSERT INTO _log_Attention (inter_code, user_id, device_id, log_time, receiver_user_id, receiver_user_role) VALUES ($1, $2, $3, $4, $5, $6)", [
 		// 	interCode,
 		// 	userId,

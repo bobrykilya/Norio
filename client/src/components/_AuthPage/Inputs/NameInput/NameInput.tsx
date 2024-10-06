@@ -3,7 +3,7 @@ import InputError from '../InputError/InputError'
 import InputCleaner from '../InputCleaner/InputCleaner'
 import { focusInput } from '../../../../utils/focusInput'
 import { capitalize } from '../../../../utils/capitalize'
-import { AvailableSignFormInputTypes, ISignFormInput } from '../../../../types/Auth-types'
+import { ISignFormInput, SignFormInputTypesOptions } from '../../../../types/Auth-types'
 
 
 
@@ -39,7 +39,7 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
         setIsCleanerOpened(false)
     }
 
-    const getRegister = (type: AvailableSignFormInputTypes) => {
+    const getRegister = (type: SignFormInputTypesOptions) => {
         switch(type) {
             case 'sign_in':  //**** SignIn
                 return register(name, {

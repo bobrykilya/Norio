@@ -1,14 +1,14 @@
 import express from "express"
 import { createServer } from 'node:http'
 import cors from "cors"
-import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import Fingerprint from "express-fingerprint"
-import AuthRootRouter from "./src/routers/Global-router.js"
-import TokenService from "./src/services/Token-service.js"
-import { socketConnection } from './src/services/Socket-service.js'
-import AuthService from './src/services/Auth-service.js'
-import { AUTO_LOGOUT_INTERVAL } from './constants.js'
+import AuthRootRouter from "./src/routers/Global-router"
+import TokenService from "./src/services/Token-service"
+import { socketConnection } from './src/services/Socket-service'
+import AuthService from './src/services/Auth-service'
+import { AUTO_LOGOUT_INTERVAL } from './constants'
+import dotenv from "dotenv"
 
 
 
@@ -21,26 +21,34 @@ socketConnection(server)
 
 app.use(cookieParser())
 app.use(express.json())
-app.use(cors({ 
+app.use(cors({
 	credentials: true, 
 	origin: process.env.CLIENT_URL
 }))
 
 app.use(
 	Fingerprint({
+		// @ts-ignore
 		parameters: [Fingerprint.useragent, Fingerprint.acceptHeaders],
 	})
 )
 
 app.use("/auth", AuthRootRouter)
 
-app.use("/resource/protected", TokenService.checkAccess, (_, res) => {
+// @ts-ignore
+app.use("/resource/protected", TokenService.checkAccess, (_: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: string): any; new(): any } } }) => {
 	return res.status(200).json("Привет " + Date.now())
 })
 
 
-server.listen(PORT, (err) => {
-	err ? console.log(err) : console.log(`Server listening on ${PORT}`)
+server.on('error', (err) => {
+	if (err) {
+		console.log(err)
+	}
+})
+
+server.listen(PORT, () => {
+	console.log(`Server listening on ${PORT}...`)
 })
 
 
