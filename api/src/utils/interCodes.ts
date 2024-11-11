@@ -111,7 +111,7 @@ const getCodeDescription = (interCode: ICommonVar['interCode']) => {
         }
         case 806 : return {
             interCode,
-            name: 'DeviceId in db with other browser & block',
+            name: 'DeviceId in db with others browser & block',
             description: 'Попытка несанкционированной подмены id неизвестного устройства. Блокировка девайса',
             lockDuration: 0, //* Infinity lock
             notifForAdmin: true,

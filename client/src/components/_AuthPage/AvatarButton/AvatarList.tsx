@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import JumpingList from '../../JumpingList/JumpingList'
+import JumpingList from '../../common/JumpingList/JumpingList'
 import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
-import ToolTip from '../../ToolTip/ToolTip'
+import ToolTip from '../../others/ToolTip/ToolTip'
 import { AuthContext } from '../../../context/Auth-context'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import timeout from "../../../utils/timeout"

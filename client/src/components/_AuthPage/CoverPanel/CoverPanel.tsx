@@ -5,7 +5,7 @@ import SignUpImg from '../../../assets/AuthPage/sign_up.png'
 // @ts-ignore
 import SignInImg from '../../../assets/AuthPage/sign_in.png'
 import { IoArrowBackCircleOutline } from "react-icons/io5"
-import ToolTip from '../../ToolTip/ToolTip'
+import ToolTip from '../../others/ToolTip/ToolTip'
 import { useCoverPanelState } from "../../../stores/Auth-store"
 // import CoverBgImg from '../../../assets/cover_bg.jpg'
 

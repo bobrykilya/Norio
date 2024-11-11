@@ -51,6 +51,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
         e.target.value ? changeInput() : clearInput()
     }
+
     const toggleDropDown = (pos: boolean) => {
         if (pos) {
             if (error?.type === 'isNotLatin') return
@@ -77,11 +78,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
     const handleClickElem = async (e:  React.MouseEvent<HTMLUListElement, MouseEvent>) => {
         // console.log(e.target)
-        // @ts-ignore
-        if (e.target.tagName === 'BUTTON' && isDropDownOpened) {
+        if ((e.target as HTMLElement).tagName === 'BUTTON' && isDropDownOpened) {
             e.preventDefault()
-            // @ts-ignore
-            setInputValue(e.target.textContent)
+            setInputValue((e.target as HTMLElement).textContent)
             await focusInput(inputRef)
         }
     }
@@ -180,18 +179,17 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
 
     const focusJumping = async (route: 'next' | 'prev') => {
-        const active = document.activeElement
+        const active = document.activeElement as HTMLElement
         switch(route) {
             case 'next':
-                // @ts-ignore
-                active.nextElementSibling?.focus()
+                (active.nextElementSibling as HTMLElement)?.focus()
                 break
             case 'prev':
-                const elem = active.previousElementSibling
+                const elem = active.previousElementSibling as HTMLElement
                 if (elem.previousElementSibling) {
-                    // @ts-ignore
                     elem.focus()
                 } else {
+                    elem.focus()
                     await focusInput(inputRef)
                 }
                 break
@@ -211,9 +209,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             isInList: (val: string) => isValueInList(val) ||
                 `Введена неизвестная ${placeholder.toLowerCase()}`
         },
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-            handleChangeInput(e)
-        },
+        onChange: handleChangeInput,
     })
 
 

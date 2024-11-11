@@ -1,5 +1,5 @@
 import { IoCloseCircleOutline } from "react-icons/io5"
-import ToolTip from '../../../ToolTip/ToolTip'
+import ToolTip from '../../../others/ToolTip/ToolTip'
 import React from "react";
 
 

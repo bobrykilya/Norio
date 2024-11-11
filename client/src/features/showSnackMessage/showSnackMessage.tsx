@@ -1,6 +1,6 @@
 import React from 'react'
 import toast from 'react-hot-toast'
-import SnackBar from '../../components/SnackBar/SnackBar'
+import SnackBar from '../../components/others/SnackBar/SnackBar'
 import { PiSealWarning, PiWarningCircleBold } from "react-icons/pi"
 import { TbLockSquareRounded } from "react-icons/tb"
 import { FiCheckCircle } from "react-icons/fi"

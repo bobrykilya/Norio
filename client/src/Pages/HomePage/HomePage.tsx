@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import NavBarCard from '../../components/Cards/NavBarCard/NavBarCard'
-import NotificationCard from '../../components/Cards/NotificationCard/NotificationCard'
+import NavBar from '../../components/Cards/NavBar/NavBar'
 import TaskCard from '../../components/Cards/TaskCard/TaskCard'
 import AccountInfoCard from '../../components/Cards/AccountInfoCard/AccountInfoCard'
 import { ClassicAnim } from '../../utils/pageTransitions'
 import { socket } from '../../context/Auth-context'
+
 
 
 type HomePageProps = {
@@ -29,8 +29,7 @@ const HomePage = ({ isUserLogged }: HomePageProps) => {
         <ClassicAnim>
             <div id='main_view-cont' className='cont'>
                 <div className='first-column cont'>
-                    <NavBarCard />
-                    <NotificationCard />
+                    <NavBar />
                 </div>
                 <div className="second-column cont">
                     <div className="search_filters_day-cont cont">

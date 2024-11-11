@@ -2,7 +2,7 @@ import React, { MutableRefObject, useRef, useState } from 'react'
 import InputCleaner from '../Inputs/InputCleaner/InputCleaner'
 import InputError from '../Inputs/InputError/InputError'
 import { PiUserThin } from "react-icons/pi"
-import ToolTip from '../../ToolTip/ToolTip'
+import ToolTip from '../../others/ToolTip/ToolTip'
 import AvatarList from './AvatarList'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import { IReactHookForm } from "../../../types/Auth-types"

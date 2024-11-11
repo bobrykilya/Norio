@@ -9,6 +9,8 @@ import { socketConnection } from './src/services/Socket-service'
 import AuthService from './src/services/Auth-service'
 import { AUTO_LOGOUT_INTERVAL } from './constants'
 import dotenv from "dotenv"
+import detect from "detect-port"
+import killPort from "kill-port"
 
 
 
@@ -47,9 +49,20 @@ server.on('error', (err) => {
 	}
 })
 
-server.listen(PORT, () => {
-	console.log(`Server listening on ${PORT}...`)
-})
+const portListeningTest = async () => {
+	const port = await detect(Number(PORT))
+	// if (port != Number(PORT)) {
+		// console.log('Server is listening right now!')
+		await killPort(Number(PORT), 'tcp')
+	// }
+	return port
+}
 
+await portListeningTest()
+	.then((port) => {
+		server.listen(port, () => {
+			console.log(`Server listening on ${port}...`)
+		})
+	})
 
 setInterval(AuthService.intervalTestFunc, AUTO_LOGOUT_INTERVAL * 1000)

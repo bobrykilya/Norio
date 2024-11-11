@@ -217,12 +217,11 @@ class AuthService {
 		}
 
 		//* Checking for fast session end
-		if (refreshSession.log_out_time && (refreshSession.log_out_time < queryTime)) {
+		if (Number(refreshSession.log_out_time) && (Number(refreshSession.log_out_time) < queryTime)) {
 			await AuthService.sessionsAutoLogOut(refreshSession)
 			throw new Unauthorized()
 		}
-		//
-		
+
 		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash) || 
 		    await DeviceService.deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId: refreshSession.user_id, queryTime })
 		

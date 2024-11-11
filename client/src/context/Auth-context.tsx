@@ -186,7 +186,7 @@ const AuthProvider = ({ children }) => {
 				// console.log(socket.id)
 			})
 			socket.on('autoLogOut', ({ isLogOut, userNameInfo }) => {
-				console.log(isLogOut)
+				// console.log(isLogOut)
 				if (isLogOut) autoLogOut(userNameInfo)
 			})
 		}

@@ -51,7 +51,7 @@ class RefreshSessionRepository {
 	}
 
 	static async getRefreshSessionsWithLogOutTime() {
-		const response = await queryDB("SELECT sess_id, user_id, device_id, log_out_time FROM refresh_sessions WHERE log_out_time < $1", [getTime()])
+		const response = await queryDB("SELECT sess_id, user_id, device_id, log_out_time FROM refresh_sessions WHERE log_out_time != 0 AND log_out_time < $1", [getTime()])
 
 		return response?.rows
 	}

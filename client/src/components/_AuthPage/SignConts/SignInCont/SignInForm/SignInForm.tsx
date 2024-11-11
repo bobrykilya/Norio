@@ -4,11 +4,11 @@ import { focusInput } from '../../../../../utils/focusInput';
 import { AuthContext } from "../../../../../context/Auth-context"
 import UserNameInput from '../../../Inputs/NameInput/NameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
-import CheckBox from '../../../../Inputs/CheckBox/CheckBox'
+import CheckBox from '../../../../common/Inputs/CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { BiLogInCircle } from "react-icons/bi"
 import { FaUser } from "react-icons/fa"
-import ToolTip from '../../../../ToolTip/ToolTip'
+import ToolTip from '../../../../others/ToolTip/ToolTip'
 import { ISignInReq } from "../../../../../../../common/types/Auth-types"
 
 

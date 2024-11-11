@@ -1,5 +1,5 @@
 import React from 'react'
-import ToolTip from '../../ToolTip/ToolTip'
+import ToolTip from '../../others/ToolTip/ToolTip'
 
 
 

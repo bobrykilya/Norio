@@ -68,7 +68,7 @@ class DeviceService {
 
             if (savedDeviceIdInDB) {
                 if (savedDeviceIdInDB !== lsDeviceId){
-                    //* Handling if db has this fingerprint, but device has other deviceId
+                    //* Handling if db has this fingerprint, but device has others deviceId
                     await this.blockDevice({ interCode: 804, userId, deviceId: savedDeviceIdInDB, logTime: queryTime, fingerprint, deviceIP  })
                 } else return lsDeviceId
             } else {
@@ -94,7 +94,7 @@ class DeviceService {
                     await AuthDeviceRepository.updateDevice({ fingerprint, deviceId: lsDeviceId, bVersion, deviceIP })
                     return lsDeviceId
                 } else {
-                    //* Handling if db has deviceId with other browser or OS
+                    //* Handling if db has deviceId with others browser or OS
                     await this.blockDevice({ interCode: 806, userId, deviceId: lsDeviceId, logTime: queryTime, fingerprint, deviceIP })
                 }
             }

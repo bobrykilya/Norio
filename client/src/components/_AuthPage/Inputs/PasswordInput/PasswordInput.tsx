@@ -5,7 +5,7 @@ import InputError from '../InputError/InputError'
 import InputCleaner from '../InputCleaner/InputCleaner'
 import { focusInput } from "../../../../utils/focusInput"
 import { useClickOutside } from "../../../../hooks/useClickOutside"
-import ToolTip from '../../../ToolTip/ToolTip'
+import ToolTip from '../../../others/ToolTip/ToolTip'
 import { ISignFormInput, SignFormInputTypesOptions } from '../../../../types/Auth-types'
 
 
