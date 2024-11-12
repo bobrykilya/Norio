@@ -8,7 +8,9 @@ type IUseCloseOnEsc = {
 }
 const useCloseOnEsc = ({ successConditionsList, successFun }: IUseCloseOnEsc) => {
 	const closeOnEsc = async (e: KeyboardEvent) => {
+		// console.log(successConditionsList)
 		if (e.code === 'Escape') {
+			// e.preventDefault()
 			successFun()
 		}
 	}

@@ -21,8 +21,12 @@ const AuthPage = () => {
 
     return (
         <>
-            <AppTitle />
-            <LogBookButton />
+            <div
+                className={'auth_page-header cont'}
+            >
+                <AppTitle />
+                <LogBookButton isClearIcon={true} />
+            </div>
             <CoverAppTitle block={!!blockErrorMessage}/>
             <AuthPageAnim>
                 <div id="auth_panel-cont" className={`cont ${blockErrorMessage && 'block'}`}>

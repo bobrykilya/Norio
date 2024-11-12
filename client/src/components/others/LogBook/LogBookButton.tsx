@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { BiError } from "react-icons/bi"
+import { PiWarningFill } from "react-icons/pi"
 import LogBookList from './LogBookList'
 import ToolTip from '../ToolTip/ToolTip'
 import toast, { useToasterStore } from 'react-hot-toast'
@@ -8,7 +9,10 @@ import { showSnack } from "../../../features/showSnackMessage/showSnackMessage"
 
 
 
-const LogBookButton = () => {
+type LogBookButtonProps = {
+    isClearIcon?: boolean;
+}
+const LogBookButton = ({ isClearIcon=false }: LogBookButtonProps) => {
 
     const [isLogListOpened, setIsLogListOpened] = useState(false)
     const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
@@ -43,7 +47,11 @@ const LogBookButton = () => {
                 type='button'
                 tabIndex={-1}
             >
-                <BiError className='fa-icon' />            
+                {isClearIcon ?
+                    < BiError className='fa-icon' />
+                :
+                    < PiWarningFill className='fa-icon' />
+                }
                 <ToolTip text='Открыть панель ошибок' position='bottom_left' />
             </button>
         </>

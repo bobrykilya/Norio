@@ -3,21 +3,21 @@
 // @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Itim&display=swap')
 // @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap')
 // @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@500&display=swap')
-@import './reset'
-@import './common'
-@import './components/common/AppTitle/AppTitle'
-@import './components/ButtonsCont/ButtonsCont'
+@import 'reset'
+@import 'common'
+@import 'components/common/AppTitle/AppTitle'
+@import 'components/ButtonsCont/ButtonsCont'
 @import 'components/others/ToolTip/ToolTip'
 @import 'components/others/SnackBar/SnackBar'
-@import './components/common/JumpingList/JumpingList'
+@import 'components/common/JumpingList/JumpingList'
 @import 'components/others/LogBook/LogBookButton'
 @import 'components/others/LogBook/LogBookList'
 @import 'components/common/Tables/Tables_imports'
-@import 'components/Cards/Cards_imports'
 @import 'components/common/Inputs/Inputs_imports'
-@import './Pages/AuthPage/AuthPage'
-@import './Pages/HomePage/HomePage'
-@import './components/common/Card/Card'
+@import 'components/common/NavBar/NavBar'
+@import 'components/common/AccountInfoCard/AccountInfoCard'
+@import 'pages/AuthPage/AuthPage'
+@import 'pages/HomePage/HomePage'
 
 
 #main_body-cont
@@ -31,11 +31,6 @@
         pointer-events: none
         width: 100vw
         height: 100vh
-    .main_bg-img
-        display: none
-        z-index: -9
-        object-fit: cover
-        // opacity: 0.7
     .main_bg-gradient
         z-index: -10
         background: radial-gradient(circle, $color-bg-light, $color-bg-dark)

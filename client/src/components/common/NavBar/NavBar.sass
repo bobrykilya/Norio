@@ -1,0 +1,52 @@
+@import '../../../variables'
+
+
+
+.nav_bar-card
+    //border: 2px solid green
+    background: none
+    width: 2.7rem
+    justify-content: space-between
+    .logo-cont
+        height: auto
+        margin-top: 12px
+        margin-bottom: 0.7rem
+        .app_icon-img
+            //border: 2px solid black
+            z-index: 100
+            pointer-events: none
+            width: 2.2rem
+            margin-bottom: 1px
+        .app_title-cont
+            opacity: 0.6
+            .app_title_name
+                font-size: 0.74rem
+    .nav_bar-cont
+        height: auto
+        padding: 7px 0
+        a
+            //border: 1px solid orange
+            height: 54px
+            width: 54px
+            border-radius: 25px
+            cursor: pointer
+            margin: 1px 0
+            //overflow: visible
+            transition: all 0.1s ease
+            &:hover
+                background-color: #a1a5b123
+            &:active
+                background-color: rgba(161, 165, 177, 0.31)
+                .fa-icon
+                    transform: scale(0.96)
+            .fa-icon
+                opacity: 0.86
+                font-size: 25px
+                color: $color-backgr
+            &.selected
+                background-color: $color-backgr
+                .fa-icon
+                    opacity: 1
+                    color: $color-dark-blue
+    .nav_bar-footer
+        height: 166px

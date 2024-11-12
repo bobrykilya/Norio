@@ -7,7 +7,7 @@ import InputCleaner from '../InputCleaner/InputCleaner'
 import { IDataListElement } from "../../../../assets/AuthPage/AuthPage-data"
 import { ISignFormInput } from "../../../../types/Auth-types"
 import { useAnyCoverModalState } from "../../../../stores/Global-store"
-import useCloseOnEsc from "../../../../hooks/useCloseOnEsc"
+import timeout from "../../../../utils/timeout"
 
 
 
@@ -126,7 +126,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             switch(e.code) {
                 case 'Tab':
                     e.preventDefault()
-                    setInputValue(dropDownRef.current.firstChild.innerHTML)
+                    if (LIST_FILTERED[0]) {
+                        setInputValue(dropDownRef.current.firstChild.innerHTML)
+                    }
                     break
                 case 'ArrowDown':
                     e.preventDefault()
@@ -140,6 +142,11 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                     // e.preventDefault()
                     setInputValue(dropDownRef.current.firstChild.innerHTML)
                     break
+                case 'Escape':
+                    await timeout(100)
+                        .then(() => {
+                            toggleDropDown(false)
+                        })
             }
         }
 
@@ -174,6 +181,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 break
             default:
                 await focusInput(inputRef)
+                    .then(async () => await focusInput(inputRef))
                 break
         }
     }
@@ -195,11 +203,6 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 break
         }
     }
-
-    useCloseOnEsc({
-        successConditionsList: [isDropDownOpened],
-        successFun: () => toggleDropDown(false)
-    })
 
     const { ref, ... rest_register } = register(name, {
         required: true,

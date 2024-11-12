@@ -1,46 +1,34 @@
-@import '../../components/Cards/Cards_variables'
+@import '../../variables'
 
 
 
 #main_view-cont
-    padding: $margin-cards
-    padding-bottom: 1rem
+    padding: $margin-card $margin-card 1rem
     flex-direction: row
     overflow: visible
-    .first-column
-        // border: 2px solid orange
-        width: $width-first-column
-        // width: auto
-        overflow: visible
-        .nav_bar_card-cont
-            margin-bottom: $margin-cards
-            height: auto
-            // flex-shrink: 1
-        .notification_card-cont
-            flex-shrink: 1
     .second-column
-        margin: 0 $margin-cards
+        margin: 0 $margin-card
         flex-shrink: 1
         overflow: visible
         .search_filters_day-cont
-            margin-bottom: $margin-cards
+            margin-bottom: $margin-card
             min-height: 7rem
             height: 23%
             max-height: 8rem 
             flex-direction: row
             overflow: visible
             .search_and_main_filters-cont
-                margin-right: $margin-cards
+                margin-right: $margin-card
                 flex-shrink: 1
                 overflow: visible
                 .search_card-cont
                     height: 2rem
-                    margin-bottom: $margin-cards
+                    margin-bottom: $margin-card
                 .main_filter_card-cont
                     flex-shrink: 1
                     // width: 100%
             .date_filter_card-cont
-                margin-right: $margin-cards
+                margin-right: $margin-card
                 min-width: 7rem
                 width: 24%
                 max-width: 16rem
@@ -50,7 +38,7 @@
                 max-width: 12rem
         .task_card-cont
                 flex-shrink: 1
-                margin-bottom: $margin-cards
+                margin-bottom: $margin-card
         .new_task_but-cont
             // border: 2px solid orange
             height: 2rem
@@ -62,7 +50,7 @@
                 width: 100%
                 &:nth-child(2)
                     width: 15rem
-                    margin: 0 $margin-cards
+                    margin: 0 $margin-card
     .third-column
         min-width: 10rem
         width: 14%
@@ -72,6 +60,6 @@
         .recent_changes_card-cont
             height: 50%
             // height: 60%
-            margin: $margin-cards 0
+            margin: $margin-card 0
         .recent_messages_card-cont
             flex-shrink: 1
