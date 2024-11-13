@@ -7,16 +7,16 @@ import AppTitle from '../../components/common/AppTitle/AppTitle'
 import LogBookButton from '../../components/others/LogBook/LogBookButton'
 import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
-import { useBlockError } from "../../stores/Device-store"
-import CoverAppTitle from "../../components/_AuthPage/CoverAppTitle/CoverAppTitle"
 import { useCoverPanelState } from "../../stores/Auth-store"
 import { useAnyCoverModalState } from "../../stores/Global-store"
 
 
 
-const AuthPage = () => {
+type AuthPageProps = {
+    blockErrorMessage: string;
+}
+const AuthPage = ({ blockErrorMessage }: AuthPageProps) => {
     const coverPanelState = useCoverPanelState(s => s.coverPanelState)
-    const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
     const { isAnyCoverModalOpened, isAnyJumpingListOpened } = useAnyCoverModalState()
 
     return (
@@ -27,7 +27,6 @@ const AuthPage = () => {
                 <AppTitle />
                 <LogBookButton isClearIcon={true} />
             </div>
-            <CoverAppTitle block={!!blockErrorMessage}/>
             <AuthPageAnim>
                 <div id="auth_panel-cont" className={`cont ${blockErrorMessage && 'block'}`}>
                     <div id="signs-cont" className="cont">

@@ -1,6 +1,6 @@
 import React from 'react'
 import SignInForm from './SignInForm/SignInForm'
-import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
+import ButtonsCont from '../../ButtonsCont/ButtonsCont'
 import NameTag from '../../NameTag/NameTag'
 import { SignContProps } from "../../../../types/Auth-types"
 

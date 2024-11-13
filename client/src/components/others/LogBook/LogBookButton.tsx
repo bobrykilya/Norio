@@ -6,6 +6,7 @@ import ToolTip from '../ToolTip/ToolTip'
 import toast, { useToasterStore } from 'react-hot-toast'
 import { useBlockError } from "../../../stores/Device-store"
 import { showSnack } from "../../../features/showSnackMessage/showSnackMessage"
+import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 
 
 
@@ -41,11 +42,9 @@ const LogBookButton = ({ isClearIcon=false }: LogBookButtonProps) => {
     return ( 
         <>
             <LogBookList closeLogList={closeLogList} isLogListOpened={isLogListOpened} />
-            <button
-                className='log_book-button cont before_but-hover'
+            <RoundButton
                 onClick={openLogList}
-                type='button'
-                tabIndex={-1}
+                className={'log_book-button'}
             >
                 {isClearIcon ?
                     < BiError className='fa-icon' />
@@ -53,7 +52,7 @@ const LogBookButton = ({ isClearIcon=false }: LogBookButtonProps) => {
                     < PiWarningFill className='fa-icon' />
                 }
                 <ToolTip text='Открыть панель ошибок' position='bottom_left' />
-            </button>
+            </RoundButton>
         </>
      )
 }

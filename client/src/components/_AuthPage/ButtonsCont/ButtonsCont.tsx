@@ -1,7 +1,7 @@
 import React from 'react'
 import { MdInstallDesktop } from "react-icons/md"
 import { FaInfo } from "react-icons/fa6"
-import ToolTip from '../others/ToolTip/ToolTip'
+import ToolTip from '../../others/ToolTip/ToolTip'
 
 
 

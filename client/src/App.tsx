@@ -6,12 +6,15 @@ import { AuthContext } from "./context/Auth-context"
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
+import CoverAppTitle from "./components/common/CoverAppTitle/CoverAppTitle"
+import { useBlockError } from "./stores/Device-store"
 
 
 
 const App = () => {
 
     const { isUserLogged } = useContext(AuthContext)
+    const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
 
     const location = useLocation()
 
@@ -29,15 +32,16 @@ const App = () => {
                     <Route path="*" element={<Navigate to={isUserLogged ? "home" : "auth"} />} />
                     {isUserLogged ? (
                         <Route path="home" element={
-                            <HomePage isUserLogged={isUserLogged} />
+                            <HomePage isUserLogged={isUserLogged} location={location}/>
                         } />
                     ) : (
                         <Route path="auth" element={
-                            <AuthPage />
+                            <AuthPage blockErrorMessage={blockErrorMessage} />
                         } />
                     )}
                 </Routes>
             </AnimatePresence>
+            <CoverAppTitle block={!!blockErrorMessage}/>
             <div className="main_bg-gradient bg"></div>
         </div>
     )

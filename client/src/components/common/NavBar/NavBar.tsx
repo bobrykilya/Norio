@@ -7,8 +7,13 @@ import LogBookButton from "../../others/LogBook/LogBookButton"
 
 
 
-const NavBar = () => {
-    const c_path = document.location.pathname.split('/')[1]
+type NavBarProps = {
+    location: {
+        pathname: string;
+    };
+}
+const NavBar = ({ location }: NavBarProps) => {
+    const curr_path = location.pathname.split('/')[1]
     // console.log(c_path)
 
     return (
@@ -28,7 +33,7 @@ const NavBar = () => {
                 {
                     NAV_BAR_LIST.map((el) => {
                         return (
-                            <a className={`cont ${el.id === c_path ? 'selected' : ''}`} key={el.id}>
+                            <a className={`cont ${el.id === curr_path ? 'selected' : ''}`} key={el.id}>
                                 {el.icon}
                             </a>
                         )

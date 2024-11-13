@@ -9,8 +9,11 @@ import { socket } from '../../context/Auth-context'
 
 type HomePageProps = {
     isUserLogged: boolean;
+    location: {
+        pathname: string;
+    };
 }
-const HomePage = ({ isUserLogged }: HomePageProps) => {
+const HomePage = ({ isUserLogged, location }: HomePageProps) => {
 
 
     const { user_id } = JSON.parse(localStorage.getItem('userInfo') || '{}')
@@ -28,7 +31,7 @@ const HomePage = ({ isUserLogged }: HomePageProps) => {
     return ( 
         <ClassicAnim>
             <div id='main_view-cont' className='cont'>
-                <NavBar />
+                <NavBar location={location} />
                 <div className="second-column cont">
                     <div className="search_filters_day-cont cont">
                         <div className="search_and_main_filters-cont cont">

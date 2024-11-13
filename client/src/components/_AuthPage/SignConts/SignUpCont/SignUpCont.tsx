@@ -1,8 +1,8 @@
 import React from 'react'
 import SignUpForm from './SignUpForm/SignUpForm'
-import ButtonsCont from '../../../ButtonsCont/ButtonsCont'
 import NameTag from '../../NameTag/NameTag'
 import { SignContProps } from "../../../../types/Auth-types"
+import ButtonsCont from "../../ButtonsCont/ButtonsCont"
 
 
 
