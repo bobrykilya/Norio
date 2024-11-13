@@ -4,6 +4,10 @@ import { NAV_BAR_LIST } from '../../../assets/common/Common-data'
 // @ts-ignore
 import appIcon from '../../../assets/common/logos/app_icon.png'
 import LogBookButton from "../../others/LogBook/LogBookButton"
+import RoundButton from "../Buttons/RoundButton/RoundButton"
+import ToolTip from "../../others/ToolTip/ToolTip"
+import { TbInfoSquareRoundedFilled } from "react-icons/tb"
+import SettingsButton from "../../others/SettingsButton/SettingsButton"
 
 
 
@@ -35,6 +39,7 @@ const NavBar = ({ location }: NavBarProps) => {
                         return (
                             <a className={`cont ${el.id === curr_path ? 'selected' : ''}`} key={el.id}>
                                 {el.icon}
+                                <ToolTip text={el.label} position={'right'} timeMS={600} />
                             </a>
                         )
                     })
@@ -44,6 +49,14 @@ const NavBar = ({ location }: NavBarProps) => {
                 className={'nav_bar-footer cont'}
             >
                 <LogBookButton />
+                <RoundButton
+                    onClick={() => {}}
+                    className={'info-button'}
+                >
+                    <TbInfoSquareRoundedFilled className='fa-icon'/>
+                    <ToolTip text='Описание приложения и инструкция' position={'right'} />
+                </RoundButton>
+                <SettingsButton />
             </div>
         </div>
      )

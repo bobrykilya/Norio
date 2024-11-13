@@ -7,31 +7,33 @@
     background: none
     width: 2.7rem
     justify-content: space-between
+    overflow: visible
     .logo-cont
         height: auto
         margin-top: 12px
-        margin-bottom: 0.7rem
+        //margin-bottom: 0.7rem
         .app_icon-img
             //border: 2px solid black
             z-index: 100
             pointer-events: none
-            width: 2.2rem
+            width: 2.15rem
             margin-bottom: 1px
         .app_title-cont
             opacity: 0.6
             .app_title_name
-                font-size: 0.74rem
+                font-size: 0.73rem
     .nav_bar-cont
         height: auto
         padding: 7px 0
+        overflow: visible
         a
             //border: 1px solid orange
             height: 54px
             width: 54px
             border-radius: 25px
             cursor: pointer
-            margin: 1px 0
-            //overflow: visible
+            margin: 0.5px 0
+            overflow: visible
             transition: all 0.1s ease
             &:hover
                 background-color: #a1a5b123
@@ -40,13 +42,39 @@
                 .fa-icon
                     transform: scale(0.96)
             .fa-icon
-                opacity: 0.86
-                font-size: 25px
-                color: $color-backgr
+                font-size: 29px
+                color: $color-backgr-clear
             &.selected
                 background-color: $color-backgr
                 .fa-icon
-                    opacity: 1
                     color: $color-dark-blue
+            .tool_tip-cont
+                .tool_tip
+                    &.right
+                        bottom: calc(10%)
     .nav_bar-footer
-        height: 166px
+        //border: 1px solid orange
+        height: auto
+        overflow: visible
+        &::before
+            content: ''
+            width: 0.4rem
+            height: 0.4rem
+            background-color: $color-backgr-clear
+            border-radius: 50%
+            margin-bottom: 0.7rem
+            pointer-events: none
+            //display: none
+        .round-button
+            .fa-icon
+                color: $color-backgr-clear
+        .log_book-button
+            .fa-icon
+                font-size: 23px
+        .info-button
+            margin-bottom: 0.15rem
+            .fa-icon
+                font-size: 28px
+        .settings-button
+            .fa-icon
+                font-size: 34px

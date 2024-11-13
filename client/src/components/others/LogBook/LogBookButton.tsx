@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { BiError } from "react-icons/bi"
-import { PiWarningFill } from "react-icons/pi"
+import { PiWarning, PiWarningFill } from "react-icons/pi"
 import LogBookList from './LogBookList'
 import ToolTip from '../ToolTip/ToolTip'
 import toast, { useToasterStore } from 'react-hot-toast'
@@ -11,9 +10,9 @@ import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 
 
 type LogBookButtonProps = {
-    isClearIcon?: boolean;
+    isAuthPage?: boolean;
 }
-const LogBookButton = ({ isClearIcon=false }: LogBookButtonProps) => {
+const LogBookButton = ({ isAuthPage=false }: LogBookButtonProps) => {
 
     const [isLogListOpened, setIsLogListOpened] = useState(false)
     const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
@@ -46,12 +45,12 @@ const LogBookButton = ({ isClearIcon=false }: LogBookButtonProps) => {
                 onClick={openLogList}
                 className={'log_book-button'}
             >
-                {isClearIcon ?
-                    < BiError className='fa-icon' />
+                {isAuthPage ?
+                    < PiWarning className='fa-icon' />
                 :
                     < PiWarningFill className='fa-icon' />
                 }
-                <ToolTip text='Открыть панель ошибок' position='bottom_left' />
+                <ToolTip text='Открыть панель ошибок' position={`${isAuthPage ? 'bottom_left' : 'right'}`} />
             </RoundButton>
         </>
      )

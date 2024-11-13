@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 
 
@@ -7,8 +7,9 @@ type AvailableToolTipPositions = 'top' | 'bottom' | 'left' | 'right' | 'top_left
 type ToolTipProps = {
     text: string;
     position?: AvailableToolTipPositions;
+    timeMS?: number;
 }
-const ToolTip = ({ text, position='top' }: ToolTipProps) => {
+const ToolTip = ({ text, position='top', timeMS }: ToolTipProps) => {
     const [isToolTipVisible, setIsToolTipVisible] = useState(false)
     const timer = useRef<number | null>(null)
 
@@ -17,7 +18,7 @@ const ToolTip = ({ text, position='top' }: ToolTipProps) => {
         timer.current = window.setTimeout(() => {
             // console.log('open')
             setIsToolTipVisible(true)
-        }, 1300)
+        }, timeMS || 1300)
     }
     
     const handleLeaveMouse = () => {

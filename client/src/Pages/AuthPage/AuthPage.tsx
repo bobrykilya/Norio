@@ -25,7 +25,7 @@ const AuthPage = ({ blockErrorMessage }: AuthPageProps) => {
                 className={'auth_page-header cont'}
             >
                 <AppTitle />
-                <LogBookButton isClearIcon={true} />
+                <LogBookButton isAuthPage={true} />
             </div>
             <AuthPageAnim>
                 <div id="auth_panel-cont" className={`cont ${blockErrorMessage && 'block'}`}>
