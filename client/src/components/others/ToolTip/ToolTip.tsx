@@ -27,6 +27,8 @@ const ToolTip = ({ text, position='top', timeMS }: ToolTipProps) => {
         if (timer.current) clearTimeout(timer.current)
     }
 
+
+
     return ( 
         <div 
             className='tool_tip-cont'

@@ -41,7 +41,7 @@ class RefreshSessionRepository {
 	}
 
 	static async deleteOldestRefreshSessionByUserId(userId: IRefreshSessionRepository['userId']) {
-		 await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1 ORDER BY log_in_time LIMIT 1", [userId])
+		 await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1 AND ctid IN (SELECT ctid FROM refresh_sessions ORDER BY log_in_time LIMIT 1)", [userId])
 	}
 
 	static async isRefreshSessionDouble(deviceId: IRefreshSessionRepository['deviceId']) {

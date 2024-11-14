@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import NavBar from '../../components/common/NavBar/NavBar'
+import NavBar from '../../components/others/NavBar/NavBar'
 import TaskCard from '../../components/Cards/TaskCard/TaskCard'
-import AccountInfoCard from '../../components/common/AccountInfoCard/AccountInfoCard'
+import AccountInfoCard from '../../components/others/AccountInfoCard/AccountInfoCard'
 import { ClassicAnim } from '../../utils/pageTransitions'
 import { socket } from '../../context/Auth-context'
 

@@ -1,13 +1,13 @@
 import React from 'react'
-import AppTitle from '../AppTitle/AppTitle'
+import AppTitle from '../../common/AppTitle/AppTitle'
 import { NAV_BAR_LIST } from '../../../assets/common/Common-data'
 // @ts-ignore
 import appIcon from '../../../assets/common/logos/app_icon.png'
-import LogBookButton from "../../others/LogBook/LogBookButton"
-import RoundButton from "../Buttons/RoundButton/RoundButton"
-import ToolTip from "../../others/ToolTip/ToolTip"
+import LogBookButton from "../LogBook/LogBookButton"
+import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
+import ToolTip from "../ToolTip/ToolTip"
 import { TbInfoSquareRoundedFilled } from "react-icons/tb"
-import SettingsButton from "../../others/SettingsButton/SettingsButton"
+import SettingsButton from "../SettingsButton/SettingsButton"
 
 
 
