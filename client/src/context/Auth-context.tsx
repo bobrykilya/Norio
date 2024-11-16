@@ -143,7 +143,7 @@ const AuthProvider = ({ children }) => {
 		const refresh = async () => {
 			try {
 				// console.log('refresh')
-				const lsDeviceId = Number(localStorage.getItem('deviceId')) || undefined
+				const lsDeviceId = Number(localStorage.getItem('deviceId')) || null
 
 				const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId })
 

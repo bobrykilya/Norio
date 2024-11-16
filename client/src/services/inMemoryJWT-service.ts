@@ -1,5 +1,6 @@
-import {LOGOUT_STORAGE_KEY} from "../../constants"
+import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "./Auth-service";
+
 
 
 const inMemoryJWTService = () => {
@@ -10,7 +11,9 @@ const inMemoryJWTService = () => {
         const timeoutTrigger = expiration - 10000
 
         refreshTimeoutId = setTimeout(async () => {
-            const { accessToken, accessTokenExpiration } = await AuthService.refresh()
+            const lsDeviceId = Number(localStorage.getItem('deviceId')) || null
+
+            const { accessToken, accessTokenExpiration } = await AuthService.refresh({ lsDeviceId })
             setToken(accessToken, accessTokenExpiration)
         }, timeoutTrigger)
     }

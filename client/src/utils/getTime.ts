@@ -7,29 +7,31 @@ export const getTime = () => {
     return Date.now()
 }
 
-export const getTimeString = (time: number) => {
-    return new Date(time).toLocaleString()
-}
 
-export const getTimeParams = (time?: number) => {
+type paramsListOptions = 'now' | 'second'| 'minute' | 'hour' | 'day' | 'month' | 'year' | 'dayNum' | 'timeString' | 'timeStringFull' | 'dateString'
+export const getTimeParams = (paramsList: paramsListOptions[], time?: number) => {
     const now = time ? new Date(time) : new Date()
-    return { hours: now.getHours(), minutes: now.getMinutes(), seconds: now.getSeconds() }
+
+    return {
+        ...(paramsList.includes('now') && { now }),
+        ...(paramsList.includes('second') && { second: now.getSeconds() }),
+        ...(paramsList.includes('minute') && { minute: now.getMinutes() }),
+        ...(paramsList.includes('hour') && { hour: now.getHours() }),
+        ...(paramsList.includes('day') && { day: now.getDate() }),
+        ...(paramsList.includes('month') && { month: now.getMonth() + 1 }),
+        ...(paramsList.includes('year') && { year: now.getFullYear() }),
+        ...(paramsList.includes('dayNum') && { dayNum: now.getDay() - 1 }),
+        ...(paramsList.includes('timeString') && { timeString: now.toLocaleTimeString().slice(0, 5) }),
+        ...(paramsList.includes('timeStringFull') && { timeStringFull: now.toLocaleTimeString() }),
+        ...(paramsList.includes('dateString') && { dateString: now.toLocaleDateString() }),
+    }
 }
 
-export const getTimeParamString = (time: number) => {
+export const zeroHandler = (time: number) => {
     if (time >= 10)
         return time.toString()
     else
         return `0${time}`
-}
-
-export const getDateParams = (time?: number) => {
-    const date = time ? new Date(time) : new Date()
-    const now = date.toISOString().split('T')[0]
-    const day = Number(now.split('-')[2])
-    const month = Number(now.split('-')[1])
-    const year = Number(now.split('-')[0])
-    return { day, month, year, dayNum: date.getDay()-1, dateString: `${day}.${month}.${year}` }
 }
 
 type getWeekOfMonthProps = {
@@ -65,6 +67,7 @@ export const getLastTime = (timestamp: number, type: TypeOptions): number => {
 export const getDayOfWeek = (num: number) => {
     return WEEK_DAYS_LIST[num]
 }
+
 export const getMonth = (num: number) => {
     return MONTHS_LIST[num-1]
 }

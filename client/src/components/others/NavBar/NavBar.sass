@@ -28,8 +28,8 @@
         overflow: visible
         a
             //border: 1px solid orange
-            height: 54px
-            width: 54px
+            height: 53px
+            width: 53px
             border-radius: 25px
             cursor: pointer
             margin: 0.5px 0
@@ -37,12 +37,14 @@
             transition: all 0.1s ease
             &:hover
                 background-color: #a1a5b123
+                .fa-icon
+                    transform: scale(1.05)
             &:active
                 background-color: rgba(161, 165, 177, 0.31)
                 .fa-icon
-                    transform: scale(0.96)
+                    transform: scale(0.97)
             .fa-icon
-                font-size: 29px
+                font-size: 27px
                 color: $color-backgr-clear
             &.selected
                 background-color: $color-backgr
