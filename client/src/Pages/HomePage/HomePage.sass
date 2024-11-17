@@ -3,60 +3,51 @@
 
 
 #main_view-cont
-    padding: $margin-card $margin-card 1rem
+    padding: $margin-card $margin-card 0.7rem
     flex-direction: row
     overflow: visible
-    .second-column
+    .center-column
         margin: 0 $margin-card
         flex-shrink: 1
         overflow: visible
-        .search_filters_day-cont
+        .center_column-header
+            //border: 1px solid orange
             margin-bottom: $margin-card
-            min-height: 7rem
-            height: 23%
-            max-height: 8rem 
+            height: 251px
             flex-direction: row
             overflow: visible
-            .search_and_main_filters-cont
+            justify-content: flex-end
+            .search_and_task_filters-cont
                 margin-right: $margin-card
                 flex-shrink: 1
-                overflow: visible
-                .search_card-cont
+                width: auto
+                .search-card
                     height: 2rem
                     margin-bottom: $margin-card
-                .main_filter_card-cont
-                    flex-shrink: 1
-                    // width: 100%
-            .date_filter_card-cont
+                .task_filters-card
+
+            .calendar-card
                 margin-right: $margin-card
-                min-width: 7rem
-                width: 24%
-                max-width: 16rem
-            .day_info_card-cont
-                min-width: 7rem
-                width: 20%
-                max-width: 12rem
-        .task_card-cont
-                flex-shrink: 1
-                margin-bottom: $margin-card
-        .new_task_but-cont
-            // border: 2px solid orange
-            height: 2rem
+                width: 467px
+            .weather-card
+                //border: 1px solid orange
+                width: 341px
+        .task_and_note_cards-cont
             flex-direction: row
-            overflow: visible
-            button
-                flex-shrink: 1
-                height: 100%
-                width: 100%
-                &:nth-child(2)
-                    width: 15rem
-                    margin: 0 $margin-card
-    .third-column
+            flex-shrink: 1
+            .task-card
+                margin-right: $margin-card
+            .note-card
+                //border: 2px solid orange
+    .right-column
+        //border: 2px solid orange
         width: 14.8rem
         overflow: visible
+        .account_info-card
+            //border: 2px solid orange
         .recent_changes_card-cont
-            height: 50%
-            // height: 60%
+            //height: 100%
+            flex-shrink: 1
             margin: $margin-card 0
         .recent_messages_card-cont
-            flex-shrink: 1
+            height: 20%

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import NavBar from '../../components/others/NavBar/NavBar'
-import TaskCard from '../../components/Cards/TaskCard/TaskCard'
 import AccountInfoCard from '../../components/others/AccountInfoCard/AccountInfoCard'
 import { ClassicAnim } from '../../utils/pageTransitions'
 import { socket } from '../../context/Auth-context'
+import TaskCard from "../../components/_HomePage/TaskCard/TaskCard"
+import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
 
 
 
@@ -32,27 +33,31 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
         <ClassicAnim>
             <div id='main_view-cont' className='cont'>
                 <NavBar location={location} />
-                <div className="second-column cont">
-                    <div className="search_filters_day-cont cont">
-                        <div className="search_and_main_filters-cont cont">
-                            <div className="search_card-cont cont card">
+                <div className="center-column cont">
+                    <div className="center_column-header cont">
+                        <div className="search_and_task_filters-cont cont">
+                            <div className="search-card cont card">
                             </div>
-                            <div className="main_filter_card-cont cont card">
+                            <div className="task_filters-card cont card">
                             </div>
                         </div>
-                        <div className="date_filter_card-cont cont card">
+                        <div className="calendar-card cont card">
                         </div>
-                        <div className="day_info_card-cont cont card">
+                        <WeatherCard />
+                    </div>
+                    <div
+                        className={'task_and_note_cards-cont cont'}
+                    >
+                        <TaskCard />
+                        <div
+                            className={'note-card cont card'}
+                        >
+
                         </div>
                     </div>
-                    <TaskCard />
-                    <div className="new_task_but-cont cont">
-                        <button className="card">Новая задача</button>
-                        <button className="card">Все задачи</button>
-                        <button className="card">Шаблоны задач</button>
-                    </div>
+
                 </div>
-                <div className="third-column cont">
+                <div className="right-column cont">
                     <AccountInfoCard />
                     <div className="recent_changes_card-cont cont card">
             

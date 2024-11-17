@@ -6,7 +6,7 @@ const TaskCard = () => {
 
 
     return ( 
-        <div className="task_card-cont cont card">
+        <div className="task-card cont card">
             {/* <div className='card_label-cont cont'>
                 
                 <span className='label-name'>Задачи</span>

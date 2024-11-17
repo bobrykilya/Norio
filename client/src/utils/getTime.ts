@@ -65,7 +65,8 @@ export const getLastTime = (timestamp: number, type: TypeOptions): number => {
 }
 
 export const getDayOfWeek = (num: number) => {
-    return WEEK_DAYS_LIST[num]
+
+    return WEEK_DAYS_LIST[num] || WEEK_DAYS_LIST[6]
 }
 
 export const getMonth = (num: number) => {
