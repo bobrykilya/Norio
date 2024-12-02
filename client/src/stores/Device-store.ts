@@ -7,7 +7,11 @@ type IUseBlockError = {
 	blockErrorMessage: string;
 	setBlockErrorMessage: (blockErrorMessage: string) => void;
 }
-export const useBlockError = create<IUseBlockError>((set) => ({
+const useBlockError = create<IUseBlockError>((set) => ({
 	blockErrorMessage: '',
 	setBlockErrorMessage: (blockErrorMessage: string) => set({ blockErrorMessage: blockErrorMessage }),
 }))
+
+export {
+	useBlockError
+}

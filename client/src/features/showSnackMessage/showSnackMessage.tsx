@@ -31,11 +31,11 @@ const showAllSnacksDev = () => {
 
 const getTypeDecoding = (type: SnackBarTypeOptions) => {
     switch (type) {
-		case 'e' : return { snackType: 'e', title: 'Ошибка', icon: <PiWarningCircleBold className='error message-icon fa-icon' />, toastDuration: 4000 }
-		case 'i' : return { snackType: 'i', title: 'Инфо', icon: <LuBadgeInfo className='info message-icon fa-icon' />, toastDuration: 5000 }
-		case 'w' : return { snackType: 'w', title: 'Внимание', icon: <PiSealWarning className='warning message-icon fa-icon' />, toastDuration: Infinity }
-		case 'b' : return { snackType: 'b', title: 'Блок', icon: <TbLockSquareRounded className='block message-icon fa-icon' />, toastDuration: Infinity }
-        case 's' : return { snackType: 's', title: 'Успех', icon: <FiCheckCircle className='success message-icon fa-icon' />, toastDuration: 3000 }
+		case 'e' : return { snackType: type, title: 'Ошибка', icon: <PiWarningCircleBold className='error message-icon fa-icon' />, toastDuration: 4000 }
+		case 'i' : return { snackType: type, title: 'Инфо', icon: <LuBadgeInfo className='info message-icon fa-icon' />, toastDuration: 5000 }
+		case 'w' : return { snackType: type, title: 'Внимание', icon: <PiSealWarning className='warning message-icon fa-icon' />, toastDuration: Infinity }
+		case 'b' : return { snackType: type, title: 'Блок', icon: <TbLockSquareRounded className='block message-icon fa-icon' />, toastDuration: Infinity }
+        case 's' : return { snackType: type, title: 'Успех', icon: <FiCheckCircle className='success message-icon fa-icon' />, toastDuration: 3000 }
     }
 }
 

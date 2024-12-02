@@ -1,5 +1,6 @@
 import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "./Auth-service";
+import { getTime } from "../utils/getTime"
 
 
 
@@ -34,7 +35,7 @@ const inMemoryJWTService = () => {
     const deleteToken = () => {
         inMemoryJWT = null
         abortRefreshToken()
-        localStorage.setItem(LOGOUT_STORAGE_KEY, String(Date.now()))
+        localStorage.setItem(LOGOUT_STORAGE_KEY, String(getTime()))
     }
 
     return { getToken, setToken, deleteToken }

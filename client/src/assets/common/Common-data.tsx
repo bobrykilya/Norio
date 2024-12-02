@@ -1,5 +1,5 @@
 import React from "react"
-import { IoHome } from "react-icons/io5"
+import { FaHome } from "react-icons/fa"
 import { BsCalendar2DateFill, BsChatTextFill, BsCheckCircleFill } from "react-icons/bs"
 import { FaBuildingUser, FaFilePen } from "react-icons/fa6"
 import { HiDocumentSearch } from "react-icons/hi"
@@ -19,7 +19,7 @@ export const NAV_BAR_LIST: INavBarDataListElement[] = [
 	{
 		id: 'home',
 		label: 'Главная',
-		icon: <IoHome className='fa-icon'/>,
+		icon: <FaHome className='fa-icon'/>,
 		link: '',
 	},
 	{

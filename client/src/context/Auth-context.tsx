@@ -6,9 +6,10 @@ import AuthService from "../services/Auth-service"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import { IUserNameInfo } from "../types/Auth-types"
 import io from "socket.io-client"
-import { useCoverPanelState } from "../stores/Auth-store"
+import { useCoverPanelState, useUserInfo } from "../stores/Auth-store"
 import { ICheckUserReq, ILoginServiceRes, ILogOutReq, ISignInReq, ISignUpReq } from "../../../common/types/Auth-types"
 import { ICommonVar } from "../../../common/types/Global-types"
+import timeout from "../utils/timeout"
 
 
 
@@ -42,7 +43,8 @@ const AuthProvider = ({ children }) => {
 		setListOfUsedAvatars([])
 	}
 	const resetSignInVariables = () => {
-		localStorage.removeItem('userInfo')
+		useUserInfo.setState({ userInfoState: null })
+		localStorage.removeItem('activeUserName')
 	}
 	const handleReturnToSignUp = () => {
 		resetSignUpVariables()
@@ -54,18 +56,17 @@ const AuthProvider = ({ children }) => {
 		setCoverPanelState('sign_in')
 	}
 
-	const checkSessionDouble = async (newUsername: string) => {
-		const userInfo = localStorage.getItem('userInfo')
-		if (userInfo) {
-			const { username, lastName, firstName }: ILoginServiceRes['userInfo'] = JSON.parse(userInfo || '{}') //* Old user info
+	const checkDoubleSessions = async (newUsername: string) => {
+		const activeUserName = JSON.parse(localStorage.getItem('activeUserName') || null)
 
-			if (newUsername !== username) {
+		if (activeUserName) {
+			if (newUsername !== activeUserName.username) {
+				handleLogOut()
 				showSnackMessage({
 					type: 'i',
-					message: `Был выполнен фоновый выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo({ lastName: lastName, firstName: firstName, username })}</span>`
+					message: `Был выполнен фоновый выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo({ lastName: activeUserName.lastName, firstName: activeUserName.firstName, username: activeUserName.username })}</span>`
 				})
-				handleLogOut()
-			}else {
+			} else {
 				location.reload()
 			}
 		}
@@ -79,7 +80,12 @@ const AuthProvider = ({ children }) => {
 	const saveUserDataOnBrowser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId }: ILoginServiceRes & { lsDeviceId?: number }) => {
 		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 		testAndUpdateLSDeviceId(deviceId, lsDeviceId)
-		localStorage.setItem('userInfo', JSON.stringify(userInfo))
+		useUserInfo.setState({ userInfoState: userInfo })
+		localStorage.setItem('activeUserName', JSON.stringify({
+			username: userInfo.username,
+			firstName: userInfo.firstName,
+			lastName: userInfo.lastName,
+		}))
 	}
 
 	const testAndUpdateLSDeviceId = (deviceId: number, lsDeviceId?: number) => {
@@ -89,11 +95,11 @@ const AuthProvider = ({ children }) => {
 	}
 
 	const handleSignIn = async (data: ISignInReq) => {
-		await checkSessionDouble(data.username)
-			.then(async () => {
-				const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signIn(data)
-				loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
-			})
+		await checkDoubleSessions(data.username)
+		await timeout(300)
+
+		const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signIn(data)
+		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 	}
 
 	const handleCheckUser = async (data: ICheckUserReq) => {
@@ -108,16 +114,16 @@ const AuthProvider = ({ children }) => {
 	}
 
 	const handleSignUp = async (data: ISignUpReq) => {
-		await checkSessionDouble(data.username)
-			.then(async () => {
-				data.username = signUpUserName
-				data.hashedPassword = signUpUserPassword
-				
-				const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp(data)
-				loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
-		
-				resetSignUpVariables()
-			})
+		await checkDoubleSessions(data.username)
+		await timeout(300)
+
+		data.username = signUpUserName
+		data.hashedPassword = signUpUserPassword
+
+		const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp(data)
+		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
+
+		resetSignUpVariables()
 	}
 
 	const handleLogOut = ({ interCode }: ILogOutReq = {}) => {
@@ -167,8 +173,10 @@ const AuthProvider = ({ children }) => {
 		const handlePersistedLogOut = (event: StorageEvent) => {
 			// console.log(event.key)
 			if (event.key === LOGOUT_STORAGE_KEY) {
-				inMemoryJWT.deleteToken()
-				setIsUserLogged(false)
+				handleLogOut({ interCode: 204 })
+				// inMemoryJWT.deleteToken()
+				// setIsUserLogged(false)
+				// resetSignInVariables()
 			}
 		}
 
@@ -183,7 +191,7 @@ const AuthProvider = ({ children }) => {
 		const socketEvents = () => {
 			socket.on('connect', () => {
 				setSocketSessId(socket.id)
-				// console.log(socket.id)
+				console.log(socket.id)
 			})
 			socket.on('autoLogOut', ({ isLogOut, userNameInfo }) => {
 				// console.log(isLogOut)

@@ -5,6 +5,7 @@ import { ClassicAnim } from '../../utils/pageTransitions'
 import { socket } from '../../context/Auth-context'
 import TaskCard from "../../components/_HomePage/TaskCard/TaskCard"
 import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
+import { useUserInfo } from "../../stores/Auth-store"
 
 
 
@@ -16,13 +17,12 @@ type HomePageProps = {
 }
 const HomePage = ({ isUserLogged, location }: HomePageProps) => {
 
-
-    const { user_id } = JSON.parse(localStorage.getItem('userInfo') || '{}')
+    const { userInfoState } = useUserInfo()
     const deviceId = Number(localStorage.getItem('deviceId'))
 
 
     useEffect(() => {
-        const userJoinEvent = () => socket.emit('join', { userId: user_id, deviceId })
+        const userJoinEvent = () => socket.emit('join', { userId: userInfoState?.userId, deviceId })
 
         if (isUserLogged) {
             userJoinEvent()

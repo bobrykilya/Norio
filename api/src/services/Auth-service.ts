@@ -68,7 +68,7 @@ class AuthService {
 			refreshToken,
 		})
 
-		const userInfo = await UserRepository.getUserInfo(userId)
+		const userInfo = await UserRepository.getHandledUserInfo(userId)
 
 		return {
 			accessToken,
@@ -202,6 +202,7 @@ class AuthService {
 	static async refresh({ fingerprint, currentRefreshToken, queryTime, lsDeviceId }: IService<IRefreshReq> & {
 		currentRefreshToken: ICommonVar['refreshToken']
 	}) {
+		console.log({ fingerprint, currentRefreshToken, queryTime, lsDeviceId })
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, queryTime })
 		
@@ -265,7 +266,7 @@ class AuthService {
 			refreshToken,
 		})
 
-		const userInfo = await UserRepository.getUserInfo(userId)
+		const userInfo = await UserRepository.getHandledUserInfo(userId)
 
 		return {
 			accessToken,

@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { CoverPanelOptions } from "../types/Auth-types"
+import { IUserRepository } from "../../../api/src/types/DB-types"
 // import { persist } from "zustand/middleware"
 
 
@@ -16,14 +17,24 @@ const useAvatarListState = create<IUseAvatarListState>(set => ({
 
 type IUseCoverPanelState = {
     coverPanelState: CoverPanelOptions;
-    setCoverPanelState: (state: string) => void;
+    setCoverPanelState: (state: CoverPanelOptions) => void;
 }
 const useCoverPanelState = create<IUseCoverPanelState>(set => ({
     coverPanelState: 'sign_in',
     setCoverPanelState: (state: CoverPanelOptions) => set({ coverPanelState: state })
 }))
 
+type IUseUserInfo = {
+	userInfoState: IUserRepository | null;
+	setUserInfoState: (state: IUserRepository) => void;
+}
+const useUserInfo = create<IUseUserInfo>(set => ({
+	userInfoState: null,
+	setUserInfoState: (state: IUserRepository) => set({ userInfoState: state })
+}))
+
 export {
 	useAvatarListState,
 	useCoverPanelState,
+	useUserInfo,
 }

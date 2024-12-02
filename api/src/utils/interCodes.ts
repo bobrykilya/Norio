@@ -37,7 +37,7 @@ const getCodeDescription = (interCode: ICommonVar['interCode']) => {
         case 204 : return {
             interCode,
             name: 'Auto log-out user',
-            description: 'Автоматический выход из аккаунта после "Не запоминать меня"',
+            description: 'Автоматический выход из аккаунта',
             notifForAdmin: false,
             notifForUser: false,
         }

@@ -4,12 +4,14 @@ import DateTime from "./DateTime/DateTime"
 import FastRoundButton from "../../common/Buttons/FastRoundButton/FastRoundButton"
 import { HiDocumentText } from "react-icons/hi2"
 import { IoNotificationsSharp } from "react-icons/io5"
+import { useUserInfo } from "../../../stores/Auth-store"
 
 
 
 const AccountInfoCard = () => {
     const { handleLogOut } = useContext(AuthContext)
-    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '')
+    // const userInfo = JSON.parse(localStorage.getItem('userInfo') || '')
+    const { userInfoState } = useUserInfo()
 
 
     return ( 
@@ -38,7 +40,7 @@ const AccountInfoCard = () => {
                 className='account-img'
                 onClick={handleLogOut}
             >
-                <img src={`/avatars/${userInfo?.avatar}.jpg`} alt='Avatar error 3' />
+                <img src={`/avatars/${userInfoState?.avatar}.jpg`} alt='Avatar error 3' />
             </button>
         </div>
      )

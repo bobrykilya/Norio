@@ -43,12 +43,24 @@ class UserRepository {
 		return response?.rows[0]
 	}
 
-	static async getUserInfo(userId: IUserRepository['userId']) {
+	static async getHandledUserInfo(userId: IUserRepository['userId']) {
 		const response = await queryDB("SELECT * FROM users WHERE user_id=$1", [userId])
 
-		delete response?.rows[0].password
-		
-		return response?.rows[0]
+		if (response?.rows[0]) {
+			const { user_id, password, last_name, first_name, middle_name, is_store, ...rest } = response?.rows[0]
+			const handledUserInfo: IUserRepository = {
+				...rest,
+				userId: user_id,
+				lastName: last_name,
+				firstName: first_name,
+				middleName: middle_name,
+				isStore: is_store,
+			}
+
+			return handledUserInfo
+		} else {
+			return null
+		}
 	}
 	
 	static async getUserName(userId: IUserRepository['userId']) {
