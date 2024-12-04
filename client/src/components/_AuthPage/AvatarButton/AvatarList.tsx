@@ -5,6 +5,7 @@ import ToolTip from '../../others/ToolTip/ToolTip'
 import { AuthContext } from '../../../context/Auth-context'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import timeout from "../../../utils/timeout"
+import { sortByAlphabet } from "../../../utils/sort"
 
 
 
@@ -25,7 +26,7 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
     const activeElemRef = useRef<HTMLButtonElement>(null)
 
     const FILTERED_LIST = listOfUsedAvatars[0] ? LIST.filter(avatar => !listOfUsedAvatars.includes(avatar.id)) : LIST //* Filtering of used avatars
-    const SORTED_AND_FILTERED_LIST = FILTERED_LIST.sort((a, b) => a.title.localeCompare(b.title)) //* Sorting of avatar list by title
+    const SORTED_AND_FILTERED_LIST = sortByAlphabet(FILTERED_LIST, 'title') //* Sorting of avatar list by title
 
     const handleKeyDownOnElem = (e: React.KeyboardEvent<HTMLButtonElement>) => {
         if (e.code.includes('Arrow') || e.code === 'Tab') {

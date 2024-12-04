@@ -8,6 +8,8 @@ import { IDataListElement } from "../../../../assets/AuthPage/AuthPage-data"
 import { ISignFormInput } from "../../../../types/Auth-types"
 import { useAnyCoverModalState } from "../../../../stores/Global-store"
 import timeout from "../../../../utils/timeout"
+import { sortByValPosInString } from "../../../../utils/sort"
+import DropDown from "../../../common/DropDown/DropDown"
 
 
 
@@ -29,9 +31,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     const filterAndSortList = ({ search, list }) => {
         const val = search.toLowerCase().trim()
         const filtered_list = list.filter((el: IDataListElement) => el.title.toLowerCase().includes(val))
-        return filtered_list.sort(
-            (el_1: IDataListElement, el_2: IDataListElement) => el_1.title.toLowerCase().indexOf(val) > el_2.title.toLowerCase().indexOf(val) ? 1 : -1
-        )
+        return sortByValPosInString(filtered_list, val, 'title')
     }
         
     const LIST_FILTERED = watch(name) ? filterAndSortList({ search: watch(name), list: LIST }) : LIST
@@ -87,7 +87,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     
     useClickOutside(dropDownRef, () => {
         toggleDropDown(false)
-    }, inputRef)
+    }, inputRef, isDropDownOpened)
 
     const clearInput = async () => {
         // console.log('clear')
@@ -176,6 +176,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 toggleDropDown(false)
                 break
             case 'Tab':
+            case 'Enter':
                 setInputValue(document.activeElement.innerHTML)
                 await focusInput(inputRef)
                 break
@@ -242,11 +243,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             {icon}
             <InputError error={error} onClick={() => focusInput(inputRef)} />
             <InputCleaner opened={isCleanerOpened} onClick={clearInput} />
-            <ul
-                id='dropdown-cont'
-                className={`${isDropDownOpened ? 'opened' : ''}`}
+            <DropDown
+                isDropDownOpened={isDropDownOpened}
                 onClick={handleClickElem}
-                tabIndex={-1}
                 ref={dropDownRef}
             >
                 {
@@ -264,7 +263,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                             </button>
                         })
                 }
-            </ul>
+            </DropDown>
         </div>
      )
 }

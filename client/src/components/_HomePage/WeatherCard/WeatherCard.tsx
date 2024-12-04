@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { showSnackMessage } from "../../../features/showSnackMessage/showSnackMessage"
 import { IDeviceInfo } from "../../../types/Auth-types"
+import CardLinkButton from "../CardLinkButton/CardLinkButton"
+import SelectButton from "../../common/Inputs/SelectButton/SelectButton"
 
 
+
+const CITIES_LIST = ['Молодечно', 'Красное', 'Полоцк', 'Глубокое', 'Радошковичи', 'Тюрли']
 
 type WeatherCardProps = {}
 const WeatherCard = ({}: WeatherCardProps) => {
@@ -26,7 +30,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 	}
 
 	useEffect(() => {
-		if (deviceType !== 'Desktop') {
+		if (!deviceCity && deviceType !== 'Desktop') {
 			getCoords()
 		}
 	}, [deviceType])
@@ -38,17 +42,8 @@ const WeatherCard = ({}: WeatherCardProps) => {
 			<div
 				className={'weather_card-header cont'}
 			>
-				<h3
-					className={'city_name'}
-				>
-					Молодечно
-				</h3>
-				{/*<CardLinkButton link={''} />*/}
-				<button
-					onClick={getCoords}
-				>
-					Button
-				</button>
+				<SelectButton selected={'Молодечно'} SELECTS_LIST={CITIES_LIST} needToSort={false} />
+				<CardLinkButton link={''} />
 			</div>
 			<div
 				className={'weather_part-cont cont'}

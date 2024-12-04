@@ -7,38 +7,17 @@
         // border: 1px solid
     // .input-icon
         // font-size: 0.75rem
-    #dropdown-cont
-        // display: none
-        position: absolute
-        // justify-content: flex-start
-        // align-items: flex-start
-        top: $height-input + 0.1rem
-        padding: 0.5rem
-        box-shadow: 2px 10px 30px #00000031
-        background-color: $color-backgr
+    .dropdown-cont
         height: auto
         max-height: 7rem
         width: 108%
-        text-align: center
-        // vertical-align: top
         overflow-y: scroll
-        border-radius: $rad-but-border + 80px
-        z-index: 10
         scroll-behavior: smooth
         scroll-snap-type: y mandatory
-        pointer-events: none
-        opacity: 0
-        transform: scale(0.9) translateY(-0.5rem)
-        transition: all 0.2s ease
         -ms-overflow-style: none
         scrollbar-width: none
         &::-webkit-scrollbar 
-            display: none   
-        &.opened
-            border-radius: $rad-but-border
-            pointer-events: auto
-            opacity: 1
-            transform: scale(1) translateY(0)
+            display: none
         button
             // border: 1px solid #acabab24
             position: relative

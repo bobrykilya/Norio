@@ -1,0 +1,35 @@
+@import '../../../../_variables'
+
+
+
+.select-but
+    //border: 1px solid red
+    position: relative
+    padding: 0.2rem 0.4rem
+    border-radius: 20px
+    .selected
+        transition: all 0.3s ease
+    &::before
+        border: 1px solid rgba(233, 237, 240, 0.26)
+        content: ''
+        top: 0
+        left: 0
+        position: absolute
+        width: 100%
+        height: 100%
+        border-radius: 20px
+        transition: all 0.3s ease
+        opacity: 0
+    &:hover
+        background-color: rgba(161, 165, 177, 0.05)
+        &::before
+            opacity: 1
+    &:active
+        background-color: #a1a5b123
+        .selected
+            transform: scale(0.98)
+.select_list-cont
+    width: 12rem
+    height: auto
+    .choice-but
+        
