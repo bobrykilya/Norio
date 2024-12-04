@@ -137,7 +137,7 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
                 >
                     {
                         !SORTED_AND_FILTERED_LIST[0] ?
-                        <span className='empty_list-message cont'>Аватары закончились...<br/>Обратитесь к разработчику</span> :
+                        <span className='empty_list-message cont'>Аватары закончились...<br/>Обратитесь к разработчику :)</span> :
                         SORTED_AND_FILTERED_LIST.map((el) => {
                                 return (
                                     <button

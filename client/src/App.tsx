@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
 import CoverAppTitle from "./components/common/CoverAppTitle/CoverAppTitle"
 import { useBlockError } from "./stores/Device-store"
+import LogBookList from "./components/others/LogBook/LogBookList"
 
 
 
@@ -23,6 +24,7 @@ const App = () => {
             id='main_body-cont'
             className='cont'
         >
+            <LogBookList />
             <Toaster reverseOrder={true} />
             <AnimatePresence>
                 <Routes

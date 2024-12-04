@@ -11,20 +11,30 @@ import {
     ISignInReq,
     ISignUpReq,
 } from "../../../common/types/Auth-types"
+import { IDeviceInfo } from "../types/Auth-types"
 
 
 
-const getDeviceType = () => {
+const getAndSaveDeviceType = (lsDeviceInfo: IDeviceInfo) => {
+    let deviceType: IDeviceInfo['type']
 	const ua = navigator.userAgent
 	const tabletRegex = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i
 	const mobRegex = /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/
 	
-	if (tabletRegex.test(ua)) return "Tablet"
-	if (mobRegex.test(ua)) return "Mobile"
-	return "Desktop"
+	if (tabletRegex.test(ua)) {
+        deviceType = "Tablet"
+    } else if (mobRegex.test(ua)) {
+        deviceType = "Mobile"
+    } else {
+        deviceType = "Desktop"
+    }
+
+    localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, type: deviceType }))
+
+    return deviceType
 }
 
-const checkCountryCode = async () => {
+const checkCountryCodeAndGetIP = async () => {
     const res = await getApiInfo()
     // console.log(res)
 
@@ -38,16 +48,13 @@ const checkCountryCode = async () => {
 }
 
 const preRequest = async <T>(data: IPreprocessing & T) => {
-    data.deviceIP = await checkCountryCode()
-    
-    const lsDeviceId = Number(localStorage.getItem('deviceId'))
+    data.deviceIP = await checkCountryCodeAndGetIP()
 
-	if (lsDeviceId) {
-        return Object.assign(data, { lsDeviceId })
-    } else {
-        const deviceType = getDeviceType()
-        return Object.assign(data, { deviceType })
-    }
+    const lsDeviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
+    const lsDeviceId = lsDeviceInfo?.id
+    const deviceType = lsDeviceInfo?.type || getAndSaveDeviceType(lsDeviceInfo)
+
+    return Object.assign(data, { lsDeviceId, deviceType })
 }
 
 

@@ -202,7 +202,6 @@ class AuthService {
 	static async refresh({ fingerprint, currentRefreshToken, queryTime, lsDeviceId }: IService<IRefreshReq> & {
 		currentRefreshToken: ICommonVar['refreshToken']
 	}) {
-		console.log({ fingerprint, currentRefreshToken, queryTime, lsDeviceId })
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, queryTime })
 		

@@ -5,7 +5,7 @@ import { IJWTPayload } from "../../api/src/services/Token-service"
 
 
 export type TimeType = number;
-export type DeviceTypeOptions = 'Tablet' | 'Mobile' | 'Desktop' | 'Unknown';
+export type DeviceTypeOptions = 'Tablet' | 'Mobile' | 'Desktop';
 export type SnackBarTypeOptions = 'e' | 'i' |'w' | 'b' | 's';
 
 export type ICommonVar = {

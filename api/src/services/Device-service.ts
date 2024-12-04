@@ -106,8 +106,7 @@ class DeviceService {
         let deviceId: ICommonVar['deviceId']
 
         try {
-			//* deviceType = 'Unknown', when device has lsDeviceId, but db doesn't know this device
-            deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTime, deviceType: deviceType || 'Unknown', deviceIP  })
+            deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTime, deviceType, deviceIP  })
             await _logAttentionRepository.createLogAttention({ interCode, userId, deviceId, logTime: queryTime })
         }catch {
             //* Handling if db have this fingerprint, but device doesn't have number in LocalStorage

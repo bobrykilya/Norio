@@ -1,16 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { showSnackMessage } from "../../../features/showSnackMessage/showSnackMessage"
+import { IDeviceInfo } from "../../../types/Auth-types"
 
 
 
 type WeatherCardProps = {}
 const WeatherCard = ({}: WeatherCardProps) => {
+	const [isGeoAllowed, setIsGeoAllowed] = useState(false)
+	const deviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
+	const deviceType = deviceInfo?.type
+	const deviceCity = deviceInfo?.city
 
-	const getAddress = () => {
-		navigator.geolocation.getCurrentPosition(function (position) {
-			// console.log(position.coords.latitude, position.coords.longitude)
-			console.log(position)
-		})
+	const getCoords = () => {
+		navigator.geolocation.getCurrentPosition(geo_success, geo_error)
 	}
+	const geo_success = ({ coords }) => {
+		setIsGeoAllowed(true)
+		// console.log(coords)
+	}
+	const geo_error = (err: any) => {
+		console.log(`Geo fail:`)
+		console.log(err)
+		showSnackMessage({ message: err.message, type: 'w' })
+		setIsGeoAllowed(false)
+	}
+
+	useEffect(() => {
+		if (deviceType !== 'Desktop') {
+			getCoords()
+		}
+	}, [deviceType])
 
 	return (
 		<div
@@ -26,9 +45,9 @@ const WeatherCard = ({}: WeatherCardProps) => {
 				</h3>
 				{/*<CardLinkButton link={''} />*/}
 				<button
-					onClick={getAddress}
+					onClick={getCoords}
 				>
-					vsdvds
+					Button
 				</button>
 			</div>
 			<div

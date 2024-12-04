@@ -4,7 +4,7 @@ import inMemoryJWT from '../services/inMemoryJWT-service'
 import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "../services/Auth-service"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
-import { IUserNameInfo } from "../types/Auth-types"
+import { IDeviceInfo, IUserNameInfo } from "../types/Auth-types"
 import io from "socket.io-client"
 import { useCoverPanelState, useUserInfo } from "../stores/Auth-store"
 import { ICheckUserReq, ILoginServiceRes, ILogOutReq, ISignInReq, ISignUpReq } from "../../../common/types/Auth-types"
@@ -54,6 +54,7 @@ const AuthProvider = ({ children }) => {
 	const userHasLogged = () => {
 		setIsUserLogged(true)
 		setCoverPanelState('sign_in')
+		localStorage.removeItem('blockDevice')
 	}
 
 	const checkDoubleSessions = async (newUsername: string) => {
@@ -89,9 +90,12 @@ const AuthProvider = ({ children }) => {
 	}
 
 	const testAndUpdateLSDeviceId = (deviceId: number, lsDeviceId?: number) => {
-		const lsDeviceId_2 = lsDeviceId || Number(localStorage.getItem('deviceId'))
+		const lsDeviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
+		const lsDeviceId_2 = lsDeviceId || lsDeviceInfo?.id
 
-		if (!lsDeviceId_2 || (lsDeviceId_2 !== deviceId)) localStorage.setItem('deviceId', String(deviceId))
+		if (!lsDeviceId_2 || (lsDeviceId_2 !== deviceId)) {
+			localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, id: deviceId }))
+		}
 	}
 
 	const handleSignIn = async (data: ISignInReq) => {
@@ -149,10 +153,9 @@ const AuthProvider = ({ children }) => {
 		const refresh = async () => {
 			try {
 				// console.log('refresh')
-				const lsDeviceId = Number(localStorage.getItem('deviceId')) || null
+				const lsDeviceId = JSON.parse(localStorage.getItem('deviceInfo'))?.id || null
 
 				const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId })
-
 				saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
 
 				setIsAppReady(true)
@@ -191,7 +194,7 @@ const AuthProvider = ({ children }) => {
 		const socketEvents = () => {
 			socket.on('connect', () => {
 				setSocketSessId(socket.id)
-				console.log(socket.id)
+				// console.log(socket.id)
 			})
 			socket.on('autoLogOut', ({ isLogOut, userNameInfo }) => {
 				// console.log(isLogOut)

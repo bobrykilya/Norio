@@ -43,6 +43,9 @@ const messagePreprocessing = (message: string) => {
 	switch (message) {
 		case 'Failed to fetch' : return 'Ошибка подключения к серверу'
 		case 'Request timed out' : return 'Ошибка ответа сервера'
+		case 'User denied Geolocation':
+		case 'User denied geolocation prompt':
+				return `Вами было запрещено получение информации о местоположении. Для корректной работы приложения, дайте <span class=\'bold\'>разрешение<span>`
         default : return false
     }
 }

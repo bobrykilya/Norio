@@ -15,6 +15,19 @@ const useAnyCoverModalState = create<IUseAnyCoverModalState>(set => ({
 	setIsAnyJumpingListOpened: (state: boolean) => set({ isAnyJumpingListOpened: state })
 }))
 
+
+type IUseLogBookListState = {
+	isLogBookListOpened: boolean;
+	setIsLogBookListOpened: (state: boolean) => void;
+}
+const useLogBookListState = create<IUseLogBookListState>(set => ({
+	isLogBookListOpened: false,
+	setIsLogBookListOpened: (state: boolean) => set({ isLogBookListOpened: state }),
+}))
+
+
+
 export {
 	useAnyCoverModalState,
+	useLogBookListState,
 }
