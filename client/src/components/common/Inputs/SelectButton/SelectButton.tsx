@@ -7,11 +7,11 @@ import { useClickOutside } from "../../../../hooks/useClickOutside"
 
 type SelectButtonProps = {
 	selected: string;
-	SELECTS_LIST: string[]
+	OPTIONS_LIST: string[]
 	needToSort?: boolean;
 }
-const SelectButton = ({ selected, SELECTS_LIST, needToSort=true }: SelectButtonProps) => {
-	const HANDLED_LIST = needToSort ? sortByAlphabet(SELECTS_LIST.filter((el) => el !== selected)) : SELECTS_LIST
+const SelectButton = ({ selected, OPTIONS_LIST, needToSort=true }: SelectButtonProps) => {
+	const HANDLED_LIST = needToSort ? sortByAlphabet(OPTIONS_LIST.filter((el) => el !== selected)) : OPTIONS_LIST
 	const [isDropDownOpened, setIsDropDownOpened] = useState(false)
 	const dropDownRef = useRef(null)
 	const butRef = useRef(null)
@@ -29,7 +29,9 @@ const SelectButton = ({ selected, SELECTS_LIST, needToSort=true }: SelectButtonP
 	}, butRef, isDropDownOpened)
 
 	return (
-		<>
+		<div
+			className={'select_but-cont cont'}
+		>
 			<button
 				className={'select-but'}
 				tabIndex={-1}
@@ -43,7 +45,6 @@ const SelectButton = ({ selected, SELECTS_LIST, needToSort=true }: SelectButtonP
 				</div>
 			</button>
 			<DropDown
-				// className={`select_list-cont`}
 				isDropDownOpened={isDropDownOpened}
 				onClick={handleClickElem}
 				ref={dropDownRef}
@@ -52,13 +53,13 @@ const SelectButton = ({ selected, SELECTS_LIST, needToSort=true }: SelectButtonP
 					return <button
 						key={i}
 						tabIndex={-1}
-						className={'choice-but cont'}
+						className={'option-but cont'}
 					>
 						{el}
 					</button>
 				})}
 			</DropDown>
-		</>
+		</div>
 	)
 }
 

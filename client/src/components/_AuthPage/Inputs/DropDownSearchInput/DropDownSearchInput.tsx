@@ -247,6 +247,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 isDropDownOpened={isDropDownOpened}
                 onClick={handleClickElem}
                 ref={dropDownRef}
+                isScrollContent={true}
             >
                 {
                     !LIST_FILTERED[0] ?

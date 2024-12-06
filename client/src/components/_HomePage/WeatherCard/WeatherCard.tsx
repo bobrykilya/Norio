@@ -42,7 +42,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 			<div
 				className={'weather_card-header cont'}
 			>
-				<SelectButton selected={'Молодечно'} SELECTS_LIST={CITIES_LIST} needToSort={false} />
+				<SelectButton selected={'Молодечно'} OPTIONS_LIST={CITIES_LIST} needToSort={false} />
 				<CardLinkButton link={''} />
 			</div>
 			<div
