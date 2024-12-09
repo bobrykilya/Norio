@@ -11,9 +11,13 @@
     .select-but
         //border: 1px solid red
         position: relative
-        padding: 0.2rem 0.4rem
+        padding: 0.3rem 0.5rem
         border-radius: 20px
-        .selected
+        &.hide
+            filter: blur(7px)
+            opacity: 0
+            transform: translateX(-1rem)
+        .select_but_selected
             transition: all 0.3s ease
         &::before
             border: 1px solid rgba(233, 237, 240, 0.26)
@@ -32,11 +36,59 @@
                 opacity: 1
         &:active
             background-color: #a1a5b123
-            .selected
-                transform: scale(0.98)
+            .select_but_selected
+                transform: scale(0.97)
     .dropdown-cont
         .option-but
             //border: 1px solid green
-            height: 1rem
+            border-radius: 20px
+            min-height: 1.8rem
+            padding: 0.35rem 0.6rem
+            margin-bottom: 0.1rem
+            color: $color-main-text
+            align-items: start
+            p
+                //border: 1px solid yellow
+                text-align: start
+                transition: all 0.3s ease
+                font-size: $size-main-text
+                line-height: 0.9rem
+                font-weight: 600
+                padding-left: 0.3rem
+                pointer-events: none
+            &:hover
+                background-color: $color-after-element
+            &:active
+                background-color: rgba(43, 77, 125, 0.28)
+                p
+                    transform: scale(0.93)
+            &.fixed
+                //border: 1px solid yellow
+                flex-direction: row
+                overflow: visible
+                margin-bottom: 0.4rem
+                align-items: center
+                .fa-icon
+                    font-size: 0.9rem
+                    margin-right: 0.4rem
+                    margin-left: -0.2rem
+                &::after
+                    content: ''
+                    bottom: -0.25rem
+                    left: 0.5rem
+                    position: absolute
+                    width: 65%
+                    height: 1.5px
+                    background-color: #1a3e3f7c
+                    border-radius: 2px
+                p
+                    padding-left: 0
+            &.active
+                background-color: $color-dark-blue
+                color: $color-backgr
+                pointer-events: none
+                .fa-icon
+                    color: $color-backgr
+
 
         

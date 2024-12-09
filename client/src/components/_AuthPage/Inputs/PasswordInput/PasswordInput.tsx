@@ -147,17 +147,17 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
             </div>
             <InputError error={error} onClick={() => focusInput(inputRef)} />
             <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
-                <button 
-                    className={`lock-but cont ${isLockVisible ? 'opened' : ''}`}
-                    type='button'
-                    tabIndex={-1} 
-                    onClick={(handleSwitchLockPosition)}
-                    ref={lockButtonRef}
-                >
-                    {!isLockOpened ? <VscEye className='fa-icon' /> :
-                    <VscEyeClosed className='fa-icon' />}
-                    <ToolTip text={!isLockOpened ? 'Показать пароль' : 'Скрыть пароль'} />
-                </button>
+            <button
+                className={`lock-but cont before_but-hover ${isLockVisible ? 'opened' : ''}`}
+                type='button'
+                tabIndex={-1}
+                onClick={(handleSwitchLockPosition)}
+                ref={lockButtonRef}
+            >
+                {!isLockOpened ? <VscEye className='fa-icon' /> :
+                <VscEyeClosed className='fa-icon' />}
+                <ToolTip text={!isLockOpened ? 'Показать пароль' : 'Скрыть пароль'} />
+            </button>
         </div>
     )
 }

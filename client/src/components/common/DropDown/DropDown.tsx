@@ -5,7 +5,7 @@ import React, { forwardRef, useRef } from 'react'
 type DropDownProps = {
 	children: any;
 	isDropDownOpened: boolean;
-	onClick: (e:  React.MouseEvent<HTMLUListElement, MouseEvent>) => void;
+	onClick?: (e:  React.MouseEvent<HTMLUListElement, MouseEvent>) => void;
 	className?: string;
 	isScrollContent?: boolean;
 }

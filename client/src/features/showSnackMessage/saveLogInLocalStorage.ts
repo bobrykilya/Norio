@@ -1,5 +1,5 @@
 import { getLastTime } from '../../utils/getTime'
-import { ISnack } from './showSnackMessage'
+import { ISnack } from '../../../../common/types/Global-types'
 import DeviceService from "../../services/Device-service"
 import { LOCAL_LOG_STORAGE_TIME, RECENTLY_TIME, SAME_LOGS_QUANTITY } from "../../../constants"
 import { useUserInfo } from "../../stores/Auth-store"
@@ -58,7 +58,7 @@ const saveLogInLocalStorage = (snack: ISnack) => {
 		DeviceService.blockDeviceInDB({
 			logTime: snack.snackTime,
 			userId: useUserInfo.getState().userInfoState?.userId || null,
-			deviceId: Number(localStorage.getItem('deviceId')),
+			deviceId: JSON.parse(localStorage.getItem('deviceInfo'))?.id,
 			interCode: 807,
 		})
 	}

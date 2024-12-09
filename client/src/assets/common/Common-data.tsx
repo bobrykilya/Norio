@@ -6,73 +6,74 @@ import { HiDocumentSearch } from "react-icons/hi"
 import { TbTableFilled } from "react-icons/tb"
 import { IoMdAnalytics } from "react-icons/io"
 import { RiAppsFill } from "react-icons/ri"
+import { ICommonVar } from "../../../../common/types/Global-types"
 
 
 
 type INavBarDataListElement = {
 	id: string;
-	label: string;
-	icon: React.ReactElement;
+	title: string;
+	icon: ICommonVar['icon'];
 	link: string;
 }
 export const NAV_BAR_LIST: INavBarDataListElement[] = [
 	{
 		id: 'home',
-		label: 'Главная',
+		title: 'Главная',
 		icon: <FaHome className='fa-icon'/>,
 		link: '',
 	},
 	{
 		id: 'tasks',
-		label: 'Задачи',
+		title: 'Задачи',
 		icon: <BsCheckCircleFill className='fa-icon'/>,
 		link: '',
 	},
 	{
 		id: 'chats',
-		label: 'Чаты',
+		title: 'Чаты',
 		icon: <BsChatTextFill className='fa-icon'/>,
 		link: '',
 	},
 	{
 		id: 'calendar',
-		label: 'Календарь',
+		title: 'Календарь',
 		icon: <BsCalendar2DateFill className='fa-icon'/>,
 		link: '',
 	},
 	{
 		id: 'notes',
-		label: 'Заметки',
+		title: 'Заметки',
 		icon: <FaFilePen className='fa-icon'/>,
 		link: '',
 	},
 	{
 		id: 'reporting',
-		label: 'Отчётность',
+		title: 'Отчётность',
 		icon: <HiDocumentSearch className='fa-icon'/>,
 		link: '',
 	},
 	{
 		id: 'tables',
-		label: 'Таблицы',
+		title: 'Таблицы',
 		icon: <TbTableFilled className='fa-icon'/>,
 		link: '',
 	},
 	{
 		id: 'analytics',
-		label: 'Аналитика',
+		title: 'Аналитика',
 		icon: <IoMdAnalytics className='fa-icon'/>,
 		link: '',
 	},
 	{
 		id: 'company',
-		label: 'Компания',
+		title: 'Компания',
 		icon: <FaBuildingUser className='fa-icon'/>,
 		link: '',
 	},
 	{
 		id: 'apps',
-		label: 'Приложения',
+		title: 'Приложения',
 		icon: <RiAppsFill className='fa-icon'/>,
 		link: '',
 	},

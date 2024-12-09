@@ -1,27 +1,56 @@
 import React, { useRef, useState } from 'react'
-import { sortByAlphabet } from "../../../../utils/sort"
 import DropDown from "../../DropDown/DropDown"
 import { useClickOutside } from "../../../../hooks/useClickOutside"
+import { ICommonVar } from "../../../../../../common/types/Global-types"
+import { sortByAlphabet } from "../../../../utils/sort"
+import timeout from "../../../../utils/timeout"
 
 
+
+const moveFixedElemUp = (a: { isFixed?: boolean }, b: { isFixed?: boolean }) => {
+	return a?.isFixed ? -1 : b?.isFixed ? 1 : 0
+}
+
+
+export type ISelectButtonOptionListElem = {
+	id: string;
+	title: string;
+	icon?: ICommonVar['icon'];
+	isFixed?: boolean;
+	otherTitle?: boolean;
+}
 
 type SelectButtonProps = {
-	selected: string;
-	OPTIONS_LIST: string[]
+	selected: ISelectButtonOptionListElem;
+	OPTIONS_LIST: ISelectButtonOptionListElem[]
+	onClick?: (id: string) => Promise<string>;
 	needToSort?: boolean;
 }
-const SelectButton = ({ selected, OPTIONS_LIST, needToSort=true }: SelectButtonProps) => {
-	const HANDLED_LIST = needToSort ? sortByAlphabet(OPTIONS_LIST.filter((el) => el !== selected)) : OPTIONS_LIST
+const SelectButton = ({ selected, OPTIONS_LIST, onClick, needToSort=true }: SelectButtonProps) => {
+	// const FILTERED_LIST = OPTIONS_LIST.filter(el => el.id !== selected)
+	const SORTED_LIST: ISelectButtonOptionListElem[] = needToSort ? sortByAlphabet(OPTIONS_LIST, 'title') : OPTIONS_LIST
+	const HANDLED_LIST = SORTED_LIST.sort(moveFixedElemUp)
 	const [isDropDownOpened, setIsDropDownOpened] = useState(false)
+	const [selectedState, setSelectedState] = useState(selected)
 	const dropDownRef = useRef(null)
 	const butRef = useRef(null)
+
 
 	const handleClickBut = () => {
 		// console.log(HANDLED_LIST)
 		setIsDropDownOpened(!isDropDownOpened)
 	}
-	const handleClickElem = () => {
+	const handleClickOption = async ({ id, title }: ISelectButtonOptionListElem) => {
+		setIsDropDownOpened(false)
+		butRef.current.classList.add('hide')
+		const handledTitle = onClick ? await onClick(id) : null
 
+		await timeout(400)
+		setSelectedState({
+			id,
+			title: handledTitle || title,
+		})
+		butRef.current.classList.remove('hide')
 	}
 
 	useClickOutside(dropDownRef, () => {
@@ -39,23 +68,26 @@ const SelectButton = ({ selected, OPTIONS_LIST, needToSort=true }: SelectButtonP
 				ref={butRef}
 			>
 				<div
-					className={'selected'}
+					className={'select_but_selected'}
 				>
-					{selected}
+					{selectedState.title}
 				</div>
 			</button>
 			<DropDown
 				isDropDownOpened={isDropDownOpened}
-				onClick={handleClickElem}
 				ref={dropDownRef}
 			>
-				{HANDLED_LIST.map((el: any, i: number) => {
+				{HANDLED_LIST.map((el) => {
 					return <button
-						key={i}
+						key={el.id}
 						tabIndex={-1}
-						className={'option-but cont'}
+						className={`option-but cont ${el.isFixed ? 'fixed' : ''} ${el.id === selectedState.id ? 'active' : ''}`}
+						onClick={() => handleClickOption({ ...el })}
 					>
-						{el}
+						{el?.icon}
+						<p>
+							{el.title}
+						</p>
 					</button>
 				})}
 			</DropDown>

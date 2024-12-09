@@ -1,10 +1,11 @@
 import React from 'react'
 import ToolTip, { AvailableToolTipPositions } from "../../../others/ToolTip/ToolTip"
+import { ICommonVar } from "../../../../../../common/types/Global-types"
 
 
 
 type FastRoundButtonProps = {
-	icon: React.ReactElement;
+	icon: ICommonVar['icon'];
 	toolTip?: {
 		text: string;
 		position?: AvailableToolTipPositions;

@@ -10,13 +10,14 @@ import { useAnyCoverModalState } from "../../../../stores/Global-store"
 import timeout from "../../../../utils/timeout"
 import { sortByValPosInString } from "../../../../utils/sort"
 import DropDown from "../../../common/DropDown/DropDown"
+import { ICommonVar } from "../../../../../../common/types/Global-types"
 
 
 
 type DropDownSearchInputProps = ISignFormInput & {
     LIST: IDataListElement[];
     placeholder: string;
-    icon: React.ReactElement;
+    icon: ICommonVar['icon'];
 }
 const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=null, reset, setValue, setError, watch, disabled=false }: DropDownSearchInputProps) => {
 
@@ -76,7 +77,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         setError(name, null)
     }
 
-    const handleClickElem = async (e:  React.MouseEvent<HTMLUListElement, MouseEvent>) => {
+    const handleClickElem = async (e: React.MouseEvent<HTMLUListElement, MouseEvent>) => {
         // console.log(e.target)
         if ((e.target as HTMLElement).tagName === 'BUTTON' && isDropDownOpened) {
             e.preventDefault()

@@ -1,12 +1,15 @@
 import { IBlockMessage } from "../../api/src/types/Device-types"
 import { ExpressReq, ExpressRes } from "../../api/src/types/Global-types"
 import { IJWTPayload } from "../../api/src/services/Token-service"
+// @ts-ignore
+import React from "react"
 
 
 
 export type TimeType = number;
-export type DeviceTypeOptions = 'Tablet' | 'Mobile' | 'Desktop';
+export type DeviceTypeOptions = 'Tablet' | 'Mobile' | 'Desktop' | 'Unknown';
 export type SnackBarTypeOptions = 'e' | 'i' |'w' | 'b' | 's';
+export type DefaultCityOptions = 'krasnoe' | 'polock' | 'turly' | 'glubokoe' | 'radoshkovochi' | 'molodechno'
 
 export type ICommonVar = {
 	username: string;
@@ -60,8 +63,9 @@ export type ICommonVar = {
 		username: ICommonVar['username'];
 		deviceId: ICommonVar['deviceId'];
 	};
+	icon: React.ReactElement;
 
-	//* ----------
+	//* ---------- Errors
 	status: number;
 	req: ExpressReq & {
 		user: string | IJWTPayload;

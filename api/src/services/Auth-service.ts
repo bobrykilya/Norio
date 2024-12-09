@@ -26,7 +26,7 @@ class AuthService {
 		const userData = await UserRepository.getUserData(username)
 		
 		if (!userData) {
-			throw new Conflict("Пользователь не найден")
+			throw new Conflict("Неверный логин или пароль")
 		}
 
 		const userId = userData.user_id

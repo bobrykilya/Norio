@@ -12,7 +12,7 @@ const inMemoryJWTService = () => {
         const timeoutTrigger = expiration - 10000
 
         refreshTimeoutId = setTimeout(async () => {
-            const lsDeviceId = Number(localStorage.getItem('deviceId')) || null
+            const lsDeviceId = JSON.parse(localStorage.getItem('deviceInfo'))?.id
 
             const { accessToken, accessTokenExpiration } = await AuthService.refresh({ lsDeviceId })
             setToken(accessToken, accessTokenExpiration)

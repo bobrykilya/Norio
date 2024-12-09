@@ -4,12 +4,13 @@ import InputCleaner from '../InputCleaner/InputCleaner'
 import { focusInput } from '../../../../utils/focusInput'
 import { capitalize } from '../../../../utils/capitalize'
 import { ISignFormInput, SignFormInputTypesOptions } from '../../../../types/Auth-types'
+import { ICommonVar } from "../../../../../../common/types/Global-types"
 
 
 
 type NameInputProps = ISignFormInput & {
     placeholder: string;
-    icon: React.ReactElement;
+    icon: ICommonVar['icon'];
     inputMaxLength?: number;
     inputRefLogin?: React.MutableRefObject<HTMLInputElement> | null;
 }

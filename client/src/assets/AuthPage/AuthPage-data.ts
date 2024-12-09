@@ -1,46 +1,57 @@
+import { DefaultCityOptions } from "../../../../common/types/Global-types"
+
+
+
 export type IDataListElement = {
     id: string;
     title: string;
+    city?: DefaultCityOptions;
 }
-
-
-
 export const STORES_LIST: IDataListElement[] = [
     {
         id: 'office',
-        title: 'Офис'
+        title: 'Офис',
+        city: 'molodechno'
     },
     {
         id: 'krasnoe',
-        title: 'Красное'
+        title: 'Красное',
+        city: 'krasnoe'
     },
     {
         id: 'polock',
-        title: 'Полоцк'
+        title: 'Полоцк',
+        city: 'polock'
     },
     {
         id: 'belmash',
-        title: 'БелМаш'
+        title: 'БелМаш',
+        city: 'molodechno'
     },
     {
         id: 'turly',
-        title: 'Тюрли'
+        title: 'Тюрли',
+        city: 'turly'
     },
     {
         id: 'glubokoe',
-        title: 'Глубокое'
+        title: 'Глубокое',
+        city: 'glubokoe'
     },
     {
         id: 'rodashki',
-        title: 'Радошковичи'
+        title: 'Радошковичи',
+        city: 'radoshkovochi'
     },
     {
         id: 'sputnik',
-        title: 'Спутник'
+        title: 'Спутник',
+        city: 'molodechno'
     },
     {
         id: 'libava',
-        title: 'Либава'
+        title: 'Либава',
+        city: 'molodechno'
     },
 ]
 

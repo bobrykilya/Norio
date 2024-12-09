@@ -2,18 +2,73 @@ import React, { useEffect, useState } from 'react'
 import { showSnackMessage } from "../../../features/showSnackMessage/showSnackMessage"
 import { IDeviceInfo } from "../../../types/Auth-types"
 import CardLinkButton from "../CardLinkButton/CardLinkButton"
-import SelectButton from "../../common/Inputs/SelectButton/SelectButton"
+import SelectButton, { ISelectButtonOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
+import { FaLocationDot } from "react-icons/fa6"
+import timeout from "../../../utils/timeout"
 
 
 
-const CITIES_LIST = ['Молодечно', 'Красное', 'Полоцк', 'Глубокое', 'Радошковичи', 'Тюрли']
+const CITIES_LIST: ISelectButtonOptionListElem[] = [
+	{
+		id: 'molodechno',
+		title: 'Молодечно',
+	},
+	{
+		id: 'krasnoe',
+		title: 'Красное',
+	},
+	{
+		id: 'polock',
+		title: 'Полоцк',
+	},
+	{
+		id: 'glubokoe',
+		title: 'Глубокое',
+	},
+	{
+		id: 'radoshkovochi',
+		title: 'Радошковичи',
+	},
+	{
+		id: 'turly',
+		title: 'Тюрли',
+	},
+]
 
-type WeatherCardProps = {}
-const WeatherCard = ({}: WeatherCardProps) => {
+const getDeviceInfoFromLS = async () => {
+	await timeout(200)
+	return JSON.parse(localStorage.getItem('deviceInfo'))?.city
+}
+
+type WeatherCardProps = {
+	lsDeviceInfo: IDeviceInfo;
+}
+const WeatherCard = ({ lsDeviceInfo }: WeatherCardProps) => {
 	const [isGeoAllowed, setIsGeoAllowed] = useState(false)
-	const deviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
-	const deviceType = deviceInfo?.type
-	const deviceCity = deviceInfo?.city
+	const deviceType = lsDeviceInfo?.type
+	const deviceCityId = lsDeviceInfo?.city
+	// console.log(deviceCityId)
+
+	const CITIES_AND_LOCATION_LIST = CITIES_LIST.concat({
+		id: 'myLocation',
+		title: 'Мои координаты',
+		icon: <FaLocationDot className={'fa-icon'} />,
+		isFixed: true,
+		otherTitle: true,
+	})
+
+	const getCityTitle = (cityId: string, strictly?: boolean) => {
+		if (cityId === 'myLocation') {
+			return 'Лох'
+		}
+		if (!strictly) return null
+		return CITIES_AND_LOCATION_LIST.find(el => el.id === cityId)?.title
+	}
+
+	const saveSelectedCity = async (cityId: string) => {
+		localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, city: cityId }))
+		return getCityTitle(cityId)
+	}
 
 	const getCoords = () => {
 		navigator.geolocation.getCurrentPosition(geo_success, geo_error)
@@ -30,10 +85,11 @@ const WeatherCard = ({}: WeatherCardProps) => {
 	}
 
 	useEffect(() => {
-		if (!deviceCity && deviceType !== 'Desktop') {
+
+		if (!deviceCityId && deviceType !== 'Desktop') {
 			getCoords()
 		}
-	}, [deviceType])
+	}, [lsDeviceInfo])
 
 	return (
 		<div
@@ -42,7 +98,15 @@ const WeatherCard = ({}: WeatherCardProps) => {
 			<div
 				className={'weather_card-header cont'}
 			>
-				<SelectButton selected={'Молодечно'} OPTIONS_LIST={CITIES_LIST} needToSort={false} />
+				<SelectButton
+					selected={{
+						id: deviceCityId,
+						title: getCityTitle(deviceCityId, true),
+					}}
+					OPTIONS_LIST={CITIES_AND_LOCATION_LIST}
+					onClick={saveSelectedCity}
+					needToSort={true}
+				/>
 				<CardLinkButton link={''} />
 			</div>
 			<div

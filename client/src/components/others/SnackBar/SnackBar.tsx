@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import toast, { useToasterStore } from 'react-hot-toast'
 import { IoCloseCircleOutline } from 'react-icons/io5'
-import { SnackBarTypeOptions } from '../../../../../common/types/Global-types'
+import { ICommonVar, SnackBarTypeOptions } from '../../../../../common/types/Global-types'
 import { TOAST_LIMIT } from "../../../../constants"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 import { useAnyCoverModalState } from "../../../stores/Global-store"
@@ -15,7 +15,7 @@ type ISnackElem = {
 
 type SnackBarProps = {
     title: string;
-    icon: React.ReactElement;
+    icon: ICommonVar['icon'];
     message: string; 
     toastElem: ISnackElem;
     type: SnackBarTypeOptions;

@@ -1,11 +1,12 @@
 import React from 'react'
 import ToolTip from '../../others/ToolTip/ToolTip'
 import CircularProgress from '@mui/joy/CircularProgress'
+import { ICommonVar } from "../../../../../common/types/Global-types"
 
 
 
 type SubmitButProps = {
-    icon: React.ReactElement;
+    icon: ICommonVar['icon'];
     isLoading: boolean;
     title: string;
     notSaveUser?: boolean;
