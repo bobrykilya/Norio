@@ -43,24 +43,20 @@ const messagePreprocessing = (message: string) => {
 	switch (message) {
 		case 'Failed to fetch' : return 'Ошибка подключения к серверу'
 		case 'Request timed out' : return 'Ошибка ответа сервера'
-		case 'User denied Geolocation':
-		case 'User denied geolocation prompt':
-				return `Вами было запрещено получение информации о местоположении. Для корректной работы приложения, дайте <span class=\'bold\'>разрешение<span>`
-        default : return false
+		case 'User denied Geolocation' :
+		case 'User denied geolocation prompt' :
+				return `Вами было запрещено получение информации о местоположении. Для отображения погоды по Вашим координатам, дайте <span class=\'bold\'>разрешение<span>`
+        default : return message
     }
 }
 
 export const showSnack = async (snack: ISnack) => {
 	const { snackType, title, icon, toastDuration } = getTypeDecoding(snack.type || 'e')
 	// console.log(snack.message)
-	const newMessage = messagePreprocessing(snack.message)
-	if (newMessage) {
-		snack.message = newMessage
-	}
 
 	if (snack?.type === 'b') await timeout(100)
 	toast.custom((toastElem) => (
-		<SnackBar title={title} icon={icon} message={snack.message || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackType} />
+		<SnackBar title={title} icon={icon} message={messagePreprocessing(snack.message) || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackType} />
 	), {
 		duration: snack.duration || toastDuration,
 		className: snackType,

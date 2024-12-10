@@ -39,7 +39,7 @@ const NavBar = ({ location }: NavBarProps) => {
                         return (
                             <a className={`cont ${el.id === curr_path ? 'selected' : ''}`} key={el.id}>
                                 {el.icon}
-                                <ToolTip text={el.title} position={'right'} timeMS={600} />
+                                <ToolTip text={el.title} position={'right'} delayTimeMS={600} />
                             </a>
                         )
                     })

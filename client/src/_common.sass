@@ -5,6 +5,7 @@
 input
     transition: all 0.2s ease
     color: $color-input
+    z-index: 1
     &::placeholder
         color: $color-place-holder
         // font-weight: 
@@ -14,6 +15,11 @@ input
 button
     flex-shrink: 0
     transition: all 0.2s ease
+    z-index: 1
+    //will-change: transform
+
+p
+    will-change: transform
 
 h1
     font-weight: 600
@@ -34,6 +40,7 @@ img, .fa-icon
     transition: all 0.15s ease-out
     color: $color-but-icon
     overflow: visible
+    will-change: transform
 
 .cont
     width: 100%

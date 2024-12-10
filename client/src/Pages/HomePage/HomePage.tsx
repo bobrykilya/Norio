@@ -6,6 +6,8 @@ import { socket } from '../../context/Auth-context'
 import TaskCard from "../../components/_HomePage/TaskCard/TaskCard"
 import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
 import { useUserInfo } from "../../stores/Auth-store"
+import { IDeviceInfo } from "../../types/Auth-types"
+import { STORES_LIST } from "../../assets/AuthPage/AuthPage-data"
 
 
 
@@ -18,15 +20,27 @@ type HomePageProps = {
 const HomePage = ({ isUserLogged, location }: HomePageProps) => {
 
     const { userInfoState } = useUserInfo()
-    const deviceId = Number(localStorage.getItem('deviceId'))
+    const lsDeviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
 
 
     useEffect(() => {
-        const userJoinEvent = () => socket.emit('join', { userId: userInfoState?.userId, deviceId })
+
+        const userJoinEvent = () => socket.emit('join', { userId: userInfoState?.userId, deviceId: lsDeviceInfo?.id })
 
         if (isUserLogged) {
             userJoinEvent()
         }
+
+        if (!lsDeviceInfo?.city) {
+            let city: string
+            if (lsDeviceInfo.type !== 'Desktop') {
+                city = 'myLocation'
+            } else {
+                city = STORES_LIST.find(el => el.title === userInfoState?.store).city
+            }
+            localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, city }))
+        }
+
 	}, [isUserLogged])
 
     return ( 
@@ -43,7 +57,7 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
                         </div>
                         <div className="calendar-card cont card">
                         </div>
-                        <WeatherCard />
+                        <WeatherCard lsDeviceInfo={lsDeviceInfo} />
                     </div>
                     <div
                         className={'task_and_note_cards-cont cont'}

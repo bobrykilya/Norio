@@ -279,7 +279,7 @@ class AuthService {
 
 	static async sessionsAutoLogOut(sessionInfo?: IRefreshSessionRepository) {
 		const sessionsLogOutList = sessionInfo ? [sessionInfo] : await RefreshSessionsRepository.getRefreshSessionsWithLogOutTime()
-		// console.log(sessionsLogOutList)
+		console.log(sessionsLogOutList)
 
 		if (!sessionsLogOutList[0]) return
 		

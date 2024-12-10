@@ -1,15 +1,12 @@
 import React from 'react'
-import ToolTip, { AvailableToolTipPositions } from "../../../others/ToolTip/ToolTip"
+import ToolTip, { ToolTipProps } from "../../../others/ToolTip/ToolTip"
 import { ICommonVar } from "../../../../../../common/types/Global-types"
 
 
 
 type FastRoundButtonProps = {
 	icon: ICommonVar['icon'];
-	toolTip?: {
-		text: string;
-		position?: AvailableToolTipPositions;
-	};
+	toolTip?: ToolTipProps;
 	notif?: number;
 }
 const FastRoundButton = ({ icon, toolTip, notif }: FastRoundButtonProps) => {
@@ -32,7 +29,7 @@ const FastRoundButton = ({ icon, toolTip, notif }: FastRoundButtonProps) => {
 					</div>
 				</>
 			}
-			<ToolTip {... toolTip}/>
+			<ToolTip { ...toolTip } />
 		</button>
 	)
 }

@@ -59,7 +59,8 @@ const WeatherCard = ({ lsDeviceInfo }: WeatherCardProps) => {
 
 	const getCityTitle = (cityId: string, strictly?: boolean) => {
 		if (cityId === 'myLocation') {
-			return 'Лох'
+			getCoords()
+			return 'Разрешите доступ к геоданным'
 		}
 		if (!strictly) return null
 		return CITIES_AND_LOCATION_LIST.find(el => el.id === cityId)?.title
@@ -75,11 +76,11 @@ const WeatherCard = ({ lsDeviceInfo }: WeatherCardProps) => {
 	}
 	const geo_success = ({ coords }) => {
 		setIsGeoAllowed(true)
-		// console.log(coords)
+		console.log(coords)
 	}
 	const geo_error = (err: any) => {
-		console.log(`Geo fail:`)
-		console.log(err)
+		// console.log(`Geo fail:`)
+		// console.log(err)
 		showSnackMessage({ message: err.message, type: 'w' })
 		setIsGeoAllowed(false)
 	}
@@ -106,6 +107,10 @@ const WeatherCard = ({ lsDeviceInfo }: WeatherCardProps) => {
 					OPTIONS_LIST={CITIES_AND_LOCATION_LIST}
 					onClick={saveSelectedCity}
 					needToSort={true}
+					toolTip={{
+						text: 'Выбрать город для прогноза погоды',
+						position: 'bottom'
+					}}
 				/>
 				<CardLinkButton link={''} />
 			</div>

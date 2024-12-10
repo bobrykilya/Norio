@@ -4,6 +4,7 @@ import { useClickOutside } from "../../../../hooks/useClickOutside"
 import { ICommonVar } from "../../../../../../common/types/Global-types"
 import { sortByAlphabet } from "../../../../utils/sort"
 import timeout from "../../../../utils/timeout"
+import ToolTip, { ToolTipProps } from "../../../others/ToolTip/ToolTip"
 
 
 
@@ -25,8 +26,9 @@ type SelectButtonProps = {
 	OPTIONS_LIST: ISelectButtonOptionListElem[]
 	onClick?: (id: string) => Promise<string>;
 	needToSort?: boolean;
+	toolTip?: ToolTipProps;
 }
-const SelectButton = ({ selected, OPTIONS_LIST, onClick, needToSort=true }: SelectButtonProps) => {
+const SelectButton = ({ selected, OPTIONS_LIST, onClick, needToSort=true, toolTip }: SelectButtonProps) => {
 	// const FILTERED_LIST = OPTIONS_LIST.filter(el => el.id !== selected)
 	const SORTED_LIST: ISelectButtonOptionListElem[] = needToSort ? sortByAlphabet(OPTIONS_LIST, 'title') : OPTIONS_LIST
 	const HANDLED_LIST = SORTED_LIST.sort(moveFixedElemUp)
@@ -67,11 +69,12 @@ const SelectButton = ({ selected, OPTIONS_LIST, onClick, needToSort=true }: Sele
 				onClick={handleClickBut}
 				ref={butRef}
 			>
-				<div
+				<p
 					className={'select_but_selected'}
 				>
 					{selectedState.title}
-				</div>
+				</p>
+				<ToolTip { ...toolTip } isBlock={isDropDownOpened} />
 			</button>
 			<DropDown
 				isDropDownOpened={isDropDownOpened}

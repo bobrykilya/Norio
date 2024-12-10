@@ -8,16 +8,20 @@
     position: relative
     width: auto
     overflow: visible
+    max-width: 70%
     .select-but
         //border: 1px solid red
         position: relative
         padding: 0.3rem 0.5rem
         border-radius: 20px
+        min-width: 4rem
+        min-height: 1.6rem
         &.hide
             filter: blur(7px)
             opacity: 0
             transform: translateX(-1rem)
         .select_but_selected
+            line-height: 1.1rem
             transition: all 0.3s ease
         &::before
             border: 1px solid rgba(233, 237, 240, 0.26)
@@ -37,7 +41,7 @@
         &:active
             background-color: #a1a5b123
             .select_but_selected
-                transform: scale(0.97)
+                transform: scale(0.94)
     .dropdown-cont
         .option-but
             //border: 1px solid green
