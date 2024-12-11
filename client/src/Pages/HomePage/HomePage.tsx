@@ -4,10 +4,12 @@ import AccountInfoCard from '../../components/others/AccountInfoCard/AccountInfo
 import { ClassicAnim } from '../../utils/pageTransitions'
 import { socket } from '../../context/Auth-context'
 import TaskCard from "../../components/_HomePage/TaskCard/TaskCard"
-import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
 import { useUserInfo } from "../../stores/Auth-store"
-import { IDeviceInfo } from "../../types/Auth-types"
 import { STORES_LIST } from "../../assets/AuthPage/AuthPage-data"
+import { useDeviceInfoState } from "../../stores/Device-store"
+import { IDeviceCity } from "../../types/Device-types"
+import { CITIES_LIST } from "../../assets/common/Common-data"
+import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
 
 
 
@@ -20,25 +22,33 @@ type HomePageProps = {
 const HomePage = ({ isUserLogged, location }: HomePageProps) => {
 
     const { userInfoState } = useUserInfo()
-    const lsDeviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
-
+    const { deviceInfoState, setDeviceCityState } = useDeviceInfoState()
 
     useEffect(() => {
 
-        const userJoinEvent = () => socket.emit('join', { userId: userInfoState?.userId, deviceId: lsDeviceInfo?.id })
+        const userJoinEvent = () => socket.emit('join', { userId: userInfoState?.userId, deviceId: deviceInfoState?.id })
 
         if (isUserLogged) {
             userJoinEvent()
         }
 
-        if (!lsDeviceInfo?.city) {
-            let city: string
-            if (lsDeviceInfo.type !== 'Desktop') {
-                city = 'myLocation'
+        if (!deviceInfoState?.location?.city) {
+            let city: IDeviceCity
+
+            if (deviceInfoState?.type !== 'Desktop') {
+                city = {
+                    id: 'myLocation',
+                    title: ''
+                }
             } else {
-                city = STORES_LIST.find(el => el.title === userInfoState?.store).city
+                const cityId = STORES_LIST.find(el => el.title === userInfoState?.store).cityId
+                city = {
+                    id: cityId,
+                    title: CITIES_LIST.find(el => el.id === cityId).title
+                }
             }
-            localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, city }))
+            setDeviceCityState(city)
+            localStorage.setItem('deviceInfo', JSON.stringify( { ...deviceInfoState, location: { city } } ))
         }
 
 	}, [isUserLogged])
@@ -57,7 +67,7 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
                         </div>
                         <div className="calendar-card cont card">
                         </div>
-                        <WeatherCard lsDeviceInfo={lsDeviceInfo} />
+                        <WeatherCard />
                     </div>
                     <div
                         className={'task_and_note_cards-cont cont'}

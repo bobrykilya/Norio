@@ -1,84 +1,50 @@
 import React, { useEffect, useState } from 'react'
 import { showSnackMessage } from "../../../features/showSnackMessage/showSnackMessage"
-import { IDeviceInfo } from "../../../types/Auth-types"
 import CardLinkButton from "../CardLinkButton/CardLinkButton"
 import SelectButton, { ISelectButtonOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
 import { FaLocationDot } from "react-icons/fa6"
-import timeout from "../../../utils/timeout"
+import { CITIES_LIST } from "../../../assets/common/Common-data"
+import { useDeviceInfoState } from "../../../stores/Device-store"
 
 
-
-const CITIES_LIST: ISelectButtonOptionListElem[] = [
-	{
-		id: 'molodechno',
-		title: 'Молодечно',
-	},
-	{
-		id: 'krasnoe',
-		title: 'Красное',
-	},
-	{
-		id: 'polock',
-		title: 'Полоцк',
-	},
-	{
-		id: 'glubokoe',
-		title: 'Глубокое',
-	},
-	{
-		id: 'radoshkovochi',
-		title: 'Радошковичи',
-	},
-	{
-		id: 'turly',
-		title: 'Тюрли',
-	},
-]
-
-const getDeviceInfoFromLS = async () => {
-	await timeout(200)
-	return JSON.parse(localStorage.getItem('deviceInfo'))?.city
-}
 
 type WeatherCardProps = {
-	lsDeviceInfo: IDeviceInfo;
-}
-const WeatherCard = ({ lsDeviceInfo }: WeatherCardProps) => {
-	const [isGeoAllowed, setIsGeoAllowed] = useState(false)
-	const deviceType = lsDeviceInfo?.type
-	const deviceCityId = lsDeviceInfo?.city
-	// console.log(deviceCityId)
 
-	const CITIES_AND_LOCATION_LIST = CITIES_LIST.concat({
+}
+const WeatherCard = ({  }: WeatherCardProps) => {
+
+	const { deviceInfoState, setDeviceCityState } = useDeviceInfoState()
+	const [isGeoAllowed, setIsGeoAllowed] = useState(false)
+	const deviceType = deviceInfoState?.type
+	const deviceCity = deviceInfoState?.location?.city
+
+
+	// @ts-ignore
+	const CITIES_AND_LOCATION_LIST: ISelectButtonOptionListElem[] = CITIES_LIST.concat({
 		id: 'myLocation',
 		title: 'Мои координаты',
 		icon: <FaLocationDot className={'fa-icon'} />,
 		isFixed: true,
-		otherTitle: true,
 	})
 
-	const getCityTitle = (cityId: string, strictly?: boolean) => {
-		if (cityId === 'myLocation') {
-			getCoords()
-			return 'Разрешите доступ к геоданным'
+	const saveSelectedCity = async ({ id, title }: { id: string, title: string }) => {
+		if (id === 'myLocation') {
+			title = 'Разрешите доступ к геоданным'
 		}
-		if (!strictly) return null
-		return CITIES_AND_LOCATION_LIST.find(el => el.id === cityId)?.title
-	}
 
-	const saveSelectedCity = async (cityId: string) => {
-		localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, city: cityId }))
-		return getCityTitle(cityId)
+		setDeviceCityState({ id, title })
+		localStorage.setItem('deviceInfo', JSON.stringify({ ...deviceInfoState, location: { city: { id, title } } }))
 	}
 
 	const getCoords = () => {
-		navigator.geolocation.getCurrentPosition(geo_success, geo_error)
+		return navigator.geolocation.getCurrentPosition(geoSuccess, geoError)
 	}
-	const geo_success = ({ coords }) => {
+	const geoSuccess = ({ coords }) => {
 		setIsGeoAllowed(true)
 		console.log(coords)
+		return coords.latitude
 	}
-	const geo_error = (err: any) => {
+	const geoError = (err: any) => {
 		// console.log(`Geo fail:`)
 		// console.log(err)
 		showSnackMessage({ message: err.message, type: 'w' })
@@ -87,10 +53,10 @@ const WeatherCard = ({ lsDeviceInfo }: WeatherCardProps) => {
 
 	useEffect(() => {
 
-		if (!deviceCityId && deviceType !== 'Desktop') {
+		if (deviceType !== 'Desktop') {
 			getCoords()
 		}
-	}, [lsDeviceInfo])
+	}, [deviceInfoState])
 
 	return (
 		<div
@@ -100,11 +66,8 @@ const WeatherCard = ({ lsDeviceInfo }: WeatherCardProps) => {
 				className={'weather_card-header cont'}
 			>
 				<SelectButton
-					selected={{
-						id: deviceCityId,
-						title: getCityTitle(deviceCityId, true),
-					}}
 					OPTIONS_LIST={CITIES_AND_LOCATION_LIST}
+					selectedState={deviceCity}
 					onClick={saveSelectedCity}
 					needToSort={true}
 					toolTip={{

@@ -4,12 +4,14 @@ import inMemoryJWT from '../services/inMemoryJWT-service'
 import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "../services/Auth-service"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
-import { IDeviceInfo, IUserNameInfo } from "../types/Auth-types"
+import { IUserNameInfo } from "../types/Auth-types"
 import io from "socket.io-client"
 import { useCoverPanelState, useUserInfo } from "../stores/Auth-store"
 import { ICheckUserReq, ILoginServiceRes, ILogOutReq, ISignInReq, ISignUpReq } from "../../../common/types/Auth-types"
 import { ICommonVar } from "../../../common/types/Global-types"
 import timeout from "../utils/timeout"
+import { useDeviceInfoState } from "../stores/Device-store"
+import { IDeviceInfo } from "../types/Device-types"
 
 
 
@@ -94,6 +96,7 @@ const AuthProvider = ({ children }) => {
 		const lsDeviceId_2 = lsDeviceId || lsDeviceInfo?.id
 
 		if (!lsDeviceId_2 || (lsDeviceId_2 !== deviceId)) {
+			useDeviceInfoState.getState().setDeviceIdState(deviceId)
 			localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, id: deviceId }))
 		}
 	}

@@ -33,13 +33,3 @@ export type IUserNameInfo = {
 	firstName: ICommonVar['firstName'];
 	username: ICommonVar['username'];
 }
-
-export type IDeviceInfo = {
-    id?: ICommonVar['deviceId'];
-    type?: ICommonVar['deviceType'];
-    city?: string;
-    coords?: {
-        lat: number;
-        lon: number;
-    }
-}

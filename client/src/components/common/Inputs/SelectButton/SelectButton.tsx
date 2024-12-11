@@ -18,22 +18,21 @@ export type ISelectButtonOptionListElem = {
 	title: string;
 	icon?: ICommonVar['icon'];
 	isFixed?: boolean;
-	otherTitle?: boolean;
 }
 
 type SelectButtonProps = {
-	selected: ISelectButtonOptionListElem;
-	OPTIONS_LIST: ISelectButtonOptionListElem[]
-	onClick?: (id: string) => Promise<string>;
+	OPTIONS_LIST: ISelectButtonOptionListElem[];
+	selectedState: ISelectButtonOptionListElem;
+	setSelectedState?: (state: ISelectButtonOptionListElem) => void
+	onClick?: (state?: ISelectButtonOptionListElem) => void;
 	needToSort?: boolean;
 	toolTip?: ToolTipProps;
 }
-const SelectButton = ({ selected, OPTIONS_LIST, onClick, needToSort=true, toolTip }: SelectButtonProps) => {
-	// const FILTERED_LIST = OPTIONS_LIST.filter(el => el.id !== selected)
+const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, needToSort=true, toolTip }: SelectButtonProps) => {
+
 	const SORTED_LIST: ISelectButtonOptionListElem[] = needToSort ? sortByAlphabet(OPTIONS_LIST, 'title') : OPTIONS_LIST
 	const HANDLED_LIST = SORTED_LIST.sort(moveFixedElemUp)
 	const [isDropDownOpened, setIsDropDownOpened] = useState(false)
-	const [selectedState, setSelectedState] = useState(selected)
 	const dropDownRef = useRef(null)
 	const butRef = useRef(null)
 
@@ -45,13 +44,17 @@ const SelectButton = ({ selected, OPTIONS_LIST, onClick, needToSort=true, toolTi
 	const handleClickOption = async ({ id, title }: ISelectButtonOptionListElem) => {
 		setIsDropDownOpened(false)
 		butRef.current.classList.add('hide')
-		const handledTitle = onClick ? await onClick(id) : null
+
+		if (onClick) {
+			onClick({ id, title })
+		}
 
 		await timeout(400)
-		setSelectedState({
-			id,
-			title: handledTitle || title,
-		})
+
+		if (setSelectedState) {
+			setSelectedState({ id, title })
+		}
+
 		butRef.current.classList.remove('hide')
 	}
 
@@ -72,7 +75,7 @@ const SelectButton = ({ selected, OPTIONS_LIST, onClick, needToSort=true, toolTi
 				<p
 					className={'select_but_selected'}
 				>
-					{selectedState.title}
+					{selectedState?.title}
 				</p>
 				<ToolTip { ...toolTip } isBlock={isDropDownOpened} />
 			</button>
@@ -84,7 +87,7 @@ const SelectButton = ({ selected, OPTIONS_LIST, onClick, needToSort=true, toolTi
 					return <button
 						key={el.id}
 						tabIndex={-1}
-						className={`option-but cont ${el.isFixed ? 'fixed' : ''} ${el.id === selectedState.id ? 'active' : ''}`}
+						className={`option-but cont ${el.isFixed ? 'fixed' : ''} ${(el.id === selectedState?.id) ? 'active' : ''}`}
 						onClick={() => handleClickOption({ ...el })}
 					>
 						{el?.icon}

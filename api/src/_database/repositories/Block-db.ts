@@ -22,7 +22,7 @@ class BlockRepository {
 	}
 
 	static async getBlockedDeviceInfo({ deviceId=0, fingerprintHash, deviceIP='' }: Pick<IBlockRepository, 'deviceId' | 'fingerprintHash' | 'deviceIP'>) {
-		console.log({ deviceId, fingerprintHash, deviceIP })
+		
 		const response = await queryDB("SELECT block_id, unlock_time, inter_code FROM blocks WHERE is_active=true AND (device_id=$1 OR finger_print=$2 OR ip=$3)",
 			[
 				deviceId, 

@@ -11,7 +11,8 @@ import {
     ISignInReq,
     ISignUpReq,
 } from "../../../common/types/Auth-types"
-import { IDeviceInfo } from "../types/Auth-types"
+import { useDeviceInfoState } from "../stores/Device-store"
+import { IDeviceInfo } from "../types/Device-types"
 
 
 
@@ -29,6 +30,7 @@ const getAndSaveDeviceType = (lsDeviceInfo: IDeviceInfo) => {
         deviceType = "Desktop"
     }
 
+    useDeviceInfoState.getState().setDeviceTypeState(deviceType)
     localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, type: deviceType }))
 
     return deviceType

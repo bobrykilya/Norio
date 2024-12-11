@@ -7,6 +7,7 @@ import { TbTableFilled } from "react-icons/tb"
 import { IoMdAnalytics } from "react-icons/io"
 import { RiAppsFill } from "react-icons/ri"
 import { ICommonVar } from "../../../../common/types/Global-types"
+import { IDeviceCity } from "../../types/Device-types"
 
 
 
@@ -76,5 +77,32 @@ export const NAV_BAR_LIST: INavBarDataListElement[] = [
 		title: 'Приложения',
 		icon: <RiAppsFill className='fa-icon'/>,
 		link: '',
+	},
+]
+
+export const CITIES_LIST: IDeviceCity[] = [
+	{
+		id: 'molodechno',
+		title: 'Молодечно',
+	},
+	{
+		id: 'krasnoe',
+		title: 'Красное',
+	},
+	{
+		id: 'polock',
+		title: 'Полоцк',
+	},
+	{
+		id: 'glubokoe',
+		title: 'Глубокое',
+	},
+	{
+		id: 'radoshkovochi',
+		title: 'Радошковичи',
+	},
+	{
+		id: 'turly',
+		title: 'Тюрли',
 	},
 ]
