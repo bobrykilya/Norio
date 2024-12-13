@@ -75,7 +75,13 @@ const WeatherCard = ({  }: WeatherCardProps) => {
 						position: 'bottom'
 					}}
 				/>
-				<CardLinkButton link={''} />
+				<CardLinkButton
+					link={''}
+					toolTip={{
+						text: 'Открыть карточку погоды',
+						position: 'bottom'
+					}}
+				/>
 			</div>
 			<div
 				className={'weather_part-cont cont'}

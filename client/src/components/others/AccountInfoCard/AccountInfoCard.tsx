@@ -5,6 +5,7 @@ import FastRoundButton from "../../common/Buttons/FastRoundButton/FastRoundButto
 import { HiDocumentText } from "react-icons/hi2"
 import { IoNotificationsSharp } from "react-icons/io5"
 import { useUserInfo } from "../../../stores/Auth-store"
+import ToolTip from "../ToolTip/ToolTip"
 
 
 
@@ -36,11 +37,16 @@ const AccountInfoCard = () => {
                 }}
             />
             <DateTime />
-            <button 
-                className='account-img'
-                onClick={handleLogOut}
+            <button
+                className='account-but'
+                onClick={() => handleLogOut()}
             >
-                <img src={`/avatars/${userInfoState?.avatar}.jpg`} alt='Avatar error 3' />
+                <div
+                    className={'account_img-cont'}
+                >
+                    <img src={`/avatars/${userInfoState?.avatar}.jpg`} alt='Avatar error 3' />
+                </div>
+                <ToolTip text={'Открыть карточку пользователя'} position={'bottom_left'}/>
             </button>
         </div>
      )

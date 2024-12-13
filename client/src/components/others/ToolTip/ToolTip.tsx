@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 
 
-export type AvailableToolTipPositions = 'top' | 'bottom' | 'left' | 'right' | 'top_left' | 'top_right'| 'bottom_left' | 'bottom_right'
+export type AvailableToolTipPositions = 'top' | 'bottom' | 'left' | 'right' | 'top_left' | 'top_right'| 'bottom_left' | 'bottom_right';
 
 export type ToolTipProps = {
     text: string;

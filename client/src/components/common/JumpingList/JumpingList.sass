@@ -3,7 +3,7 @@
 
 
 .jumping_list_cover-cont
-    // border: 5px solid black
+    //border: 5px solid black
     position: fixed
     left: 0
     bottom: 0
@@ -23,9 +23,9 @@
         height: 0.2rem
         background-color: #ffffff4a
         border-radius: 10px
-        transition: all 0.1s ease
+        transition: opacity 0.1s 1s ease, transform 0.6s 0.1s ease
         opacity: 0
-        transform: translateY(4rem)
+        transform: translateY(14rem)
     &.opened
         opacity: 1
         backdrop-filter: blur(5px)
@@ -38,7 +38,7 @@
             border-radius: 120px 120px 0 0
             transform: translateX(-50%)
     .jumping_list-cont
-        // border: 2px solid black
+        //border: 2px solid black
         position: absolute
         left: 50%
         bottom: 0

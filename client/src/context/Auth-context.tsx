@@ -15,9 +15,21 @@ import { IDeviceInfo } from "../types/Device-types"
 
 
 
-export const AuthContext = createContext({})
-export const socket = io(import.meta.env.VITE_API_URL)
+type IAuthContext = {
+	// data,
+	handleReturnToSignUp: () => void,
+	handleCheckUser: (data: ICheckUserReq) => Promise<void>,
+	// handleFetchProtected: (data: any) => Promise<void>,
+	handleSignUp: (data: ISignUpReq) => Promise<void>,
+	handleSignIn: (data: ISignInReq) => Promise<void>,
+	handleLogOut: (data?: ILogOutReq) => void,
+	isUserLogged: boolean,
+	isAppReady: boolean,
+	listOfUsedAvatars: ICommonVar['IAvatarListElement'][],
+}
 
+export const AuthContext = createContext<IAuthContext | null>(null)
+export const socket = io(import.meta.env.VITE_API_URL)
 
 const AuthProvider = ({ children }) => {
 	// const [data, setData] = useState<Record<string, any> | null>(null)
@@ -38,7 +50,7 @@ const AuthProvider = ({ children }) => {
 		showSnackMessage({ type: 'w', message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`})
 		handleLogOut({ interCode: 204 })
 	}
-	
+
 	const resetSignUpVariables = () => {
 		setSignUpUserName('')
 		setSignUpUserPassword('')

@@ -19,6 +19,10 @@ const App = () => {
 
     const location = useLocation()
 
+    // window.onbeforeunload = function() {
+    //     return 'Нажатие на кнопки перехода по браузеру некорректно работают с такими приложениями';
+    // }
+
     return (
         <div 
             id='main_body-cont'
