@@ -1,4 +1,5 @@
 import { ICommonVar } from "../../../common/types/Global-types"
+import { IDeviceLocation } from "../../../common/types/Device-types"
 
 
 
@@ -18,16 +19,5 @@ export type IBlockDeviceService = {
 export type IDeviceInfo = {
     id?: ICommonVar['deviceId'];
     type?: ICommonVar['deviceType'];
-    location?: {
-        city?: IDeviceCity;
-        coords?: {
-            lat: number;
-            lon: number;
-        }
-    }
-}
-
-export type IDeviceCity = {
-    id: string;
-    title: string;
+    location?: IDeviceLocation;
 }

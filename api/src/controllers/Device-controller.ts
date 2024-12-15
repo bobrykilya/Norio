@@ -1,6 +1,8 @@
 import DeviceService from '../services/Device-service'
-import ErrorsUtils from "../utils/Errors"
+import ErrorsUtils, { NotFound } from "../utils/Errors"
 import { ICommonVar } from "../../../common/types/Global-types"
+import { IDeviceLocation } from "../../../common/types/Device-types.ts"
+import WeatherService from "../services/Weather-service.ts"
 
 
 
@@ -30,6 +32,17 @@ class DeviceController {
             return ErrorsUtils.catchError({ interCode: 900, req, res, err, fingerprint, queryTime: logTime })
         }
     }
+
+	static async getWeather(req: { body: IDeviceLocation }, res: ICommonVar['res']) {
+		try {
+			const data = await WeatherService.getLocationWeather(req.body)
+
+			return res.status(200).json(data)
+		} catch (err) {
+			// throw new NotFound("Ошибка получения погоды")
+			throw new NotFound(err.message)
+		}
+	}
 }
 
 export default DeviceController

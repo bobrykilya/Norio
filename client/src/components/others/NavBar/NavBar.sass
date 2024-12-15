@@ -37,20 +37,21 @@
             overflow: visible
             transition: all 0.1s ease
             &:hover
-                background-color: #a1a5b123
+                background-color: $color-behind-icon
                 .fa-icon
                     transform: scale(1.05)
             &:active
-                background-color: rgba(161, 165, 177, 0.31)
+                background-color: rgba($color-behind-icon, 0.2)
                 .fa-icon
                     transform: scale(0.97)
             .fa-icon
                 font-size: 27px
                 color: $color-backgr-clear
             &.selected
+                pointer-events: none
                 background-color: $color-backgr
                 .fa-icon
-                    color: $color-dark-blue
+                    color: $color-blue-main
             .tool_tip-cont
                 .tool_tip
                     &.right

@@ -1,7 +1,7 @@
 import { create } from "zustand"
-import { IDeviceCity, IDeviceInfo } from "../types/Device-types"
+import { IDeviceInfo } from "../types/Device-types"
 import { DeviceTypeOptions } from "../../../common/types/Global-types"
-// import { persist } from "zustand/middleware"
+import { IDeviceLocation } from "../../../common/types/Device-types"
 
 
 
@@ -19,7 +19,7 @@ type IUseDeviceInfoState = {
 	deviceInfoState: IDeviceInfo
 	setDeviceInfoState: (state: IDeviceInfo) => void;
 	setDeviceIdState: (id: number) => void;
-	setDeviceCityState: (city: IDeviceCity) => void;
+	setDeviceLocationState: (city: IDeviceLocation) => void;
 	setDeviceTypeState: (type: DeviceTypeOptions) => void;
 }
 const deviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
@@ -30,11 +30,9 @@ const useDeviceInfoState = create<IUseDeviceInfoState>((set, get) => ({
 			...get().deviceInfoState,
 			id
 		} }),
-	setDeviceCityState: (city: IDeviceCity) => set({ deviceInfoState: {
+	setDeviceLocationState: (location: IDeviceLocation) => set({ deviceInfoState: {
 		...get().deviceInfoState,
-		location: {
-			city
-		}
+		location
 	} }),
 	setDeviceTypeState: (type: DeviceTypeOptions) => set({ deviceInfoState: {
 		...get().deviceInfoState,

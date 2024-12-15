@@ -47,7 +47,10 @@ const AuthProvider = ({ children }) => {
 	}
 	const autoLogOut = (userNameInfo: IUserNameInfo) => {
 		// console.log('Auto logOut')
-		showSnackMessage({ type: 'w', message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`})
+		showSnackMessage({
+			type: 'w',
+			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`
+		})
 		handleLogOut({ interCode: 204 })
 	}
 

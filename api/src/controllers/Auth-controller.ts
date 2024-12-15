@@ -17,7 +17,7 @@ import { ICommonVar } from "../../../common/types/Global-types"
 class AuthController {
 
 	static async signIn(req: ICommonVar['req'], res: ICommonVar['res']) {
-		// console.log(req)
+		// console.log(req.body)
 		const { username, password, fastSession, deviceType, lsDeviceId, deviceIP }: ISignInController = req.body
 		const { fingerprint } = req
 		const queryTime = getTime()

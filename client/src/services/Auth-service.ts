@@ -43,7 +43,10 @@ const checkCountryCodeAndGetIP = async () => {
     if (!res) return undefined
 
     if (!PERMITTED_COUNTRIES.includes(res.country_code)) {
-        showSnackMessage({ type: 'e', message: 'Приложение работает только на территории РБ (И временно Польши)' })
+        showSnackMessage({
+            type: 'e',
+            message: 'Приложение работает только на территории РБ (И временно Польши)'
+        })
         throw new Error('СheckCountryCode error')
     }
     return res.ip
@@ -64,8 +67,7 @@ class AuthService {
     static async signIn(data: ISignInReq) {
         // console.log(data)
         try {
-            const newData = await preRequest(data)
-            return await $apiAuth.post("sign-in", { json: newData }).json<ILoginServiceRes>()
+            return await $apiAuth.post("sign-in" ,{ json: await preRequest(data) }).json<ILoginServiceRes>()
         } catch (err) {
             showSnackMessage(err)
             throw new Error('SignIn error')
@@ -83,9 +85,7 @@ class AuthService {
 
     static async signUp(data: ISignUpReq) {
         try {
-            const newData = await preRequest(data)
-
-            return await $apiAuth.post("sign-up", { json: newData }).json<ILoginServiceRes>()
+            return await $apiAuth.post("sign-up", { json: await preRequest(data) }).json<ILoginServiceRes>()
         } catch (err) {
             showSnackMessage(err)
             throw new Error('SignUp error')

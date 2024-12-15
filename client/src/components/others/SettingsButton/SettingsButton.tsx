@@ -7,8 +7,9 @@ import { TbSettings, TbSettingsFilled } from "react-icons/tb"
 
 type SettingsButtonProps = {
 	isAuthPage?: boolean;
+	delayTimeMS?: number;
 }
-const SettingsButton = ({ isAuthPage=false }: SettingsButtonProps) => {
+const SettingsButton = ({ isAuthPage=false, delayTimeMS }: SettingsButtonProps) => {
 
 
 	return (
@@ -21,7 +22,7 @@ const SettingsButton = ({ isAuthPage=false }: SettingsButtonProps) => {
 				:
 				< TbSettingsFilled className='fa-icon' />
 			}
-			<ToolTip text='Открыть панель ошибок' position={`${isAuthPage ? 'bottom_left' : 'right'}`} />
+			<ToolTip text='Открыть панель ошибок' position={`${isAuthPage ? 'bottom_left' : 'right'}`} delayTimeMS={delayTimeMS} />
 		</RoundButton>
 	)
 }

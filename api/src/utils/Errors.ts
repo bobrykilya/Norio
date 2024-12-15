@@ -31,11 +31,11 @@ export class Conflict extends WebError {
 	}
 }
 
-// export class NotFound extends WebError {
-// 	constructor(message?: string) {
-// 		super(404, 'NotFound', message)
-// 	}
-// }
+export class NotFound extends WebError {
+	constructor(message?: string) {
+		super(404, 'NotFound', message)
+	}
+}
 
 export class Forbidden extends WebError {
 	constructor(message?: string) {

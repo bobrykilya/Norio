@@ -58,7 +58,7 @@ export const showSnack = async (snack: ISnack) => {
 	toast.custom((toastElem) => (
 		<SnackBar title={title} icon={icon} message={messagePreprocessing(snack.message) || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackType} />
 	), {
-		duration: snack.duration || toastDuration,
+		duration: snack.durationInSec * 1000 || toastDuration,
 		className: snackType,
 		// duration: Infinity,
 	})
@@ -82,7 +82,11 @@ export const showSnackMessage = (snack: ISnack) => {
 					.then((snack: ISnack) => showSnackMessage(snack))
 		}catch {
 			// if (messagePreprocessing())
-			showSnackMessage({ type: 'w', message: snack.message || 'Непредвиденная ошибка', snackTime: getTime() })
+			showSnackMessage({
+				type: 'w',
+				message: snack.message || 'Непредвиденная ошибка',
+				snackTime: getTime()
+			})
 		}
 		return
 	}

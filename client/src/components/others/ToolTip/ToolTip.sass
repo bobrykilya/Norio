@@ -34,40 +34,41 @@
         opacity: 0
         filter: blur(7px)
         -webkit-filter: blur(7px)
-        $tooltip-step: 17%
-        $tooltip-scale: 0.6
+        $tooltip-margin: 17%
+        $tooltip-step: 0.6rem
+        $tooltip-scale: 0.8
         &.top
-            bottom: calc(100% + $tooltip-step)
+            bottom: calc(100% + $tooltip-margin)
             left: calc(50% - 3rem)
-            transform: translateY(1rem) scale($tooltip-scale)
+            transform: translateY($tooltip-step) scale($tooltip-scale)
         &.bottom
-            top: calc(100% + $tooltip-step)
+            top: calc(100% + $tooltip-margin)
             left: calc(50% - 3rem)
-            transform: translateY(-1rem) scale($tooltip-scale)
+            transform: translateY(-$tooltip-step) scale($tooltip-scale)
         &.left
             bottom: calc(-50%)
-            right: calc(100% + $tooltip-step)
-            transform: translateX(2rem) scale($tooltip-scale)
+            right: calc(100% + $tooltip-margin)
+            transform: translateX($tooltip-step * 2) scale($tooltip-scale)
         &.right
             bottom: calc(-50%)
-            left: calc(100% + $tooltip-step)
-            transform: translateX(-2rem) scale($tooltip-scale)
+            left: calc(100% + $tooltip-margin)
+            transform: translateX(-($tooltip-step * 2)) scale($tooltip-scale)
         &.bottom_left 
-            top: calc(100% + $tooltip-step)
+            top: calc(100% + $tooltip-margin)
             right: 0
-            transform: translate(1rem, -1rem) scale($tooltip-scale)
+            transform: translate($tooltip-step, -$tooltip-step) scale($tooltip-scale)
         &.bottom_right
-            top: calc(100% + $tooltip-step)
+            top: calc(100% + $tooltip-margin)
             left: 0
-            transform: translate(-1rem, -1rem) scale($tooltip-scale)
+            transform: translate(-$tooltip-step, -$tooltip-step) scale($tooltip-scale)
         &.top_left
-            bottom: calc(100% + $tooltip-step)
+            bottom: calc(100% + $tooltip-margin)
             right: 0
-            transform: translate(-1rem, -1rem) scale($tooltip-scale)
+            transform: translate(-$tooltip-step, -$tooltip-step) scale($tooltip-scale)
         &.top_right
-            bottom: calc(100% + $tooltip-step)
+            bottom: calc(100% + $tooltip-margin)
             left: 0
-            transform: translate(-1rem, -1rem) scale($tooltip-scale)
+            transform: translate(-$tooltip-step, -$tooltip-step) scale($tooltip-scale)
         &.active
             opacity: 1
             transform: none

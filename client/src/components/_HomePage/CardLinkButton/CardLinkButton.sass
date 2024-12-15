@@ -3,20 +3,20 @@
 
 
 .card_link-button
-    width: 41px
-    height: 41px
+    width: $size-small-round-but
+    height: $size-small-round-but
     border-radius: 50%
-    background-color: rgba(233, 237, 240, 0.2)
+    background-color: $color-behind-icon
     .fa-icon
         color: $color-backgr
         font-size: 18px
         margin-top: 5px
         margin-left: 0.5px
     &:hover
-        background-color: rgba(255, 255, 255, 0.3)
+        background-color: rgba($color-behind-icon, 0.3)
         .fa-icon
             transform: translate(1px, -1px)
     &:active
-        background-color: rgba(255, 255, 255, 0.13)
+        background-color: $color-behind-icon
         .fa-icon
             transform: translate(1px, -1px) scale(0.92)

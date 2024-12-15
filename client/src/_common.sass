@@ -40,7 +40,7 @@ img, .fa-icon
 
 .fa-icon
     transition: all 0.15s ease-out
-    color: $color-but-icon
+    color: $color-icon
     overflow: visible
     will-change: transform
 
@@ -63,15 +63,13 @@ img, .fa-icon
         width: 100%
         height: 100%
         border-radius: 50%
-        background-color: #cbcbcb4e
+        background-color: $color-behind-icon
         transition: transform 0.18s ease
         z-index: -1
-        // opacity: 0
         transform: scale(0)
     &:hover
         transform: translateY(0)
         &::after
-            // opacity: 1
             transform: scale(1)
     &:active
         .fa-icon

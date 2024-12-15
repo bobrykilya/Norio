@@ -44,12 +44,12 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 	const handleClickOption = async ({ id, title }: ISelectButtonOptionListElem) => {
 		setIsDropDownOpened(false)
 		butRef.current.classList.add('hide')
+		
+		await timeout(400)
 
 		if (onClick) {
 			onClick({ id, title })
 		}
-
-		await timeout(400)
 
 		if (setSelectedState) {
 			setSelectedState({ id, title })

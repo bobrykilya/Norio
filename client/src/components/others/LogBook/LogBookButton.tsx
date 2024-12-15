@@ -9,8 +9,9 @@ import { useLogBookListState } from "../../../stores/Global-store"
 
 type LogBookButtonProps = {
     isAuthPage?: boolean;
+    delayTimeMS?: number;
 }
-const LogBookButton = ({ isAuthPage=false }: LogBookButtonProps) => {
+const LogBookButton = ({ isAuthPage=false, delayTimeMS }: LogBookButtonProps) => {
 
     const { setIsLogBookListOpened } = useLogBookListState()
     const { toasts } = useToasterStore()
@@ -39,7 +40,7 @@ const LogBookButton = ({ isAuthPage=false }: LogBookButtonProps) => {
                 :
                     < PiWarningFill className='fa-icon' />
                 }
-                <ToolTip text='Открыть панель ошибок' position={`${isAuthPage ? 'bottom_left' : 'right'}`} />
+                <ToolTip text='Открыть панель ошибок' position={`${isAuthPage ? 'bottom_left' : 'right'}`} delayTimeMS={delayTimeMS} />
             </RoundButton>
         </>
      )

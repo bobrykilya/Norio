@@ -7,7 +7,7 @@ import { TbTableFilled } from "react-icons/tb"
 import { IoMdAnalytics } from "react-icons/io"
 import { RiAppsFill } from "react-icons/ri"
 import { ICommonVar } from "../../../../common/types/Global-types"
-import { IDeviceCity } from "../../types/Device-types"
+import { IDeviceLocation } from "../../../../common/types/Device-types"
 
 
 
@@ -80,29 +80,65 @@ export const NAV_BAR_LIST: INavBarDataListElement[] = [
 	},
 ]
 
-export const CITIES_LIST: IDeviceCity[] = [
+export const LOCATIONS_LIST: IDeviceLocation[] = [
 	{
-		id: 'molodechno',
-		title: 'Молодечно',
+		city: {
+			id: 'maladzyechna',
+			title: 'Молодечно',
+		},
+		coords: {
+			lat: 54.307332,
+			lon: 26.838939,
+		}
 	},
 	{
-		id: 'krasnoe',
-		title: 'Красное',
+		city: {
+			id: 'krasnaye',
+			title: 'Красное',
+		},
+		coords: {
+			lat: 54.248907,
+			lon: 27.077756,
+		}
 	},
 	{
-		id: 'polock',
-		title: 'Полоцк',
+		city: {
+			id: 'polatsk',
+			title: 'Полоцк',
+		},
+		coords: {
+			lat: 55.485576,
+			lon: 28.768349,
+		}
 	},
 	{
-		id: 'glubokoe',
-		title: 'Глубокое',
+		city: {
+			id: 'hlybokaye',
+			title: 'Глубокое',
+		},
+		coords: {
+			lat: 55.138799,
+			lon: 27.685843,
+		}
 	},
 	{
-		id: 'radoshkovochi',
-		title: 'Радошковичи',
+		city: {
+			id: 'radashkovichy',
+			title: 'Радошковичи',
+		},
+		coords: {
+			lat: 54.156384,
+			lon: 27.242273,
+		}
 	},
 	{
-		id: 'turly',
-		title: 'Тюрли',
+		city: {
+			id: 'turly??',
+			title: 'Тюрли',
+		},
+		coords: {
+			lat: 54.282272,
+			lon: 26.820829,
+		}
 	},
 ]

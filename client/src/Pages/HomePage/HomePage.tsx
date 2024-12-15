@@ -7,9 +7,9 @@ import TaskCard from "../../components/_HomePage/TaskCard/TaskCard"
 import { useUserInfo } from "../../stores/Auth-store"
 import { STORES_LIST } from "../../assets/AuthPage/AuthPage-data"
 import { useDeviceInfoState } from "../../stores/Device-store"
-import { IDeviceCity } from "../../types/Device-types"
-import { CITIES_LIST } from "../../assets/common/Common-data"
+import { LOCATIONS_LIST } from "../../assets/common/Common-data"
 import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
+import { IDeviceLocation } from "../../../../common/types/Device-types"
 
 
 
@@ -22,7 +22,7 @@ type HomePageProps = {
 const HomePage = ({ isUserLogged, location }: HomePageProps) => {
 
     const { userInfoState } = useUserInfo()
-    const { deviceInfoState, setDeviceCityState } = useDeviceInfoState()
+    const { deviceInfoState, setDeviceLocationState } = useDeviceInfoState()
 
     useEffect(() => {
 
@@ -32,23 +32,22 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
             userJoinEvent()
         }
 
-        if (!deviceInfoState?.location?.city) {
-            let city: IDeviceCity
+        if (!deviceInfoState?.location) {
+            let location: IDeviceLocation
 
             if (deviceInfoState?.type !== 'Desktop') {
-                city = {
-                    id: 'myLocation',
-                    title: ''
+                location = {
+                    city: {
+                        id: 'myLocation',
+                        title: ''
+                    }
                 }
             } else {
                 const cityId = STORES_LIST.find(el => el.title === userInfoState?.store).cityId
-                city = {
-                    id: cityId,
-                    title: CITIES_LIST.find(el => el.id === cityId).title
-                }
+                location = LOCATIONS_LIST.find(el => el.city.id === cityId)
             }
-            setDeviceCityState(city)
-            localStorage.setItem('deviceInfo', JSON.stringify( { ...deviceInfoState, location: { city } } ))
+            setDeviceLocationState(location)
+            localStorage.setItem('deviceInfo', JSON.stringify( { ...deviceInfoState, location } ))
         }
 
 	}, [isUserLogged])

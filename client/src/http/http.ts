@@ -11,6 +11,12 @@ const $apiAuth = ky.extend({
 	credentials: 'include',
 })
 
+const $apiUnprotected = ky.extend({
+	prefixUrl: `${import.meta.env.VITE_API_URL}/unprotected`,
+	cache: 'no-store',
+	credentials: 'include',
+})
+
 const $apiSecureResource = ky.extend({
 	prefixUrl: `${import.meta.env.VITE_API_URL}/resource`,
 	hooks: {
@@ -24,6 +30,7 @@ const $apiSecureResource = ky.extend({
 		],
 	},
 })
+
 
 const $apiIpInfo = ky.extend({
 	prefixUrl: `https://ipapi.co/json`,
@@ -57,7 +64,10 @@ const getApiInfo = async () => {
 				ip: res.query,
 			}
 		} catch {
-			showSnackMessage({ type: 'w', message: 'Ошибка обращения к сервисам ipapi.co, ip-api.com' })
+			showSnackMessage({
+				type: 'w',
+				message: 'Ошибка обращения к сервисам ipapi.co, ip-api.com'
+			})
 			console.error('Ошибка обращения к сервисам ipapi.co, ip-api.com')
 			return undefined
 		}
@@ -65,5 +75,12 @@ const getApiInfo = async () => {
 }
 
 
-export { $apiAuth, $apiSecureResource, $apiIpInfo, $apiIpInfoReserve, getApiInfo }
+export {
+	$apiAuth,
+	$apiSecureResource,
+	$apiUnprotected,
+	$apiIpInfo,
+	$apiIpInfoReserve,
+	getApiInfo
+}
 

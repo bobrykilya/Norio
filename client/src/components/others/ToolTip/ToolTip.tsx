@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { TOOLTIP_DELAY_TIME } from "../../../../constants"
 
 
 
@@ -20,7 +21,7 @@ const ToolTip = ({ text, position='top', delayTimeMS, isBlock }: ToolTipProps) =
             timer.current = window.setTimeout(() => {
                 // console.log('open')
                 setIsToolTipVisible(true)
-            }, delayTimeMS || 1300)
+            }, delayTimeMS || TOOLTIP_DELAY_TIME)
         }
     }
     

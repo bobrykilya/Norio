@@ -112,7 +112,7 @@ export type ISnack = {
 	type: SnackBarTypeOptions;
 	message: string;
 	snackTime?: number;
-	duration?: number;
+	durationInSec?: number;
 	response?: Response;
 	detail?: {
 		action: string;

@@ -19,7 +19,9 @@
         "express-fingerprint": "^1.2.2",
         "jsonwebtoken": "^9.0.2",
         "kill-port": "^2.0.1",
+        "ky": "^1.7.3",
         "pg": "^8.11.3",
+        "redis": "^4.7.0",
         "socket.io": "^4.7.5"
     },
     "devDependencies": {
