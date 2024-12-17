@@ -4,7 +4,7 @@ export const MONTHS_LIST = ['Январь', 'Февраль', 'Март', 'Ап�
 
 
 export const getTime = () => {
-    return Date.now()
+    return Math.round(Date.now() / 1000)//* In seconds
 }
 
 
@@ -47,9 +47,9 @@ export const getWeekOfMonth = ({ month, year }: getWeekOfMonthProps) => {
 }
 
 type TypeOptions = 'hour' | 'minute' | 'second';
-export const getLastTime = (timestamp: number, type: TypeOptions): number => {
+export const getLastTime = (timestampInSec: number, type: TypeOptions): number => {
     try {
-        const timeDiff = (getTime() - timestamp) / 1000 //* Time in seconds
+        const timeDiff = getTime() - timestampInSec //* Time in seconds
         // console.log(timeDiff)
     
         switch (type) {

@@ -1,5 +1,5 @@
 export const getTime = () => {
-    return Date.now()
+    return Math.round(Date.now() / 1000) //* In seconds
 }
 
 type IGetEndTime = {

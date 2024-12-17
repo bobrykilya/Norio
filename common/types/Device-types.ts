@@ -31,6 +31,7 @@ export type ILocationWeatherElem = {
 	icon: string;
 }
 export type ILocationWeather = {
+	forecastDeadTime?: number;
 	current: ILocationWeatherElem;
 	hourly: ILocationWeatherElem[];
 	daily: ILocationWeatherElem[];

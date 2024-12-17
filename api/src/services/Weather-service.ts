@@ -1,65 +1,53 @@
-import { IDeviceLocation } from "../../../common/types/Device-types.ts"
+import { IDeviceLocation, ILocationWeather, ILocationWeatherElem } from "../../../common/types/Device-types.ts"
 import { $apiWeather } from "../http/http.ts"
+import { redisGet, redisWeatherSet } from "../utils/redisUtils.ts"
+import { getTime } from "../utils/getTime.ts"
+import { WEATHER_UPDATE_TIME } from "../../constants.ts"
 
 
-// const deleteKeyInObject = async (object, key) => {
-// 	// console.log(typeof object)
-// 	if (!(object instanceof Object)) return
-// 	delete object?.key
-//
-// 	Object.keys(object).forEach((k) => {
-// 		if (object?.k instanceof Object) {
-// 			deleteKeyInObject(object?.k, key)
-// 		}
-// 		if (Array.isArray(object?.k)) {
-// 			object?.k.forEach(item => deleteKeyInObject(item, key))
-// 		}
-// 	})
-// 	// console.log()
-// }
 
-const deleteKeyInObject = (object, keysList: string[]) => {
-	let newObject = {
-		current: {},
-		hourly: {},
-		daily: {},
-	}
+const getWeatherObjectByKeys = (object: ILocationWeatherElem, keysList: string[]) => {
+	let newObject: ILocationWeatherElem | {} = {}
+
 	keysList.forEach(i => {
-		if (!object['current'][i]) {
-			Object.keys(object).forEach(k => {
-				if (object[k] instanceof Object) {
-
-				}
-			})
+		if (object[i]) {
+			newObject[i] = object[i]
 		} else {
-			newObject['current'][i] = object['current'][i]
+			if (object['weather'][0][i]) {
+				newObject[i] = object['weather'][0][i]
+			}
 		}
 	})
 
-	return newObject
+	return newObject as ILocationWeatherElem
 }
+
 
 class WeatherService {
 	static async getLocationWeather(location: IDeviceLocation) {
-		const key_list = ['dt', 'rain', 'snow', 'temp', 'feels_like', 'humidity', 'weather']
-		// console.log(location)
-		// let locationWeather: ILocationWeather = null
-		// locationWeather = JSON.parse(await redisGet(location.city.id))
+		const REQUIRED_KEYS_LIST = ['dt', 'rain', 'snow', 'temp', 'feels_like', 'humidity', 'icon', 'description']
 
+		let locationWeather: ILocationWeather
 
-		const weatherData = await $apiWeather.get('onecall', {
-			searchParams: {
-				lat: location.coords.lat,
-				lon: location.coords.lon,
-			},
-		}).json<any>()
+		locationWeather = await redisGet(location.city.id)
+		if (!locationWeather) {
+			const weatherData = await $apiWeather.get('onecall', {
+				searchParams: {
+					lat: location.coords.lat,
+					lon: location.coords.lon,
+				},
+			}).json<ILocationWeather>()
 
-		const locationWeather = deleteKeyInObject(weatherData, key_list)
-		// const locationWeather = {}
-		// locationWeather.current = weatherData.current
+			locationWeather = {
+				forecastDeadTime: getTime() + (WEATHER_UPDATE_TIME * 60) + 10,
+				current: getWeatherObjectByKeys(weatherData.current, REQUIRED_KEYS_LIST),
+				hourly: weatherData.hourly.map((item) => getWeatherObjectByKeys(item, REQUIRED_KEYS_LIST)),
+				daily: weatherData.daily.map((item) => getWeatherObjectByKeys(item, REQUIRED_KEYS_LIST)),
+			}
+			
+			await redisWeatherSet(location.city.id, locationWeather)
+		}
 
-
-		// await redisDisconnect()
 
 		return locationWeather
 	}

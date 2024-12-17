@@ -13,6 +13,7 @@ import detect from "detect-port"
 import killPort from "kill-port"
 import { UnprotectedRouter } from "./src/routers/Unprotected-router.ts"
 import { createClient } from "redis"
+import { Conflict } from "./src/utils/Errors.ts"
 
 
 
@@ -23,12 +24,15 @@ const server = createServer(app)
 const PORT = process.env.API_PORT || 5000
 socketConnection(server)
 
-export const redis = await createClient()
-	.on('error', err => {
-		console.log('Redis Client Error', err)
-		// throw new Conflict('Redis connection error')
+export const redis = await createClient({
+	// url: 'redis://alice:foobared@awesome.redis.server:6380' //* redis[s]://[[username][:password]@][host][:port][/db-number]
+})
+	.on('error', () => {
+		// console.log('Redis Client Error', err)
+		throw new Conflict(`Redis connection error on port: ${process.env.REDIS_PORT}`)
 	})
 	.connect()
+
 
 app.use(cookieParser())
 app.use(express.json())

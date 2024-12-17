@@ -5,7 +5,7 @@ import SelectButton, { ISelectButtonOptionListElem } from "../../common/Inputs/S
 import { FaLocationDot } from "react-icons/fa6"
 import { LOCATIONS_LIST } from "../../../assets/common/Common-data"
 import { useDeviceInfoState } from "../../../stores/Device-store"
-import { IDeviceLocation } from "../../../../../common/types/Device-types"
+import { IDeviceLocation, ILocationWeather } from "../../../../../common/types/Device-types"
 import WeatherService from "../../../services/Weather-service"
 
 
@@ -19,7 +19,7 @@ const WeatherCard = ({  }: WeatherCardProps) => {
 	const [isGeoAllowed, setIsGeoAllowed] = useState(false)
 	const deviceType = deviceInfoState?.type
 	const deviceCity = deviceInfoState?.location?.city
-	const [weatherData, setWeatherData] = useState<any>(false)
+	const [weatherData, setWeatherData] = useState<ILocationWeather>(null)
 	console.log(weatherData)
 
 
@@ -56,8 +56,7 @@ const WeatherCard = ({  }: WeatherCardProps) => {
 
 		setDeviceLocationState(location)
 		localStorage.setItem('deviceInfo', JSON.stringify({ ...deviceInfoState, location }))
-		console.log(await WeatherService.getLocationWeather(location))
-		// setWeatherData(await WeatherService.getLocationWeather(location))
+		setWeatherData(await WeatherService.getLocationWeather(location))
 	}
 
 	const getCoords = () => {

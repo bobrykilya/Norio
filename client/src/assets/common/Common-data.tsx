@@ -133,7 +133,7 @@ export const LOCATIONS_LIST: IDeviceLocation[] = [
 	},
 	{
 		city: {
-			id: 'turly??',
+			id: 'turly', //* ??????? "village": "Цюрлі", "city": "Цюрлёўскі сельскі Савет"
 			title: 'Тюрли',
 		},
 		coords: {
