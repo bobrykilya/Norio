@@ -66,7 +66,7 @@ export const showSnack = async (snack: ISnack) => {
 }
 
 export const showSnackMessage = (snack: ISnack) => {
-	// console.log(snack)
+	// console.log(snack.message)
 	
 	if (useBlockError.getState().blockErrorMessage) return
 
@@ -110,7 +110,7 @@ export const showSnackMessage = (snack: ISnack) => {
 
 	showSnack(snackWithTime)
 
-	if (localStorage.getItem('blockDevice')) return
+	if (localStorage.getItem('blockDevice') && snack.message === 'Failed to fetch') return
 	// if (!['s'].includes(snackWithTime.type))
 		saveLogInLocalStorage(snackWithTime)
 }

@@ -4,8 +4,9 @@ import CardLinkButton from "../CardLinkButton/CardLinkButton"
 import SelectButton, { ISelectButtonOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
 import { FaLocationDot } from "react-icons/fa6"
 import { LOCATIONS_LIST } from "../../../assets/common/Common-data"
-import { useDeviceInfoState } from "../../../stores/Device-store"
 import { IDeviceLocation, ILocationWeather } from "../../../../../common/types/Device-types"
+import { CircularProgress } from '@mui/joy'
+import { useDeviceInfoState } from "../../../stores/Device-store"
 import WeatherService from "../../../services/Weather-service"
 
 
@@ -13,12 +14,10 @@ import WeatherService from "../../../services/Weather-service"
 type WeatherCardProps = {
 
 }
-const WeatherCard = ({  }: WeatherCardProps) => {
+const WeatherCard = ({}: WeatherCardProps) => {
 
 	const { deviceInfoState, setDeviceLocationState } = useDeviceInfoState()
-	const [isGeoAllowed, setIsGeoAllowed] = useState(false)
-	const deviceType = deviceInfoState?.type
-	const deviceCity = deviceInfoState?.location?.city
+	const deviceLocation = deviceInfoState?.location
 	const [weatherData, setWeatherData] = useState<ILocationWeather>(null)
 	console.log(weatherData)
 
@@ -27,59 +26,86 @@ const WeatherCard = ({  }: WeatherCardProps) => {
 	const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIST.map(loc => loc.city).concat({
 		id: 'myLocation',
 		title: 'Мои координаты',
-		icon: <FaLocationDot className={'fa-icon'} />,
+		icon: <FaLocationDot className={'fa-icon'}/>,
 		isFixed: true,
 	})
 
-	const saveSelectedCity = async ({ id }: { id: string, title: string }) => {
+	const myLocationChecking = ({ id }: { id: string, title: string }) => {
 		let location: IDeviceLocation
 
 		if (id === 'myLocation') {
-			showSnackMessage({
-				message: 'Разрешите доступ к геоданным для отображения погоды по Вашему местоположению',
-				type: 'w',
-				durationInSec: 5
-			})
-
 			location = {
 				city: {
 					id: 'myLocation',
 					title: 'Разрешите доступ к геоданным'
 				},
-				// coords: {
-				//
-				// }
 			}
 		} else {
 			location = LOCATIONS_LIST.find(el => el.city.id === id)
 		}
 
-		setDeviceLocationState(location)
+		saveSelectedCity(location)
+		// setWeather(location)
+	}
+
+	const saveSelectedCity = (location: IDeviceLocation) => {
 		localStorage.setItem('deviceInfo', JSON.stringify({ ...deviceInfoState, location }))
-		setWeatherData(await WeatherService.getLocationWeather(location))
+		console.log(location, 'saveSelected')
+		setDeviceLocationState(location)
 	}
 
 	const getCoords = () => {
 		return navigator.geolocation.getCurrentPosition(geoSuccess, geoError)
 	}
-	const geoSuccess = ({ coords }) => {
-		setIsGeoAllowed(true)
-		console.log(coords)
-		return coords.latitude
+	const geoSuccess = async ({ coords }) => {
+		
+		const data: ILocationWeather = await WeatherService.getLocationWeather({
+			city: deviceInfoState.location.city,
+			coords: {
+				lat: coords.latitude,
+				lon: coords.longitude,
+			}
+		})
+
+		const location = {
+			city: {
+				id: 'myLocation',
+				title: data.cityTitle
+			},
+			coords: {
+				lat: coords.latitude,
+				lon: coords.longitude,
+			}
+		}
+
+		setWeatherData(data)
+		saveSelectedCity(location)
 	}
+
 	const geoError = (err: any) => {
-		// console.log(`Geo fail:`)
-		// console.log(err)
 		showSnackMessage({ message: err.message, type: 'w' })
-		setIsGeoAllowed(false)
 	}
+
+	const setWeather = async (location?: IDeviceLocation) => {
+		const tempLocation = location || deviceLocation
+
+		if (tempLocation.city.id === 'myLocation') {
+			// console.log('getCoords')
+			getCoords()
+		} else {
+			setWeatherData(await WeatherService.getLocationWeather(tempLocation))
+		}
+	}
+	useEffect(() => {
+		// console.log('effect')
+		setWeather()
+	}, [])
 
 	useEffect(() => {
-
-		if (deviceType !== 'Desktop') {
-			getCoords()
+		if (deviceInfoState.location.city.id === 'myLocation') {
+			setWeather(deviceInfoState.location)
 		}
-	}, [deviceInfoState])
+	}, [deviceInfoState.location.city.id])
 
 	return (
 		<div
@@ -90,8 +116,8 @@ const WeatherCard = ({  }: WeatherCardProps) => {
 			>
 				<SelectButton
 					OPTIONS_LIST={CITIES_AND_MY_LOCATION_LIST}
-					selectedState={deviceCity}
-					onClick={saveSelectedCity}
+					selectedState={deviceLocation?.city}
+					onClick={myLocationChecking}
 					needToSort={true}
 					toolTip={{
 						text: 'Выбрать город для прогноза погоды',
@@ -148,9 +174,9 @@ const WeatherCard = ({  }: WeatherCardProps) => {
 					</p>
 				</div>
 				:
-					<div className='cont'>
-						{/*<CircularProgress variant="plain" />*/}
-					</div>
+				<div className='weather_part-cont cont'>
+					<CircularProgress variant="plain"/>
+				</div>
 			}
 		</div>
 	)

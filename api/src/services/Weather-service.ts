@@ -1,36 +1,60 @@
-import { IDeviceLocation, ILocationWeather, ILocationWeatherElem } from "../../../common/types/Device-types.ts"
-import { $apiWeather } from "../http/http.ts"
+import {
+	IDeviceLocation,
+	ILocationAddress,
+	ILocationWeather,
+	ILocationWeatherElem,
+} from "../../../common/types/Device-types.ts"
+import { $apiLocation, $apiWeather } from "../http/http.ts"
 import { redisGet, redisWeatherSet } from "../utils/redisUtils.ts"
 import { getTime } from "../utils/getTime.ts"
 import { WEATHER_UPDATE_TIME } from "../../constants.ts"
 
 
 
-const getWeatherObjectByKeys = (object: ILocationWeatherElem, keysList: string[]) => {
-	let newObject: ILocationWeatherElem | {} = {}
+const getObjectByKeys = <T> (object: T, keysList: string[]) => {
+	let newObject: T | {} = {}
 
 	keysList.forEach(i => {
 		if (object[i]) {
 			newObject[i] = object[i]
 		} else {
-			if (object['weather'][0][i]) {
-				newObject[i] = object['weather'][0][i]
+			if (object['weather']) {
+				if (object['weather'][0][i]) {
+					newObject[i] = object['weather'][0][i]
+				}
 			}
 		}
 	})
 
-	return newObject as ILocationWeatherElem
+	return newObject as T
 }
 
 
 class WeatherService {
 	static async getLocationWeather(location: IDeviceLocation) {
-		const REQUIRED_KEYS_LIST = ['dt', 'rain', 'snow', 'temp', 'feels_like', 'humidity', 'icon', 'description']
+		if (location.city.id !== 'myLocation') {
+			return await this.getWeatherByCoords(location)
+		}
 
+		return await this.getWeatherByCoords({
+			city: {
+				id: 'myLocation',
+				title: await this.getLocationTitleByCoords(location.coords),
+			},
+			coords: location.coords,
+		})
+	}
+
+	static async getWeatherByCoords(location: IDeviceLocation) {
 		let locationWeather: ILocationWeather
+		const getRedisKeyForWeather = (location: IDeviceLocation) => {
+			return (location.city.id !== 'myLocation' ? location.city.id : location.city.title).toLowerCase()
+		}
 
-		locationWeather = await redisGet(location.city.id)
+		locationWeather = await redisGet(getRedisKeyForWeather(location))
 		if (!locationWeather) {
+			const REQUIRED_KEYS_LIST = ['dt', 'rain', 'snow', 'temp', 'feels_like', 'humidity', 'icon', 'description']
+
 			const weatherData = await $apiWeather.get('onecall', {
 				searchParams: {
 					lat: location.coords.lat,
@@ -39,17 +63,35 @@ class WeatherService {
 			}).json<ILocationWeather>()
 
 			locationWeather = {
+				cityId: location.city.id,
+				cityTitle: location.city.title,
 				forecastDeadTime: getTime() + (WEATHER_UPDATE_TIME * 60) + 10,
-				current: getWeatherObjectByKeys(weatherData.current, REQUIRED_KEYS_LIST),
-				hourly: weatherData.hourly.map((item) => getWeatherObjectByKeys(item, REQUIRED_KEYS_LIST)),
-				daily: weatherData.daily.map((item) => getWeatherObjectByKeys(item, REQUIRED_KEYS_LIST)),
+				current: getObjectByKeys<ILocationWeatherElem>(weatherData.current, REQUIRED_KEYS_LIST),
+				hourly: weatherData.hourly.map((item) => getObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
+				daily: weatherData.daily.map((item) => getObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
 			}
-			
-			await redisWeatherSet(location.city.id, locationWeather)
+
+			await redisWeatherSet(getRedisKeyForWeather(location), locationWeather)
 		}
 
-
 		return locationWeather
+	}
+
+	static async getLocationTitleByCoords(coords: IDeviceLocation['coords']) {
+		let locationAddress: ILocationAddress['address']
+		const REQUIRED_KEYS_LIST = ['city', 'town', 'village']
+
+		const locationData = await $apiLocation.get('reverse', {
+			searchParams: {
+				lat: coords.lat,
+				lon: coords.lon,
+			}
+		}).json<ILocationAddress>()
+		console.log(locationData)
+		locationAddress = getObjectByKeys<ILocationAddress['address']>(locationData.address, REQUIRED_KEYS_LIST)
+
+
+		return locationAddress.village || locationAddress.town || locationAddress.city
 	}
 }
 

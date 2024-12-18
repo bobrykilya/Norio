@@ -10,6 +10,7 @@ export type TimeType = number;
 export type DeviceTypeOptions = 'Tablet' | 'Mobile' | 'Desktop' | 'Unknown';
 export type SnackBarTypeOptions = 'e' | 'i' |'w' | 'b' | 's';
 export type DefaultCityOptions = 'krasnoe' | 'polock' | 'turly' | 'glubokoe' | 'radoshkovochi' | 'molodechno'
+export type DurationTypeOptions = 'second' | 'minute' | 'hour' | null
 
 export type ICommonVar = {
 	username: string;

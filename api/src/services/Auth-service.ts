@@ -58,7 +58,7 @@ class AuthService {
 		const accessToken = await TokenService.generateAccessToken(payload)
 		const refreshToken = await TokenService.generateRefreshToken(payload)
 
-		const logOutTime = fastSession ? getEndTime({ startTime: queryTime, duration: FAST_SESSION_DURATION }) : null
+		const logOutTime = fastSession ? getEndTime({ startTimeInSec: queryTime, duration: FAST_SESSION_DURATION }) : null
 
 		await RefreshSessionsRepository.createRefreshSession({
 			userId,

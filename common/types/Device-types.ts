@@ -8,6 +8,7 @@ export type IDeviceLocation = {
 		lon: number;
 	};
 }
+
 export type ILocationWeatherElem = {
 	dt: number;
 	rain?: number;
@@ -30,9 +31,20 @@ export type ILocationWeatherElem = {
 	description: string;
 	icon: string;
 }
+
 export type ILocationWeather = {
+	cityId: string;
+	cityTitle: string;
 	forecastDeadTime?: number;
 	current: ILocationWeatherElem;
 	hourly: ILocationWeatherElem[];
 	daily: ILocationWeatherElem[];
 } | null
+
+export type ILocationAddress = {
+	address: {
+		city?: string;
+		town?: string;
+		village?: string;
+	}
+}

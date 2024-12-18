@@ -23,7 +23,7 @@ class DeviceService {
             // return res
         } catch (err) {
             showSnackMessage(err)
-            if (err.response.status !== 900) {
+            if (err.response?.status !== 900) {
                 showSnackMessage({type: 'w', message: 'Device-service error'})
                 throw new Error(`Device-service error: ${err}`)
             }

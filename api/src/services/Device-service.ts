@@ -150,7 +150,7 @@ class DeviceService {
             deviceId: deviceId,
             userId,
             lockTime: logTime,
-            unlockTime: lockDuration ? getEndTime({ startTime: logTime, duration: lockDuration, durationType: 'minute' }) : 0,
+            unlockTime: lockDuration ? getEndTime({ startTimeInSec: logTime, duration: lockDuration, durationType: 'minute' }) : 0,
             deviceIP,
             fingerprintHash: fingerprint.hash
         })

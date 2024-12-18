@@ -7,7 +7,9 @@ import { $apiUnprotected } from "../http/http"
 class WeatherService {
 	static async getLocationWeather(location: IDeviceLocation) {
 		try {
-			return await $apiUnprotected.post("weather", { json: location })?.json<any>()
+			// return useQuery('weather', async () => {
+				return await $apiUnprotected.post("weather", { json: location })?.json<any>()
+			// })
 		} catch (err) {
 			showSnackMessage(err)
 			throw new Error('getLocationWeather error')

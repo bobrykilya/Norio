@@ -1,16 +1,23 @@
+import { DurationTypeOptions } from "../../../common/types/Global-types"
+
+
+
 export const WEEK_DAYS_LIST = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 export const MONTHS_LIST = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
 
 
 
-export const getTime = () => {
-    return Math.round(Date.now() / 1000)//* In seconds
+export const getTime = (ms=false) => {
+    if (ms) {
+        return Date.now()  //* In milliseconds
+    }
+    return Math.round(Date.now() / 1000)  //* In seconds
 }
 
 
 type paramsListOptions = 'now' | 'second'| 'minute' | 'hour' | 'day' | 'month' | 'year' | 'dayNum' | 'timeString' | 'timeStringFull' | 'dateString'
-export const getTimeParams = (paramsList: paramsListOptions[], time?: number) => {
-    const now = time ? new Date(time) : new Date()
+export const getTimeParams = (paramsList: paramsListOptions[], timeInSec?: number) => {
+    const now = timeInSec ? new Date(timeInSec * 1000) : new Date()
 
     return {
         ...(paramsList.includes('now') && { now }),
@@ -46,7 +53,7 @@ export const getWeekOfMonth = ({ month, year }: getWeekOfMonthProps) => {
     return Math.ceil((now - firstDayOfMonth) / (1000 * 60 * 60 * 24 * 7))
 }
 
-type TypeOptions = 'hour' | 'minute' | 'second';
+type TypeOptions = 'hour' | 'minute' | 'second' | 'millisecond';
 export const getLastTime = (timestampInSec: number, type: TypeOptions): number => {
     try {
         const timeDiff = getTime() - timestampInSec //* Time in seconds
@@ -56,11 +63,12 @@ export const getLastTime = (timestampInSec: number, type: TypeOptions): number =
             case 'hour': return (timeDiff / 60 / 60)
             case 'minute': return (timeDiff / 60)
             case 'second': return timeDiff
+            case 'millisecond': return timeDiff * 1000
         }
     } catch (err) {
-        console.log('Ошибка даты при сохранении в ErrsList в LocalStorage (getLastTime)')
+        console.log('GetLastTime error')
         console.error(err)
-        throw new Error('Ошибка даты при сохранении в ErrsList в LocalStorage (getLastTime)')
+        throw new Error('GetLastTime error')
     }
 }
 
@@ -74,13 +82,14 @@ export const getMonth = (num: number) => {
 }
 
 type IUseGetEndTime = {
-    startTime: number;
+    startTimeInSec: number;
     duration: number;
-    durationType: IDurationType;
+    durationType?: DurationTypeOptions;
 }
-export const getEndTime = ({ startTime, duration, durationType=null }: IUseGetEndTime) => {
+export const getEndTime = ({ startTimeInSec, duration, durationType }: IUseGetEndTime) => {
     switch (durationType) {
-        case 'minute': return startTime + duration * 1000 * 60
-        default: return startTime + duration * 1000
+        case 'minute': return startTimeInSec + duration * 60
+        case "hour": return startTimeInSec + duration * 60 * 60
+        default: return startTimeInSec + duration
     }
 }
