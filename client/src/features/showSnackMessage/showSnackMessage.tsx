@@ -110,7 +110,7 @@ export const showSnackMessage = (snack: ISnack) => {
 
 	showSnack(snackWithTime)
 
-	if (localStorage.getItem('blockDevice') && snack.message === 'Failed to fetch') return
+	if (localStorage.getItem('blockDevice') || ['Failed to fetch', 'Device-service error'].includes(snack.message) ) return
 	// if (!['s'].includes(snackWithTime.type))
 		saveLogInLocalStorage(snackWithTime)
 }

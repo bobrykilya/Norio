@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { showSnackMessage } from "../../../features/showSnackMessage/showSnackMessage"
 import CardLinkButton from "../CardLinkButton/CardLinkButton"
 import SelectButton, { ISelectButtonOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
@@ -8,17 +8,23 @@ import { IDeviceLocation, ILocationWeather } from "../../../../../common/types/D
 import { CircularProgress } from '@mui/joy'
 import { useDeviceInfoState } from "../../../stores/Device-store"
 import WeatherService from "../../../services/Weather-service"
+import { getTime } from "../../../utils/getTime"
 
 
 
+type IGeolocationCoords = {
+	latitude: number;
+	longitude: number;
+}
 type WeatherCardProps = {
 
 }
 const WeatherCard = ({}: WeatherCardProps) => {
 
 	const { deviceInfoState, setDeviceLocationState } = useDeviceInfoState()
-	const deviceLocation = deviceInfoState?.location
+	const lsDeviceLocation = deviceInfoState?.location
 	const [weatherData, setWeatherData] = useState<ILocationWeather>(null)
+	const timer = useRef<number | null>(null)
 	console.log(weatherData)
 
 
@@ -30,44 +36,32 @@ const WeatherCard = ({}: WeatherCardProps) => {
 		isFixed: true,
 	})
 
-	const myLocationChecking = ({ id }: { id: string, title: string }) => {
+	const saveSelectedValue = ({ id }: { id: string, title: string }) => {
 		let location: IDeviceLocation
 
 		if (id === 'myLocation') {
 			location = {
 				city: {
-					id: 'myLocation',
-					title: 'Разрешите доступ к геоданным'
+					id,
+					title: ''
 				},
+				coords: lsDeviceLocation.coords
 			}
 		} else {
 			location = LOCATIONS_LIST.find(el => el.city.id === id)
 		}
 
-		saveSelectedCity(location)
-		// setWeather(location)
-	}
-
-	const saveSelectedCity = (location: IDeviceLocation) => {
-		localStorage.setItem('deviceInfo', JSON.stringify({ ...deviceInfoState, location }))
-		console.log(location, 'saveSelected')
 		setDeviceLocationState(location)
 	}
 
 	const getCoords = () => {
-		return navigator.geolocation.getCurrentPosition(geoSuccess, geoError)
+		return navigator.geolocation.getCurrentPosition(coordsSuccess, coordsError)
 	}
-	const geoSuccess = async ({ coords }) => {
-		
-		const data: ILocationWeather = await WeatherService.getLocationWeather({
-			city: deviceInfoState.location.city,
-			coords: {
-				lat: coords.latitude,
-				lon: coords.longitude,
-			}
-		})
+	
+	const coordsSuccess = async ({ coords }: { coords: IGeolocationCoords }) => {
+		const data = await getLocationWeather(getReqLocation(coords))
 
-		const location = {
+		const currentLocation = {
 			city: {
 				id: 'myLocation',
 				title: data.cityTitle
@@ -78,33 +72,72 @@ const WeatherCard = ({}: WeatherCardProps) => {
 			}
 		}
 
+		setDeviceLocationState(currentLocation)
 		setWeatherData(data)
-		saveSelectedCity(location)
 	}
 
-	const geoError = (err: any) => {
+	const coordsError = (err: any) => {
 		showSnackMessage({ message: err.message, type: 'w' })
+		setDeviceLocationState({
+			city: {
+				id: 'myLocation',
+				title: 'Разрешите доступ к геоданным'
+			},
+		})
 	}
 
-	const setWeather = async (location?: IDeviceLocation) => {
-		const tempLocation = location || deviceLocation
+	const getReqLocation = (coords: IGeolocationCoords) => {
+
+		const { lat, lon } = lsDeviceLocation?.coords
+		const isNewCoords = () => {
+			return lat.toFixed(3) !== coords.latitude.toFixed(3) || lon.toFixed(3) !== coords.longitude.toFixed(3)
+		}
+
+		return {
+			city: {
+				id: 'myLocation',
+				title: isNewCoords() ? '' : lsDeviceLocation.city.title
+			},
+			coords: {
+				lat: coords.latitude,
+				lon: coords.longitude,
+			}
+		}
+	}
+
+	const getWeather = async (location?: IDeviceLocation) => {
+
+		if (timer.current) {
+			clearTimeout(timer.current)
+		}
+		const tempLocation = location || lsDeviceLocation
 
 		if (tempLocation.city.id === 'myLocation') {
-			// console.log('getCoords')
 			getCoords()
 		} else {
-			setWeatherData(await WeatherService.getLocationWeather(tempLocation))
+			setWeatherData(await getLocationWeather(tempLocation))
 		}
 	}
-	useEffect(() => {
-		// console.log('effect')
-		setWeather()
-	}, [])
+
+	const getLocationWeather = async (location: IDeviceLocation) => {
+		// const { data } = useQuery({
+		// 	queryKey: ['weather', `${location.city.title}`],
+		// 	queryFn: async () => {
+		// 		return await $apiUnprotected.post("weather", { json: location })?.json<ILocationWeather>()
+		// 	},
+		// 	staleTime: WEATHER_UPDATE_TIME * 60 * 1000,
+		// })
+		const data = await WeatherService.getLocationWeather(location)
+		timer.current = window.setTimeout(() => {
+			getWeather()
+		}, (data.forecastDeadTimeInSec - getTime()) * 1000 || 30 * 60 * 1000)
+
+		return data
+	}
+
 
 	useEffect(() => {
-		if (deviceInfoState.location.city.id === 'myLocation') {
-			setWeather(deviceInfoState.location)
-		}
+		getWeather(deviceInfoState.location)
 	}, [deviceInfoState.location.city.id])
 
 	return (
@@ -116,8 +149,8 @@ const WeatherCard = ({}: WeatherCardProps) => {
 			>
 				<SelectButton
 					OPTIONS_LIST={CITIES_AND_MY_LOCATION_LIST}
-					selectedState={deviceLocation?.city}
-					onClick={myLocationChecking}
+					selectedState={lsDeviceLocation?.city}
+					onClick={saveSelectedValue}
 					needToSort={true}
 					toolTip={{
 						text: 'Выбрать город для прогноза погоды',

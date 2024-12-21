@@ -112,7 +112,6 @@ const AuthProvider = ({ children }) => {
 
 		if (!lsDeviceId_2 || (lsDeviceId_2 !== deviceId)) {
 			useDeviceInfoState.getState().setDeviceIdState(deviceId)
-			localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, id: deviceId }))
 		}
 	}
 

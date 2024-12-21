@@ -63,6 +63,7 @@ const CoverPanel = ({ disabled }: CoverPanelProps) => {
                     tabIndex={-1}
                     onClick={() => handleReturnToSignUp()}
                     disabled={disabled}
+                    className={'cont'}
                 >
                     <IoArrowBackCircleOutline className='fa-icon'/>
                 </button>

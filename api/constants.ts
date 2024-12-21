@@ -14,4 +14,5 @@
     export const AUTO_LOGOUT_INTERVAL = 60      //* AutoLogout checking interval in seconds (default: 60)
     export const DEFAULT_BLOCK_DURATION = 3     //* Block duration in minutes (default: 3)
 
-	export const WEATHER_UPDATE_TIME = 30       //* in minutes (default: 30)
+//* HomePage settings
+export const WEATHER_UPDATE_TIME = 30       //* in minutes (default: 30)

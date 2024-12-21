@@ -1,5 +1,4 @@
-import { IDeviceLocation } from "../../../common/types/Device-types"
-import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
+import { IDeviceLocation, ILocationWeather } from "../../../common/types/Device-types"
 import { $apiUnprotected } from "../http/http"
 
 
@@ -7,11 +6,9 @@ import { $apiUnprotected } from "../http/http"
 class WeatherService {
 	static async getLocationWeather(location: IDeviceLocation) {
 		try {
-			// return useQuery('weather', async () => {
-				return await $apiUnprotected.post("weather", { json: location })?.json<any>()
-			// })
+			return await $apiUnprotected.post("weather", { json: location })?.json<ILocationWeather>()
 		} catch (err) {
-			showSnackMessage(err)
+			console.log(err)
 			throw new Error('getLocationWeather error')
 		}
 	}

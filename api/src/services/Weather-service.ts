@@ -34,15 +34,15 @@ class WeatherService {
 	static async getLocationWeather(location: IDeviceLocation) {
 		if (location.city.id !== 'myLocation') {
 			return await this.getWeatherByCoords(location)
+		} else {
+			return await this.getWeatherByCoords({
+				city: {
+					id: 'myLocation',
+					title: location.city.title || (await this.getLocationCityTitleByCoords(location.coords)).toLowerCase(),
+				},
+				coords: location.coords,
+			})
 		}
-
-		return await this.getWeatherByCoords({
-			city: {
-				id: 'myLocation',
-				title: await this.getLocationTitleByCoords(location.coords),
-			},
-			coords: location.coords,
-		})
 	}
 
 	static async getWeatherByCoords(location: IDeviceLocation) {
@@ -65,7 +65,7 @@ class WeatherService {
 			locationWeather = {
 				cityId: location.city.id,
 				cityTitle: location.city.title,
-				forecastDeadTime: getTime() + (WEATHER_UPDATE_TIME * 60) + 10,
+				forecastDeadTimeInSec: getTime() + (WEATHER_UPDATE_TIME * 60) + 10,
 				current: getObjectByKeys<ILocationWeatherElem>(weatherData.current, REQUIRED_KEYS_LIST),
 				hourly: weatherData.hourly.map((item) => getObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
 				daily: weatherData.daily.map((item) => getObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
@@ -77,7 +77,7 @@ class WeatherService {
 		return locationWeather
 	}
 
-	static async getLocationTitleByCoords(coords: IDeviceLocation['coords']) {
+	static async getLocationCityTitleByCoords(coords: IDeviceLocation['coords']) {
 		let locationAddress: ILocationAddress['address']
 		const REQUIRED_KEYS_LIST = ['city', 'town', 'village']
 
@@ -87,9 +87,8 @@ class WeatherService {
 				lon: coords.lon,
 			}
 		}).json<ILocationAddress>()
-		console.log(locationData)
+		// console.log(locationData)
 		locationAddress = getObjectByKeys<ILocationAddress['address']>(locationData.address, REQUIRED_KEYS_LIST)
-
 
 		return locationAddress.village || locationAddress.town || locationAddress.city
 	}

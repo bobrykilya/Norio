@@ -35,7 +35,7 @@ export type ILocationWeatherElem = {
 export type ILocationWeather = {
 	cityId: string;
 	cityTitle: string;
-	forecastDeadTime?: number;
+	forecastDeadTimeInSec: number;
 	current: ILocationWeatherElem;
 	hourly: ILocationWeatherElem[];
 	daily: ILocationWeatherElem[];

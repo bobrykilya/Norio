@@ -81,12 +81,7 @@ export const getMonth = (num: number) => {
     return MONTHS_LIST[num-1]
 }
 
-type IUseGetEndTime = {
-    startTimeInSec: number;
-    duration: number;
-    durationType?: DurationTypeOptions;
-}
-export const getEndTime = ({ startTimeInSec, duration, durationType }: IUseGetEndTime) => {
+export const getEndTime = (startTimeInSec: number, duration: number, durationType?: DurationTypeOptions) => {
     switch (durationType) {
         case 'minute': return startTimeInSec + duration * 60
         case "hour": return startTimeInSec + duration * 60 * 60

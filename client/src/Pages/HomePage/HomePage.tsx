@@ -58,14 +58,14 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
                 <NavBar location={location} />
                 <div className="center-column cont">
                     <div className="center_column-header cont">
-                        <div className="search_and_task_filters-cont cont">
-                            <div className="search-card cont card">
-                            </div>
-                            <div className="task_filters-card cont card">
-                            </div>
-                        </div>
-                        <div className="calendar-card cont card">
-                        </div>
+                        {/*<div className="search_and_task_filters-cont cont">*/}
+                        {/*    <div className="search-card cont card">*/}
+                        {/*    </div>*/}
+                        {/*    <div className="task_filters-card cont card">*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
+                        {/*<div className="calendar-card cont card">*/}
+                        {/*</div>*/}
                         <WeatherCard />
                     </div>
                     <div

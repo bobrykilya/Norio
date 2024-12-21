@@ -5,6 +5,7 @@ import { ICommonVar } from "../../../../../../common/types/Global-types"
 import { sortByAlphabet } from "../../../../utils/sort"
 import timeout from "../../../../utils/timeout"
 import ToolTip, { ToolTipProps } from "../../../others/ToolTip/ToolTip"
+import { capitalize } from "../../../../utils/capitalize"
 
 
 
@@ -67,7 +68,7 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 			className={'select_but-cont cont'}
 		>
 			<button
-				className={'select-but'}
+				className={`select-but ${!selectedState?.title ? 'empty' : ''}`}
 				tabIndex={-1}
 				onClick={handleClickBut}
 				ref={butRef}
@@ -75,7 +76,7 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 				<p
 					className={'select_but_selected'}
 				>
-					{selectedState?.title}
+					{capitalize(selectedState?.title)}
 				</p>
 				<ToolTip { ...toolTip } isBlock={isDropDownOpened} />
 			</button>

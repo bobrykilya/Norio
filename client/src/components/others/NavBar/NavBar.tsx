@@ -32,7 +32,9 @@ const NavBar = ({ location }: NavBarProps) => {
 
     const handleLeaveMouse = () => {
         setToolTipDelayTimeMS(TOOLTIP_DELAY_TIME)
-        if (timer.current) clearTimeout(timer.current)
+        if (timer.current) {
+            clearTimeout(timer.current)
+        }
     }
 
     return (
