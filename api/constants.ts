@@ -15,4 +15,4 @@
     export const DEFAULT_BLOCK_DURATION = 3     //* Block duration in minutes (default: 3)
 
 //* HomePage settings
-export const WEATHER_UPDATE_TIME = 30       //* in minutes (default: 30)
+export const WEATHER_UPDATE_TIME_IN_MIN = 30       //* in minutes (default: 30)

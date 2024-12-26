@@ -78,7 +78,7 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 				>
 					{capitalize(selectedState?.title)}
 				</p>
-				<ToolTip { ...toolTip } isBlock={isDropDownOpened} />
+				<ToolTip { ...toolTip } />
 			</button>
 			<DropDown
 				isDropDownOpened={isDropDownOpened}

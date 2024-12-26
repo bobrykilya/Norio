@@ -1,0 +1,40 @@
+@import '../../../../variables'
+
+
+
+.weather_el-cont
+    //border: 2px solid red
+    color: $color-backgr
+    justify-content: flex-start
+    margin-bottom: -0.1rem
+    .weather_el-label
+        //border: 2px solid green
+        font-weight: 600
+        text-align: center
+        &.start
+            text-align: start
+        &.end
+            text-align: end
+    .weather_el-body
+        //border: 2px solid brown
+        margin-top: 0.22rem
+        flex-direction: row
+        overflow: visible
+        height: auto
+        .weather_el-icon
+            //border: 2px solid green
+            $icon-size: $size-h3 * 1.7
+            width: $icon-size
+            height: $icon-size
+            margin-right: 0.3rem
+        .weather_el-temp
+            font-weight: 600
+            font-size: $size-h3 + 0.04rem
+        &.big
+            .weather_el-icon
+                $icon-size: $size-h3 * 2.1
+                width: $icon-size
+                height: $icon-size
+            .weather_el-temp
+                font-size: $size-h3 + 0.22rem
+

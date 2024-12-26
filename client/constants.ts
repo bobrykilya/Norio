@@ -15,5 +15,3 @@ export const APP_TITLE = 'NORIO'
 //* Services settings
 	export const CHECK_IP_AND_COUNTRY = false 			//* IP and Country checking before request on Api (ipapi.co, ip-api.com services)
 	export const PERMITTED_COUNTRIES = ['BY', 'PL'] 	//* Permitted countries for working with app
-
-export const WEATHER_UPDATE_TIME = 30       //* in minutes (default: 30)

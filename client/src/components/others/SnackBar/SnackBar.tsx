@@ -67,7 +67,7 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
         >
             {icon}
             <div className='snackbar-message cont'>
-                <h3>{title ? title : null}</h3>
+                <h3>{title}</h3>
                 <p dangerouslySetInnerHTML={{ __html: message}}></p>
             </div>
             {

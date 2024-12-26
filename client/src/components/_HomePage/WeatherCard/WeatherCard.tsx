@@ -8,8 +8,16 @@ import { IDeviceLocation, ILocationWeather } from "../../../../../common/types/D
 import { CircularProgress } from '@mui/joy'
 import { useDeviceInfoState } from "../../../stores/Device-store"
 import WeatherService from "../../../services/Weather-service"
-import { getTime } from "../../../utils/getTime"
+import { getTime, getTimeParams } from "../../../utils/getTime"
+import WeatherElement from "./WeatherElement/WeatherElement"
+import { capitalize } from "../../../utils/capitalize"
+import ToolTip from "../../others/ToolTip/ToolTip"
 
+
+
+export const getTemp = (temp: number) => {
+	return `${temp > 0 ? `+${Math.round(temp)}` : Math.round(temp)} °`
+}
 
 
 type IGeolocationCoords = {
@@ -25,7 +33,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 	const lsDeviceLocation = deviceInfoState?.location
 	const [weatherData, setWeatherData] = useState<ILocationWeather>(null)
 	const timer = useRef<number | null>(null)
-	console.log(weatherData)
+	// console.log(weatherData)
 
 
 	// @ts-ignore
@@ -125,12 +133,12 @@ const WeatherCard = ({}: WeatherCardProps) => {
 		// 	queryFn: async () => {
 		// 		return await $apiUnprotected.post("weather", { json: location })?.json<ILocationWeather>()
 		// 	},
-		// 	staleTime: WEATHER_UPDATE_TIME * 60 * 1000,
+		// 	staleTime: (data.forecastDeadTimeInSec - data.forecastTimeInSec) * 1000,
 		// })
 		const data = await WeatherService.getLocationWeather(location)
 		timer.current = window.setTimeout(() => {
 			getWeather()
-		}, (data.forecastDeadTimeInSec - getTime()) * 1000 || 30 * 60 * 1000)
+		}, (data.forecastDeadTimeInSec - getTime()) * 1000)
 
 		return data
 	}
@@ -170,44 +178,54 @@ const WeatherCard = ({}: WeatherCardProps) => {
 					className={'weather_part-cont cont'}
 				>
 					<div
-						className={'weather_el-cont'}
+						className={'current_weather-cont cont'}
 					>
-						<p
-							className={'now_label'}
-						>
-							Сейчас
-						</p>
+						<WeatherElement
+							label={'Сейчас'}
+							labelPos={'start'}
+							isBigSize={true}
+							iconId={weatherData.current.icon}
+							temperature={weatherData.current.temp as number}
+						/>
 						<div
-							className={'weather_icon-cont'}
+							className={'current_weather_description-cont cont'}
 						>
-							{/*<img src={} alt="" >*/}
+							<span>
+								{capitalize(weatherData.current.description)}
+							</span>
+							<p
 
+							>
+								Ощущается как {getTemp(weatherData.current.feels_like as number)}
+							</p>
 						</div>
-
+						<ToolTip text={`Данные обновлены в ${getTimeParams(['timeString'], weatherData.forecastTimeInSec).timeString}`} />
 					</div>
 					<div
-						className={'now_temperature'}
+						className={'future_weather-cont cont'}
 					>
-
+						<WeatherElement
+							label={'Вечером'}
+							labelPos={'start'}
+							iconId={weatherData.current.icon}
+							temperature={weatherData.current.temp as number}
+						/>
+						<WeatherElement
+							label={'Утром'}
+							// labelPos={'start'}
+							iconId={weatherData.current.icon}
+							temperature={weatherData.current.temp as number}
+						/>
+						<WeatherElement
+							label={'Днём'}
+							labelPos={'end'}
+							iconId={weatherData.current.icon}
+							temperature={weatherData.current.temp as number}
+						/>
 					</div>
-					<p
-						className={'next_1_label'}
-					>
-						Вечером
-					</p>
-					<p
-						className={'next_2_label'}
-					>
-						Ночью
-					</p>
-					<p
-						className={'next_3_label'}
-					>
-						Утром
-					</p>
 				</div>
 				:
-				<div className='weather_part-cont cont'>
+				<div className='cont'>
 					<CircularProgress variant="plain"/>
 				</div>
 			}

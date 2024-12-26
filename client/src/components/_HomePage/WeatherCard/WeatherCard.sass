@@ -27,3 +27,34 @@
         //border: 1px solid yellow
         flex-shrink: 1
         margin-top: 2.1rem
+        justify-content: space-between
+        overflow: visible
+        .current_weather-cont
+            //border: 1px solid red
+            flex-direction: row
+            justify-content: space-between
+            align-items: end
+            overflow: visible
+            height: auto
+            padding-left: 0.4rem
+            .current_weather_description-cont
+                height: auto
+                width: auto
+                margin-bottom: 0.2rem
+                align-items: start
+                color: $color-backgr
+                overflow: visible
+                span
+                    font-weight: 600
+                    margin-bottom: 0.15rem
+                p
+                    color: rgba($color-backgr, 0.7)
+            .tool_tip
+                &.top
+                    bottom: calc(85%)
+        .future_weather-cont
+            //border: 1px solid black
+            justify-content: space-between
+            flex-direction: row
+            height: auto
+            overflow: visible

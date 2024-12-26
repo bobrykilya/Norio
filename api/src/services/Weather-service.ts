@@ -7,7 +7,7 @@ import {
 import { $apiLocation, $apiWeather } from "../http/http.ts"
 import { redisGet, redisWeatherSet } from "../utils/redisUtils.ts"
 import { getTime } from "../utils/getTime.ts"
-import { WEATHER_UPDATE_TIME } from "../../constants.ts"
+import { WEATHER_UPDATE_TIME_IN_MIN } from "../../constants.ts"
 
 
 
@@ -62,10 +62,12 @@ class WeatherService {
 				},
 			}).json<ILocationWeather>()
 
+			const currentTime = getTime()
 			locationWeather = {
 				cityId: location.city.id,
 				cityTitle: location.city.title,
-				forecastDeadTimeInSec: getTime() + (WEATHER_UPDATE_TIME * 60) + 10,
+				forecastTimeInSec: currentTime,
+				forecastDeadTimeInSec: currentTime + (WEATHER_UPDATE_TIME_IN_MIN * 60) + 10,
 				current: getObjectByKeys<ILocationWeatherElem>(weatherData.current, REQUIRED_KEYS_LIST),
 				hourly: weatherData.hourly.map((item) => getObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
 				daily: weatherData.daily.map((item) => getObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
