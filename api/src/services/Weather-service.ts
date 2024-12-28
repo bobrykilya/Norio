@@ -11,12 +11,16 @@ import { WEATHER_UPDATE_TIME_IN_MIN } from "../../constants.ts"
 
 
 
-const getObjectByKeys = <T> (object: T, keysList: string[]) => {
+const getWeatherObjectByKeys = <T> (object: T, keysList: string[]) => {
 	let newObject: T | {} = {}
 
 	keysList.forEach(i => {
 		if (object[i]) {
-			newObject[i] = object[i]
+			if ((i === 'snow' || i === 'rain') && object[i]['1h']) {
+				newObject[i] = object[i]['1h']
+			} else {
+				newObject[i] = object[i]
+			}
 		} else {
 			if (object['weather']) {
 				if (object['weather'][0][i]) {
@@ -61,16 +65,17 @@ class WeatherService {
 					lon: location.coords.lon,
 				},
 			}).json<ILocationWeather>()
-			
+			// console.log(weatherData)
+
 			const currentTime = getTime()
 			locationWeather = {
 				cityId: location.city.id,
 				cityTitle: location.city.title,
 				forecastTimeInSec: currentTime,
 				forecastDeadTimeInSec: currentTime + (WEATHER_UPDATE_TIME_IN_MIN * 60) + 10,
-				current: getObjectByKeys<ILocationWeatherElem>(weatherData.current, REQUIRED_KEYS_LIST),
-				hourly: weatherData.hourly.map((item) => getObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
-				daily: weatherData.daily.map((item) => getObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
+				current: getWeatherObjectByKeys<ILocationWeatherElem>(weatherData.current, REQUIRED_KEYS_LIST),
+				hourly: weatherData.hourly.map((item) => getWeatherObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
+				daily: weatherData.daily.map((item) => getWeatherObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
 			}
 
 			await redisWeatherSet(getRedisKeyForWeather(location), locationWeather)
@@ -90,7 +95,7 @@ class WeatherService {
 			}
 		}).json<ILocationAddress>()
 		// console.log(locationData)
-		locationAddress = getObjectByKeys<ILocationAddress['address']>(locationData.address, REQUIRED_KEYS_LIST)
+		locationAddress = getWeatherObjectByKeys<ILocationAddress['address']>(locationData.address, REQUIRED_KEYS_LIST)
 
 		return locationAddress.village || locationAddress.town || locationAddress.city
 	}

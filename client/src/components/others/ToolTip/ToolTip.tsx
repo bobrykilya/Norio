@@ -10,8 +10,9 @@ export type ToolTipProps = {
     position?: AvailableToolTipPositions;
     delayTimeMS?: number;
     isBlock?: boolean;
+    isInfoToolTip?: boolean;
 }
-const ToolTip = ({ text, position='top', delayTimeMS, isBlock }: ToolTipProps) => {
+const ToolTip = ({ text, position='top', delayTimeMS, isBlock, isInfoToolTip=false }: ToolTipProps) => {
     const [isToolTipVisible, setIsToolTipVisible] = useState(false)
     const timer = useRef<number | null>(null)
 

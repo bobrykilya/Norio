@@ -33,22 +33,27 @@
             //border: 1px solid red
             flex-direction: row
             justify-content: space-between
-            align-items: end
             overflow: visible
             height: auto
             padding-left: 0.4rem
             .current_weather_description-cont
+                //border: 1px solid blue
                 height: auto
                 width: auto
-                margin-bottom: 0.2rem
+                //margin-bottom: 0.2rem
                 align-items: start
                 color: $color-backgr
                 overflow: visible
                 span
-                    font-weight: 600
                     margin-bottom: 0.15rem
-                p
+                    font-weight: 600
+                .current_weather-description
                     color: rgba($color-backgr, 0.7)
+                .current_weather-alerts
+                    margin-top: 0.15rem
+                    font-size: $size-main-text - 0.05rem
+                    font-weight: 600
+                    color: #a2b8f5
         .future_weather-cont
             //border: 1px solid black
             justify-content: space-between

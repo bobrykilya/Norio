@@ -29,7 +29,7 @@ const DateTime = () => {
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
-			setTime(getTimeParams(['timeString']))
+			setTime(getTimeParams(['timeString']).timeString)
 		}, 1000*(60-second))
 		
 		return () => {
@@ -50,7 +50,11 @@ const DateTime = () => {
 			<p>
 				{dateString}
 			</p>
-			<ToolTip text={`${timeStringFull}, ${getDayOfWeek(dayNum)} ${getMonth(month)}`} position='bottom' />
+			<ToolTip
+				text={`${timeStringFull}, ${getDayOfWeek(dayNum)} ${getMonth(month)}`}
+				position='bottom'
+				isInfoToolTip={true}
+			/>
 		</div>
 	)
 }

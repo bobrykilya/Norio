@@ -52,15 +52,16 @@ const WeatherCard = ({}: WeatherCardProps) => {
 	const lsDeviceLocation = deviceInfoState?.location
 	const [weatherData, setWeatherData] = useState<ILocationWeather>(null)
 	const timer = useRef<number | null>(null)
-	console.log(weatherData)
+	// console.log(weatherData)
 
-	const getFutureWeather = (weather:  ILocationWeatherElem) => {
+	const getFutureWeather = (weather: ILocationWeatherElem) => {
 		if (!weather) return
+		
 		const result: ILocationWeatherElem & { label?: string } = {
 			...weather
 		}
 
-		const weatherTime = getTimeParams(['hour'], weather.dt) as number
+		const weatherTime = getTimeParams(['hour'], weather.dt).hour
 		// console.log(weatherTime)
 		if (6 <= weatherTime &&  weatherTime <= 11) {
 			result.label = 'Утром'
@@ -75,8 +76,26 @@ const WeatherCard = ({}: WeatherCardProps) => {
 		return result
 	}
 
-	const weather_2 = getFutureWeather(weatherData?.hourly[7])
-	const weather_3 = getFutureWeather(weatherData?.hourly[13])
+	const getWeatherAlert = (weatherList: ILocationWeatherElem[]) => {
+		if (!weatherList) return
+
+		const getElTime = (el: { dt: number }) => {
+			return getTimeParams(['timeString'], el.dt).timeString
+		}
+		for (const el of weatherList) {
+			if (el.rain && !el.snow) {
+				return `Дождь в ${getElTime(el)}`
+			} else if (!el.rain && el.snow) {
+				return `Снег в ${getElTime(el)}`
+			} else if (el.rain && el.snow) {
+				return `Дождь и снег в ${getElTime(el)}`
+			}
+		}
+	}
+
+	const weather2 = getFutureWeather(weatherData?.hourly[7])
+	const weather3 = getFutureWeather(weatherData?.hourly[13])
+	const weatherAlert = getWeatherAlert(weatherData?.hourly.slice(1, 11))
 
 	// @ts-ignore
 	const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIST.map(loc => loc.city).concat({
@@ -241,26 +260,33 @@ const WeatherCard = ({}: WeatherCardProps) => {
 								{capitalize(weatherData.current.description)}
 							</span>
 							<p
-
+								className={'current_weather-description'}
 							>
 								Ощущается как {getTemp(weatherData.current.feels_like)}
 							</p>
+							{weatherAlert &&
+								<p
+									className={'current_weather-alerts'}
+								>
+									{weatherAlert}
+								</p>
+							}
 						</div>
 					</div>
 					<div
 						className={'future_weather-cont cont'}
 					>
 						<WeatherElement
-							label={weather_2.label}
+							label={weather2.label}
 							labelPos={'start'}
-							iconId={weather_2.icon}
-							temperature={getTemp(weather_2.temp)}
+							iconId={weather2.icon}
+							temperature={getTemp(weather2.temp)}
 						/>
 						<WeatherElement
-							label={weather_3.label}
+							label={weather3.label}
 							// labelPos={'start'}
-							iconId={weather_3.icon}
-							temperature={getTemp(weather_3.temp)}
+							iconId={weather3.icon}
+							temperature={getTemp(weather3.temp)}
 						/>
 						<WeatherElement
 							label={'Завтра'}
@@ -270,8 +296,10 @@ const WeatherCard = ({}: WeatherCardProps) => {
 						/>
 					</div>
 					<ToolTip
-						text={`Данные погоды обновлены в ${getTimeParams(['timeString'], weatherData.forecastTimeInSec)}`}
+						text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weatherData.forecastTimeInSec).timeString}`}
 						position={'bottom'}
+						delayTimeMS={2000}
+						isInfoToolTip={true}
 					/>
 				</div>
 				:

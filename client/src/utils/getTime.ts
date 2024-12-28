@@ -16,11 +16,24 @@ export const getTime = (ms=false) => {
 
 
 type paramsListOptions = 'now' | 'second'| 'minute' | 'hour' | 'day' | 'month' | 'year' | 'dayNum' | 'timeString' | 'timeStringFull' | 'dateString'
-export const getTimeParams = (paramsList: paramsListOptions[], timeInSec?: number) => {
+export type ITimeParamsObject = {
+    dateString?: string;
+    timeStringFull?: string;
+    timeString?: string;
+    dayNum?: number;
+    year?: number;
+    month?: number;
+    day?: number;
+    hour?: number;
+    minute?: number;
+    second?: number;
+    now?: Date;
+}
+export const getTimeParams = (paramsList: paramsListOptions[], timeInSec?: number): ITimeParamsObject => {
     const now = timeInSec ? new Date(timeInSec * 1000) : new Date()
 
     
-    const result = {
+    return {
         ...(paramsList.includes('now') && { now }),
         ...(paramsList.includes('second') && { second: now.getSeconds() }),
         ...(paramsList.includes('minute') && { minute: now.getMinutes() }),
@@ -34,7 +47,7 @@ export const getTimeParams = (paramsList: paramsListOptions[], timeInSec?: numbe
         ...(paramsList.includes('dateString') && { dateString: now.toLocaleDateString() }),
     }
 
-    return paramsList.length === 1 ? result[`${paramsList[0]}`] as number : result
+    // return paramsList.length === 1 ? result[`${paramsList[0]}`] as number : result
 }
 
 export const zeroHandler = (time: number) => {
