@@ -11,22 +11,22 @@ export const STORES_LIST: IDataListElement[] = [
     {
         id: 'office',
         title: 'Офис',
-        cityId: 'molodechno'
+        cityId: 'maladzyechna'
     },
     {
         id: 'krasnoe',
         title: 'Красное',
-        cityId: 'krasnoe'
+        cityId: 'krasnaye'
     },
     {
         id: 'polock',
         title: 'Полоцк',
-        cityId: 'polock'
+        cityId: 'polatsk'
     },
     {
         id: 'belmash',
         title: 'БелМаш',
-        cityId: 'molodechno'
+        cityId: 'maladzyechna'
     },
     {
         id: 'turly',
@@ -36,22 +36,22 @@ export const STORES_LIST: IDataListElement[] = [
     {
         id: 'glubokoe',
         title: 'Глубокое',
-        cityId: 'glubokoe'
+        cityId: 'hlybokaye'
     },
     {
         id: 'rodashki',
         title: 'Радошковичи',
-        cityId: 'radoshkovochi'
+        cityId: 'radashkovichy'
     },
     {
         id: 'sputnik',
         title: 'Спутник',
-        cityId: 'molodechno'
+        cityId: 'maladzyechna'
     },
     {
         id: 'libava',
         title: 'Либава',
-        cityId: 'molodechno'
+        cityId: 'maladzyechna'
     },
 ]
 

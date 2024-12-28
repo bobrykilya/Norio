@@ -8,8 +8,8 @@ import { useUserInfo } from "../../stores/Auth-store"
 import { STORES_LIST } from "../../assets/AuthPage/AuthPage-data"
 import { useDeviceInfoState } from "../../stores/Device-store"
 import { LOCATIONS_LIST } from "../../assets/common/Common-data"
-import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
 import { IDeviceLocation } from "../../../../common/types/Device-types"
+import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
 
 
 
@@ -47,7 +47,6 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
                 location = LOCATIONS_LIST.find(el => el.city.id === cityId)
             }
             setDeviceLocationState(location)
-            localStorage.setItem('deviceInfo', JSON.stringify( { ...deviceInfoState, location } ))
         }
 
 	}, [isUserLogged])

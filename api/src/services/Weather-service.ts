@@ -61,7 +61,7 @@ class WeatherService {
 					lon: location.coords.lon,
 				},
 			}).json<ILocationWeather>()
-
+			
 			const currentTime = getTime()
 			locationWeather = {
 				cityId: location.city.id,

@@ -4,7 +4,12 @@ import CardLinkButton from "../CardLinkButton/CardLinkButton"
 import SelectButton, { ISelectButtonOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
 import { FaLocationDot } from "react-icons/fa6"
 import { LOCATIONS_LIST } from "../../../assets/common/Common-data"
-import { IDeviceLocation, ILocationWeather } from "../../../../../common/types/Device-types"
+import {
+	IDeviceLocation,
+	ILocationWeather,
+	ILocationWeatherElem,
+	IWeatherTempObj,
+} from "../../../../../common/types/Device-types"
 import { CircularProgress } from '@mui/joy'
 import { useDeviceInfoState } from "../../../stores/Device-store"
 import WeatherService from "../../../services/Weather-service"
@@ -15,8 +20,22 @@ import ToolTip from "../../others/ToolTip/ToolTip"
 
 
 
-export const getTemp = (temp: number) => {
-	return `${temp > 0 ? `+${Math.round(temp)}` : Math.round(temp)} °`
+export const getTemp = (temp: ILocationWeatherElem['feels_like'] = 0) => {
+
+	const getStringTemp = (temp: number) => {
+		temp = Math.round(temp)
+		return `${temp > 0 ? `+${temp}` : temp} °`
+	}
+	const getAverageTemp = (temp: IWeatherTempObj) => {
+		return (temp.morn + temp.day + temp.eve + temp.night) / 4
+	}
+
+
+	if (typeof temp === 'number') {
+		return getStringTemp(temp)
+	}
+
+	return getStringTemp(getAverageTemp(temp))
 }
 
 
@@ -33,8 +52,31 @@ const WeatherCard = ({}: WeatherCardProps) => {
 	const lsDeviceLocation = deviceInfoState?.location
 	const [weatherData, setWeatherData] = useState<ILocationWeather>(null)
 	const timer = useRef<number | null>(null)
-	// console.log(weatherData)
+	console.log(weatherData)
 
+	const getFutureWeather = (weather:  ILocationWeatherElem) => {
+		if (!weather) return
+		const result: ILocationWeatherElem & { label?: string } = {
+			...weather
+		}
+
+		const weatherTime = getTimeParams(['hour'], weather.dt) as number
+		// console.log(weatherTime)
+		if (6 <= weatherTime &&  weatherTime <= 11) {
+			result.label = 'Утром'
+		} else if (12 <= weatherTime &&  weatherTime <= 18) {
+			result.label = 'Днём'
+		} else if (19 <= weatherTime &&  weatherTime <= 23) {
+			result.label = 'Вечером'
+		} else if (0 <= weatherTime &&  weatherTime <= 5) {
+			result.label = 'Ночью'
+		}
+
+		return result
+	}
+
+	const weather_2 = getFutureWeather(weatherData?.hourly[7])
+	const weather_3 = getFutureWeather(weatherData?.hourly[13])
 
 	// @ts-ignore
 	const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIST.map(loc => loc.city).concat({
@@ -86,18 +128,21 @@ const WeatherCard = ({}: WeatherCardProps) => {
 
 	const coordsError = (err: any) => {
 		showSnackMessage({ message: err.message, type: 'w' })
+		setWeatherData(null)
 		setDeviceLocationState({
 			city: {
 				id: 'myLocation',
-				title: 'Разрешите доступ к геоданным'
+				title: 'Нет доступа к геоданным'
 			},
 		})
 	}
 
 	const getReqLocation = (coords: IGeolocationCoords) => {
 
-		const { lat, lon } = lsDeviceLocation?.coords
 		const isNewCoords = () => {
+			if (!lsDeviceLocation?.coords) return true
+
+			const { lat, lon } = lsDeviceLocation.coords
 			return lat.toFixed(3) !== coords.latitude.toFixed(3) || lon.toFixed(3) !== coords.longitude.toFixed(3)
 		}
 
@@ -119,6 +164,8 @@ const WeatherCard = ({}: WeatherCardProps) => {
 			clearTimeout(timer.current)
 		}
 		const tempLocation = location || lsDeviceLocation
+
+		if (!tempLocation) return
 
 		if (tempLocation.city.id === 'myLocation') {
 			getCoords()
@@ -146,7 +193,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 
 	useEffect(() => {
 		getWeather(deviceInfoState.location)
-	}, [deviceInfoState.location.city.id])
+	}, [deviceInfoState?.location?.city.id])
 
 	return (
 		<div
@@ -185,7 +232,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 							labelPos={'start'}
 							isBigSize={true}
 							iconId={weatherData.current.icon}
-							temperature={weatherData.current.temp as number}
+							temperature={getTemp(weatherData.current.temp)}
 						/>
 						<div
 							className={'current_weather_description-cont cont'}
@@ -196,37 +243,40 @@ const WeatherCard = ({}: WeatherCardProps) => {
 							<p
 
 							>
-								Ощущается как {getTemp(weatherData.current.feels_like as number)}
+								Ощущается как {getTemp(weatherData.current.feels_like)}
 							</p>
 						</div>
-						<ToolTip text={`Данные обновлены в ${getTimeParams(['timeString'], weatherData.forecastTimeInSec).timeString}`} />
 					</div>
 					<div
 						className={'future_weather-cont cont'}
 					>
 						<WeatherElement
-							label={'Вечером'}
+							label={weather_2.label}
 							labelPos={'start'}
-							iconId={weatherData.current.icon}
-							temperature={weatherData.current.temp as number}
+							iconId={weather_2.icon}
+							temperature={getTemp(weather_2.temp)}
 						/>
 						<WeatherElement
-							label={'Утром'}
+							label={weather_3.label}
 							// labelPos={'start'}
-							iconId={weatherData.current.icon}
-							temperature={weatherData.current.temp as number}
+							iconId={weather_3.icon}
+							temperature={getTemp(weather_3.temp)}
 						/>
 						<WeatherElement
-							label={'Днём'}
+							label={'Завтра'}
 							labelPos={'end'}
-							iconId={weatherData.current.icon}
-							temperature={weatherData.current.temp as number}
+							iconId={weatherData.daily[1].icon}
+							temperature={getTemp(weatherData.daily[1].temp)}
 						/>
 					</div>
+					<ToolTip
+						text={`Данные погоды обновлены в ${getTimeParams(['timeString'], weatherData.forecastTimeInSec)}`}
+						position={'bottom'}
+					/>
 				</div>
 				:
-				<div className='cont'>
-					<CircularProgress variant="plain"/>
+				<div className='weather-progress cont'>
+					<CircularProgress variant="plain" />
 				</div>
 			}
 		</div>

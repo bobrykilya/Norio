@@ -1,6 +1,10 @@
+import { DefaultCityOptions } from "./Global-types"
+
+
+
 export type IDeviceLocation = {
 	city?: {
-		id: string;
+		id: DefaultCityOptions | string;
 		title: string;
 	};
 	coords?: {
@@ -9,24 +13,21 @@ export type IDeviceLocation = {
 	};
 }
 
+export type IWeatherTempObj = {
+	morn: number;
+	day: number;
+	eve: number;
+	night: number;
+}
 export type ILocationWeatherElem = {
 	dt: number;
 	rain?: number;
 	snow?: number;
-	temp: number | {
-		morn: number;
-		day: number;
-		eve: number;
-		night: number;
+	temp: number | IWeatherTempObj & {
 		min: number;
 		max: number;
 	};
-	feels_like: number | {
-		morn: number;
-		day: number;
-		eve: number;
-		night: number;
-	};
+	feels_like: number | IWeatherTempObj;
 	humidity: number;
 	description: string;
 	icon: string;

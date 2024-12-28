@@ -1,12 +1,11 @@
 import React from 'react'
-import { getTemp } from "../WeatherCard"
 
 
 
 type WeatherElementProps = {
 	label: string;
 	iconId: string;
-	temperature: number;
+	temperature: string;
 	labelPos?: 'start' | 'center' | 'end';
 	isBigSize?: boolean;
 }
@@ -32,7 +31,7 @@ const WeatherElement = ({ label, iconId, temperature, labelPos='center', isBigSi
 				<p
 					className={'weather_el-temp'}
 				>
-					{getTemp(temperature)}
+					{temperature}
 				</p>
 			</div>
 		</div>

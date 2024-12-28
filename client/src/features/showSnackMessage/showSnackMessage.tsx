@@ -45,7 +45,7 @@ const messagePreprocessing = (message: string) => {
 		case 'Request timed out' : return 'Ошибка ответа сервера'
 		case 'User denied Geolocation' :
 		case 'User denied geolocation prompt' :
-				return `Вами было запрещено получение информации о местоположении. Для отображения погоды по Вашим координатам, дайте <span class=\'bold\'>разрешение<span>`
+				return `Вами было запрещено получение информации о местоположении. Для отображения погоды по Вашим координатам, <span class=\'bold\'>дайте разрешение и обновите страницу</span>`
         default : return message
     }
 }

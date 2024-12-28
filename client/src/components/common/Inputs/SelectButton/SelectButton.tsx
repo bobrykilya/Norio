@@ -76,7 +76,7 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 				<p
 					className={'select_but_selected'}
 				>
-					{capitalize(selectedState?.title)}
+					{capitalize(selectedState?.title || '')}
 				</p>
 				<ToolTip { ...toolTip } />
 			</button>

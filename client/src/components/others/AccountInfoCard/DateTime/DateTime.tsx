@@ -29,7 +29,7 @@ const DateTime = () => {
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
-			setTime(getTimeParams(['timeString'])['timeString'])
+			setTime(getTimeParams(['timeString']))
 		}, 1000*(60-second))
 		
 		return () => {
