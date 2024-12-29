@@ -20,3 +20,7 @@
         background-color: $color-behind-icon
         .fa-icon
             transform: translate(1px, -1px) scale(0.92)
+    &:disabled
+        pointer-events: none
+        .fa-icon
+            color: rgba($color-backgr, 0.3)

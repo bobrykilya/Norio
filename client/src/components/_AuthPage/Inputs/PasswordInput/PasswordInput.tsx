@@ -57,9 +57,12 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
     }
 
     //* CapsLock closing onBlur
-    useClickOutside(inputRef, () => {
-        setIsCapsLockEnabled(false)
-    }, lockButtonRef, isCapsLockEnabled)
+    useClickOutside({
+        ref: inputRef,
+        butRef: lockButtonRef,
+        callback: () => setIsCapsLockEnabled(false),
+        condition: isCapsLockEnabled
+    })
 
 
     const getRegister = (type: SignFormInputTypesOptions) => {

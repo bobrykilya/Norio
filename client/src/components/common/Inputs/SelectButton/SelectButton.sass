@@ -12,17 +12,14 @@
     .select-but
         //border: 1px solid red
         position: relative
-        padding: 0.3rem 0.5rem
+        padding: 0.3rem 0.4rem
         border-radius: 20px
-        min-width: 4rem
+        //min-width: 4rem
         min-height: 1.6rem
         &.hide, &.empty
             filter: blur(7px)
             opacity: 0
-            transform: translateX(-1rem)
-        .select_but_selected
-            line-height: 1.1rem
-            transition: all 0.3s ease
+            transform: translateX(-0.7rem)
         &::before
             border: 1px solid $color-behind-icon
             content: ''
@@ -42,6 +39,11 @@
             background-color: rgba($color-backgr, 0.07)
             .select_but_selected
                 transform: scale(0.94)
+        .select_but_selected
+            line-height: 1.1rem
+            transition: all 0.3s ease
+            &.active
+                text-shadow: rgba(255, 255, 255, 0.35) 0 0 10px
     .dropdown-cont
         .option-but
             //border: 1px solid green

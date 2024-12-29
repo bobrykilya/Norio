@@ -62,8 +62,8 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
     useCloseOnEsc({
-        successConditionsList: [!isFormDisabled, !isAnyCoverModalOpened],
-        successFun: () => handleReturnToSignUp()
+        conditionsList: [!isFormDisabled, !isAnyCoverModalOpened],
+        callback: () => handleReturnToSignUp()
     })
     
     const onSubmit = async (data: ISignUp) => {

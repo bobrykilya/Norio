@@ -2,69 +2,79 @@
 
 
 
-.weather-card
+.weather_card-frame
     //border: 1px solid red
     overflow: visible
-    .weather_card-header
+    .weather-card
         //border: 1px solid red
+        overflow: visible
+        transition: all 0.4s $trans-bounce-style
+        will-change: width, height
+        z-index: 1
         position: absolute
         top: 0
-        padding: $padding-card
-        height: auto
-        flex-direction: row
-        justify-content: space-between
-        align-items: flex-start
-        overflow: visible
-        .select-but
-            margin-left: -0.2rem
-            margin-top: -0.2rem
-            .select_but_selected
-                color: $color-backgr
-                font-weight: 600
-                font-size: $size-h3
-        //.card_link-button
-    .weather_part-cont
-        //border: 1px solid yellow
-        flex-shrink: 1
-        margin-top: 2.1rem
-        justify-content: space-between
-        overflow: visible
-        .current_weather-cont
+        right: 0
+        .weather_card-header
             //border: 1px solid red
+            height: auto
             flex-direction: row
             justify-content: space-between
+            align-items: flex-start
             overflow: visible
-            height: auto
-            padding-left: 0.4rem
-            .current_weather_description-cont
-                //border: 1px solid blue
-                height: auto
-                width: auto
-                //margin-bottom: 0.2rem
-                align-items: start
-                color: $color-backgr
+            .select_but-cont
+                margin-left: -0.4rem
+                margin-top: -0.2rem
+                .select_but_selected
+                    color: $color-backgr
+                    font-weight: 600
+                    font-size: $size-h3
+        .weather_part-cont
+            //border: 1px solid yellow
+            flex-shrink: 1
+            margin-top: 0.5rem
+            justify-content: space-between
+            overflow: visible
+            .current_weather-cont
+                //border: 1px solid red
+                flex-direction: row
+                justify-content: space-between
                 overflow: visible
-                span
-                    margin-bottom: 0.15rem
-                    font-weight: 600
-                .current_weather-description
-                    color: rgba($color-backgr, 0.7)
-                .current_weather-alerts
-                    margin-top: 0.15rem
-                    font-size: $size-main-text - 0.05rem
-                    font-weight: 600
-                    color: #a2b8f5
-        .future_weather-cont
-            //border: 1px solid black
-            justify-content: space-between
-            flex-direction: row
-            height: auto
-            overflow: visible
-        .tool_tip-cont
-            border-radius: 0
-            .tool_tip
-                &.bottom
-                    top: calc(110%)
-    .weather-progress
-        //border: 1px solid red
-        padding-top: 1.6rem
+                height: auto
+                //padding-left: 0.4rem
+                .current_weather_description-cont
+                    //border: 1px solid blue
+                    height: auto
+                    width: auto
+                    //margin-bottom: 0.2rem
+                    align-items: start
+                    color: $color-backgr
+                    overflow: visible
+                    span
+                        margin-bottom: 0.15rem
+                        font-weight: 600
+                    .current_weather-description
+                        color: rgba($color-backgr, 0.7)
+                    .current_weather-alerts
+                        margin-top: 0.15rem
+                        font-size: $size-main-text - 0.05rem
+                        font-weight: 600
+                        color: #a2b8f5
+            .future_weather-cont
+                //border: 1px solid black
+                justify-content: space-between
+                flex-direction: row
+                height: auto
+                overflow: visible
+            .tool_tip-cont
+                border-radius: 0
+                .tool_tip
+                    &.bottom
+                        top: calc(110%)
+        .weather-progress
+            flex-shrink: 1
+        &.full
+            height: 20rem
+            width: 20rem
+            backdrop-filter: blur(10px)
+            border-radius: $rad-main-border * 2
+            padding: $padding-card * 2

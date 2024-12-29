@@ -58,8 +58,8 @@ const SignUpForm = ({ isFormBlur, isFormDisabled, isAnyCoverModalOpened }: SignU
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
     useCloseOnEsc({
-        successConditionsList: [!isFormDisabled, !isAnyCoverModalOpened],
-        successFun: () => setCoverPanelState('sign_in')
+        conditionsList: [!isFormDisabled, !isAnyCoverModalOpened],
+        callback: () => setCoverPanelState('sign_in')
     })
 
     const onSubmit = async (data: ICheckUserReq & { confirmPassword: string }) => {

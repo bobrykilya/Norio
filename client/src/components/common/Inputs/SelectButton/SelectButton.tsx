@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react'
 import DropDown from "../../DropDown/DropDown"
-import { useClickOutside } from "../../../../hooks/useClickOutside"
 import { ICommonVar } from "../../../../../../common/types/Global-types"
 import { sortByAlphabet } from "../../../../utils/sort"
 import timeout from "../../../../utils/timeout"
@@ -59,10 +58,6 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 		butRef.current.classList.remove('hide')
 	}
 
-	useClickOutside(dropDownRef, () => {
-		setIsDropDownOpened(false)
-	}, butRef, isDropDownOpened)
-
 	return (
 		<div
 			className={'select_but-cont cont'}
@@ -74,7 +69,7 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 				ref={butRef}
 			>
 				<p
-					className={'select_but_selected'}
+					className={`select_but_selected ${isDropDownOpened ? 'active' : ''}`}
 				>
 					{capitalize(selectedState?.title || '')}
 				</p>
@@ -83,6 +78,15 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 			<DropDown
 				isDropDownOpened={isDropDownOpened}
 				ref={dropDownRef}
+				clickOutsideParams={{
+					butRef: butRef,
+					callback: () => setIsDropDownOpened(false),
+					condition: isDropDownOpened
+				}}
+				closeOnEscParams={{
+					conditionsList: [isDropDownOpened],
+					callback: () => setIsDropDownOpened(false)
+				}}
 			>
 				{HANDLED_LIST.map((el) => {
 					return <button

@@ -17,6 +17,8 @@ import { getTime, getTimeParams } from "../../../utils/getTime"
 import WeatherElement from "./WeatherElement/WeatherElement"
 import { capitalize } from "../../../utils/capitalize"
 import ToolTip from "../../others/ToolTip/ToolTip"
+import { useClickOutside } from "../../../hooks/useClickOutside"
+import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 
 
 
@@ -51,7 +53,10 @@ const WeatherCard = ({}: WeatherCardProps) => {
 	const { deviceInfoState, setDeviceLocationState } = useDeviceInfoState()
 	const lsDeviceLocation = deviceInfoState?.location
 	const [weatherData, setWeatherData] = useState<ILocationWeather>(null)
+	const [isFullWeatherOpened, setIsFullWeatherOpened] = useState(false)
 	const timer = useRef<number | null>(null)
+	const weatherCardRef = useRef(null)
+	const linkButtonRef = useRef(null)
 	// console.log(weatherData)
 
 	const getFutureWeather = (weather: ILocationWeatherElem) => {
@@ -148,6 +153,8 @@ const WeatherCard = ({}: WeatherCardProps) => {
 	const coordsError = (err: any) => {
 		showSnackMessage({ message: err.message, type: 'w' })
 		setWeatherData(null)
+		setIsFullWeatherOpened(false)
+		weatherCardRef.current.classList.remove('full')
 		setDeviceLocationState({
 			city: {
 				id: 'myLocation',
@@ -209,104 +216,129 @@ const WeatherCard = ({}: WeatherCardProps) => {
 		return data
 	}
 
-
 	useEffect(() => {
 		getWeather(deviceInfoState.location)
 	}, [deviceInfoState?.location?.city.id])
 
+
+	const toggleFullWeather = () => {
+		setIsFullWeatherOpened(prev => !prev)
+		weatherCardRef.current.classList.toggle('full')
+	}
+
+
+	useClickOutside({
+		ref: weatherCardRef,
+		butRef: linkButtonRef,
+		callback: toggleFullWeather,
+		condition: isFullWeatherOpened
+	})
+
+	useCloseOnEsc({
+		conditionsList: [isFullWeatherOpened],
+		callback: toggleFullWeather
+	})
+
 	return (
 		<div
-			className={'weather-card cont card'}
+			className={'weather_card-frame cont'}
 		>
 			<div
-				className={'weather_card-header cont'}
+				className={'weather-card cont card'}
+				ref={weatherCardRef}
 			>
-				<SelectButton
-					OPTIONS_LIST={CITIES_AND_MY_LOCATION_LIST}
-					selectedState={lsDeviceLocation?.city}
-					onClick={saveSelectedValue}
-					needToSort={true}
-					toolTip={{
-						text: 'Выбрать город для прогноза погоды',
-						position: 'bottom'
-					}}
-				/>
-				<CardLinkButton
-					link={''}
-					toolTip={{
-						text: 'Открыть карточку погоды',
-						position: 'bottom'
-					}}
-				/>
-			</div>
-			{weatherData ?
 				<div
-					className={'weather_part-cont cont'}
+					className={'weather_card-header cont'}
 				>
-					<div
-						className={'current_weather-cont cont'}
-					>
-						<WeatherElement
-							label={'Сейчас'}
-							labelPos={'start'}
-							isBigSize={true}
-							iconId={weatherData.current.icon}
-							temperature={getTemp(weatherData.current.temp)}
-						/>
-						<div
-							className={'current_weather_description-cont cont'}
-						>
-							<span>
-								{capitalize(weatherData.current.description)}
-							</span>
-							<p
-								className={'current_weather-description'}
-							>
-								Ощущается как {getTemp(weatherData.current.feels_like)}
-							</p>
-							{weatherAlert &&
-								<p
-									className={'current_weather-alerts'}
-								>
-									{weatherAlert}
-								</p>
-							}
-						</div>
-					</div>
-					<div
-						className={'future_weather-cont cont'}
-					>
-						<WeatherElement
-							label={weather2.label}
-							labelPos={'start'}
-							iconId={weather2.icon}
-							temperature={getTemp(weather2.temp)}
-						/>
-						<WeatherElement
-							label={weather3.label}
-							// labelPos={'start'}
-							iconId={weather3.icon}
-							temperature={getTemp(weather3.temp)}
-						/>
-						<WeatherElement
-							label={'Завтра'}
-							labelPos={'end'}
-							iconId={weatherData.daily[1].icon}
-							temperature={getTemp(weatherData.daily[1].temp)}
-						/>
-					</div>
-					<ToolTip
-						text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weatherData.forecastTimeInSec).timeString}`}
-						position={'bottom'}
-						delayTimeMS={2000}
-						isInfoToolTip={true}
+					<SelectButton
+						OPTIONS_LIST={CITIES_AND_MY_LOCATION_LIST}
+						selectedState={lsDeviceLocation?.city}
+						onClick={saveSelectedValue}
+						needToSort={true}
+						toolTip={{
+							text: 'Выбрать город для прогноза погоды',
+							position: 'bottom'
+						}}
+					/>
+					<CardLinkButton
+						onClick={toggleFullWeather}
+						toolTip={{
+							text: `${isFullWeatherOpened ? 'Закрыть' : 'Открыть'} карточку погоды`,
+							position: 'bottom'
+						}}
+						disabled={!weatherData}
+						ref={linkButtonRef}
 					/>
 				</div>
-				:
-				<div className='weather-progress cont'>
-					<CircularProgress variant="plain" />
-				</div>
-			}
+				{weatherData ?
+					<div
+						className={'weather_part-cont cont'}
+					>
+						<div
+							className={'current_weather-cont cont'}
+						>
+							<WeatherElement
+								label={'Сейчас'}
+								labelPos={'start'}
+								isBigSize={true}
+								iconId={weatherData.current.icon}
+								temperature={getTemp(weatherData.current.temp)}
+							/>
+							<div
+								className={'current_weather_description-cont cont'}
+							>
+								<span>
+									{capitalize(weatherData.current.description)}
+								</span>
+								<p
+									className={'current_weather-description'}
+								>
+									Ощущается как {getTemp(weatherData.current.feels_like)}
+								</p>
+								{weatherAlert &&
+									<p
+										className={'current_weather-alerts'}
+									>
+										{weatherAlert}
+									</p>
+								}
+							</div>
+						</div>
+						<div
+							className={'future_weather-cont cont'}
+						>
+							<WeatherElement
+								label={weather2.label}
+								labelPos={'start'}
+								iconId={weather2.icon}
+								temperature={getTemp(weather2.temp)}
+							/>
+							<WeatherElement
+								label={weather3.label}
+								// labelPos={'start'}
+								iconId={weather3.icon}
+								temperature={getTemp(weather3.temp)}
+							/>
+							<WeatherElement
+								label={'Завтра'}
+								labelPos={'end'}
+								iconId={weatherData.daily[1].icon}
+								temperature={getTemp(weatherData.daily[1].temp)}
+							/>
+						</div>
+						<ToolTip
+							text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weatherData.forecastTimeInSec).timeString}`}
+							position={'bottom'}
+							delayTimeMS={2000}
+							isInfoToolTip={true}
+						/>
+					</div>
+					:
+					<div className='weather-progress cont'>
+						<CircularProgress variant="plain" />
+					</div>
+				}
+			</div>
 		</div>
 	)
 }

@@ -23,8 +23,8 @@ const JumpingList = ({ children, isListOpened, closeList, other_children }: Jump
     }
 
     useCloseOnEsc({
-        successConditionsList: [isListOpened],
-        successFun: closeList
+        conditionsList: [isListOpened],
+        callback: closeList
     })
 
     //* For forms Esc blur while JumpingList is opened

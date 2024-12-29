@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { focusInput } from "../../../../utils/focusInput"
 import { capitalize } from '../../../../utils/capitalize'
-import { useClickOutside } from "../../../../hooks/useClickOutside"
 import InputError from '../InputError/InputError'
 import InputCleaner from '../InputCleaner/InputCleaner'
 import { IDataListElement } from "../../../../assets/AuthPage/AuthPage-data"
@@ -85,10 +84,6 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             await focusInput(inputRef)
         }
     }
-    
-    useClickOutside(dropDownRef, () => {
-        toggleDropDown(false)
-    }, inputRef, isDropDownOpened)
 
     const clearInput = async () => {
         // console.log('clear')
@@ -249,6 +244,11 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 onClick={handleClickElem}
                 ref={dropDownRef}
                 isScrollContent={true}
+                clickOutsideParams={{
+                    butRef: inputRef,
+                    callback: () => toggleDropDown(false),
+                    condition: isDropDownOpened
+                }}
             >
                 {
                     !LIST_FILTERED[0] ?
