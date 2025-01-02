@@ -57,7 +57,7 @@ class WeatherService {
 
 		locationWeather = await redisGet(getRedisKeyForWeather(location))
 		if (!locationWeather) {
-			const REQUIRED_KEYS_LIST = ['dt', 'rain', 'snow', 'temp', 'feels_like', 'humidity', 'icon', 'description']
+			const REQUIRED_KEYS_LIST = ['dt', 'rain', 'snow', 'wind_gust', 'temp', 'feels_like', 'humidity', 'icon', 'description']
 
 			const weatherData = await $apiWeather.get('onecall', {
 				searchParams: {

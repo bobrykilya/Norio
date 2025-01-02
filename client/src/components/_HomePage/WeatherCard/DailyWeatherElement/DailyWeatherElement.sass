@@ -1,0 +1,34 @@
+@import '../../../../variables'
+
+
+$icon-size: 1.4rem
+.daily_weather_el-cont
+    //border: 1px solid black
+    flex-direction: row
+    height: auto
+    justify-content: space-between
+    color: $color-backgr
+    margin: 0.15rem 0
+    .daily_weather_el_text-cont
+        //border: 1px solid red
+        flex-direction: row
+        justify-content: space-between
+        flex-shrink: 1
+        margin-right: 0.7rem
+        .daily_weather_el-day
+            //border: 1px solid brown
+            font-weight: 600
+        .daily_weather_el-description
+            white-space: nowrap
+            color: rgba($color-backgr, 0.9)
+    .daily_weather_el_weather-cont
+        //border: 1px solid black
+        flex-direction: row
+        width: 3.3rem
+        //width: auto
+        justify-content: space-between
+        .daily_weather_el-icon
+            width: $icon-size
+            height: $icon-size
+        //.daily_weather_el-temp
+            //margin-left: 0.6rem

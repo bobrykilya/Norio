@@ -16,10 +16,6 @@
         border-radius: 20px
         //min-width: 4rem
         min-height: 1.6rem
-        &.hide, &.empty
-            filter: blur(7px)
-            opacity: 0
-            transform: translateX(-0.7rem)
         &::before
             border: 1px solid $color-behind-icon
             content: ''
@@ -44,6 +40,10 @@
             transition: all 0.3s ease
             &.active
                 text-shadow: rgba(255, 255, 255, 0.35) 0 0 10px
+        &.hide, &.empty
+            filter: blur(7px)
+            opacity: 0
+            transform: translateX(-0.7rem)
     .dropdown-cont
         .option-but
             //border: 1px solid green
