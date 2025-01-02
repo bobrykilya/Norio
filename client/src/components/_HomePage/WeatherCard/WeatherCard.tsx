@@ -15,10 +15,12 @@ import { useDeviceInfoState } from "../../../stores/Device-store"
 import WeatherService from "../../../services/Weather-service"
 import { getTime, getTimeParams } from "../../../utils/getTime"
 import WeatherElement from "./WeatherElement/WeatherElement"
-import { capitalize } from "../../../utils/capitalize"
 import ToolTip from "../../others/ToolTip/ToolTip"
 import { useClickOutside } from "../../../hooks/useClickOutside"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
+import WeatherWithDescription from "./WeatherWithDescription/WeatherWithDescription"
+import HourlyWeatherElement from "./HourlyWeatherElement/HourlyWeatherElement"
+import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
 
 
 
@@ -78,7 +80,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 			result.label = 'Ночью'
 		}
 
-		return result
+		return result as ILocationWeatherElem & { label: string }
 	}
 
 	const getWeatherAlert = (weatherList: ILocationWeatherElem[]) => {
@@ -98,9 +100,12 @@ const WeatherCard = ({}: WeatherCardProps) => {
 		}
 	}
 
-	const weather2 = getFutureWeather(weatherData?.hourly[7])
-	const weather3 = getFutureWeather(weatherData?.hourly[13])
-	const weatherAlert = getWeatherAlert(weatherData?.hourly.slice(1, 11))
+	const weatherStepInHours = 6
+	const weatherAlertStepInHours = 10
+
+	const weatherAlertCurrent = getWeatherAlert(weatherData?.hourly.slice(1, weatherAlertStepInHours))
+	const weather2 = getFutureWeather(weatherData?.hourly[weatherStepInHours + 1])
+	const weather3 = getFutureWeather(weatherData?.hourly[weatherStepInHours * 2 + 1])
 
 	// @ts-ignore
 	const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIST.map(loc => loc.city).concat({
@@ -267,6 +272,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 							position: 'bottom'
 						}}
 						disabled={!weatherData}
+						isCloseIcon={isFullWeatherOpened}
 						ref={linkButtonRef}
 					/>
 				</div>
@@ -274,33 +280,38 @@ const WeatherCard = ({}: WeatherCardProps) => {
 					<div
 						className={'weather_part-cont cont'}
 					>
+						<WeatherWithDescription
+							weather={{
+								label: 'Сейчас',
+								...weatherData.current
+							}}
+							weatherAlert={weatherAlertCurrent}
+						/>
 						<div
-							className={'current_weather-cont cont'}
+							className={'only_full_weather cont'}
 						>
-							<WeatherElement
-								label={'Сейчас'}
-								labelPos={'start'}
-								isBigSize={true}
-								iconId={weatherData.current.icon}
-								temperature={getTemp(weatherData.current.temp)}
-							/>
 							<div
-								className={'current_weather_description-cont cont'}
+								className={'hourly_weather_el_list-cont cont'}
 							>
-								<span>
-									{capitalize(weatherData.current.description)}
-								</span>
-								<p
-									className={'current_weather-description'}
-								>
-									Ощущается как {getTemp(weatherData.current.feels_like)}
-								</p>
-								{weatherAlert &&
-									<p
-										className={'current_weather-alerts'}
-									>
-										{weatherAlert}
-									</p>
+								{
+									weatherData.hourly.slice(1, 10).map(el =>
+										<HourlyWeatherElement
+											key={el.dt}
+											weather={el}
+										/>
+									)
+								}
+							</div>
+							<div
+							    className={'daily_weather_el_list-cont cont'}
+							>
+								{
+									weatherData.daily.slice(1).map(el =>
+										<DailyWeatherElement
+											key={el.dt}
+											weather={el}
+										/>
+									)
 								}
 							</div>
 						</div>
@@ -308,24 +319,25 @@ const WeatherCard = ({}: WeatherCardProps) => {
 							className={'future_weather-cont cont'}
 						>
 							<WeatherElement
-								label={weather2.label}
+								weather={weather2}
 								labelPos={'start'}
-								iconId={weather2.icon}
-								temperature={getTemp(weather2.temp)}
 							/>
 							<WeatherElement
-								label={weather3.label}
-								// labelPos={'start'}
-								iconId={weather3.icon}
-								temperature={getTemp(weather3.temp)}
+								weather={weather3}
 							/>
 							<WeatherElement
-								label={'Завтра'}
+								weather={{
+									label: 'Завтра',
+									...weatherData.current
+								}}
 								labelPos={'end'}
-								iconId={weatherData.daily[1].icon}
-								temperature={getTemp(weatherData.daily[1].temp)}
 							/>
 						</div>
+						{/*<div*/}
+						{/*	className={'cont'}*/}
+						{/*>*/}
+
+						{/*</div>*/}
 						<ToolTip
 							text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weatherData.forecastTimeInSec).timeString}`}
 							position={'bottom'}

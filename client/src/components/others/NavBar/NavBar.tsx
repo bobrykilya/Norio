@@ -45,6 +45,7 @@ const NavBar = ({ location }: NavBarProps) => {
         >
             <button
                 className='logo-cont cont'
+                tabIndex={-1}
                 // title='Улыбнись, заяц)'
             >
                 <img className="app_icon-img" src={appIcon} alt="*" />

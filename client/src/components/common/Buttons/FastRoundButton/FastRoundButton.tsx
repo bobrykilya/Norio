@@ -15,6 +15,7 @@ const FastRoundButton = ({ icon, toolTip, notif }: FastRoundButtonProps) => {
 	return (
 		<button
 			className={'fast_button cont'}
+			tabIndex={-1}
 		>
 			{icon}
 			{notif &&

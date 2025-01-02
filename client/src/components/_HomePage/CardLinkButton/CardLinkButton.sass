@@ -3,24 +3,47 @@
 
 
 .card_link-button
+    //border: 2px solid black
     width: $size-small-round-but
     height: $size-small-round-but
     border-radius: 50%
     background-color: $color-behind-icon
-    .fa-icon
-        color: $color-backgr
-        font-size: 18px
-        margin-top: 5px
-        margin-left: 0.5px
+    //overflow: visible
+    .fa_icons_switch-cont
+        //border: 2px solid red
+        position: absolute
+        top: 0
+        overflow: visible
+        justify-content: space-between
+        height: $size-small-round-but * 2
+        transition: transform 0.5s $trans-bounce-style
+        will-change: transform
+        transform: translateY(-50%)
+        .fa_icon-cont
+            width: $size-small-round-but
+            height: $size-small-round-but
+            .fa-icon
+                color: $color-backgr
+            .link-icon
+                margin-top: 1px
+                margin-left: 0.5px
+                font-size: 18px
+            .close-icon
+                font-size: 23px
     &:hover
         background-color: rgba($color-behind-icon, 0.3)
-        .fa-icon
+        .link-icon
             transform: translate(1px, -1px)
+        .close-icon
+            transform: translateY(-1px)
     &:active
         background-color: $color-behind-icon
         .fa-icon
-            transform: translate(1px, -1px) scale(0.92)
+            transform: scale(0.9)
     &:disabled
         pointer-events: none
         .fa-icon
             color: rgba($color-backgr, 0.3)
+    &.close_icon_opened
+        .fa_icons_switch-cont
+            transform: translateY(0)

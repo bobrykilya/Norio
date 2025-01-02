@@ -3,6 +3,7 @@ import { DurationTypeOptions } from "../../../common/types/Global-types"
 
 
 export const WEEK_DAYS_LIST = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+export const WEEK_DAYS_LIST_FULL = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
 export const MONTHS_LIST = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
 
 
@@ -88,8 +89,10 @@ export const getLastTime = (timestampInSec: number, type: TypeOptions): number =
     }
 }
 
-export const getDayOfWeek = (num: number) => {
-
+export const getDayOfWeek = (num: number, isFullName?: boolean) => {
+    if (isFullName) {
+        return WEEK_DAYS_LIST_FULL[num] || WEEK_DAYS_LIST_FULL[6]
+    }
     return WEEK_DAYS_LIST[num] || WEEK_DAYS_LIST[6]
 }
 

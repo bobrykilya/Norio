@@ -1,19 +1,38 @@
 @import '../../../variables'
 
 
-
+$dur-open-weather: 0.3s
 .weather_card-frame
     //border: 1px solid red
     overflow: visible
     .weather-card
         //border: 1px solid red
         overflow: visible
-        transition: all 0.4s $trans-bounce-style
+        transition: all $dur-open-weather + 0.2s $trans-bounce-style
+        //transition: all $dur-open-weather + 0.2s ease-out
         will-change: width, height
         z-index: 1
         position: absolute
         top: 0
         right: 0
+        .only_full_weather
+            //border: 1px solid black
+            flex-shrink: 1
+            overflow: visible
+            transition: all 0.1s ease-out
+            opacity: 0
+            height: 0
+            .hourly_weather_el_list-cont
+                flex-direction: row
+                justify-content: space-between
+                height: auto
+                margin: 1rem 0
+            .daily_weather_el_list-cont
+                justify-content: space-between
+                background-color: rgba($color-backgr, 0.06)
+                border-radius: $rad-main-border
+                padding: $padding-card - 0.15rem $padding-card
+                height: auto
         .weather_card-header
             //border: 1px solid red
             height: auto
@@ -34,37 +53,13 @@
             margin-top: 0.5rem
             justify-content: space-between
             overflow: visible
-            .current_weather-cont
-                //border: 1px solid red
-                flex-direction: row
-                justify-content: space-between
-                overflow: visible
-                height: auto
-                //padding-left: 0.4rem
-                .current_weather_description-cont
-                    //border: 1px solid blue
-                    height: auto
-                    width: auto
-                    //margin-bottom: 0.2rem
-                    align-items: start
-                    color: $color-backgr
-                    overflow: visible
-                    span
-                        margin-bottom: 0.15rem
-                        font-weight: 600
-                    .current_weather-description
-                        color: rgba($color-backgr, 0.7)
-                    .current_weather-alerts
-                        margin-top: 0.15rem
-                        font-size: $size-main-text - 0.05rem
-                        font-weight: 600
-                        color: #a2b8f5
             .future_weather-cont
                 //border: 1px solid black
                 justify-content: space-between
                 flex-direction: row
                 height: auto
                 overflow: visible
+                transition-duration: $dur-open-weather - 0.2s
             .tool_tip-cont
                 border-radius: 0
                 .tool_tip
@@ -73,8 +68,31 @@
         .weather-progress
             flex-shrink: 1
         &.full
-            height: 20rem
-            width: 20rem
+            height: 27rem
+            width: 23rem
+            //width: auto
+            //height: auto
             backdrop-filter: blur(10px)
             border-radius: $rad-main-border * 2
             padding: $padding-card * 2
+            box-shadow: 2px 10px 30px rgba(0, 0, 0, 0.1)
+            .only_full_weather
+                transition: all $dur-open-weather - 0.15s 0.1s ease-out
+                opacity: 1
+                height: 100%
+            .weather_part-cont
+                //border: 1px solid yellow
+                //width: auto
+                //justify-content: start
+                .weather_with_description-cont
+                    //border: 1px solid gray
+                    margin-bottom: 0.5rem
+                    //justify-content: start
+                    .weather_extra_info-cont
+                        transition: all $dur-open-weather - 0.15s 0.1s ease-out
+                        width: 100%
+                        opacity: 1
+                        transform: scale(1)
+                .future_weather-cont
+                    opacity: 0
+                    height: 0

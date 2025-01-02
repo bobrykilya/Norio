@@ -40,6 +40,7 @@ const AccountInfoCard = () => {
             <button
                 className='account-but'
                 onClick={() => handleLogOut()}
+                tabIndex={-1}
             >
                 <div
                     className={'account_img-cont'}

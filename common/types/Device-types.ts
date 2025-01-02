@@ -23,6 +23,7 @@ export type ILocationWeatherElem = {
 	dt: number;
 	rain?: number;
 	snow?: number;
+	wind_gust?: number;
 	temp: number | IWeatherTempObj & {
 		min: number;
 		max: number;
