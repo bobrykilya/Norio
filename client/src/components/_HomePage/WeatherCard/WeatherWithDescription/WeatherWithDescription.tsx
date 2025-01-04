@@ -14,7 +14,17 @@ type WeatherWithDescriptionProps = {
 }
 const WeatherWithDescription = ({ weather, weatherAlert }: WeatherWithDescriptionProps) => {
 
+	const wind = Math.round(weather.wind_gust)
+	const getWindDescription = (wind: number) => {
+		if (wind > 10) {
+			return 'strong'
+		} else if (wind > 18) {
+			return 'dangerous'
+		}
 
+	}
+
+	
 	return (
 		<div
 			className={'weather_with_description-cont cont'}
@@ -39,8 +49,10 @@ const WeatherWithDescription = ({ weather, weatherAlert }: WeatherWithDescriptio
 					className={'weather_extra_info_el-cont cont'}
 				>
 					<FiWind className={'fa-icon'}/>
-					<span>
-						{Math.round(weather.wind_gust)}м/c
+					<span
+						className={`${getWindDescription(wind)}`}
+					>
+						{wind}м/c
 					</span>
 				</div>
 			</div>

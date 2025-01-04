@@ -5,12 +5,12 @@ import { PiSealWarning, PiWarningCircleBold } from "react-icons/pi"
 import { TbLockSquareRounded } from "react-icons/tb"
 import { FiCheckCircle } from "react-icons/fi"
 import { LuBadgeInfo } from "react-icons/lu"
-import saveLogInLocalStorage from './saveLogInLocalStorage'
 import { getTime } from "../../utils/getTime"
 import blockDevice from "../blockDevice/blockDevice"
 import timeout from "../../utils/timeout"
 import { useBlockError } from "../../stores/Device-store"
 import { ISnack, SnackBarTypeOptions } from "../../../../common/types/Global-types"
+import saveLogInLocalStorage from "./saveLogInLocalStorage"
 
 
 
@@ -66,12 +66,18 @@ export const showSnack = async (snack: ISnack) => {
 }
 
 export const showSnackMessage = (snack: ISnack) => {
-	// console.log(snack.message)
+	// console.log(snack)
 	
 	if (useBlockError.getState().blockErrorMessage) return
+	
+	if (snack?.detail?.res?.status === 401) {
+		localStorage.removeItem('blockDevice')
+	}
 
 	//* Refresh errs ban
-	if (snack?.type !== 'b' && snack?.detail?.action === 'refresh') return
+	if (snack?.type !== 'b' && snack?.detail?.res?.status === 401) {
+		return
+	}
 	// console.log(snack)
 
 	//* Response-snack handling
@@ -110,7 +116,7 @@ export const showSnackMessage = (snack: ISnack) => {
 
 	showSnack(snackWithTime)
 
-	if (localStorage.getItem('blockDevice') || ['Failed to fetch', 'Device-service error'].includes(snack.message) ) return
+	if (localStorage.getItem('blockDevice') || ['Failed to fetch', 'Device-service error'].includes(snack.message)) return
 	// if (!['s'].includes(snackWithTime.type))
 		saveLogInLocalStorage(snackWithTime)
 }

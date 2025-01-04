@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react"
-import CircularProgress from '@mui/joy/CircularProgress'
+import { Circles } from 'react-loader-spinner'
 import inMemoryJWT from '../services/inMemoryJWT-service'
 import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "../services/Auth-service"
@@ -8,7 +8,6 @@ import { IUserNameInfo } from "../types/Auth-types"
 import io from "socket.io-client"
 import { useCoverPanelState, useUserInfo } from "../stores/Auth-store"
 import { ICheckUserReq, ILoginServiceRes, ILogOutReq, ISignInReq, ISignUpReq } from "../../../common/types/Auth-types"
-import { ICommonVar } from "../../../common/types/Global-types"
 import timeout from "../utils/timeout"
 import { useDeviceInfoState } from "../stores/Device-store"
 import { IDeviceInfo } from "../types/Device-types"
@@ -25,7 +24,7 @@ type IAuthContext = {
 	handleLogOut: (data?: ILogOutReq) => void,
 	isUserLogged: boolean,
 	isAppReady: boolean,
-	listOfUsedAvatars: ICommonVar['IAvatarListElement'][],
+	listOfUsedAvatars: string[],
 }
 
 export const AuthContext = createContext<IAuthContext | null>(null)
@@ -35,7 +34,7 @@ const AuthProvider = ({ children }) => {
 	// const [data, setData] = useState<Record<string, any> | null>(null)
 	const [isAppReady, setIsAppReady] = useState(false)
 	const [isUserLogged, setIsUserLogged] = useState(false)
-	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<ICommonVar['IAvatarListElement'][]>([])
+	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<string[]>([])
 	const [signUpUserName, setSignUpUserName] = useState('')
 	const [signUpUserPassword, setSignUpUserPassword] = useState('')
 	const [socketSessId, setSocketSessId] = useState('')
@@ -71,7 +70,6 @@ const AuthProvider = ({ children }) => {
 	const userHasLogged = () => {
 		setIsUserLogged(true)
 		setCoverPanelState('sign_in')
-		localStorage.removeItem('blockDevice')
 	}
 
 	const checkDoubleSessions = async (newUsername: string) => {
@@ -239,8 +237,11 @@ const AuthProvider = ({ children }) => {
 			{isAppReady ? (
 				children
 			) : (
-				<div className='cont'>
-					<CircularProgress variant="plain" />
+				<div className='cont main_bg-gradient'>
+					<Circles
+						color='#E9EDF0CC'
+						width="100"
+					/>
 				</div>
 			)}
 		</AuthContext.Provider>

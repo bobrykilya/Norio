@@ -36,13 +36,13 @@ const App = () => {
                     key={location.pathname}
                 >
                     <Route path="*" element={<Navigate to={isUserLogged ? "home" : "auth"} />} />
-                    {isUserLogged ? (
-                        <Route path="home" element={
-                            <HomePage isUserLogged={isUserLogged} location={location}/>
-                        } />
-                    ) : (
+                    {!isUserLogged ? (
                         <Route path="auth" element={
                             <AuthPage blockErrorMessage={blockErrorMessage} />
+                        } />
+                    ) : (
+                        <Route path="home" element={
+                            <HomePage isUserLogged={isUserLogged} location={location}/>
                         } />
                     )}
                 </Routes>

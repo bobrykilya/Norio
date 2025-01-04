@@ -4,13 +4,8 @@ import CardLinkButton from "../CardLinkButton/CardLinkButton"
 import SelectButton, { ISelectButtonOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
 import { FaLocationDot } from "react-icons/fa6"
 import { LOCATIONS_LIST } from "../../../assets/common/Common-data"
-import {
-	IDeviceLocation,
-	ILocationWeather,
-	ILocationWeatherElem,
-	IWeatherTempObj,
-} from "../../../../../common/types/Device-types"
-import { CircularProgress } from '@mui/joy'
+import { IDeviceLocation, ILocationWeatherElem, IWeatherTempObj } from "../../../../../common/types/Device-types"
+import { ThreeDots } from 'react-loader-spinner'
 import { useDeviceInfoState } from "../../../stores/Device-store"
 import WeatherService from "../../../services/Weather-service"
 import { getTime, getTimeParams } from "../../../utils/getTime"
@@ -21,6 +16,7 @@ import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 import WeatherWithDescription from "./WeatherWithDescription/WeatherWithDescription"
 import HourlyWeatherElement from "./HourlyWeatherElement/HourlyWeatherElement"
 import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
+import { useQuery } from '@tanstack/react-query'
 
 
 
@@ -54,21 +50,19 @@ const WeatherCard = ({}: WeatherCardProps) => {
 
 	const { deviceInfoState, setDeviceLocationState } = useDeviceInfoState()
 	const lsDeviceLocation = deviceInfoState?.location
-	const [weatherData, setWeatherData] = useState<ILocationWeather>(null)
 	const [isFullWeatherOpened, setIsFullWeatherOpened] = useState(false)
 	const timer = useRef<number | null>(null)
 	const weatherCardRef = useRef(null)
 	const linkButtonRef = useRef(null)
-	// console.log(weatherData)
 
-	// const getWeatherWithCash = useQuery({
-	// 	queryKey: ['weather', `${deviceInfoState.location.city.title}`],
-	// 	queryFn: async () => {
-	// 		return await getLocationWeather(deviceInfoState.location)
-	// 	},
-	// 	staleTime: 15 * 60 * 1000,
-	// })
-	// console.log(getWeatherWithCash.data)
+	const { data: getWeatherWithCash } = useQuery({
+		queryKey: ['weather', `${deviceInfoState?.location?.city.title !== 'Нет доступа к геоданным' ? deviceInfoState?.location?.city.title : null}`],
+		queryFn: async () => {
+			return await getLocationWeather(deviceInfoState?.location)
+		},
+		staleTime: 15 * 60 * 1000,
+	})
+	console.log(getWeatherWithCash)
 
 	const getFutureWeather = (weather: ILocationWeatherElem) => {
 		if (!weather) return
@@ -112,9 +106,9 @@ const WeatherCard = ({}: WeatherCardProps) => {
 	const weatherStepInHours = 6
 	const weatherAlertStepInHours = 10
 
-	const weatherAlertCurrent = getWeatherAlert(weatherData?.hourly.slice(1, weatherAlertStepInHours))
-	const weather2 = getFutureWeather(weatherData?.hourly[weatherStepInHours + 1])
-	const weather3 = getFutureWeather(weatherData?.hourly[weatherStepInHours * 2 + 1])
+	const weatherAlertCurrent = getWeatherAlert(getWeatherWithCash?.hourly?.slice(1, weatherAlertStepInHours))
+	const weather2 = getFutureWeather(getWeatherWithCash?.hourly[weatherStepInHours + 1])
+	const weather3 = getFutureWeather(getWeatherWithCash?.hourly[weatherStepInHours * 2 + 1])
 
 	// @ts-ignore
 	const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIST.map(loc => loc.city).concat({
@@ -161,12 +155,11 @@ const WeatherCard = ({}: WeatherCardProps) => {
 		}
 
 		setDeviceLocationState(currentLocation)
-		setWeatherData(data)
 	}
 
 	const coordsError = (err: any) => {
 		showSnackMessage({ message: err.message, type: 'w' })
-		setWeatherData(null)
+		// setWeatherData(null)
 		setIsFullWeatherOpened(false)
 		weatherCardRef.current.classList.remove('full')
 		setDeviceLocationState({
@@ -209,12 +202,11 @@ const WeatherCard = ({}: WeatherCardProps) => {
 
 		if (tempLocation.city.id === 'myLocation') {
 			getCoords()
-		} else {
-			setWeatherData(await getLocationWeather(tempLocation))
 		}
 	}
 
 	const getLocationWeather = async (location: IDeviceLocation) => {
+		if (!location?.coords) return
 		const data = await WeatherService.getLocationWeather(location)
 		timer.current = window.setTimeout(() => {
 			getWeather()
@@ -272,19 +264,19 @@ const WeatherCard = ({}: WeatherCardProps) => {
 							text: `${isFullWeatherOpened ? 'Закрыть' : 'Открыть'} карточку погоды`,
 							position: 'bottom'
 						}}
-						disabled={!weatherData}
+						disabled={!getWeatherWithCash}
 						isCloseIcon={isFullWeatherOpened}
 						ref={linkButtonRef}
 					/>
 				</div>
-				{weatherData ?
+				{getWeatherWithCash ?
 					<div
 						className={'weather_part-cont cont'}
 					>
 						<WeatherWithDescription
 							weather={{
 								label: 'Сейчас',
-								...weatherData.current
+								...getWeatherWithCash.current
 							}}
 							weatherAlert={weatherAlertCurrent}
 						/>
@@ -295,7 +287,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 								className={'hourly_weather_el_list-cont cont'}
 							>
 								{
-									weatherData.hourly.slice(1, 10).map(el =>
+									getWeatherWithCash.hourly.slice(1, 10).map(el =>
 										<HourlyWeatherElement
 											key={el.dt}
 											weather={el}
@@ -307,10 +299,11 @@ const WeatherCard = ({}: WeatherCardProps) => {
 							    className={'daily_weather_el_list-cont cont'}
 							>
 								{
-									weatherData.daily.slice(1).map(el =>
+									getWeatherWithCash.daily.map((el, num) =>
 										<DailyWeatherElement
 											key={el.dt}
 											weather={el}
+											label={num === 0 && 'Сегодня'}
 										/>
 									)
 								}
@@ -329,7 +322,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 							<WeatherElement
 								weather={{
 									label: 'Завтра',
-									...weatherData.current
+									...getWeatherWithCash.current
 								}}
 								labelPos={'end'}
 							/>
@@ -340,7 +333,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 
 						{/*</div>*/}
 						<ToolTip
-							text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weatherData.forecastTimeInSec).timeString}`}
+							text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], getWeatherWithCash.forecastTimeInSec).timeString}`}
 							position={'bottom'}
 							delayTimeMS={2000}
 							isInfoToolTip={true}
@@ -348,7 +341,10 @@ const WeatherCard = ({}: WeatherCardProps) => {
 					</div>
 					:
 					<div className='weather-progress cont'>
-						<CircularProgress variant="plain" />
+						<ThreeDots
+							color='#E9EDF0CC'
+							width="40"
+						/>
 					</div>
 				}
 			</div>

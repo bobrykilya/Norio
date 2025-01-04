@@ -36,6 +36,7 @@ const getWeatherObjectByKeys = <T> (object: T, keysList: string[]) => {
 
 class WeatherService {
 	static async getLocationWeather(location: IDeviceLocation) {
+		// console.log(location)
 		if (location.city.id !== 'myLocation') {
 			return await this.getWeatherByCoords(location)
 		} else {

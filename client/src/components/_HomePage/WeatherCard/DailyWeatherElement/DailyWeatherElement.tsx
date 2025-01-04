@@ -8,8 +8,9 @@ import { capitalize } from "../../../../utils/capitalize"
 
 type DailyWeatherElementProps = {
 	weather: ILocationWeatherElem;
+	label?: string
 }
-const DailyWeatherElement = ({ weather }: DailyWeatherElementProps) => {
+const DailyWeatherElement = ({ weather, label }: DailyWeatherElementProps) => {
 
 	return (
 		<div
@@ -21,7 +22,7 @@ const DailyWeatherElement = ({ weather }: DailyWeatherElementProps) => {
 				<p
 					className={`daily_weather_el-day`}
 				>
-					{getDayOfWeek(getTimeParams(['dayNum'], weather.dt).dayNum, true)}
+					{label || getDayOfWeek(getTimeParams(['dayNum'], weather.dt).dayNum, true)}
 				</p>
 				<span
 					className={'daily_weather_el-description'}

@@ -20,8 +20,10 @@ $dur-open-weather: 0.3s
             flex-shrink: 1
             overflow: visible
             transition: all 0.1s ease-out
+            will-change: opacity, height, transform
             opacity: 0
             height: 0
+            transform: translateY(3rem)
             .hourly_weather_el_list-cont
                 flex-direction: row
                 justify-content: space-between
@@ -68,7 +70,7 @@ $dur-open-weather: 0.3s
         .weather-progress
             flex-shrink: 1
         &.full
-            height: 27rem
+            height: 28.5rem
             width: 23rem
             //width: auto
             //height: auto
@@ -80,6 +82,7 @@ $dur-open-weather: 0.3s
                 transition: all $dur-open-weather - 0.15s 0.1s ease-out
                 opacity: 1
                 height: 100%
+                transform: none
             .weather_part-cont
                 //border: 1px solid yellow
                 //width: auto

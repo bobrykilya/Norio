@@ -1,6 +1,6 @@
 import React from 'react'
 import ToolTip from '../../others/ToolTip/ToolTip'
-import CircularProgress from '@mui/joy/CircularProgress'
+import { ThreeDots } from 'react-loader-spinner'
 import { ICommonVar } from "../../../../../common/types/Global-types"
 
 
@@ -27,11 +27,14 @@ const SubmitBut = ({ icon, isLoading, notSaveUser=false, onClick, disabled=false
         >
             {!isLoading ?
                 icon :
-                <CircularProgress
-                    color="neutral"
-                    size="sm"
-                    variant="plain"
-                />
+                <div
+                    className={'submit-loader cont'}
+                >
+                    <ThreeDots
+                        color='#E9EDF0CC'
+                        width="40"
+                    />
+                </div>
             }
             <ToolTip text={title} />
         </button>

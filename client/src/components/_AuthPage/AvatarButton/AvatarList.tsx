@@ -33,23 +33,38 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
             e.preventDefault()
         }
 
-        const active = e.target
+        const nextElems= (elem: HTMLElement, steps?: number) => {
+            const getNextElem = (elem: HTMLElement) => {
+                return elem.parentElement.nextElementSibling?.children[0] as HTMLElement
+            }
+            if (steps && steps !== 1) {
+                return nextElems(getNextElem(elem), steps - 1)
+            }
+            return getNextElem(elem)
+        }
+        const prevElems= (elem: HTMLElement, steps?: number) => {
+            const getNextElem = (elem: HTMLElement) => {
+                return elem.parentElement.previousElementSibling?.children[0] as HTMLElement
+            }
+            if (steps && steps !== 1) {
+                return prevElems(getNextElem(elem), steps - 1)
+            }
+            return getNextElem(elem)
+        }
+
+        const active: HTMLElement = e.target as HTMLElement
         switch(e.code) {
             case 'ArrowUp':
-                // @ts-ignore
-                active.previousElementSibling?.previousElementSibling?.previousElementSibling?.previousElementSibling?.focus()
+                prevElems(active, 4).focus()
                 break
             case 'ArrowDown':
-                // @ts-ignore
-                active.nextElementSibling?.nextElementSibling?.nextElementSibling?.nextElementSibling?.focus()
+                nextElems(active, 4).focus()
                 break
             case 'ArrowLeft':
-                // @ts-ignore
-                active.previousElementSibling?.focus()
+                prevElems(active).focus()
                 break
             case 'ArrowRight':
-                // @ts-ignore
-                active.nextElementSibling?.focus()
+                nextElems(active).focus()
                 break
         }
     }
@@ -72,14 +87,13 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
         focusActiveElem()
     }, [isAvatarListOpened])
 
-    //*
     const arrowKeyDownOnAvatarBut = (e: KeyboardEvent) => {
         if (e.target instanceof HTMLElement) {
             if (e.target.classList.contains('avatar-but')) {
                 if (e.code.includes('Arrow')) {
                     e.preventDefault()
                     // @ts-ignore
-                    listRef.current.children[0]?.focus()
+                    listRef.current.children[0]?.children[0].focus()
                 }
             }
         }
@@ -141,24 +155,25 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
                         <span className='empty_list-message cont'>Аватары закончились...<br/>Обратитесь к разработчику :)</span> :
                         SORTED_AND_FILTERED_LIST.map((el) => {
                                 return (
-                                    <button
+                                    <div
+                                        className={'avatar_button-cont cont'}
                                         key={el.id}
-                                        id={el.id}
-                                        className='cont'
-                                        type={'button'}
-                                        tabIndex={-1}
-                                        disabled={disabled}
-                                        onClick={() => handleClickElem(el.id)}
-                                        onKeyDown={handleKeyDownOnElem}
-                                        ref={avatar === el.id ? activeElemRef : null}
                                     >
-                                        <div className={'avatar_list_img-cont'}>
+                                        <button
+                                            id={el.id}
+                                            type={'button'}
+                                            tabIndex={-1}
+                                            disabled={disabled}
+                                            onClick={() => handleClickElem(el.id)}
+                                            onKeyDown={handleKeyDownOnElem}
+                                            ref={avatar === el.id ? activeElemRef : null}
+                                        >
                                             <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
-                                        </div>
+                                        </button>
                                         <label htmlFor={el.id}>
                                             {el.title}
                                         </label>
-                                    </button>
+                                    </div>
                                 )
                             })
                         }

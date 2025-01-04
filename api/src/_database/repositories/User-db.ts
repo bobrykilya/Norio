@@ -72,7 +72,7 @@ class UserRepository {
 	static async getUsedAvatarsList() {
 		const response = await queryDB("SELECT avatar FROM users")
 
-		return response.rows
+		return response.rows.map(el => el.avatar) as string[]
 	}
 
 	static async setStatusForUser({ userId, status }: Pick<IUserRepository, 'userId' | 'status'>) {

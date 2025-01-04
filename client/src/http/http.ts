@@ -5,19 +5,19 @@ import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 
 
 
-const $apiAuth = ky.extend({
+const $apiAuth = ky.create({
 	prefixUrl: `${import.meta.env.VITE_API_URL}/auth`,
 	cache: 'no-store', 
 	credentials: 'include',
 })
 
-const $apiUnprotected = ky.extend({
+const $apiUnprotected = ky.create({
 	prefixUrl: `${import.meta.env.VITE_API_URL}/unprotected`,
 	cache: 'no-store',
 	credentials: 'include',
 })
 
-const $apiSecureResource = ky.extend({
+const $apiSecureResource = ky.create({
 	prefixUrl: `${import.meta.env.VITE_API_URL}/resource`,
 	hooks: {
 		beforeRequest: [
@@ -32,11 +32,11 @@ const $apiSecureResource = ky.extend({
 })
 
 
-const $apiIpInfo = ky.extend({
+const $apiIpInfo = ky.create({
 	prefixUrl: `https://ipapi.co/json`,
 })
 
-const $apiIpInfoReserve = ky.extend({
+const $apiIpInfoReserve = ky.create({
 	prefixUrl: `http://ip-api.com/json`,
 })
 

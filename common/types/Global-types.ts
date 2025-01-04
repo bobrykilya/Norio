@@ -56,9 +56,6 @@ export type ICommonVar = {
 	refreshToken: string;
 	accessToken: string;
 	accessTokenExpiration: number;
-	IAvatarListElement: {
-		title: string;
-	};
 	payload: IJWTPayload | {
 		userId: ICommonVar['userId'];
 		username: ICommonVar['username'];
