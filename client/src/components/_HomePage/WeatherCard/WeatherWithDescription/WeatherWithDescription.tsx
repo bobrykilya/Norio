@@ -1,10 +1,10 @@
 import React from 'react'
 import WeatherElement from "../WeatherElement/WeatherElement"
-import { capitalize } from "../../../../utils/capitalize"
 import { getTemp } from "../WeatherCard"
 import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
 import { MdOutlineWaterDrop } from "react-icons/md"
 import { FiWind } from "react-icons/fi"
+import { capitalize } from "../../../../utils/capitalize"
 
 
 

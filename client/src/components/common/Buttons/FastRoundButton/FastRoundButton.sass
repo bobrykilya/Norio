@@ -13,6 +13,10 @@
         background-color: #234779
         .fa-icon
             transform: scale(1.05)
+        .notif_circle_cover
+            transform: translateY(-2px)
+        .notif_circle
+            transform: translateY(-2px)
     &:active
         background-color: #305ea0
         .fa-icon
@@ -30,6 +34,7 @@
         width: 27px
         background-color: $color-blue-main
         border-radius: 20px
+        transition: all 0.2s ease
     .notif_circle
         position: absolute
         top: 0
@@ -43,3 +48,4 @@
         color: $color-backgr
         font-size: 16px
         font-weight: 600
+        transition: all 0.2s ease

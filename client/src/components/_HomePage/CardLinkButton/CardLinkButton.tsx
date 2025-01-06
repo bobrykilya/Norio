@@ -27,20 +27,23 @@ const CardLinkButton = forwardRef(({ link, onClick, toolTip, disabled, isCloseIc
 			tabIndex={-1}
 		>
 			<div
-				className={'fa_icons_switch-cont cont'}
+			    className={'fa_icons_tooltip-cont cont'}
 			>
 				<div
-					className={'fa_icon-cont cont'}
+					className={'fa_icons_switch-cont cont'}
 				>
-					<IoClose className={'fa-icon close-icon'}/>
-				</div>
-				<div
-					className={'fa_icon-cont cont'}
-				>
-					<BsArrowUpRight strokeWidth={0.5} className={'fa-icon link-icon'}/>
+					<div
+						className={'fa_icon-cont cont'}
+					>
+						<IoClose className={'fa-icon close-icon'}/>
+					</div>
+					<div
+						className={'fa_icon-cont cont'}
+					>
+						<BsArrowUpRight strokeWidth={0.5} className={'fa-icon link-icon'}/>
+					</div>
 				</div>
 			</div>
-
 			<ToolTip {...toolTip} />
 		</button>
 	)

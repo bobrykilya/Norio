@@ -8,28 +8,30 @@
     height: $size-small-round-but
     border-radius: 50%
     background-color: $color-behind-icon
-    //overflow: visible
-    .fa_icons_switch-cont
-        //border: 2px solid red
-        position: absolute
-        top: 0
-        overflow: visible
-        justify-content: space-between
-        height: $size-small-round-but * 2
-        transition: transform 0.5s $trans-bounce-style
-        will-change: transform
-        transform: translateY(-50%)
-        .fa_icon-cont
-            width: $size-small-round-but
-            height: $size-small-round-but
-            .fa-icon
-                color: $color-backgr
-            .link-icon
-                margin-top: 1px
-                margin-left: 0.5px
-                font-size: 18px
-            .close-icon
-                font-size: 23px
+    overflow: visible
+    .fa_icons_tooltip-cont
+        pointer-events: none
+        .fa_icons_switch-cont
+            //border: 2px solid red
+            //overflow: visible
+            position: absolute
+            top: 0
+            justify-content: space-between
+            height: $size-small-round-but * 2
+            transition: transform 0.5s $trans-bounce-style
+            will-change: transform
+            transform: translateY(-50%)
+            .fa_icon-cont
+                width: $size-small-round-but
+                height: $size-small-round-but
+                .fa-icon
+                    color: $color-backgr
+                .link-icon
+                    margin-top: 1px
+                    margin-left: 0.5px
+                    font-size: 18px
+                .close-icon
+                    font-size: 23px
     &:hover
         background-color: rgba($color-behind-icon, 0.3)
         .link-icon

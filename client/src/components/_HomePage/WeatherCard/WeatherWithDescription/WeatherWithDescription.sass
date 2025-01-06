@@ -12,19 +12,22 @@
     .weather_extra_info-cont
         //border: 2px solid yellow
         flex-shrink: 1
-        transition: all 0.1s ease-out
-        width: 0
+        will-change: width, transform
+        transition: all 0.1s linear
+        width: auto
+        max-width: 0
         opacity: 0
         transform: scale(0.6)
-        margin: 0 0.5rem
+        //margin: 0 0.5rem
         flex-direction: row
         justify-content: space-around
         overflow: visible
-        will-change: width, opacity, transform
         .weather_extra_info_el-cont
+            //border: 2px solid red
             overflow: visible
             color: $color-backgr
             width: auto
+            margin: 0 0.7rem
             .fa-icon
                 color: $color-backgr
                 margin-bottom: 0.4rem

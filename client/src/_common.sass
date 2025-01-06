@@ -8,26 +8,18 @@ input
     z-index: 1
     &::placeholder
         color: $color-place-holder
-        // font-weight: 
-        // font-style: italic
-        // text-transform: capitalize
 
 button
     flex-shrink: 0
     transition: all 0.2s ease
     z-index: 1
 
-p
-    will-change: transform, filter
-
 h1
     font-weight: 600
     font-size: $size-h1
-    will-change: transform
 
 h3
     font-size: $size-h3
-    will-change: transform
 
 img, .fa-icon
     flex-shrink: 0
@@ -40,7 +32,6 @@ img, .fa-icon
     transition: all 0.15s ease-out
     color: $color-icon
     overflow: visible
-    will-change: transform
 
 .cont
     width: 100%
@@ -55,6 +46,7 @@ img, .fa-icon
     flex-shrink: 0
 
 .before_but-hover
+    //border: 1px solid black
     &::after
         content: ''
         position: absolute
@@ -63,7 +55,7 @@ img, .fa-icon
         border-radius: 50%
         background-color: $color-behind-icon
         transition: transform 0.18s ease
-        z-index: -1
+        z-index: -2
         transform: scale(0)
     &:hover
         transform: translateY(0)
