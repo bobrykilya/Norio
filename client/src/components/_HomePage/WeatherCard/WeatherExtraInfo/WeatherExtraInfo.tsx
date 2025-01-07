@@ -15,17 +15,32 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 
 	const wind = Math.round(weather.wind_gust)
 	const getWindDescription = (wind: number) => {
-		if (wind > 10) {
-			return 'strong'
-		} else if (wind > 18) {
+		if (wind > 18) {
 			return 'dangerous'
+		} else if (wind > 10) {
+			return 'strong'
 		}
 	}
-	const getAlertDescription = (alert: number) => {
+	const getRainDescription = (rain: number) => {
+		if (rain > 25) {
+			return 'dangerous'
+		} else if (rain > 15) {
+			return 'strong'
+		}
+	}
+	const getSnowDescription = (snow: number) => {
+		if (snow > 4) {
+			return 'dangerous'
+		} else if (snow > 2) {
+			return 'strong'
+		}
+	}
+
+	const getAlert = (alert: number) => {
 		if (!alert) {
 			return '0'
 		}
-		return `${alert}`
+		return alert.toString()
 	}
 
 	return (
@@ -63,17 +78,21 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 						className={'weather_extra_info_el-cont cont'}
 					>
 						<BsCloudRain className={'fa-icon'}/>
-						<span>
-						{getAlertDescription(weather.rain)}мм/ч
-					</span>
+						<span
+							className={`${getRainDescription(weather.rain)}`}
+						>
+							{getAlert(weather.rain)}мм/ч
+						</span>
 					</div>
 					<div
 						className={'weather_extra_info_el-cont cont'}
 					>
 						<IoSnowOutline className={'fa-icon'}/>
-						<span>
-						{getAlertDescription(weather.snow)}мм/ч
-					</span>
+						<span
+							className={`${getSnowDescription(weather.snow)}`}
+						>
+							{getAlert(weather.snow)}мм/ч
+						</span>
 					</div>
 				</div>
 			}

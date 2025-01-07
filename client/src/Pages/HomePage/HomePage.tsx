@@ -82,7 +82,7 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
                 <div className="right-column cont">
                     <AccountInfoCard />
                     <div className="recent_changes_card-cont cont card">
-            
+
                     </div>
                     <div className="recent_messages_card-cont cont card">
             

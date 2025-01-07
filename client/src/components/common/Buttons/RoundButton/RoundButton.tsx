@@ -6,8 +6,9 @@ type RoundButtonProps = {
 	children: ReactNode;
 	onClick: () => void;
 	className?: string;
+	disabled?: boolean;
 }
-const RoundButton = ({children, onClick, className}: RoundButtonProps) => {
+const RoundButton = ({ children, onClick, className, disabled }: RoundButtonProps) => {
 
 
 	return (
@@ -16,6 +17,7 @@ const RoundButton = ({children, onClick, className}: RoundButtonProps) => {
 			onClick={onClick}
 			type='button'
 			tabIndex={-1}
+			disabled={disabled}
 		>
 			{children}
 		</button>

@@ -13,10 +13,10 @@ import WeatherElement from "./WeatherElement/WeatherElement"
 import { useClickOutside } from "../../../hooks/useClickOutside"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 import WeatherWithDescription from "./WeatherWithDescription/WeatherWithDescription"
-import HourlyWeatherElement from "./HourlyWeatherElement/HourlyWeatherElement"
 import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
 import { useQuery } from '@tanstack/react-query'
 import ToolTip from "../../others/ToolTip/ToolTip"
+import HourlyWeatherSlider from "./HourlyWeatherSlider/HourlyWeatherSlider"
 
 
 
@@ -266,12 +266,6 @@ const WeatherCard = ({}: WeatherCardProps) => {
 						isCloseIcon={isFullWeatherOpened}
 						ref={linkButtonRef}
 					/>
-					{/*<ToolTip*/}
-					{/*	text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], getWeatherWithCash.forecastTimeInSec).timeString}`}*/}
-					{/*	// position={'top'}*/}
-					{/*	delayTimeMS={2000}*/}
-					{/*	isInfoToolTip={true}*/}
-					{/*/>*/}
 				</div>
 				{getWeatherWithCash ?
 					<div
@@ -287,20 +281,11 @@ const WeatherCard = ({}: WeatherCardProps) => {
 						<div
 							className={'only_full_weather cont'}
 						>
+							<HourlyWeatherSlider
+								hourlyWeatherList={getWeatherWithCash.hourly}
+							/>
 							<div
-								className={'hourly_weather_el_list-cont cont'}
-							>
-								{
-									getWeatherWithCash.hourly.slice(1, 10).map(el =>
-										<HourlyWeatherElement
-											key={el.dt}
-											weather={el}
-										/>
-									)
-								}
-							</div>
-							<div
-							    className={'daily_weather_el_list-cont cont'}
+							    className={'daily_weather_list-cont cont'}
 							>
 								{
 									getWeatherWithCash.daily.map((el, num) =>
@@ -308,7 +293,6 @@ const WeatherCard = ({}: WeatherCardProps) => {
 											key={el.dt}
 											weather={el}
 											label={num === 0 && 'Сегодня'}
-											// weatherAlert={getWeatherAlert(getWeatherWithCash?.hourly?.slice(1, weatherAlertStepInHours))}
 										/>
 									)
 								}
