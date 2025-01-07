@@ -3,32 +3,76 @@
 
 $icon-size: 1.4rem
 .daily_weather_el-cont
-    //border: 1px solid black
-    flex-direction: row
-    height: auto
-    justify-content: space-between
-    color: $color-backgr
-    margin: 0.15rem 0
-    .daily_weather_el_text-cont
-        //border: 1px solid red
-        flex-direction: row
-        justify-content: space-between
-        flex-shrink: 1
-        margin-right: 0.7rem
-        .daily_weather_el-day
-            //border: 1px solid brown
-            font-weight: 600
-        .daily_weather_el-description
-            white-space: nowrap
-            color: rgba($color-backgr, 0.9)
-    .daily_weather_el_weather-cont
+    //border: 1px solid orange
+    width: 100%
+    position: relative
+    .daily_weather_el-but
         //border: 1px solid black
         flex-direction: row
-        width: 3.3rem
-        //width: auto
+        height: auto
         justify-content: space-between
-        .daily_weather_el-icon
-            width: $icon-size
-            height: $icon-size
-        //.daily_weather_el-temp
-            //margin-left: 0.6rem
+        color: $color-backgr
+        padding: 0.2rem 0
+        margin: -0.05rem 0
+        font-size: $size-main-text
+        overflow: visible
+        &:active
+            background: $color-gradient-active
+        .daily_weather_el_text-cont
+            //border: 1px solid red
+            flex-direction: row
+            justify-content: space-between
+            flex-shrink: 1
+            margin-right: 0.7rem
+            .daily_weather_el-day
+                //border: 1px solid brown
+                font-weight: 600
+            .daily_weather_el-description
+                white-space: nowrap
+                color: rgba($color-backgr, 0.8)
+        .daily_weather_el_weather-cont
+            //border: 1px solid black
+            flex-direction: row
+            width: 3.3rem
+            //width: auto
+            justify-content: space-between
+            .daily_weather_el-icon
+                width: $icon-size
+                height: $icon-size
+        &.extra_info_opened
+            padding: 0.7rem 0
+            background: $color-gradient-active
+    .daily_extra_info-cont
+        //border: 1px solid $color-backgr
+        position: absolute
+        top: 50%
+        right: -1rem
+        height: auto
+        width: auto
+        border-radius: $rad-main-border
+        box-shadow: $shadow-card
+        padding: $padding-card
+        background: linear-gradient(rgba($color-bg-light, 0.97), rgba($color-blue-main, 0.97))
+        will-change: scale
+        transition: all 0.25s ease-out
+        transform: translate(calc(100% + 2rem), -50%)
+        scale: 0.95
+        opacity: 0
+        pointer-events: none
+        .weather_extra_info-cont
+            //transform: none
+            max-width: 15rem
+            width: auto
+            .weather_extra_info_double-cont
+                padding: 0 0.5rem
+                .weather_extra_info_el-cont
+                    margin: 0.5rem 0
+        &.opened
+            transform: translate(calc(100%), -50%)
+            scale: 1
+            opacity: 1
+            pointer-events: auto
+            .weather_extra_info-cont
+                transform: none
+                opacity: 1
+

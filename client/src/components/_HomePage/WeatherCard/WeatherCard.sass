@@ -1,7 +1,7 @@
 @import '../../../variables'
 
 
-$dur-open-weather: 0.1s
+$dur-open-weather: 0.12s
 .weather_card-frame
     //border: 1px solid red
     overflow: visible
@@ -9,31 +9,11 @@ $dur-open-weather: 0.1s
         //border: 1px solid red
         overflow: visible
         //transition: all $dur-open-weather + 0.2s $trans-bounce-style
-        transition: all $dur-open-weather + 0.2s ease-out
-        z-index: 1
+        transition: all $dur-open-weather + 0.1s ease-out
+        z-index: 10
         position: absolute
         top: 0
         right: 0
-        .only_full_weather
-            //border: 1px solid black
-            flex-shrink: 1
-            height: 100%
-            transition: all $dur-open-weather + 0.1s ease-out, max-height $dur-open-weather + 0.1s 0.1s ease-out
-            opacity: 0
-            max-height: 0
-            transform: translateY(11rem)
-            pointer-events: none
-            .hourly_weather_el_list-cont
-                flex-direction: row
-                justify-content: space-between
-                height: auto
-                margin: 1rem 0
-            .daily_weather_el_list-cont
-                justify-content: space-between
-                background: linear-gradient(rgba($color-backgr, 0.1), rgba($color-backgr, 0.02))
-                border-radius: $rad-main-border
-                padding: $padding-card - 0.15rem $padding-card
-                height: auto
         .weather_card-header
             //border: 1px solid red
             height: auto
@@ -54,54 +34,75 @@ $dur-open-weather: 0.1s
             margin-top: 0.5rem
             justify-content: space-between
             overflow: visible
+            .only_full_weather
+                //border: 1px solid black
+                flex-shrink: 1
+                height: 100%
+                transition: all $dur-open-weather ease-out, max-height $dur-open-weather 0.1s ease-out
+                opacity: 0
+                max-height: 0
+                transform: translateY(11rem)
+                pointer-events: none
+                margin-top: 0.5rem
+                .hourly_weather_el_list-cont
+                    flex-direction: row
+                    justify-content: space-between
+                    height: auto
+                    margin: 1rem 0
+                .daily_weather_el_list-cont
+                    //border: 1px solid black
+                    justify-content: space-between
+                    background: linear-gradient(rgba($color-backgr, 0.1), rgba($color-backgr, 0.02))
+                    border-radius: $rad-main-border
+                    padding: $padding-card - 0.16rem $padding-card
+                    height: auto
+                    overflow: visible
+                    z-index: 12
             .future_weather-cont
                 //border: 1px solid black
                 justify-content: space-between
                 flex-direction: row
                 height: auto
                 overflow: visible
-                transition: all $dur-open-weather + 0.1s ease-out
+                transition: all $dur-open-weather ease-out
                 max-height: 5rem
                 opacity: 1
                 pointer-events: auto
             .tool_tip-cont
+                z-index: 10
                 border-radius: 0
                 .tool_tip
-                    &.bottom
-                        top: calc(110%)
+                    &.left
+                        top: -0.5rem
+                        bottom: auto
+                        right: calc(100% + 1.5rem)
         .weather-progress
             flex-shrink: 1
         &.full
             height: 28.5rem
-            width: 23rem
+            width: 23.5rem
             //width: auto
             //height: auto
             backdrop-filter: blur(10px)
             border-radius: $rad-main-border * 2
             padding: $padding-card * 2
-            box-shadow: 2px 10px 30px rgba(0, 0, 0, 0.1)
-            .only_full_weather
-                transition: all $dur-open-weather + 0.15s 0.1s ease
-                opacity: 1
-                max-height: 20rem
-                transform: none
-                pointer-events: auto
-                overflow: visible
+            box-shadow: $shadow-card
             .weather_part-cont
-                //border: 1px solid yellow
-                //width: auto
-                //justify-content: start
                 .weather_with_description-cont
-                    //border: 1px solid gray
-                    margin-bottom: 0.5rem
-                    //justify-content: start
                     .weather_extra_info-cont
-                        transition: all $dur-open-weather + 0.05s 0.1s ease-out
+                        transition: all $dur-open-weather 0.1s ease-out
                         max-width: 10rem
                         opacity: 1
                         transform: scale(1)
+                .only_full_weather
+                    transition: all $dur-open-weather + 0.05s 0.1s ease
+                    opacity: 1
+                    max-height: 20rem
+                    transform: none
+                    pointer-events: auto
+                    overflow: visible
                 .future_weather-cont
-                    transition: all $dur-open-weather + 0.1s ease-out
+                    transition: all $dur-open-weather ease-out
                     max-height: 0
                     opacity: 0
                     pointer-events: none

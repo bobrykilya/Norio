@@ -65,6 +65,48 @@ img, .fa-icon
         .fa-icon
             transform: scale(0.7)
 
+.before_lines-hover
+    $trans-hover-duration: 0.3s
+    &::before
+        content: ''
+        position: absolute
+        top: 0
+        left: 50%
+        transform: translateX(-50%)
+        height: 2px
+        width: 100%
+        background: $color-gradient-hover
+        transition: all $trans-hover-duration ease-out
+        max-width: 0
+        opacity: 0
+    &::after
+        content: ''
+        position: absolute
+        bottom: 0
+        left: 50%
+        transform: translateX(-50%)
+        height: 2px
+        width: 100%
+        background: $color-gradient-hover
+        transition: all $trans-hover-duration ease-out
+        max-width: 0
+        opacity: 0
+    &:hover, &:focus
+        z-index: 2
+        &::before
+            z-index: 2
+            opacity: 1
+            max-width: 100%
+        &::after
+            z-index: 2
+            opacity: 1
+            max-width: 100%
+    &:active
+        &::before
+            background: $color-gradient-active
+        &::after
+            background: $color-gradient-active
+
 .card
     background-color: $color-card-backgr
     border-radius: $rad-main-border

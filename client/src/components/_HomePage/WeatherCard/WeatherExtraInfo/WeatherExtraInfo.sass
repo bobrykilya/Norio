@@ -1,0 +1,40 @@
+@import '../../../../variables'
+
+
+
+.weather_extra_info-cont
+    //border: 2px solid yellow
+    flex-shrink: 1
+    transition: all 0.1s linear
+    max-width: 0
+    opacity: 0
+    transform: scale(0.6)
+    flex-direction: row
+    overflow: visible
+    .weather_extra_info_double-cont
+        //border: 2px solid blue
+        height: auto
+        flex-direction: row
+        justify-content: space-around
+        padding: 0 0.8rem
+        .weather_extra_info_el-cont
+            //border: 2px solid red
+            overflow: visible
+            color: $color-backgr
+            width: auto
+            .fa-icon
+                color: $color-backgr
+                margin-bottom: 0.4rem
+                font-size: 1.1rem
+            span
+                margin-left: 0.2rem
+                &.strong
+                    font-weight: 700
+                    color: #a099ff
+                &.dangerous
+                    font-weight: 700
+                    color: #ff7e7e
+    &.full
+        .weather_extra_info_double-cont
+            flex-direction: column
+            width: auto

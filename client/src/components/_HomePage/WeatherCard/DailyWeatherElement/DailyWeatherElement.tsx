@@ -1,48 +1,85 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { getTemp } from "../WeatherCard"
 import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-import { getDayOfWeek, getTimeParams } from "../../../../utils/getTime"
+import { getDayOfWeek, getMonth, getTimeParams } from "../../../../utils/getTime"
 import { capitalize } from "../../../../utils/capitalize"
+import WeatherExtraInfo from "../WeatherExtraInfo/WeatherExtraInfo"
+import { useClickOutside } from "../../../../hooks/useClickOutside"
 
 
 
 type DailyWeatherElementProps = {
 	weather: ILocationWeatherElem;
-	label?: string
+	label?: string;
 }
 const DailyWeatherElement = ({ weather, label }: DailyWeatherElementProps) => {
 
+	const dayParams = getTimeParams(['dayNum', 'day', 'month'], weather.dt)
+	const [isDailyExtraInfoOpened, setIsDailyExtraInfoOpened] = useState(false)
+	const butRef = useRef(null)
+	const extraInfoRef = useRef(null)
+
+	const switchDailyExtraInfoState = () => {
+		setIsDailyExtraInfoOpened(prev => !prev)
+	}
+
+	useClickOutside(
+		{
+			ref: extraInfoRef,
+			butRef: butRef,
+			callback: switchDailyExtraInfoState,
+			condition: isDailyExtraInfoOpened
+		}
+	)
+
 	return (
 		<div
-			className={'daily_weather_el-cont cont'}
+		    className={'daily_weather_el-cont'}
 		>
-			<div
-			    className={'daily_weather_el_text-cont cont'}
-			>
-				<p
-					className={`daily_weather_el-day`}
-				>
-					{label || getDayOfWeek(getTimeParams(['dayNum'], weather.dt).dayNum, true)}
-				</p>
-				<span
-					className={'daily_weather_el-description'}
-				>
-					{capitalize(weather.description)}
-				</span>
-			</div>
-			<div
-			    className={'daily_weather_el_weather-cont cont'}
+			<button
+				className={`daily_weather_el-but cont  before_lines-hover ${isDailyExtraInfoOpened ? 'extra_info_opened' : ''}`}
+				tabIndex={-1}
+				onClick={switchDailyExtraInfoState}
+				ref={butRef}
 			>
 				<div
-					className={'daily_weather_el-icon'}
+					className={'daily_weather_el_text-cont cont'}
 				>
-					<img src={`/weather/${weather.icon}.svg`} alt="?"/>
+					<p
+						className={`daily_weather_el-day`}
+					>
+						{label || getDayOfWeek(dayParams.dayNum)},
+						{` ${dayParams.day} ${getMonth(dayParams.month)}`}
+					</p>
+					<span
+						className={'daily_weather_el-description'}
+					>
+						{capitalize(weather.description)}
+					</span>
 				</div>
-				<p
-					className={'daily_weather_el-temp'}
+				<div
+					className={'daily_weather_el_weather-cont cont'}
 				>
-					{getTemp(weather.temp)}
-				</p>
+					<div
+						className={'daily_weather_el-icon'}
+					>
+						<img src={`/weather/${weather.icon}.svg`} alt="?"/>
+					</div>
+					<p
+						className={'daily_weather_el-temp'}
+					>
+						{getTemp(weather.temp)}
+					</p>
+				</div>
+			</button>
+			<div
+				className={`daily_extra_info-cont cont ${isDailyExtraInfoOpened ? 'opened' : ''}`}
+				ref={extraInfoRef}
+			>
+				<WeatherExtraInfo
+					weather={weather}
+					isFull={true}
+				/>
 			</div>
 		</div>
 	)

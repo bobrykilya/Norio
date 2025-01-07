@@ -2,9 +2,10 @@ import { DurationTypeOptions } from "../../../common/types/Global-types"
 
 
 
-export const WEEK_DAYS_LIST = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-export const WEEK_DAYS_LIST_FULL = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-export const MONTHS_LIST = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+export const WEEK_DAYS_LIST = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+export const WEEK_DAYS_LIST_FULL = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+export const MONTHS_LIST = ['янв.', 'февр.', 'марта', 'апр.', 'мая', 'июня', 'июля', 'авг.', 'сент.', 'окт.', 'нояб.', 'дек.'];
+export const MONTHS_LIST_FULL = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
 
 
 
@@ -96,8 +97,11 @@ export const getDayOfWeek = (num: number, isFullName?: boolean) => {
     return WEEK_DAYS_LIST[num] || WEEK_DAYS_LIST[6]
 }
 
-export const getMonth = (num: number) => {
-    return MONTHS_LIST[num-1]
+export const getMonth = (num: number, isFullName?: boolean) => {
+    if (isFullName) {
+        return MONTHS_LIST_FULL[num-1] || ''
+    }
+    return MONTHS_LIST[num-1] || ''
 }
 
 export const getEndTime = (startTimeInSec: number, duration: number, durationType?: DurationTypeOptions) => {

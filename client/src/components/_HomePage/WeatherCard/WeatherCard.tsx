@@ -10,13 +10,13 @@ import { useDeviceInfoState } from "../../../stores/Device-store"
 import WeatherService from "../../../services/Weather-service"
 import { getTime, getTimeParams } from "../../../utils/getTime"
 import WeatherElement from "./WeatherElement/WeatherElement"
-import ToolTip from "../../others/ToolTip/ToolTip"
 import { useClickOutside } from "../../../hooks/useClickOutside"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 import WeatherWithDescription from "./WeatherWithDescription/WeatherWithDescription"
 import HourlyWeatherElement from "./HourlyWeatherElement/HourlyWeatherElement"
 import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
 import { useQuery } from '@tanstack/react-query'
+import ToolTip from "../../others/ToolTip/ToolTip"
 
 
 
@@ -50,7 +50,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 
 	const { deviceInfoState, setDeviceLocationState } = useDeviceInfoState()
 	const lsDeviceLocation = deviceInfoState?.location
-	const [isFullWeatherOpened, setIsFullWeatherOpened] = useState(false)
+	const [isFullWeatherOpened, setIsFullWeatherOpened] = useState(true)
 	const timer = useRef<number | null>(null)
 	const weatherCardRef = useRef(null)
 	const linkButtonRef = useRef(null)
@@ -161,7 +161,6 @@ const WeatherCard = ({}: WeatherCardProps) => {
 		showSnackMessage({ message: err.message, type: 'w' })
 		// setWeatherData(null)
 		setIsFullWeatherOpened(false)
-		weatherCardRef.current.classList.remove('full')
 		setDeviceLocationState({
 			city: {
 				id: 'myLocation',
@@ -222,7 +221,6 @@ const WeatherCard = ({}: WeatherCardProps) => {
 
 	const toggleFullWeather = () => {
 		setIsFullWeatherOpened(prev => !prev)
-		weatherCardRef.current.classList.toggle('full')
 	}
 
 	useClickOutside({
@@ -242,7 +240,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 			className={'weather_card-frame cont'}
 		>
 			<div
-				className={'weather-card cont card'}
+				className={`weather-card cont card ${isFullWeatherOpened ? 'full' : ''}`}
 				ref={weatherCardRef}
 			>
 				<div
@@ -268,6 +266,12 @@ const WeatherCard = ({}: WeatherCardProps) => {
 						isCloseIcon={isFullWeatherOpened}
 						ref={linkButtonRef}
 					/>
+					{/*<ToolTip*/}
+					{/*	text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], getWeatherWithCash.forecastTimeInSec).timeString}`}*/}
+					{/*	// position={'top'}*/}
+					{/*	delayTimeMS={2000}*/}
+					{/*	isInfoToolTip={true}*/}
+					{/*/>*/}
 				</div>
 				{getWeatherWithCash ?
 					<div
@@ -304,6 +308,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 											key={el.dt}
 											weather={el}
 											label={num === 0 && 'Сегодня'}
+											// weatherAlert={getWeatherAlert(getWeatherWithCash?.hourly?.slice(1, weatherAlertStepInHours))}
 										/>
 									)
 								}
@@ -327,14 +332,9 @@ const WeatherCard = ({}: WeatherCardProps) => {
 								labelPos={'end'}
 							/>
 						</div>
-						{/*<div*/}
-						{/*	className={'cont'}*/}
-						{/*>*/}
-
-						{/*</div>*/}
 						<ToolTip
 							text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], getWeatherWithCash.forecastTimeInSec).timeString}`}
-							position={'bottom'}
+							position={'left'}
 							delayTimeMS={2000}
 							isInfoToolTip={true}
 						/>
@@ -343,7 +343,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 					<div className='weather-progress cont'>
 						<ThreeDots
 							color='#E9EDF0CC'
-							width="40"
+							width="60"
 						/>
 					</div>
 				}
