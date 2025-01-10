@@ -10,13 +10,13 @@ import { useDeviceInfoState } from "../../../stores/Device-store"
 import WeatherService from "../../../services/Weather-service"
 import { getTime, getTimeParams } from "../../../utils/getTime"
 import WeatherElement from "./WeatherElement/WeatherElement"
-import { useClickOutside } from "../../../hooks/useClickOutside"
-import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 import WeatherWithDescription from "./WeatherWithDescription/WeatherWithDescription"
 import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
 import { useQuery } from '@tanstack/react-query'
-import ToolTip from "../../others/ToolTip/ToolTip"
 import HourlyWeatherSlider from "./HourlyWeatherSlider/HourlyWeatherSlider"
+import { useClickOutside } from "../../../hooks/useClickOutside"
+import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
+import ToolTip from "../../others/ToolTip/ToolTip"
 
 
 
@@ -50,7 +50,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 
 	const { deviceInfoState, setDeviceLocationState } = useDeviceInfoState()
 	const lsDeviceLocation = deviceInfoState?.location
-	const [isFullWeatherOpened, setIsFullWeatherOpened] = useState(true)
+	const [isFullWeatherOpened, setIsFullWeatherOpened] = useState(false)
 	const timer = useRef<number | null>(null)
 	const weatherCardRef = useRef(null)
 	const linkButtonRef = useRef(null)
@@ -62,7 +62,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 		},
 		staleTime: 15 * 60 * 1000,
 	})
-	console.log(getWeatherWithCash)
+	// console.log(getWeatherWithCash)
 
 	const getFutureWeather = (weather: ILocationWeatherElem) => {
 		if (!weather) return

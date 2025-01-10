@@ -1259,6 +1259,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"debounce@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "debounce@npm:2.2.0"
+  checksum: 684536fe9a04c9eea46cf02f119f69aa4071813ba25b9b43370e1503ea60b34fd38d694c7145fa2be504f9d40e7e39354cb9ed155c70954a0eefa391aefe271c
+  languageName: node
+  linkType: hard
+
 "debug@npm:4, debug@npm:^4.3.4":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
@@ -1540,6 +1547,7 @@ __metadata:
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
     "@vitejs/plugin-react": "npm:^4.3.1"
+    debounce: "npm:^2.2.0"
     framer-motion: "npm:^11.2.4"
     ky: "npm:^1.2.3"
     react: "npm:^18.2.0"

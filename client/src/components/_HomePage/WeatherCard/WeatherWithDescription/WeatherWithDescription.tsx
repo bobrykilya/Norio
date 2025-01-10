@@ -1,10 +1,9 @@
 import React from 'react'
 import WeatherElement from "../WeatherElement/WeatherElement"
 import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-
-import { capitalize } from "../../../../utils/capitalize"
 import { getTemp } from "../WeatherCard"
 import WeatherExtraInfo from "../WeatherExtraInfo/WeatherExtraInfo"
+import { capitalize } from "../../../../utils/capitalize"
 
 
 
