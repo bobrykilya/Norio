@@ -2,6 +2,7 @@ import { create } from "zustand"
 import { IDeviceInfo } from "../types/Device-types"
 import { DeviceTypeOptions } from "../../../common/types/Global-types"
 import { IDeviceLocation } from "../../../common/types/Device-types"
+import { immer } from "zustand/middleware/immer"
 
 
 
@@ -16,47 +17,45 @@ const useBlockError = create<IUseBlockError>((set) => ({
 
 
 type IUseDeviceInfoState = {
-	deviceInfoState: IDeviceInfo
+	deviceInfoState: IDeviceInfo;
 	setDeviceInfoState: (state: IDeviceInfo) => void;
 	setDeviceIdState: (id: number) => void;
-	setDeviceLocationState: (city: IDeviceLocation) => void;
 	setDeviceTypeState: (type: DeviceTypeOptions) => void;
+	setDeviceLocationState: (location: IDeviceLocation) => void;
+	setDeviceLocationTitleState: (title: IDeviceLocation['city']['title']) => void;
 }
-const deviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
-const useDeviceInfoState = create<IUseDeviceInfoState>((set, get) => ({
-	deviceInfoState: deviceInfo,
-	setDeviceInfoState: (state: IDeviceInfo) => set({ deviceInfoState: state }),
+const useDeviceInfoState = create<IUseDeviceInfoState>()(immer((set, get) => ({
+	deviceInfoState: JSON.parse(localStorage.getItem('deviceInfo')),
+	setDeviceInfoState: (state) => set({ deviceInfoState: state }),
 	setDeviceIdState: (id: number) => {
-		const prev = get().deviceInfoState
-		set({
-			deviceInfoState: {
-				...prev,
-				id,
-			},
-		})
-		localStorage.setItem('deviceInfo', JSON.stringify({ ...prev, id }))
+		const deviceInfoState = get().deviceInfoState || {}
+		deviceInfoState.id = id
+
+		set({ deviceInfoState })
+		localStorage.setItem('deviceInfo', JSON.stringify(deviceInfoState))
 	},
-	setDeviceLocationState: (location: IDeviceLocation) => {
-		const prev = get().deviceInfoState
-		set({
-			deviceInfoState: {
-				...prev,
-				location,
-			},
-		})
-		localStorage.setItem('deviceInfo', JSON.stringify({ ...prev, location }))
+	setDeviceTypeState: (type) => {
+		const deviceInfoState = get().deviceInfoState || {}
+		deviceInfoState.type = type
+
+		set({ deviceInfoState })
+		localStorage.setItem('deviceInfo', JSON.stringify(deviceInfoState))
 	},
-	setDeviceTypeState: (type: DeviceTypeOptions) => {
-		const prev = get().deviceInfoState
-		localStorage.setItem('deviceInfo', JSON.stringify({ ...prev, type }))
-		set({
-			deviceInfoState: {
-				...prev,
-				type,
-			},
-		})
+	setDeviceLocationState: (location) => {
+		const deviceInfoState = get().deviceInfoState
+		deviceInfoState.location = location
+
+		set({ deviceInfoState })
+		localStorage.setItem('deviceInfo', JSON.stringify(deviceInfoState))
 	},
-}))
+	setDeviceLocationTitleState: (title) => {
+		const deviceInfoState = get().deviceInfoState
+		deviceInfoState.location.city.title = title
+
+		set({ deviceInfoState })
+		localStorage.setItem('deviceInfo', JSON.stringify(deviceInfoState))
+	},
+})))
 
 
 

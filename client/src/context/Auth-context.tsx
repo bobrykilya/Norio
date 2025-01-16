@@ -11,6 +11,7 @@ import { ICheckUserReq, ILoginServiceRes, ILogOutReq, ISignInReq, ISignUpReq } f
 import timeout from "../utils/timeout"
 import { useDeviceInfoState } from "../stores/Device-store"
 import { IDeviceInfo } from "../types/Device-types"
+import { queryClient } from "../http/tanstackQuery-client"
 
 
 
@@ -153,6 +154,7 @@ const AuthProvider = ({ children }) => {
 		resetSignInVariables()
 
 		inMemoryJWT.deleteToken()
+		queryClient.removeQueries()
 
 		setIsUserLogged(false)
 	}

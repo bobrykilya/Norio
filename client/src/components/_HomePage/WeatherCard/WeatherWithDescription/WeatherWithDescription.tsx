@@ -4,14 +4,37 @@ import { ILocationWeatherElem } from "../../../../../../common/types/Device-type
 import { getTemp } from "../WeatherCard"
 import WeatherExtraInfo from "../WeatherExtraInfo/WeatherExtraInfo"
 import { capitalize } from "../../../../utils/capitalize"
+import { getTimeParams } from "../../../../utils/getTime"
 
+
+
+const getWeatherAlert = (weatherList: ILocationWeatherElem[]) => {
+	if (!weatherList) return
+
+	const getElTime = (el: { dt: number }) => {
+		return getTimeParams(['timeString'], el.dt).timeString
+	}
+	for (const el of weatherList) {
+		if (el.rain && !el.snow) {
+			return `Дождь в ${getElTime(el)}`
+		} else if (!el.rain && el.snow) {
+			return `Снег в ${getElTime(el)}`
+		} else if (el.rain && el.snow) {
+			return `Дождь и снег в ${getElTime(el)}`
+		}
+	}
+}
 
 
 type WeatherWithDescriptionProps = {
 	weather: ILocationWeatherElem & { label: string };
-	weatherAlert?: string;
+	hourlyWeatherList?: ILocationWeatherElem[];
 }
-const WeatherWithDescription = ({ weather, weatherAlert }: WeatherWithDescriptionProps) => {
+const WeatherWithDescription = ({ weather, hourlyWeatherList }: WeatherWithDescriptionProps) => {
+	
+	const weatherAlertForecastTime = 10
+	const weatherAlert = getWeatherAlert(hourlyWeatherList?.slice(1, weatherAlertForecastTime))
+
 	
 	return (
 		<div

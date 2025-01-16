@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import DropDown from "../../DropDown/DropDown"
 import { ICommonVar } from "../../../../../../common/types/Global-types"
 import { sortByAlphabet } from "../../../../utils/sort"
@@ -54,9 +54,13 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 		if (setSelectedState) {
 			setSelectedState({ id, title })
 		}
-
-		butRef.current.classList.remove('hide')
 	}
+
+	useEffect(() => {
+		if (selectedState?.title) {
+			butRef.current.classList.remove('hide')
+		}
+	}, [selectedState?.title])
 
 	return (
 		<div

@@ -11,7 +11,7 @@ type IUseAvatarListState = {
 }
 const useAvatarListState = create<IUseAvatarListState>(set => ({
 	isAvatarListOpened: false,
-	setIsAvatarListOpened: (state: boolean) => set({ isAvatarListOpened: state }),
+	setIsAvatarListOpened: (state) => set({ isAvatarListOpened: state }),
 }))
 
 
@@ -21,7 +21,7 @@ type IUseCoverPanelState = {
 }
 const useCoverPanelState = create<IUseCoverPanelState>(set => ({
     coverPanelState: 'sign_in',
-    setCoverPanelState: (state: CoverPanelOptions) => set({ coverPanelState: state })
+    setCoverPanelState: (state) => set({ coverPanelState: state })
 }))
 
 type IUseUserInfo = {
@@ -30,7 +30,7 @@ type IUseUserInfo = {
 }
 const useUserInfo = create<IUseUserInfo>(set => ({
 	userInfoState: null,
-	setUserInfoState: (state: IUserRepository) => set({ userInfoState: state })
+	setUserInfoState: (state) => set({ userInfoState: state })
 }))
 
 export {

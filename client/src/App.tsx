@@ -14,7 +14,7 @@ import LogBookList from "./components/others/LogBook/LogBookList"
 
 const App = () => {
 
-    const { isUserLogged } = useContext(AuthContext)
+    const isUserLogged = useContext(AuthContext)?.isUserLogged
     const blockErrorMessage = useBlockError(s => s.blockErrorMessage)
 
     const location = useLocation()

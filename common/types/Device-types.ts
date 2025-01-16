@@ -2,15 +2,16 @@ import { DefaultCityOptions } from "./Global-types"
 
 
 
+export type ILocationCoords = {
+	lat: number;
+	lon: number;
+}
 export type IDeviceLocation = {
 	city?: {
 		id: DefaultCityOptions | string;
 		title: string;
 	};
-	coords?: {
-		lat: number;
-		lon: number;
-	};
+	coords?: ILocationCoords;
 }
 
 export type IWeatherTempObj = {

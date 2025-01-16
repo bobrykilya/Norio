@@ -53,7 +53,7 @@ const DateTime = () => {
 			<ToolTip
 				text={`${timeStringFull}, ${getDayOfWeek(dayNum)} ${getMonth(month, true)}`}
 				position='bottom'
-				isInfoToolTip={true}
+				isAlwaysToolTip={true}
 			/>
 		</div>
 	)

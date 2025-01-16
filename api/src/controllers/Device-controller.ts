@@ -35,11 +35,10 @@ class DeviceController {
 
 	static async getWeather(req: { body: IDeviceLocation }, res: ICommonVar['res']) {
 		try {
-			const data = await WeatherService.getLocationWeather(req.body)
+			const data = await WeatherService.getWeatherByCoords(req.body)
 
 			return res.status(200).json(data)
 		} catch (err) {
-			// throw new NotFound("Ошибка получения погоды")
 			throw new NotFound(err.message)
 		}
 	}

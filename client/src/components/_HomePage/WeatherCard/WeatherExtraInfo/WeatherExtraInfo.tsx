@@ -17,7 +17,7 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 	const getWindDescription = (wind: number) => {
 		if (wind > 18) {
 			return 'dangerous'
-		} else if (wind > 10) {
+		} else if (wind > 12) {
 			return 'strong'
 		}
 	}
@@ -29,9 +29,9 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 		}
 	}
 	const getSnowDescription = (snow: number) => {
-		if (snow > 4) {
+		if (snow > 3.5) {
 			return 'dangerous'
-		} else if (snow > 2) {
+		} else if (snow > 1.7) {
 			return 'strong'
 		}
 	}

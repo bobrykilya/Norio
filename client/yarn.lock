@@ -824,6 +824,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-devtools@npm:5.62.16":
+  version: 5.62.16
+  resolution: "@tanstack/query-devtools@npm:5.62.16"
+  checksum: 21b3e8ad11b752135934c560883926fa0eeecd65ea8d922fc507c13a3e59e1d0b93541a587134dec51537d7b20dd55f59f8acd9795210dc366efda58c12ec4d3
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-devtools@npm:^5.64.0":
+  version: 5.64.0
+  resolution: "@tanstack/react-query-devtools@npm:5.64.0"
+  dependencies:
+    "@tanstack/query-devtools": "npm:5.62.16"
+  peerDependencies:
+    "@tanstack/react-query": ^5.64.0
+    react: ^18 || ^19
+  checksum: df73041d6d60d29180e2b56e775601b3465fb61c4430aebd4bffa820d9aa22117b6dee0d884724bf1645ecb55d5ede9ef300d93701a43a0b4a76bead060c2122
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-query@npm:^5.29.2":
   version: 5.29.2
   resolution: "@tanstack/react-query@npm:5.29.2"
@@ -1543,12 +1562,14 @@ __metadata:
     "@emotion/react": "npm:^11.11.4"
     "@emotion/styled": "npm:^11.11.5"
     "@tanstack/react-query": "npm:^5.29.2"
+    "@tanstack/react-query-devtools": "npm:^5.64.0"
     "@types/node": "npm:^22.5.4"
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
     "@vitejs/plugin-react": "npm:^4.3.1"
     debounce: "npm:^2.2.0"
     framer-motion: "npm:^11.2.4"
+    immer: "npm:^10.1.1"
     ky: "npm:^1.2.3"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -1721,6 +1742,13 @@ __metadata:
   dependencies:
     safer-buffer: "npm:>= 2.1.2 < 3.0.0"
   checksum: 98102bc66b33fcf5ac044099d1257ba0b7ad5e3ccd3221f34dd508ab4070edff183276221684e1e0555b145fce0850c9f7d2b60a9fcac50fbb4ea0d6e845a3b1
+  languageName: node
+  linkType: hard
+
+"immer@npm:^10.1.1":
+  version: 10.1.1
+  resolution: "immer@npm:10.1.1"
+  checksum: b749e10d137ccae91788f41bd57e9387f32ea6d6ea8fd7eb47b23fd7766681575efc7f86ceef7fe24c3bc9d61e38ff5d2f49c2663b2b0c056e280a4510923653
   languageName: node
   linkType: hard
 

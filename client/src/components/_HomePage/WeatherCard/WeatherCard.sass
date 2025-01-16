@@ -1,7 +1,7 @@
 @import '../../../variables'
 
 
-$dur-open-weather: 0.12s
+
 .weather_card-frame
     //border: 1px solid red
     overflow: visible
@@ -34,6 +34,7 @@ $dur-open-weather: 0.12s
             margin-top: 0.4rem
             justify-content: space-between
             overflow: visible
+            transition-duration: 0.1s
             .only_full_weather
                 //border: 1px solid black
                 flex-shrink: 1
@@ -53,16 +54,8 @@ $dur-open-weather: 0.12s
                     height: auto
                     overflow: visible
                     z-index: 12
-            .future_weather-cont
-                //border: 1px solid black
-                justify-content: space-between
-                flex-direction: row
-                height: auto
-                overflow: visible
-                transition: all $dur-open-weather ease-out
-                max-height: 5rem
-                opacity: 1
-                pointer-events: auto
+            &.loading
+                opacity: 0.4
             .tool_tip-cont
                 z-index: 10
                 border-radius: 0

@@ -18,8 +18,8 @@ const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) =>
 	const scrollListEnd = scrollListRef.current?.scrollWidth - scrollListRef.current?.clientWidth
 	const scrollListPosition = scrollListRef.current?.scrollLeft + 3
 	const scrollValue = 270
-	const debounceScrollDelay = 250
-	// console.log({ scrollListPosition, scrollListEnd })
+	const debounceScrollDelay = 220
+	// console.log({ scrollListPosition })
 
 	const useDebounce = async () => {
 		setIsScrollBlocked(true)
@@ -27,6 +27,9 @@ const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) =>
 		setIsScrollBlocked(false)
 	}
 	const handleScrollToTheStart = async () => {
+		if (scrollListPosition < 5) {
+			return
+		}
 		scrollListRef.current.scrollTo({ left: 0, behavior: 'smooth' })
 		await useDebounce()
 	}
@@ -48,6 +51,9 @@ const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) =>
 			e.currentTarget.scrollLeft += scrollValue
 			await useDebounce()
 		} else {
+			if (scrollListPosition < 5) {
+				return
+			}
 			e.currentTarget.scrollLeft -= scrollValue
 			await useDebounce()
 		}

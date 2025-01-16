@@ -59,7 +59,12 @@ const NavBar = ({ location }: NavBarProps) => {
                         return (
                             <a className={`cont ${el.id === curr_path ? 'selected' : ''}`} key={el.id}>
                                 {el.icon}
-                                <ToolTip text={el.title} position={'right'} delayTimeMS={toolTipDelayTimeMS} />
+                                <ToolTip
+                                    text={el.title}
+                                    position={'right'}
+                                    delayTimeMS={toolTipDelayTimeMS}
+                                    isAlwaysToolTip={true}
+                                />
                             </a>
                         )
                     })
@@ -74,7 +79,11 @@ const NavBar = ({ location }: NavBarProps) => {
                     className={'info-button'}
                 >
                     <TbInfoSquareRoundedFilled className='fa-icon'/>
-                    <ToolTip text='Описание приложения и инструкция' position={'right'} delayTimeMS={toolTipDelayTimeMS} />
+                    <ToolTip
+                        text='Описание приложения и инструкция'
+                        position={'right'}
+                        delayTimeMS={toolTipDelayTimeMS}
+                    />
                 </RoundButton>
                 <SettingsButton delayTimeMS={toolTipDelayTimeMS} />
             </div>

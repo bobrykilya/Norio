@@ -1,5 +1,6 @@
 export const LOGOUT_STORAGE_KEY = 'lastLogout'
 export const APP_TITLE = 'NORIO'
+export const MY_LOC = 'myLocation'
 
 //* Snack (err, warning, success) settings
 	export const TOAST_LIMIT = 3 						//* Max toasts quantity limit
@@ -12,6 +13,9 @@ export const APP_TITLE = 'NORIO'
 	export const SAME_LOGS_QUANTITY = 7 				//* Limit of possible error quantity recently
 	export const LOCAL_LOG_STORAGE_TIME = 24 			//* User error storage time in hours
 
-//* Services settings
+//* Auth settings
 	export const CHECK_IP_AND_COUNTRY = false 			//* IP and Country checking before request on Api (ipapi.co, ip-api.com services)
 	export const PERMITTED_COUNTRIES = ['BY', 'PL'] 	//* Permitted countries for working with app
+
+//* Weather settings
+	export const WEATHER_ACCURACY = 3 					//* Number of decimal places for weather-service's coords (default: 3)

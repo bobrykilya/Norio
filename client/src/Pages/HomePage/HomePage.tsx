@@ -10,6 +10,8 @@ import { useDeviceInfoState } from "../../stores/Device-store"
 import { LOCATIONS_LIST } from "../../assets/common/Common-data"
 import { IDeviceLocation } from "../../../../common/types/Device-types"
 import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
+import HoroscopeCard from "../../components/_HomePage/HoroscopeCard/HoroscopeCard"
+import { handleLocationCoords } from "../../services/Device-service"
 
 
 
@@ -46,7 +48,7 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
                 const cityId = STORES_LIST.find(el => el.title === userInfoState?.store).cityId
                 location = LOCATIONS_LIST.find(el => el.city.id === cityId)
             }
-            setDeviceLocationState(location)
+            setDeviceLocationState(handleLocationCoords(location))
         }
 
 	}, [isUserLogged])
@@ -84,9 +86,7 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
                     <div className="recent_changes_card-cont cont card">
 
                     </div>
-                    <div className="recent_messages_card-cont cont card">
-            
-                    </div>
+                    <HoroscopeCard />
                 </div>
             </div>
         </ClassicAnim>

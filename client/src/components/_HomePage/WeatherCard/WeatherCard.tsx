@@ -4,19 +4,21 @@ import CardLinkButton from "../CardLinkButton/CardLinkButton"
 import SelectButton, { ISelectButtonOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
 import { FaLocationDot } from "react-icons/fa6"
 import { LOCATIONS_LIST } from "../../../assets/common/Common-data"
-import { IDeviceLocation, ILocationWeatherElem, IWeatherTempObj } from "../../../../../common/types/Device-types"
+import { ILocationWeather, ILocationWeatherElem, IWeatherTempObj } from "../../../../../common/types/Device-types"
 import { ThreeDots } from 'react-loader-spinner'
 import { useDeviceInfoState } from "../../../stores/Device-store"
-import WeatherService from "../../../services/Weather-service"
-import { getTime, getTimeParams } from "../../../utils/getTime"
-import WeatherElement from "./WeatherElement/WeatherElement"
+import { getTimeParams } from "../../../utils/getTime"
 import WeatherWithDescription from "./WeatherWithDescription/WeatherWithDescription"
 import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
-import { useQuery } from '@tanstack/react-query'
 import HourlyWeatherSlider from "./HourlyWeatherSlider/HourlyWeatherSlider"
 import { useClickOutside } from "../../../hooks/useClickOutside"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 import ToolTip from "../../others/ToolTip/ToolTip"
+import FutureWeather from "./FutureWeather/FutureWeather"
+import { useFetchWeather } from "../../../queries/Weather-queries"
+import { MY_LOC } from "../../../../constants"
+import { queryClient } from "../../../http/tanstackQuery-client"
+import { getCoord, handleLocationCoords } from "../../../services/Device-service"
 
 
 
@@ -38,185 +40,81 @@ export const getTemp = (temp: ILocationWeatherElem['feels_like'] = 0) => {
 	return getStringTemp(getAverageTemp(temp))
 }
 
+const WeatherCard = () => {
 
-type IGeolocationCoords = {
-	latitude: number;
-	longitude: number;
-}
-type WeatherCardProps = {
-
-}
-const WeatherCard = ({}: WeatherCardProps) => {
-
-	const { deviceInfoState, setDeviceLocationState } = useDeviceInfoState()
-	const lsDeviceLocation = deviceInfoState?.location
+	const { deviceInfoState, setDeviceLocationState, setDeviceLocationTitleState } = useDeviceInfoState()
+	const deviceLocationState = deviceInfoState?.location
 	const [isFullWeatherOpened, setIsFullWeatherOpened] = useState(false)
-	const timer = useRef<number | null>(null)
 	const weatherCardRef = useRef(null)
 	const linkButtonRef = useRef(null)
 
-	const { data: getWeatherWithCash } = useQuery({
-		queryKey: ['weather', `${deviceInfoState?.location?.city.title !== 'Нет доступа к геоданным' ? deviceInfoState?.location?.city.title : null}`],
-		queryFn: async () => {
-			return await getLocationWeather(deviceInfoState?.location)
-		},
-		staleTime: 15 * 60 * 1000,
+	const { data: weather, isPending } = useFetchWeather(deviceLocationState, {
+		enabled: !!deviceLocationState && !!deviceLocationState?.coords
 	})
-	// console.log(getWeatherWithCash)
-
-	const getFutureWeather = (weather: ILocationWeatherElem) => {
-		if (!weather) return
-		
-		const result: ILocationWeatherElem & { label?: string } = {
-			...weather
-		}
-
-		const weatherTime = getTimeParams(['hour'], weather.dt).hour
-		// console.log(weatherTime)
-		if (6 <= weatherTime &&  weatherTime <= 11) {
-			result.label = 'Утром'
-		} else if (12 <= weatherTime &&  weatherTime <= 18) {
-			result.label = 'Днём'
-		} else if (19 <= weatherTime &&  weatherTime <= 23) {
-			result.label = 'Вечером'
-		} else if (0 <= weatherTime &&  weatherTime <= 5) {
-			result.label = 'Ночью'
-		}
-
-		return result as ILocationWeatherElem & { label: string }
-	}
-
-	const getWeatherAlert = (weatherList: ILocationWeatherElem[]) => {
-		if (!weatherList) return
-
-		const getElTime = (el: { dt: number }) => {
-			return getTimeParams(['timeString'], el.dt).timeString
-		}
-		for (const el of weatherList) {
-			if (el.rain && !el.snow) {
-				return `Дождь в ${getElTime(el)}`
-			} else if (!el.rain && el.snow) {
-				return `Снег в ${getElTime(el)}`
-			} else if (el.rain && el.snow) {
-				return `Дождь и снег в ${getElTime(el)}`
-			}
-		}
-	}
-
-	const weatherStepInHours = 6
-	const weatherAlertStepInHours = 10
-
-	const weatherAlertCurrent = getWeatherAlert(getWeatherWithCash?.hourly?.slice(1, weatherAlertStepInHours))
-	const weather2 = getFutureWeather(getWeatherWithCash?.hourly[weatherStepInHours + 1])
-	const weather3 = getFutureWeather(getWeatherWithCash?.hourly[weatherStepInHours * 2 + 1])
+	// console.log(weather)
 
 	// @ts-ignore
 	const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIST.map(loc => loc.city).concat({
-		id: 'myLocation',
+		id: MY_LOC,
 		title: 'Мои координаты',
 		icon: <FaLocationDot className={'fa-icon'}/>,
 		isFixed: true,
 	})
 
-	const saveSelectedValue = ({ id }: { id: string, title: string }) => {
-		let location: IDeviceLocation
-
-		if (id === 'myLocation') {
-			location = {
-				city: {
-					id,
-					title: ''
-				},
-				coords: lsDeviceLocation.coords
-			}
+	const saveSelectedValue = ({ id }: { id: string }) => {
+		if (id === MY_LOC) {
+			getCoords()
 		} else {
-			location = LOCATIONS_LIST.find(el => el.city.id === id)
+			const storedDeviceLocation = LOCATIONS_LIST.find(el => el.city.id === id)
+			setDeviceLocationState(handleLocationCoords(storedDeviceLocation))
 		}
-
-		setDeviceLocationState(location)
 	}
 
 	const getCoords = () => {
 		return navigator.geolocation.getCurrentPosition(coordsSuccess, coordsError)
 	}
-	
-	const coordsSuccess = async ({ coords }: { coords: IGeolocationCoords }) => {
-		const data = await getLocationWeather(getReqLocation(coords))
+	const coordsSuccess = async ({ coords }: { coords: {
+			latitude: number;
+			longitude: number;
+		} }) => {
+		const lat = getCoord(coords.latitude)
+		const lon = getCoord(coords.longitude)
+		const cashedWeather = queryClient.getQueryData(['weather', lat, lon]) as ILocationWeather
 
-		const currentLocation = {
+		setDeviceLocationState({
 			city: {
-				id: 'myLocation',
-				title: data.cityTitle
+				id: MY_LOC,
+				title: !cashedWeather ? '' : cashedWeather.cityTitle
 			},
 			coords: {
-				lat: coords.latitude,
-				lon: coords.longitude,
+				lat,
+				lon
 			}
-		}
-
-		setDeviceLocationState(currentLocation)
+		})
 	}
-
 	const coordsError = (err: any) => {
 		showSnackMessage({ message: err.message, type: 'w' })
-		// setWeatherData(null)
 		setIsFullWeatherOpened(false)
 		setDeviceLocationState({
 			city: {
-				id: 'myLocation',
+				id: MY_LOC,
 				title: 'Нет доступа к геоданным'
 			},
 		})
 	}
 
-	const getReqLocation = (coords: IGeolocationCoords) => {
-
-		const isNewCoords = () => {
-			if (!lsDeviceLocation?.coords) return true
-
-			const { lat, lon } = lsDeviceLocation.coords
-			return lat.toFixed(3) !== coords.latitude.toFixed(3) || lon.toFixed(3) !== coords.longitude.toFixed(3)
-		}
-
-		return {
-			city: {
-				id: 'myLocation',
-				title: isNewCoords() ? '' : lsDeviceLocation.city.title
-			},
-			coords: {
-				lat: coords.latitude,
-				lon: coords.longitude,
-			}
-		}
-	}
-
-	const getWeather = async (location?: IDeviceLocation) => {
-
-		if (timer.current) {
-			clearTimeout(timer.current)
-		}
-		const tempLocation = location || lsDeviceLocation
-
-		if (!tempLocation) return
-
-		if (tempLocation.city.id === 'myLocation') {
-			getCoords()
-		}
-	}
-
-	const getLocationWeather = async (location: IDeviceLocation) => {
-		if (!location?.coords) return
-		const data = await WeatherService.getLocationWeather(location)
-		timer.current = window.setTimeout(() => {
-			getWeather()
-		}, (data.forecastDeadTimeInSec - getTime()) * 1000)
-
-		return data
-	}
 
 	useEffect(() => {
-		getWeather(deviceInfoState.location)
-	}, [deviceInfoState?.location?.city.id])
+		if (deviceLocationState?.city.id === MY_LOC) {
+			getCoords()
+		}
+	}, [])
+
+	useEffect(() => {
+		if (deviceLocationState?.city.title !== weather?.cityTitle && weather?.cityTitle) {
+			setDeviceLocationTitleState(weather.cityTitle)
+		}
+	}, [weather?.cityId === MY_LOC && !deviceLocationState?.city.title && weather?.cityTitle])
 
 
 	const toggleFullWeather = () => {
@@ -235,6 +133,7 @@ const WeatherCard = ({}: WeatherCardProps) => {
 		callback: toggleFullWeather
 	})
 
+
 	return (
 		<div
 			className={'weather_card-frame cont'}
@@ -248,85 +147,71 @@ const WeatherCard = ({}: WeatherCardProps) => {
 				>
 					<SelectButton
 						OPTIONS_LIST={CITIES_AND_MY_LOCATION_LIST}
-						selectedState={lsDeviceLocation?.city}
+						selectedState={deviceLocationState?.city}
 						onClick={saveSelectedValue}
 						needToSort={true}
 						toolTip={{
 							text: 'Выбрать город для прогноза погоды',
-							position: 'bottom'
+							position: 'bottom',
 						}}
 					/>
 					<CardLinkButton
 						onClick={toggleFullWeather}
 						toolTip={{
 							text: `${isFullWeatherOpened ? 'Закрыть' : 'Открыть'} карточку погоды`,
-							position: 'bottom'
+							position: 'bottom',
 						}}
-						disabled={!getWeatherWithCash}
+						disabled={!weather}
 						isCloseIcon={isFullWeatherOpened}
 						ref={linkButtonRef}
 					/>
 				</div>
-				{getWeatherWithCash ?
+			{ weather && deviceLocationState?.coords ?
 					<div
-						className={'weather_part-cont cont'}
+						className={`weather_part-cont cont ${isPending ? 'loading' : ''}`}
 					>
 						<WeatherWithDescription
 							weather={{
 								label: 'Сейчас',
-								...getWeatherWithCash.current
+								...weather?.current,
 							}}
-							weatherAlert={weatherAlertCurrent}
+							hourlyWeatherList={weather?.hourly}
 						/>
 						<div
 							className={'only_full_weather cont'}
 						>
 							<HourlyWeatherSlider
-								hourlyWeatherList={getWeatherWithCash.hourly}
+								hourlyWeatherList={weather?.hourly}
 							/>
 							<div
-							    className={'daily_weather_list-cont cont'}
+								className={'daily_weather_list-cont cont'}
 							>
 								{
-									getWeatherWithCash.daily.map((el, num) =>
+									weather?.daily.map((el, num) =>
 										<DailyWeatherElement
 											key={el.dt}
 											weather={el}
 											label={num === 0 && 'Сегодня'}
-										/>
+										/>,
 									)
 								}
 							</div>
 						</div>
-						<div
-							className={'future_weather-cont cont'}
-						>
-							<WeatherElement
-								weather={weather2}
-								labelPos={'start'}
-							/>
-							<WeatherElement
-								weather={weather3}
-							/>
-							<WeatherElement
-								weather={{
-									label: 'Завтра',
-									...getWeatherWithCash.current
-								}}
-								labelPos={'end'}
-							/>
-						</div>
+						<FutureWeather
+							hourlyWeatherList={weather?.hourly}
+							currentWeather={weather?.current}
+						/>
 						<ToolTip
-							text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], getWeatherWithCash.forecastTimeInSec).timeString}`}
+							text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weather?.forecastTimeInSec).timeString}`}
 							position={'left'}
 							delayTimeMS={2000}
-							isInfoToolTip={true}
+							isAlwaysToolTip={true}
 						/>
 					</div>
 					:
-					<div className='weather-progress cont'>
+					<div className="weather-progress cont">
 						<ThreeDots
-							color='#E9EDF0CC'
+							color="#E9EDF0CC"
 							width="60"
 						/>
 					</div>

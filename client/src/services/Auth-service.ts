@@ -29,7 +29,7 @@ const getAndSaveDeviceType = (lsDeviceInfo: IDeviceInfo) => {
     } else {
         deviceType = "Desktop"
     }
-
+    
     useDeviceInfoState.getState().setDeviceTypeState(deviceType)
     localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, type: deviceType }))
 
