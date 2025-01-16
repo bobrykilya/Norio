@@ -1,6 +1,6 @@
 import inMemoryJWT from '../../services/inMemoryJWT-service'
 import { IBlockDevice } from '../../types/Device-types'
-import { useBlockError } from "../../stores/Device-store"
+import { useBlockErrorState } from "../../stores/Device-store"
 import { setUnlockTimer } from "./unlockDevice"
 
 
@@ -8,7 +8,7 @@ import { setUnlockTimer } from "./unlockDevice"
 const blockDevice = ({ errMessage, unlockTime }: IBlockDevice) => {
     
     inMemoryJWT.deleteToken()
-    useBlockError.setState({ blockErrorMessage: errMessage })
+    useBlockErrorState.setState({ blockErrorState: errMessage })
     setTimeout(() => {
         localStorage.setItem('blockDevice', unlockTime.toString()) //* Limitation for saveLogInLocalStorage
     }, 1000)

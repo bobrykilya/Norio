@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useAnyCoverModalState } from "../../../stores/Global-store"
+import { useModalState } from "../../../stores/Global-store"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 
 
@@ -12,7 +12,7 @@ type JumpingListProps = {
 }
 const JumpingList = ({ children, isListOpened, closeList, other_children }: JumpingListProps) => {
 
-    const setIsAnyJumpingListOpened = useAnyCoverModalState(s => s.setIsAnyJumpingListOpened)
+    const setBlurModalState = useModalState(s => s.setBlurModalState)
 
     const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as Element
@@ -30,9 +30,9 @@ const JumpingList = ({ children, isListOpened, closeList, other_children }: Jump
     //* For forms Esc blur while JumpingList is opened
     useEffect(() => {
         if (isListOpened) {
-            setIsAnyJumpingListOpened(true)
+            setBlurModalState(true)
         } else {
-            setIsAnyJumpingListOpened(false)
+            setBlurModalState(false)
         }
     }, [isListOpened])
 

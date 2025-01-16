@@ -2,32 +2,31 @@ import { create } from "zustand"
 
 
 
-type IUseAnyCoverModalState = {
-	isAnyCoverModalOpened: boolean;
-	isAnyJumpingListOpened: boolean;
-	setIsAnyCoverModalOpened: (state: boolean) => void;
-	setIsAnyJumpingListOpened: (state: boolean) => void;
+type IUseModalState = {
+	modalState: boolean;
+	blurModalState: boolean;
+	setModalState: (state: boolean) => void;
+	setBlurModalState: (state: boolean) => void;
 }
-const useAnyCoverModalState = create<IUseAnyCoverModalState>(set => ({
-	isAnyCoverModalOpened: false,
-	isAnyJumpingListOpened: false,
-	setIsAnyCoverModalOpened: (state) => set({ isAnyCoverModalOpened: state }),
-	setIsAnyJumpingListOpened: (state) => set({ isAnyJumpingListOpened: state })
+const useModalState = create<IUseModalState>(set => ({
+	modalState: false,
+	blurModalState: false,
+	setModalState: (state) => set({ modalState: state }),
+	setBlurModalState: (state) => set({ blurModalState: state })
 }))
 
 
 type IUseLogBookListState = {
-	isLogBookListOpened: boolean;
-	setIsLogBookListOpened: (state: boolean) => void;
+	logBookListState: boolean;
+	setLogBookListState: (state: boolean) => void;
 }
 const useLogBookListState = create<IUseLogBookListState>(set => ({
-	isLogBookListOpened: false,
-	setIsLogBookListOpened: (state) => set({ isLogBookListOpened: state }),
+	logBookListState: false,
+	setLogBookListState: (state) => set({ logBookListState: state }),
 }))
 
 
-
 export {
-	useAnyCoverModalState,
+	useModalState,
 	useLogBookListState,
 }

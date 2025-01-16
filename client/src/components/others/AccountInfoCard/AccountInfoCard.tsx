@@ -4,7 +4,7 @@ import DateTime from "./DateTime/DateTime"
 import FastRoundButton from "../../common/Buttons/FastRoundButton/FastRoundButton"
 import { HiDocumentText } from "react-icons/hi2"
 import { IoNotificationsSharp } from "react-icons/io5"
-import { useUserInfo } from "../../../stores/Auth-store"
+import { useUserInfoState } from "../../../stores/Auth-store"
 import ToolTip from "../ToolTip/ToolTip"
 
 
@@ -12,7 +12,7 @@ import ToolTip from "../ToolTip/ToolTip"
 const AccountInfoCard = () => {
     const { handleLogOut } = useContext(AuthContext)
     // const userInfo = JSON.parse(localStorage.getItem('userInfo') || '')
-    const { userInfoState } = useUserInfo()
+    const { userInfoState } = useUserInfoState()
 
 
     return ( 

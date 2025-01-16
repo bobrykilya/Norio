@@ -12,7 +12,8 @@ import AvatarButton from '../../../AvatarButton/AvatarButton'
 import { focusInput } from '../../../../../utils/focusInput'
 import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
 import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
-import { ISignUp } from "../../../../../../../common/types/Auth-types"
+import { ISignUp, ISignUpReq } from "../../../../../../../common/types/Auth-types"
+import { useModalState } from "../../../../../stores/Global-store"
 
 
 
@@ -22,12 +23,12 @@ type SignUpInfoFormProps = {
     AVATARS_LIST: IDataListElement[];
     isFormDisabled: boolean;
     isAvatarButDisabled: boolean;
-    isAnyCoverModalOpened: boolean;
 }
-const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled, isAvatarButDisabled, isAnyCoverModalOpened }: SignUpInfoFormProps) => {
+const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled, isAvatarButDisabled }: SignUpInfoFormProps) => {
     // console.log('SignUpInfoForm')
 
     const { handleSignUp, handleReturnToSignUp } = useContext(AuthContext)
+    const modalState = useModalState(s => s.modalState)
     const [avatar, setAvatar] = useState<string>('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -62,7 +63,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
     useCloseOnEsc({
-        conditionsList: [!isFormDisabled, !isAnyCoverModalOpened],
+        conditionsList: [!isFormDisabled, !modalState],
         callback: () => handleReturnToSignUp()
     })
     
@@ -71,7 +72,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
         data.avatar = avatar
 
         setIsLoading(true)
-        await handleSignUp(data)
+        await handleSignUp(data as ISignUpReq)
             .catch(() => {
                 focusInput(inputRefPhone)
             })

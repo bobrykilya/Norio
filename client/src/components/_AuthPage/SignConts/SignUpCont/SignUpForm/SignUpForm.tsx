@@ -11,19 +11,20 @@ import { FaUser } from "react-icons/fa"
 import { useCoverPanelState } from "../../../../../stores/Auth-store"
 import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
 import { ICheckUserReq } from "../../../../../../../common/types/Auth-types"
+import { useModalState } from "../../../../../stores/Global-store"
 
 
 
 type SignUpFormProps = {
     isFormBlur: boolean;
     isFormDisabled: boolean;
-    isAnyCoverModalOpened: boolean;
 }
-const SignUpForm = ({ isFormBlur, isFormDisabled, isAnyCoverModalOpened }: SignUpFormProps) => {
+const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
     // console.log('SignUp')
     
     const { handleCheckUser } = useContext(AuthContext)
-    const setCoverPanelState = useCoverPanelState(s => s.setCoverPanelState)
+    const { setCoverPanelState } = useCoverPanelState()
+    const modalState = useModalState(s => s.modalState)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefLogin = useRef(null)
 
@@ -58,7 +59,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled, isAnyCoverModalOpened }: SignU
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
     useCloseOnEsc({
-        conditionsList: [!isFormDisabled, !isAnyCoverModalOpened],
+        conditionsList: [!isFormDisabled, !modalState],
         callback: () => setCoverPanelState('sign_in')
     })
 

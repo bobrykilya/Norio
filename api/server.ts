@@ -6,8 +6,6 @@ import Fingerprint from "express-fingerprint"
 import { AuthRouter } from "./src/routers/Auth-router.ts"
 import TokenService from "./src/services/Token-service"
 import { socketConnection } from './src/services/Socket-service'
-import AuthService from './src/services/Auth-service'
-import { AUTO_LOGOUT_INTERVAL } from './constants'
 import dotenv from "dotenv"
 import detect from "detect-port"
 import killPort from "kill-port"
@@ -79,4 +77,4 @@ await portListeningTest()
 		})
 	})
 
-setInterval(AuthService.intervalTestFunc, AUTO_LOGOUT_INTERVAL * 1000)
+// setInterval(AuthService.intervalTestFunc, AUTO_LOGOUT_INTERVAL * 1000)

@@ -5,7 +5,7 @@ import { SignContProps } from "../../../../types/Auth-types"
 
 
 
-const SignUpInfoCont = ({ actForm, isFormDisabled, isAnyCoverModalOpened }: SignContProps) => {
+const SignUpInfoCont = ({ actForm, isFormDisabled }: SignContProps) => {
 
     return ( 
         <section
@@ -18,7 +18,6 @@ const SignUpInfoCont = ({ actForm, isFormDisabled, isAnyCoverModalOpened }: Sign
                 AVATARS_LIST={AVATARS_LIST}
                 isFormDisabled={isFormDisabled || actForm !== 'sign_up_info'}
                 isAvatarButDisabled={actForm !== 'sign_up_info'}
-                isAnyCoverModalOpened={isAnyCoverModalOpened}
             />
         </section>
      )

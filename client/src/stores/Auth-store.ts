@@ -6,12 +6,12 @@ import { IUserRepository } from "../../../api/src/types/DB-types"
 
 
 type IUseAvatarListState = {
-	isAvatarListOpened: boolean;
-	setIsAvatarListOpened: (status: boolean) => void;
+	avatarListState: boolean;
+	setAvatarListState: (status: boolean) => void;
 }
 const useAvatarListState = create<IUseAvatarListState>(set => ({
-	isAvatarListOpened: false,
-	setIsAvatarListOpened: (state) => set({ isAvatarListOpened: state }),
+	avatarListState: false,
+	setAvatarListState: (state) => set({ avatarListState: state }),
 }))
 
 
@@ -24,11 +24,11 @@ const useCoverPanelState = create<IUseCoverPanelState>(set => ({
     setCoverPanelState: (state) => set({ coverPanelState: state })
 }))
 
-type IUseUserInfo = {
+type IUseUserInfoState = {
 	userInfoState: IUserRepository | null;
 	setUserInfoState: (state: IUserRepository) => void;
 }
-const useUserInfo = create<IUseUserInfo>(set => ({
+const useUserInfoState = create<IUseUserInfoState>(set => ({
 	userInfoState: null,
 	setUserInfoState: (state) => set({ userInfoState: state })
 }))
@@ -36,5 +36,5 @@ const useUserInfo = create<IUseUserInfo>(set => ({
 export {
 	useAvatarListState,
 	useCoverPanelState,
-	useUserInfo,
+	useUserInfoState,
 }

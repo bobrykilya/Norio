@@ -2,7 +2,7 @@ import { getLastTime } from '../../utils/getTime'
 import { ISnack } from '../../../../common/types/Global-types'
 import DeviceService from "../../services/Device-service"
 import { LOCAL_LOG_STORAGE_TIME, RECENTLY_TIME, SAME_LOGS_QUANTITY } from "../../../constants"
-import { useUserInfo } from "../../stores/Auth-store"
+import { useUserInfoState } from "../../stores/Auth-store"
 // import { useBlockError } from '../../stores/Global-store'
 
 
@@ -57,7 +57,7 @@ const saveLogInLocalStorage = (snack: ISnack) => {
 
 		DeviceService.blockDeviceInDB({
 			logTime: snack.snackTime,
-			userId: useUserInfo.getState().userInfoState?.userId || null,
+			userId: useUserInfoState.getState().userInfoState?.userId || null,
 			deviceId: JSON.parse(localStorage.getItem('deviceInfo'))?.id,
 			interCode: 807,
 		})

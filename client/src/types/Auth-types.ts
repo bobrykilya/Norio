@@ -7,7 +7,6 @@ export type CoverPanelOptions = 'sign_in' | 'sign_up' | 'sign_up_info';
 export type SignContProps = {
     actForm: string;
     isFormDisabled: boolean;
-    isAnyCoverModalOpened?: boolean;
 }
 
 export type IReactHookForm = {

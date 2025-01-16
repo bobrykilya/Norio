@@ -6,7 +6,7 @@ import ButtonsCont from "../../ButtonsCont/ButtonsCont"
 
 
 
-const SignUpCont = ({ actForm, isFormDisabled, isAnyCoverModalOpened }: SignContProps) => {
+const SignUpCont = ({ actForm, isFormDisabled }: SignContProps) => {
     
     return (  
         <section 
@@ -20,7 +20,6 @@ const SignUpCont = ({ actForm, isFormDisabled, isAnyCoverModalOpened }: SignCont
             <SignUpForm
                 isFormDisabled={isFormDisabled || actForm !== 'sign_up'}
                 isFormBlur={actForm === 'sign_up_info'}
-                isAnyCoverModalOpened={isAnyCoverModalOpened}
             />
             <NameTag />
         </section>

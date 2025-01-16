@@ -5,7 +5,7 @@ import InputError from '../InputError/InputError'
 import InputCleaner from '../InputCleaner/InputCleaner'
 import { IDataListElement } from "../../../../assets/AuthPage/AuthPage-data"
 import { ISignFormInput } from "../../../../types/Auth-types"
-import { useAnyCoverModalState } from "../../../../stores/Global-store"
+import { useModalState } from "../../../../stores/Global-store"
 import timeout from "../../../../utils/timeout"
 import { sortByValPosInString } from "../../../../utils/sort"
 import DropDown from "../../../common/DropDown/DropDown"
@@ -22,7 +22,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    const setIsAnyCoverModalOpened = useAnyCoverModalState(s => s.setIsAnyCoverModalOpened) //* For forms Esc blur while any DropDown is opened
+    const setModalState = useModalState(s => s.setModalState) //* For forms Esc blur while any DropDown is opened
     
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
@@ -55,11 +55,11 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     const toggleDropDown = (pos: boolean) => {
         if (pos) {
             if (error?.type === 'isNotLatin') return
-            setIsAnyCoverModalOpened(true)
+            setModalState(true)
             setIsDropDownOpened(true)
             dropDownRef.current.scrollTo({ top: 0, behavior: 'smooth'})
         } else {
-            setIsAnyCoverModalOpened(false)
+            setModalState(false)
             setIsDropDownOpened(false)
         }
     }

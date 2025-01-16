@@ -19,7 +19,7 @@ type AvatarButtonProps = IReactHookForm & {
 }
 const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false,  isAvatarButTabDisabled=false }: AvatarButtonProps) => {
     
-    const { isAvatarListOpened, setIsAvatarListOpened } = useAvatarListState()
+    const { avatarListState, setAvatarListState } = useAvatarListState()
     const [isNoAvatarOpened, setIsNoAvatarOpened] = useState(true)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isArrowButsActive, setIsArrowButsActive] = useState(false)
@@ -32,7 +32,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
 
     const handleClickAvatarButton = () => {
         if (error) setError(null)
-        setIsAvatarListOpened(true)
+        setAvatarListState(true)
         setTimeoutRef.current = setTimeout(() => {
             setIsArrowButsActive(true)
         }, 1100)
@@ -55,7 +55,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
     }
 
     const closeAvatarList = () => {
-        setIsAvatarListOpened(false)
+        setAvatarListState(false)
         clearTimeout(setTimeoutRef.current)
         setIsArrowButsActive(false)
         avatarButtonRef.current.focus()
@@ -67,7 +67,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
                 <AvatarList
                     LIST={LIST}
                     avatar={avatar}
-                    isAvatarListOpened={isAvatarListOpened}
+                    isAvatarListOpened={avatarListState}
                     closeAvatarList={closeAvatarList}
                     handleClickElem={handleClickElem}
                     isArrowButsActive={isArrowButsActive}

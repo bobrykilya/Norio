@@ -8,7 +8,7 @@ import { LuBadgeInfo } from "react-icons/lu"
 import { getTime } from "../../utils/getTime"
 import blockDevice from "../blockDevice/blockDevice"
 import timeout from "../../utils/timeout"
-import { useBlockError } from "../../stores/Device-store"
+import { useBlockErrorState } from "../../stores/Device-store"
 import { ISnack, SnackBarTypeOptions } from "../../../../common/types/Global-types"
 import saveLogInLocalStorage from "./saveLogInLocalStorage"
 
@@ -68,7 +68,7 @@ export const showSnack = async (snack: ISnack) => {
 export const showSnackMessage = (snack: ISnack) => {
 	// console.log(snack)
 	
-	if (useBlockError.getState().blockErrorMessage) return
+	if (useBlockErrorState.getState().blockErrorState) return
 	
 	if (snack?.detail?.res?.status === 401) {
 		localStorage.removeItem('blockDevice')

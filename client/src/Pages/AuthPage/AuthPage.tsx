@@ -8,7 +8,7 @@ import LogBookButton from '../../components/others/LogBook/LogBookButton'
 import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
 import { useCoverPanelState } from "../../stores/Auth-store"
-import { useAnyCoverModalState } from "../../stores/Global-store"
+import { useModalState } from "../../stores/Global-store"
 
 
 
@@ -17,7 +17,7 @@ type AuthPageProps = {
 }
 const AuthPage = ({ blockErrorMessage }: AuthPageProps) => {
     const coverPanelState = useCoverPanelState(s => s.coverPanelState)
-    const { isAnyCoverModalOpened, isAnyJumpingListOpened } = useAnyCoverModalState()
+    const blurModalState = useModalState(s => s.blurModalState)
 
     return (
         <>
@@ -32,18 +32,16 @@ const AuthPage = ({ blockErrorMessage }: AuthPageProps) => {
                     <div id="signs-cont" className="cont">
                         <SignInCont
                             actForm={coverPanelState}
-                            isFormDisabled={isAnyJumpingListOpened || !!blockErrorMessage}
+                            isFormDisabled={blurModalState || !!blockErrorMessage}
                         />
                         <SignUpCont
                             actForm={coverPanelState}
-                            isFormDisabled={isAnyJumpingListOpened || !!blockErrorMessage}
-                            isAnyCoverModalOpened={isAnyCoverModalOpened}
+                            isFormDisabled={blurModalState || !!blockErrorMessage}
                         />
                         {coverPanelState !== 'sign_in' &&
                             <SignUpInfoCont
                                 actForm={coverPanelState}
-                                isFormDisabled={isAnyJumpingListOpened || !!blockErrorMessage}
-                                isAnyCoverModalOpened={isAnyCoverModalOpened}
+                                isFormDisabled={blurModalState || !!blockErrorMessage}
                             />
                         }
                     </div>

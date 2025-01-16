@@ -4,7 +4,7 @@ import { IoCloseCircleOutline } from 'react-icons/io5'
 import { ICommonVar, SnackBarTypeOptions } from '../../../../../common/types/Global-types'
 import { TOAST_LIMIT } from "../../../../constants"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
-import { useAnyCoverModalState } from "../../../stores/Global-store"
+import { useModalState } from "../../../stores/Global-store"
 
 
 
@@ -23,7 +23,7 @@ type SnackBarProps = {
 const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
     const { toasts } = useToasterStore()
-    const setIsAnyCoverModalOpened = useAnyCoverModalState(s => s.setIsAnyCoverModalOpened)
+    const setModalState = useModalState(s => s.setModalState)
 
     useEffect(() => {
         toasts
@@ -48,9 +48,9 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
     useEffect(() => {
         if (toasts[0]) {
             if (toasts.find(t => t.visible && t.duration !== Infinity)) {
-                setIsAnyCoverModalOpened(true)
+                setModalState(true)
             } else {
-                setIsAnyCoverModalOpened(false)
+                setModalState(false)
             }
         }
     }, [toasts])

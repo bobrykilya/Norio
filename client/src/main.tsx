@@ -6,7 +6,6 @@ import AuthProvider from "./context/Auth-context"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from "react-router-dom"
 import { queryClient } from "./http/tanstackQuery-client"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 
 
@@ -17,7 +16,7 @@ root.render(
             <AuthProvider>
                 <BrowserRouter>
                     <App />
-                    <ReactQueryDevtools initialIsOpen={false} />
+                    {/*<ReactQueryDevtools initialIsOpen={false} />*/}
                 </BrowserRouter>
             </AuthProvider>
         </GlobalProvider>

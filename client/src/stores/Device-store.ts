@@ -6,13 +6,13 @@ import { immer } from "zustand/middleware/immer"
 
 
 
-type IUseBlockError = {
-	blockErrorMessage: string;
-	setBlockErrorMessage: (blockErrorMessage: string) => void;
+type IUseBlockErrorState = {
+	blockErrorState: string;
+	setBlockErrorState: (blockErrorMessage: string) => void;
 }
-const useBlockError = create<IUseBlockError>((set) => ({
-	blockErrorMessage: '',
-	setBlockErrorMessage: (blockErrorMessage: string) => set({ blockErrorMessage: blockErrorMessage }),
+const useBlockErrorState = create<IUseBlockErrorState>((set) => ({
+	blockErrorState: '',
+	setBlockErrorState: (blockErrorMessage: string) => set({ blockErrorState: blockErrorMessage }),
 }))
 
 
@@ -60,6 +60,6 @@ const useDeviceInfoState = create<IUseDeviceInfoState>()(immer((set, get) => ({
 
 
 export {
-	useBlockError,
+	useBlockErrorState,
 	useDeviceInfoState,
 }

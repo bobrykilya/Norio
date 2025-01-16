@@ -6,7 +6,7 @@ import AuthService from "../services/Auth-service"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import { IUserNameInfo } from "../types/Auth-types"
 import io from "socket.io-client"
-import { useCoverPanelState, useUserInfo } from "../stores/Auth-store"
+import { useCoverPanelState, useUserInfoState } from "../stores/Auth-store"
 import { ICheckUserReq, ILoginServiceRes, ILogOutReq, ISignInReq, ISignUpReq } from "../../../common/types/Auth-types"
 import timeout from "../utils/timeout"
 import { useDeviceInfoState } from "../stores/Device-store"
@@ -60,7 +60,7 @@ const AuthProvider = ({ children }) => {
 		setListOfUsedAvatars([])
 	}
 	const resetSignInVariables = () => {
-		useUserInfo.setState({ userInfoState: null })
+		useUserInfoState.setState({ userInfoState: null })
 		localStorage.removeItem('activeUserName')
 	}
 	const handleReturnToSignUp = () => {
@@ -97,7 +97,7 @@ const AuthProvider = ({ children }) => {
 	const saveUserDataOnBrowser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId }: ILoginServiceRes & { lsDeviceId?: number }) => {
 		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
 		testAndUpdateLSDeviceId(deviceId, lsDeviceId)
-		useUserInfo.setState({ userInfoState: userInfo })
+		useUserInfoState.setState({ userInfoState: userInfo })
 		localStorage.setItem('activeUserName', JSON.stringify({
 			username: userInfo.username,
 			firstName: userInfo.firstName,
