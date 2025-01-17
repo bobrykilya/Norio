@@ -41,12 +41,12 @@ const getCashKeyForWeather = (location: IDeviceLocation) => {
 class WeatherService {
 
 	static async getWeatherByCoords(location: IDeviceLocation) {
+		// console.log(location)
 		let locationWeather: ILocationWeather
 
 		locationWeather = await redisGet(getCashKeyForWeather(location))
 		if (!locationWeather) {
 			const REQUIRED_KEYS_LIST = ['dt', 'rain', 'snow', 'wind_gust', 'temp', 'feels_like', 'humidity', 'icon', 'description']
-
 			const weatherData = await $apiWeather.get('onecall', {
 				searchParams: {
 					lat: location.coords.lat,

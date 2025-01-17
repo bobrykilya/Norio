@@ -13,12 +13,13 @@ type HourlyWeatherSliderProps = {
 }
 const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) => {
 
+	// const [scrollPosition, setScrollPosition] = useState(0)
 	const [isScrollBlocked, setIsScrollBlocked] = useState(false)
 	const scrollListRef = useRef(null)
-	const scrollListEnd = scrollListRef.current?.scrollWidth - scrollListRef.current?.clientWidth
+	const scrollListEnd = scrollListRef.current?.scrollWidth - scrollListRef.current?.clientWidth //521
 	const scrollListPosition = scrollListRef.current?.scrollLeft + 3
 	const scrollValue = 270
-	const debounceScrollDelay = 220
+	const debounceScrollDelay = 150
 	// console.log({ scrollListPosition })
 
 	const useDebounce = async () => {
@@ -26,6 +27,18 @@ const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) =>
 		await timeout(debounceScrollDelay)
 		setIsScrollBlocked(false)
 	}
+
+
+	const debounce = (callback: (...args: any[]) => void, delayInMS: number) => {
+		let timeoutId = null
+		return (...args: any[]) => {
+			clearTimeout(timeoutId)
+			timeoutId = setTimeout(() => {
+				callback(...args)
+			}, delayInMS)
+		};
+	}
+
 	const handleScrollToTheStart = async () => {
 		if (scrollListPosition < 5) {
 			return
@@ -41,24 +54,31 @@ const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) =>
 		await useDebounce()
 	}
 
+	// const handleOnWheel = (e: React.WheelEvent<HTMLUListElement>) => {
+	// 	scrollList(e)
+	// 	setScrollPosition(scrollListRef.current?.scrollLeft + 2)
+	// }
+
 	const handleScrollList = async (e: React.WheelEvent<HTMLUListElement>) => {
-		if (isScrollBlocked) return
+
+		if(isScrollBlocked) {
+			return
+		}
 
 		if (e.deltaY > 0) {
 			if (scrollListPosition > scrollListEnd) {
 				return
 			}
-			e.currentTarget.scrollLeft += scrollValue
+			scrollListRef.current.scrollLeft += scrollValue
 			await useDebounce()
 		} else {
 			if (scrollListPosition < 5) {
 				return
 			}
-			e.currentTarget.scrollLeft -= scrollValue
+			scrollListRef.current.scrollLeft -= scrollValue
 			await useDebounce()
 		}
 	}
-
 
 	return (
 		<div
@@ -72,7 +92,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) =>
 			</RoundButton>
 			<ul
 				className={'hourly_weather_list-cont cont'}
-				onWheel={handleScrollList}
+				onWheel={debounce(handleScrollList, 60)}
 				ref={scrollListRef}
 			>
 				{

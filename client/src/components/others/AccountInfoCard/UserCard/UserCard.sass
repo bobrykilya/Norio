@@ -1,0 +1,44 @@
+@import '../../../../variables'
+
+
+
+$size-account-img: 75px
+.user_card-frame
+    //border: 2px solid yellow
+    width: $size-account-img
+    height: $size-account-img
+    border-radius: $rad-main-border
+    overflow: visible
+    .unfolding-card
+        //border: 2px solid red
+        padding: 0
+        .account-but
+            border: 1px solid $color-backgr
+            width: $size-account-img
+            height: $size-account-img
+            overflow: visible
+            border-radius: 50%
+            transition: all 0.1s ease
+            padding: 0.15rem
+            &:hover
+                border-radius: 40%
+                .account_img-cont
+                    border-radius: 40%
+            &:active
+                box-shadow: rgba(255, 255, 255, 0.35) 0 0 10px
+                .account_img-cont
+                    transform: scale(0.92)
+            .account_img-cont
+                overflow: hidden
+                pointer-events: none
+                transition: all 0.2s ease
+                border-radius: 50%
+                will-change: transform
+                img
+                    width: 100%
+                    height: 100%
+                    object-fit: cover
+                    z-index: -2
+        &.full
+            width: 15rem
+            height: 20rem

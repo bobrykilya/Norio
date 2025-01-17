@@ -1,0 +1,33 @@
+@import '../../../variables'
+
+
+
+.unfolding-card
+    //border: 2px solid red
+    overflow: visible
+    position: absolute
+    top: 0
+    right: 0
+    z-index: 10
+    transition: all $dur-unfolding-card + 0.1s ease-out
+    .unfolding_card-only_full
+        //border: 1px solid black
+        flex-shrink: 1
+        height: 100%
+        transition: all $dur-unfolding-card ease-out, max-height $dur-unfolding-card 0.1s ease-out
+        opacity: 0
+        max-height: 0
+        transform: translateY(11rem)
+        pointer-events: none
+    &.full
+        backdrop-filter: blur(15px)
+        border-radius: $rad-main-border * 2
+        padding: $padding-card * 2 !important
+        box-shadow: $shadow-card
+        .unfolding_card-only_full
+            transition: all $dur-unfolding-card + 0.05s 0.1s ease
+            opacity: 1
+            max-height: 20rem
+            transform: none
+            pointer-events: auto
+            overflow: visible

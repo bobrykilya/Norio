@@ -101,11 +101,13 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
             </div>
             <SubmitBut
                 icon={<BiLogInCircle className='fa-icon'/>}
-                disabled={isFormDisabled}
-                notSaveUser={notSaveUser}
                 onClick={handleSubmit(onSubmitNotSave)}
+                disabled={isFormDisabled}
+                useOnClick={notSaveUser}
                 isLoading={isLoading}
-                title='Выполнить вход'
+                toolTip={{
+                    text: 'Выполнить вход'
+                }}
             />
         </form>
     )  

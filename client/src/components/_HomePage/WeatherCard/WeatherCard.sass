@@ -3,17 +3,10 @@
 
 
 .weather_card-frame
-    //border: 1px solid red
+    //border: 1px solid black
     overflow: visible
-    .weather-card
-        //border: 1px solid red
-        overflow: visible
-        //transition: all $dur-open-weather + 0.2s $trans-bounce-style
-        transition: all $dur-open-weather + 0.1s ease-out
-        z-index: 10
-        position: absolute
-        top: 0
-        right: 0
+    border-radius: $rad-main-border
+    .unfolding-card
         .weather_card-header
             //border: 1px solid red
             height: auto
@@ -35,20 +28,14 @@
             justify-content: space-between
             overflow: visible
             transition-duration: 0.1s
-            .only_full_weather
-                //border: 1px solid black
-                flex-shrink: 1
-                height: 100%
-                transition: all $dur-open-weather ease-out, max-height $dur-open-weather 0.1s ease-out
-                opacity: 0
-                max-height: 0
-                transform: translateY(11rem)
-                pointer-events: none
-                margin-top: 0.5rem
+            .unfolding_card-only_full
+                //margin-top: 0.5rem
+                .hourly_weather_slider-cont
+                    margin: 1.3rem 0
                 .daily_weather_list-cont
                     //border: 1px solid black
                     justify-content: space-between
-                    background: linear-gradient(rgba($color-backgr, 0.1), rgba($color-backgr, 0.02))
+                    background: linear-gradient(rgba($color-backgr, 0.07), rgba($color-backgr, 0.02))
                     border-radius: $rad-main-border
                     padding: $padding-card - 0.16rem $padding-card
                     height: auto
@@ -67,30 +54,17 @@
         .weather-progress
             flex-shrink: 1
         &.full
-            height: 28.5rem
+            height: 29rem
             width: 23.5rem
-            //width: auto
-            //height: auto
-            backdrop-filter: blur(10px)
-            border-radius: $rad-main-border * 2
-            padding: $padding-card * 2
-            box-shadow: $shadow-card
             .weather_part-cont
                 .weather_with_description-cont
                     .weather_extra_info-cont
-                        transition: all $dur-open-weather 0.1s ease-out
+                        transition: all $dur-unfolding-card 0.1s ease-out
                         max-width: 10rem
                         opacity: 1
                         transform: scale(1)
-                .only_full_weather
-                    transition: all $dur-open-weather + 0.05s 0.1s ease
-                    opacity: 1
-                    max-height: 20rem
-                    transform: none
-                    pointer-events: auto
-                    overflow: visible
                 .future_weather-cont
-                    transition: all $dur-open-weather ease-out
+                    transition: all $dur-unfolding-card ease-out
                     max-height: 0
                     opacity: 0
                     pointer-events: none

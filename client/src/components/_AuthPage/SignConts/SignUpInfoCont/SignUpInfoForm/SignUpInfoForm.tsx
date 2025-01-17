@@ -163,8 +163,10 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     icon={<BiLogInCircle className='fa-icon'/>}
                     disabled={isFormDisabled}
                     isLoading={isLoading}
-                    tabIndex={0}
-                    title='Завершить регистрацию и выполнить вход'
+                    tabNotBlur={true}
+                    toolTip={{
+                        text: 'Завершить регистрацию и выполнить вход'
+                    }}
                 />
             </div>
         </form>

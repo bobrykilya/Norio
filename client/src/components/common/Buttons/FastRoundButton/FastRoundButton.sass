@@ -9,19 +9,8 @@
     border-radius: 50%
     overflow: visible
     z-index: 1
-    &:hover
-        background-color: #234779
-        .fa-icon
-            transform: scale(1.05)
-        .notif_circle_cover
-            transform: translateY(-2px)
-        .notif_circle
-            transform: translateY(-2px)
-    &:active
-        background-color: #305ea0
-        .fa-icon
-            transform: scale(0.97)
     .fa-icon
+        will-change: transform
         color: $color-backgr
         font-size: 28px
     .notif_circle_cover
@@ -34,6 +23,7 @@
         width: 27px
         background-color: $color-blue-main
         border-radius: 20px
+        will-change: transform
         transition: all 0.2s ease
     .notif_circle
         position: absolute
@@ -48,4 +38,17 @@
         color: $color-backgr
         font-size: 16px
         font-weight: 600
+        will-change: transform
         transition: all 0.2s ease
+    &:hover
+        background-color: #234779
+        .fa-icon
+            transform: scale(1.05)
+        .notif_circle_cover
+            transform: translateY(-2px)
+        .notif_circle
+            transform: translateY(-2px)
+    &:active
+        background-color: #305ea0
+        .fa-icon
+            transform: scale(0.97)

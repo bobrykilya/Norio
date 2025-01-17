@@ -11,14 +11,13 @@ import { getTimeParams } from "../../../utils/getTime"
 import WeatherWithDescription from "./WeatherWithDescription/WeatherWithDescription"
 import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
 import HourlyWeatherSlider from "./HourlyWeatherSlider/HourlyWeatherSlider"
-import { useClickOutside } from "../../../hooks/useClickOutside"
-import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 import ToolTip from "../../others/ToolTip/ToolTip"
 import FutureWeather from "./FutureWeather/FutureWeather"
 import { useFetchWeather } from "../../../queries/Weather-queries"
 import { MY_LOC } from "../../../../constants"
 import { queryClient } from "../../../http/tanstackQuery-client"
 import { getCoord, handleLocationCoords } from "../../../services/Device-service"
+import UnfoldingCard from "../../common/UnfoldingCard/UnfoldingCard"
 
 
 
@@ -40,26 +39,29 @@ export const getTemp = (temp: ILocationWeatherElem['feels_like'] = 0) => {
 	return getStringTemp(getAverageTemp(temp))
 }
 
+// @ts-ignore
+const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIST.map(loc => loc.city).concat({
+	id: MY_LOC,
+	title: 'Мои координаты',
+	icon: <FaLocationDot className={'fa-icon'}/>,
+	isFixed: true,
+})
+
 const WeatherCard = () => {
+
+	const [isFullWeatherCard, setIsFullWeatherCard] = useState(false)
+	const linkButtonRef = useRef(null)
+	const toggleWeatherCard = () => {
+		setIsFullWeatherCard(prev => !prev)
+	}
 
 	const { deviceInfoState, setDeviceLocationState, setDeviceLocationTitleState } = useDeviceInfoState()
 	const deviceLocationState = deviceInfoState?.location
-	const [isFullWeatherOpened, setIsFullWeatherOpened] = useState(false)
-	const weatherCardRef = useRef(null)
-	const linkButtonRef = useRef(null)
 
 	const { data: weather, isPending } = useFetchWeather(deviceLocationState, {
 		enabled: !!deviceLocationState && !!deviceLocationState?.coords
 	})
 	// console.log(weather)
-
-	// @ts-ignore
-	const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIST.map(loc => loc.city).concat({
-		id: MY_LOC,
-		title: 'Мои координаты',
-		icon: <FaLocationDot className={'fa-icon'}/>,
-		isFixed: true,
-	})
 
 	const saveSelectedValue = ({ id }: { id: string }) => {
 		if (id === MY_LOC) {
@@ -94,7 +96,7 @@ const WeatherCard = () => {
 	}
 	const coordsError = (err: any) => {
 		showSnackMessage({ message: err.message, type: 'w' })
-		setIsFullWeatherOpened(false)
+		setIsFullWeatherCard(false)
 		setDeviceLocationState({
 			city: {
 				id: MY_LOC,
@@ -117,30 +119,14 @@ const WeatherCard = () => {
 	}, [weather?.cityId === MY_LOC && !deviceLocationState?.city.title && weather?.cityTitle])
 
 
-	const toggleFullWeather = () => {
-		setIsFullWeatherOpened(prev => !prev)
-	}
-
-	useClickOutside({
-		ref: weatherCardRef,
-		butRef: linkButtonRef,
-		callback: toggleFullWeather,
-		condition: isFullWeatherOpened
-	})
-
-	useCloseOnEsc({
-		conditionsList: [isFullWeatherOpened],
-		callback: toggleFullWeather
-	})
-
-
 	return (
 		<div
 			className={'weather_card-frame cont'}
 		>
-			<div
-				className={`weather-card cont card ${isFullWeatherOpened ? 'full' : ''}`}
-				ref={weatherCardRef}
+			<UnfoldingCard
+				isFullCard={isFullWeatherCard}
+				toggleCard={toggleWeatherCard}
+				ref={linkButtonRef}
 			>
 				<div
 					className={'weather_card-header cont'}
@@ -156,17 +142,18 @@ const WeatherCard = () => {
 						}}
 					/>
 					<CardLinkButton
-						onClick={toggleFullWeather}
+						onClick={toggleWeatherCard}
 						toolTip={{
-							text: `${isFullWeatherOpened ? 'Закрыть' : 'Открыть'} карточку погоды`,
+							text: `${isFullWeatherCard ? 'Закрыть' : 'Открыть'} карточку погоды`,
 							position: 'bottom',
 						}}
 						disabled={!weather}
-						isCloseIcon={isFullWeatherOpened}
+						isCloseIcon={isFullWeatherCard}
 						ref={linkButtonRef}
 					/>
 				</div>
-			{ weather && deviceLocationState?.coords ?
+				{
+					weather && deviceLocationState?.coords ?
 					<div
 						className={`weather_part-cont cont ${isPending ? 'loading' : ''}`}
 					>
@@ -178,7 +165,7 @@ const WeatherCard = () => {
 							hourlyWeatherList={weather?.hourly}
 						/>
 						<div
-							className={'only_full_weather cont'}
+							className={'unfolding_card-only_full cont'}
 						>
 							<HourlyWeatherSlider
 								hourlyWeatherList={weather?.hourly}
@@ -216,7 +203,7 @@ const WeatherCard = () => {
 						/>
 					</div>
 				}
-			</div>
+			</UnfoldingCard>
 		</div>
 	)
 }

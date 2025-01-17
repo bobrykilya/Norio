@@ -35,6 +35,13 @@
             margin: 0.5px 0
             overflow: visible
             transition: all 0.1s ease
+            .fa-icon
+                font-size: 27px
+                color: $color-backgr-clear
+            .tool_tip-cont
+                .tool_tip
+                    &.right
+                        bottom: calc(10%)
             &:hover
                 background-color: $color-behind-icon
                 .fa-icon
@@ -43,18 +50,11 @@
                 background-color: rgba($color-behind-icon, 0.2)
                 .fa-icon
                     transform: scale(0.97)
-            .fa-icon
-                font-size: 27px
-                color: $color-backgr-clear
             &.selected
                 pointer-events: none
                 background-color: $color-backgr
                 .fa-icon
                     color: $color-blue-main
-            .tool_tip-cont
-                .tool_tip
-                    &.right
-                        bottom: calc(10%)
     .nav_bar-footer
         //border: 1px solid orange
         height: auto

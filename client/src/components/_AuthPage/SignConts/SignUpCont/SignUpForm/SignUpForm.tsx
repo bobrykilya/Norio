@@ -115,7 +115,9 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
                 disabled={isFormDisabled}
                 blur={isFormBlur}
                 isLoading={isLoading}
-                title='Продолжить регистрацию'
+                toolTip={{
+                    text: 'Продолжить регистрацию'
+                }}
             />
         </form>
     )  

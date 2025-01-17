@@ -1,18 +1,13 @@
-import React, { useContext } from 'react'
-import { AuthContext } from '../../../context/Auth-context'
+import React from 'react'
 import DateTime from "./DateTime/DateTime"
 import FastRoundButton from "../../common/Buttons/FastRoundButton/FastRoundButton"
 import { HiDocumentText } from "react-icons/hi2"
 import { IoNotificationsSharp } from "react-icons/io5"
-import { useUserInfoState } from "../../../stores/Auth-store"
-import ToolTip from "../ToolTip/ToolTip"
+import UserCard from "./UserCard/UserCard"
 
 
 
 const AccountInfoCard = () => {
-    const { handleLogOut } = useContext(AuthContext)
-    // const userInfo = JSON.parse(localStorage.getItem('userInfo') || '')
-    const { userInfoState } = useUserInfoState()
 
 
     return ( 
@@ -37,18 +32,7 @@ const AccountInfoCard = () => {
                 }}
             />
             <DateTime />
-            <button
-                className='account-but'
-                onClick={() => handleLogOut()}
-                tabIndex={-1}
-            >
-                <div
-                    className={'account_img-cont'}
-                >
-                    <img src={`/avatars/${userInfoState?.avatar}.jpg`} alt='Avatar error 3' />
-                </div>
-                <ToolTip text={'Открыть карточку пользователя'} position={'bottom_left'}/>
-            </button>
+            <UserCard />
         </div>
      )
 }

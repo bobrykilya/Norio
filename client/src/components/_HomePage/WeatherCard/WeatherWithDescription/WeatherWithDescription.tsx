@@ -49,7 +49,7 @@ const WeatherWithDescription = ({ weather, hourlyWeatherList }: WeatherWithDescr
 				weather={weather}
 			/>
 			<div
-				className={'weather_with_description_text-cont cont'}
+				className={`weather_with_description_text-cont cont ${weatherAlert ? 'with_alert' : ''}`}
 			>
 				<span
 					className={'weather_with_description-title'}

@@ -1,5 +1,5 @@
 import React from 'react'
-import ToolTip from '../../others/ToolTip/ToolTip'
+import ToolTip, { ToolTipProps } from '../../others/ToolTip/ToolTip'
 import { ThreeDots } from 'react-loader-spinner'
 import { ICommonVar } from "../../../../../common/types/Global-types"
 
@@ -7,23 +7,23 @@ import { ICommonVar } from "../../../../../common/types/Global-types"
 
 type SubmitButProps = {
     icon: ICommonVar['icon'];
-    isLoading: boolean;
-    title: string;
-    notSaveUser?: boolean;
     onClick?: () => void;
+    isLoading?: boolean;
+    useOnClick?: boolean;
     disabled?: boolean;
     blur?: boolean;
-    tabIndex?: number;
+    toolTip?: ToolTipProps;
+    tabNotBlur?: boolean;
 }
-const SubmitBut = ({ icon, isLoading, notSaveUser=false, onClick, disabled=false, blur=false, title, tabIndex=-1 }: SubmitButProps) => {
+const SubmitBut = ({ icon, onClick, isLoading, useOnClick, disabled, blur, toolTip, tabNotBlur }: SubmitButProps) => {
 
     return (
         <button
-            className={`submit-but cont ${blur && 'blur'}`}
-            type={notSaveUser ? 'button' : 'submit'}
-            tabIndex={tabIndex}
+            className={`submit-but cont ${blur ? 'blur' : ''}`}
+            type={useOnClick ? 'button' : 'submit'}
+            tabIndex={tabNotBlur ? 0 : -1}
             disabled={disabled ? true : isLoading}
-            onClick={notSaveUser ? onClick : () => null}
+            onClick={useOnClick ? onClick : () => null}
         >
             {!isLoading ?
                 icon :
@@ -36,7 +36,10 @@ const SubmitBut = ({ icon, isLoading, notSaveUser=false, onClick, disabled=false
                     />
                 </div>
             }
-            <ToolTip text={title} />
+            {
+                toolTip &&
+                <ToolTip {...toolTip} />
+            }
         </button>
     )
 }
