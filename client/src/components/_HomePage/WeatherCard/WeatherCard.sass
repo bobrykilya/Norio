@@ -1,35 +1,51 @@
 @import '../../../variables'
 
 
-
+$width-full-weather-card: 23.5rem
 .weather_card-frame
     //border: 1px solid black
     overflow: visible
     border-radius: $rad-main-border
     .unfolding-card
+        //border: 1px solid red
+        min-height: 100%
         .weather_card-header
-            //border: 1px solid red
+            //border: 1px solid green
             height: auto
             flex-direction: row
             justify-content: space-between
-            align-items: flex-start
             overflow: visible
             .select_but-cont
                 margin-left: -0.4rem
-                margin-top: -0.2rem
                 .select_but_selected
                     color: $color-backgr
                     font-weight: 600
                     font-size: $size-h3
         .weather_part-cont
             //border: 1px solid yellow
-            flex-shrink: 1
             margin-top: 0.4rem
-            justify-content: space-between
             overflow: visible
-            transition-duration: 0.1s
+            .weather_tool_tip-cont
+                overflow: visible
+                .weather_with_description-cont
+                    .weather_extra_info-cont
+                        transition: all $dur-unfolding-card * 0.5 linear
+                .future_weather-cont
+                    //border: 1px solid brown
+                    margin-top: 0.7rem
+                    transition: all $dur-unfolding-card * 1.2 $dur-unfolding-card * 0.5 ease-out
+                    max-height: 5rem
+                .tool_tip-cont
+                    //border: 1px solid brown
+                    z-index: 10
+                    border-radius: 0
+                    .tool_tip
+                        &.left
+                            top: 1.2rem
+                            bottom: auto
+                            right: calc(100% + 1.5rem)
             .unfolding_card-only_full
-                //margin-top: 0.5rem
+                //border: 1px solid brown
                 .hourly_weather_slider-cont
                     margin: 1.3rem 0
                 .daily_weather_list-cont
@@ -43,28 +59,20 @@
                     z-index: 12
             &.loading
                 opacity: 0.4
-            .tool_tip-cont
-                z-index: 10
-                border-radius: 0
-                .tool_tip
-                    &.left
-                        top: 1.5rem
-                        bottom: auto
-                        right: calc(100% + 1.5rem)
         .weather-progress
             flex-shrink: 1
         &.full
-            height: 29rem
-            width: 23.5rem
+            width: $width-full-weather-card
             .weather_part-cont
                 .weather_with_description-cont
                     .weather_extra_info-cont
-                        transition: all $dur-unfolding-card 0.1s ease-out
+                        transition: all $dur-unfolding-card * 1.5 ease-out
                         max-width: 10rem
                         opacity: 1
                         transform: scale(1)
                 .future_weather-cont
-                    transition: all $dur-unfolding-card ease-out
+                    transition: all $dur-unfolding-card * 1.2 ease-out
+                    margin-top: 0
                     max-height: 0
                     opacity: 0
                     pointer-events: none

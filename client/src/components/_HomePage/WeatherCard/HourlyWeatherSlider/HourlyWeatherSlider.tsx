@@ -1,84 +1,72 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import { getTemp } from "../WeatherCard"
 import { getTimeParams } from "../../../../utils/getTime"
-import timeout from "../../../../utils/timeout"
+import { debounceWithStart } from "../../../../utils/debounce"
 
 
 
+type scrollTestOptions = 'start' | 'end'
 type HourlyWeatherSliderProps = {
 	hourlyWeatherList: ILocationWeatherElem[];
+	isReset?: boolean;
 }
-const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) => {
+const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSliderProps) => {
 
-	// const [scrollPosition, setScrollPosition] = useState(0)
-	const [isScrollBlocked, setIsScrollBlocked] = useState(false)
+	const [scrollPosition, setScrollPosition] = useState(0)
 	const scrollListRef = useRef(null)
-	const scrollListEnd = scrollListRef.current?.scrollWidth - scrollListRef.current?.clientWidth //521
-	const scrollListPosition = scrollListRef.current?.scrollLeft + 3
-	const scrollValue = 270
+	const scrollListEnd = scrollListRef.current?.scrollWidth - scrollListRef.current?.clientWidth //* 521
+	const scrollValue = 265
 	const debounceScrollDelay = 150
-	// console.log({ scrollListPosition })
+	const debounceFault = 5
+	// console.log({ scrollPosition })
 
-	const useDebounce = async () => {
-		setIsScrollBlocked(true)
-		await timeout(debounceScrollDelay)
-		setIsScrollBlocked(false)
+	const scrollTest = (option: scrollTestOptions = 'start') => {
+		if (option === 'start') {
+			return scrollPosition < debounceFault
+		} else {
+			return scrollPosition + debounceFault > scrollListEnd
+		}
 	}
 
-
-	const debounce = (callback: (...args: any[]) => void, delayInMS: number) => {
-		let timeoutId = null
-		return (...args: any[]) => {
-			clearTimeout(timeoutId)
-			timeoutId = setTimeout(() => {
-				callback(...args)
-			}, delayInMS)
-		};
-	}
 
 	const handleScrollToTheStart = async () => {
-		if (scrollListPosition < 5) {
-			return
-		}
 		scrollListRef.current.scrollTo({ left: 0, behavior: 'smooth' })
-		await useDebounce()
+		setScrollPosition(0)
 	}
 	const handleScrollToTheEnd = async () => {
-		if (scrollListPosition > scrollListEnd) {
-			return
-		}
 		scrollListRef.current.scrollTo({ left: scrollListEnd, behavior: 'smooth' })
-		await useDebounce()
+		setScrollPosition(scrollListEnd)
 	}
 
-	// const handleOnWheel = (e: React.WheelEvent<HTMLUListElement>) => {
-	// 	scrollList(e)
-	// 	setScrollPosition(scrollListRef.current?.scrollLeft + 2)
-	// }
 
 	const handleScrollList = async (e: React.WheelEvent<HTMLUListElement>) => {
 
-		if(isScrollBlocked) {
-			return
-		}
-
-		if (e.deltaY > 0) {
-			if (scrollListPosition > scrollListEnd) {
-				return
-			}
-			scrollListRef.current.scrollLeft += scrollValue
-			await useDebounce()
-		} else {
-			if (scrollListPosition < 5) {
+		if (e.deltaY < 0) {
+			if (scrollTest()) {
 				return
 			}
 			scrollListRef.current.scrollLeft -= scrollValue
-			await useDebounce()
+			setScrollPosition(scrollListRef.current.scrollLeft - scrollValue)
+		} else {
+			if (scrollTest('end')) {
+				return
+			}
+			scrollListRef.current.scrollLeft += scrollValue
+			setScrollPosition(scrollListRef.current.scrollLeft + scrollValue)
 		}
 	}
+
+	useEffect(() => {
+		if (isReset) {
+			if (scrollTest()) {
+				return
+			}
+			handleScrollToTheStart()
+		}
+	}, [isReset])
 
 	return (
 		<div
@@ -87,12 +75,13 @@ const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) =>
 			<RoundButton
 				className={'left'}
 				onClick={handleScrollToTheStart}
+				disabled={scrollTest()}
 			>
 				<FaAngleLeft className={'fa-icon'}/>
 			</RoundButton>
 			<ul
 				className={'hourly_weather_list-cont cont'}
-				onWheel={debounce(handleScrollList, 60)}
+				onWheel={debounceWithStart(handleScrollList, debounceScrollDelay)}
 				ref={scrollListRef}
 			>
 				{
@@ -123,6 +112,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList }: HourlyWeatherSliderProps) =>
 			<RoundButton
 				className={'right'}
 				onClick={handleScrollToTheEnd}
+				disabled={scrollTest('end')}
 			>
 				<FaAngleRight className={'fa-icon'}/>
 			</RoundButton>

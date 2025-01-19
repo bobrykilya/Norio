@@ -9,15 +9,15 @@ import { ThreeDots } from 'react-loader-spinner'
 import { useDeviceInfoState } from "../../../stores/Device-store"
 import { getTimeParams } from "../../../utils/getTime"
 import WeatherWithDescription from "./WeatherWithDescription/WeatherWithDescription"
-import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
-import HourlyWeatherSlider from "./HourlyWeatherSlider/HourlyWeatherSlider"
 import ToolTip from "../../others/ToolTip/ToolTip"
-import FutureWeather from "./FutureWeather/FutureWeather"
 import { useFetchWeather } from "../../../queries/Weather-queries"
 import { MY_LOC } from "../../../../constants"
 import { queryClient } from "../../../http/tanstackQuery-client"
 import { getCoord, handleLocationCoords } from "../../../services/Device-service"
 import UnfoldingCard from "../../common/UnfoldingCard/UnfoldingCard"
+import HourlyWeatherSlider from "./HourlyWeatherSlider/HourlyWeatherSlider"
+import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
+import FutureWeather from "./FutureWeather/FutureWeather"
 
 
 
@@ -157,18 +157,33 @@ const WeatherCard = () => {
 					<div
 						className={`weather_part-cont cont ${isPending ? 'loading' : ''}`}
 					>
-						<WeatherWithDescription
-							weather={{
-								label: 'Сейчас',
-								...weather?.current,
-							}}
-							hourlyWeatherList={weather?.hourly}
-						/>
+						<div
+							className={'weather_tool_tip-cont cont'}
+						>
+							<WeatherWithDescription
+								weather={{
+									label: 'Сейчас',
+									...weather?.current,
+								}}
+								hourlyWeatherList={weather?.hourly}
+							/>
+							<FutureWeather
+								hourlyWeatherList={weather?.hourly}
+								currentWeather={weather?.current}
+							/>
+							<ToolTip
+								text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weather?.forecastTimeInSec).timeString}`}
+								position={'left'}
+								delayTimeMS={2000}
+								isAlwaysToolTip={true}
+							/>
+						</div>
 						<div
 							className={'unfolding_card-only_full cont'}
 						>
 							<HourlyWeatherSlider
 								hourlyWeatherList={weather?.hourly}
+								isReset={!isFullWeatherCard}
 							/>
 							<div
 								className={'daily_weather_list-cont cont'}
@@ -184,16 +199,6 @@ const WeatherCard = () => {
 								}
 							</div>
 						</div>
-						<FutureWeather
-							hourlyWeatherList={weather?.hourly}
-							currentWeather={weather?.current}
-						/>
-						<ToolTip
-							text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weather?.forecastTimeInSec).timeString}`}
-							position={'left'}
-							delayTimeMS={2000}
-							isAlwaysToolTip={true}
-						/>
 					</div>
 					:
 					<div className="weather-progress cont">

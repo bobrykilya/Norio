@@ -10,18 +10,19 @@
     height: auto
     .weather_with_description_text-cont
         //border: 1px solid blue
-        //margin-left: 10%
-        height: auto
         width: auto
         align-items: start
         color: $color-backgr
-        overflow: visible
-        .weather_with_description-title
-            max-width: 7rem
-            //white-space: nowrap
-            margin-bottom: 0.3rem
-            font-weight: 600
+        margin-top: 0.3rem
+        //justify-content: space-around
         .weather_with_description-description
+            //border: 1px solid blue
+            //white-space: nowrap
+            margin-bottom: 0.25rem
+            max-width: 7rem
+            font-weight: 600
+        .weather_with_description-fells_like
+            //border: 1px solid brown
             white-space: nowrap
             color: rgba($color-backgr, 0.7)
         .weather_with_description-alert
@@ -30,5 +31,6 @@
             font-weight: 600
             color: #a2b8f5
         &.with_alert
-            .weather_with_description-title
+            margin-top: 0
+            .weather_with_description-description
                 margin-bottom: 0.15rem

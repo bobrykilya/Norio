@@ -2,20 +2,23 @@
 
 
 
-$size-account-img: 75px
+$size-little-account-img: 75px
+$size-big-account-img: 120px
 .user_card-frame
     //border: 2px solid yellow
-    width: $size-account-img
-    height: $size-account-img
+    width: $size-little-account-img
+    height: $size-little-account-img
     border-radius: $rad-main-border
     overflow: visible
     .unfolding-card
         //border: 2px solid red
         padding: 0
+        justify-content: start
+        transition: all $dur-unfolding-card * 1.5 ease-out, max-height $dur-unfolding-card * 1.5 ease-out, border-radius $dur-unfolding-card ease-out
         .account-but
-            border: 1px solid $color-backgr
-            width: $size-account-img
-            height: $size-account-img
+            border: 1px solid rgba($color-backgr, 0.8)
+            width: $size-little-account-img
+            height: $size-little-account-img
             overflow: visible
             border-radius: 50%
             transition: all 0.1s ease
@@ -39,6 +42,72 @@ $size-account-img: 75px
                     height: 100%
                     object-fit: cover
                     z-index: -2
+        .account_change-buts
+            //border: 2px solid red
+            position: absolute
+            top: $padding-card * 2
+            height: $size-big-account-img
+            padding: 0 $padding-card * 2
+            flex-direction: row
+            flex-shrink: 1
+            transition: all 0.1s linear
+            max-width: 0
+            opacity: 0
+            transform: scale(0.6)
+        .unfolding_card-only_full
+            //border: 2px solid green
+            height: auto
+            margin-top: 0.6rem
+            .user_name-cont
+                //border: 2px solid brown
+                height: auto
+                text-align: center
+                color: $color-backgr
+                line-height: $size-main-text + 0.3rem
+                font-size: $size-main-text + 0.07rem
+                .user-name
+                    //border: 2px solid brown
+                    width: auto
+                    height: auto
+                    overflow: visible
+                    &::after
+                        content: ''
+                        position: absolute
+                        bottom: -0.3rem
+                        //left: 50%
+                        //transform: translateX(-50%)
+                        height: 2px
+                        width: calc(100% + 5rem)
+                        background: $color-gradient-hover
+                .user-job
+                    margin-top: 0.45rem
+                    font-size: $size-main-text
+                    font-weight: 300
+                    color: rgba($color-backgr, 0.8)
+            .recent_users-cont
+                margin-top: 0.7rem
+                height: 5rem
+                background-color: rgba($color-backgr, 0.9)
+                border-radius: $rad-main-border
+
+            .submit-but
+                margin-top: 0.7rem
+                border: 1px solid rgba($color-backgr, 0.5)
+                //width: 90%
+                .fa-icon
+                    font-size: $size-main-text + 0.1rem
         &.full
-            width: 15rem
-            height: 20rem
+            width: 13rem
+            .account-but
+                border: 1px solid $color-backgr
+                width: $size-big-account-img
+                height: $size-big-account-img
+            .account_change-buts
+                transition: all $dur-unfolding-card 0.1s ease-out
+                max-width: 100%
+                opacity: 1
+                transform: scale(1)
+            .unfolding_card-only_full
+                .user_name-cont
+
+

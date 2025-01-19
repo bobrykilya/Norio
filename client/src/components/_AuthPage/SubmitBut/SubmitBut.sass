@@ -25,6 +25,8 @@
         background-color: $color-confirm-but-act
     &:active
         transform: translateX(-$height-but-act-jump * 4)
+        .fa-icon
+            filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.85))
     &:disabled
         pointer-events: none
     &.blur
@@ -40,4 +42,3 @@
         color: $color-backgr
     .submit-loader
         color: $color-backgr
-        //background-color: $color-backgr

@@ -15,6 +15,9 @@ $icon-size: 1.4rem
         &::after
             width: $size-round-but - 0.8rem
             height: $size-round-but - 0.8rem
+        &:disabled
+            opacity: 0.4
+            pointer-events: none
         .fa-icon
             color: rgba($color-backgr, 0.3)
             font-size: $size-main-text
@@ -45,7 +48,6 @@ $icon-size: 1.4rem
             //border: 1px solid yellow
             width: auto
             height: auto
-            color: $color-backgr
             overflow: visible
             margin: 0 0.34rem
             &:first-child, &:last-child
@@ -56,10 +58,12 @@ $icon-size: 1.4rem
                 font-weight: 600
                 font-size: $size-main-text + 0.05rem
                 margin-left: 0.2rem
+                color: rgba($color-backgr, 0.9)
             .hourly_weather_el-icon
                 //border: 1px solid yellow
                 width: $icon-size
                 height: $icon-size
-                margin: 0.1rem 0
+                margin: 0.2rem 0
             .hourly_weather_el-time
                 font-size: $size-main-text - 0.1rem
+                color: rgba($color-backgr, 0.8)

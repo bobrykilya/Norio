@@ -3,8 +3,8 @@ import WeatherElement from "../WeatherElement/WeatherElement"
 import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
 import { getTemp } from "../WeatherCard"
 import WeatherExtraInfo from "../WeatherExtraInfo/WeatherExtraInfo"
-import { capitalize } from "../../../../utils/capitalize"
 import { getTimeParams } from "../../../../utils/getTime"
+import { capitalize } from "../../../../utils/capitalize"
 
 
 
@@ -52,12 +52,12 @@ const WeatherWithDescription = ({ weather, hourlyWeatherList }: WeatherWithDescr
 				className={`weather_with_description_text-cont cont ${weatherAlert ? 'with_alert' : ''}`}
 			>
 				<span
-					className={'weather_with_description-title'}
+					className={'weather_with_description-description'}
 				>
 					{capitalize(weather.description)}
 				</span>
 				<span
-					className={'weather_with_description-description'}
+					className={'weather_with_description-fells_like'}
 				>
 					Ощущается как {getTemp(weather.feels_like)}
 				</span>

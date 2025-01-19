@@ -9,25 +9,23 @@
     top: 0
     right: 0
     z-index: 10
-    transition: all $dur-unfolding-card + 0.1s ease-out
+    height: auto
+    transition: all $dur-unfolding-card * 1.5 ease-out, max-height $dur-unfolding-card * 1.8 ease-out, border-radius $dur-unfolding-card ease-out
+    max-height: 0
     .unfolding_card-only_full
-        //border: 1px solid black
-        flex-shrink: 1
-        height: 100%
-        transition: all $dur-unfolding-card ease-out, max-height $dur-unfolding-card 0.1s ease-out
+        transition: all $dur-unfolding-card * 1.2 ease, opacity $dur-unfolding-card * 0.5
         opacity: 0
-        max-height: 0
-        transform: translateY(11rem)
         pointer-events: none
+        transform: translateY(3rem)
     &.full
         backdrop-filter: blur(15px)
         border-radius: $rad-main-border * 2
-        padding: $padding-card * 2 !important
         box-shadow: $shadow-card
+        padding: $padding-card * 2 !important
+        max-height: 40rem !important
         .unfolding_card-only_full
-            transition: all $dur-unfolding-card + 0.05s 0.1s ease
-            opacity: 1
-            max-height: 20rem
-            transform: none
-            pointer-events: auto
+            transition: all $dur-unfolding-card * 1.2 $dur-unfolding-card * 0.75 ease
             overflow: visible
+            opacity: 1
+            pointer-events: auto
+            transform: none
