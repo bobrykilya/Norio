@@ -1,14 +1,18 @@
-import React, { ReactNode } from "react"
+import React from "react"
+import ToolTip, { ToolTipProps } from "../../../others/ToolTip/ToolTip"
+import { ICommonVar } from "../../../../../../common/types/Global-types"
 
 
 
 type RoundButtonProps = {
-	children: ReactNode;
 	onClick: () => void;
+	icon?: ICommonVar['icon'];
 	className?: string;
 	disabled?: boolean;
+	toolTip?: ToolTipProps;
+	children?: any;
 }
-const RoundButton = ({ children, onClick, className, disabled }: RoundButtonProps) => {
+const RoundButton = ({ icon, onClick, className, disabled, toolTip, children }: RoundButtonProps) => {
 
 
 	return (
@@ -19,7 +23,9 @@ const RoundButton = ({ children, onClick, className, disabled }: RoundButtonProp
 			tabIndex={-1}
 			disabled={disabled}
 		>
+			{icon}
 			{children}
+			{toolTip && <ToolTip {...toolTip} />}
 		</button>
 	)
 }

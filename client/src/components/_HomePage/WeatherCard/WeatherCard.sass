@@ -29,7 +29,11 @@ $width-full-weather-card: 23.5rem
                 overflow: visible
                 .weather_with_description-cont
                     .weather_extra_info-cont
-                        transition: all $dur-unfolding-card * 0.5 linear
+                        flex-shrink: 1
+                        transition: all $dur-unfolding-card * 0.5 ease-out
+                        max-width: 0
+                        opacity: 0
+                        transform: scale(0.6)
                 .future_weather-cont
                     //border: 1px solid brown
                     margin-top: 0.7rem

@@ -1,6 +1,5 @@
 import React from "react"
 import { PiWarning, PiWarningFill } from "react-icons/pi"
-import ToolTip from '../ToolTip/ToolTip'
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import { useLogBookListState } from "../../../stores/Global-store"
 
@@ -18,16 +17,18 @@ const LogBookButton = ({ isAuthPage=false, delayTimeMS }: LogBookButtonProps) =>
     return ( 
         <>
             <RoundButton
-                onClick={() => setLogBookListState(true)}
-                className={'log_book-button'}
-            >
-                {isAuthPage ?
-                    < PiWarning className='fa-icon' />
-                :
+                icon={isAuthPage ?
+                    < PiWarning className='fa-icon' /> :
                     < PiWarningFill className='fa-icon' />
                 }
-                <ToolTip text='Открыть панель ошибок' position={`${isAuthPage ? 'bottom_left' : 'right'}`} delayTimeMS={delayTimeMS} />
-            </RoundButton>
+                onClick={() => setLogBookListState(true)}
+                className={'log_book-button'}
+                toolTip={{
+                    text: 'Открыть панель ошибок',
+                    position: isAuthPage ? 'bottom_left' : 'right',
+                    delayTimeMS
+                }}
+            />
         </>
      )
 }

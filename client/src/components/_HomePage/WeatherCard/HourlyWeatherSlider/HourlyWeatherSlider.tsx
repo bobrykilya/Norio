@@ -73,12 +73,11 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 			className={'hourly_weather_slider-cont cont'}
 		>
 			<RoundButton
-				className={'left'}
+				icon={<FaAngleLeft className={'fa-icon'} />}
 				onClick={handleScrollToTheStart}
+				className={'left'}
 				disabled={scrollTest()}
-			>
-				<FaAngleLeft className={'fa-icon'}/>
-			</RoundButton>
+			/>
 			<ul
 				className={'hourly_weather_list-cont cont'}
 				onWheel={debounceWithStart(handleScrollList, debounceScrollDelay)}
@@ -110,12 +109,11 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 				}
 			</ul>
 			<RoundButton
-				className={'right'}
+				icon={<FaAngleRight className={'fa-icon'} />}
 				onClick={handleScrollToTheEnd}
+				className={'right'}
 				disabled={scrollTest('end')}
-			>
-				<FaAngleRight className={'fa-icon'}/>
-			</RoundButton>
+			/>
 		</div>
 	)
 }

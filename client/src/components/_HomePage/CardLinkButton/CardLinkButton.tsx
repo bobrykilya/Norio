@@ -44,7 +44,7 @@ const CardLinkButton = forwardRef(({ link, onClick, toolTip, disabled, isCloseIc
 					</div>
 				</div>
 			</div>
-			<ToolTip {...toolTip} />
+			{toolTip && <ToolTip {...toolTip} />}
 		</button>
 	)
 })

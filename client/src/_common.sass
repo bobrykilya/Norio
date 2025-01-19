@@ -31,7 +31,7 @@ img, .fa-icon
 .fa-icon
     transition: all 0.15s ease-out
     color: $color-icon
-    overflow: visible
+    //overflow: visible
 
 .cont
     width: 100%
@@ -47,7 +47,7 @@ img, .fa-icon
 
 .before_but-hover
     //border: 1px solid black
-    &::after
+    &::before
         content: ''
         position: absolute
         width: 100%
@@ -58,7 +58,7 @@ img, .fa-icon
         z-index: -2
         transform: scale(0)
     &:hover
-        &::after
+        &::before
             transform: scale(1)
     &:active
         .fa-icon

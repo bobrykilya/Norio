@@ -35,7 +35,7 @@ const getTypeDecoding = (type: SnackBarTypeOptions) => {
 		case 'i' : return { snackType: type, title: 'Инфо', icon: <LuBadgeInfo className='info message-icon fa-icon' />, toastDuration: 5000 }
 		case 'w' : return { snackType: type, title: 'Внимание', icon: <PiSealWarning className='warning message-icon fa-icon' />, toastDuration: Infinity }
 		case 'b' : return { snackType: type, title: 'Блок', icon: <TbLockSquareRounded className='block message-icon fa-icon' />, toastDuration: Infinity }
-        case 's' : return { snackType: type, title: 'Успех', icon: <FiCheckCircle className='success message-icon fa-icon' />, toastDuration: 3000 }
+        case 's' : return { snackType: type, title: 'Успех', icon: <FiCheckCircle className='success message-icon fa-icon' />, toastDuration: 2000 }
     }
 }
 

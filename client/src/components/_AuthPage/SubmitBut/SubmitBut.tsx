@@ -36,10 +36,7 @@ const SubmitBut = ({ icon, onClick, isLoading, useOnClick, disabled, blur, toolT
                     />
                 </div>
             }
-            {
-                toolTip &&
-                <ToolTip {...toolTip} />
-            }
+            {toolTip && <ToolTip {...toolTip} />}
         </button>
     )
 }

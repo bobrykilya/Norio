@@ -112,7 +112,7 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
     const scrollButsJSX = (
         <div className={`scroll_buts-cont cont ${isAvatarListOpened ? 'opened' : ''}`}>
             <button
-                className='avatar_list_up-but cont'
+                className='avatar_list_up-but before_but-hover cont'
                 type='button'
                 tabIndex={-1}
                 onClick={() => listRef.current.scrollTo({ top: 0, behavior: 'smooth'})}
@@ -124,7 +124,7 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
                 <ToolTip text='Пролистать список вверх' position='right' />
             </button>
             <button
-                className='avatar_list_down-but cont opened'
+                className='avatar_list_down-but before_but-hover cont'
                 type='button'
                 tabIndex={-1}
                 onClick={() => listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth'})}

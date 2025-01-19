@@ -12,22 +12,25 @@ $icon-size: 1.4rem
     button
         position: absolute
         $arrow-position: 1.75rem
-        &::after
-            width: $size-round-but - 0.8rem
-            height: $size-round-but - 0.8rem
+        &::before
+            width: $size-round-but - 0.7rem
+            height: $size-round-but - 0.7rem
         &:disabled
             opacity: 0.4
             pointer-events: none
         .fa-icon
+            margin-top: -0.05rem
             color: rgba($color-backgr, 0.3)
             font-size: $size-main-text
         &.left
             left: -$arrow-position
             .fa-icon
+                margin-left: -0.05rem
                 left: -1rem
         &.right
             right: -$arrow-position
             .fa-icon
+                margin-right: -0.05rem
                 right: -1rem
     .hourly_weather_list-cont
         //border: 2px solid black

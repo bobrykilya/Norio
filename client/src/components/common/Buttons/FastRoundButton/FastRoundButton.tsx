@@ -22,7 +22,9 @@ const FastRoundButton = ({ icon, toolTip, notif }: FastRoundButtonProps) => {
 				<>
 					<div
 						className={'notif_circle_cover'}
-					></div>
+					>
+						
+					</div>
 					<div
 						className={'notif_circle cont'}
 					>
@@ -30,7 +32,7 @@ const FastRoundButton = ({ icon, toolTip, notif }: FastRoundButtonProps) => {
 					</div>
 				</>
 			}
-			<ToolTip { ...toolTip } />
+			{toolTip && <ToolTip {...toolTip} />}
 		</button>
 	)
 }

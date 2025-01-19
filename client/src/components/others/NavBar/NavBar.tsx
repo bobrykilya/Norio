@@ -75,16 +75,15 @@ const NavBar = ({ location }: NavBarProps) => {
             >
                 <LogBookButton delayTimeMS={toolTipDelayTimeMS} />
                 <RoundButton
+                    icon={<TbInfoSquareRoundedFilled className='fa-icon' />}
                     onClick={() => {}}
                     className={'info-button'}
-                >
-                    <TbInfoSquareRoundedFilled className='fa-icon'/>
-                    <ToolTip
-                        text='Описание приложения и инструкция'
-                        position={'right'}
-                        delayTimeMS={toolTipDelayTimeMS}
-                    />
-                </RoundButton>
+                    toolTip={{
+                        text: 'Описание приложения и инструкция',
+                        position: 'right',
+                        delayTimeMS: toolTipDelayTimeMS
+                    }}
+                />
                 <SettingsButton delayTimeMS={toolTipDelayTimeMS} />
             </div>
         </div>
