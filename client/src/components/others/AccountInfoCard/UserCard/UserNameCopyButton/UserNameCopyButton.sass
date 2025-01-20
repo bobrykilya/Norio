@@ -1,0 +1,55 @@
+@import '../../../../../variables'
+
+
+.user_name-cont
+    height: auto
+    width: 90%
+    overflow: visible
+    .user_name-but
+        //border: 2px solid brown
+        height: auto
+        width: auto
+        text-align: center
+        color: $color-backgr
+        line-height: $size-main-text + 0.3rem
+        font-size: $size-main-text + 0.07rem
+        cursor: pointer
+        overflow: visible
+        &:hover
+            .user-name
+                &::after
+                    opacity: 1
+        &:active
+            $shadow-active: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3))
+            .user-name
+                transition: none
+                filter: $shadow-active
+            .user-job
+                transition: none
+                filter: $shadow-active
+        .user-name
+            //border: 2px solid brown
+            width: auto
+            height: auto
+            overflow: visible
+            transition: all 0.3s ease-in
+            &::after
+                content: ''
+                position: absolute
+                bottom: -0.3rem
+                height: 2px
+                width: calc(100% + 5rem)
+                background: linear-gradient(90deg, rgba(#ffff, 0) 10%, rgba($color-backgr, 0.4) 50%, rgba(#ffff, 0) 90%)
+                transition: all 0.3s ease-out
+                opacity: 0.4
+        .user-job
+            margin-top: 0.45rem
+            font-size: $size-main-text
+            font-weight: 300
+            color: rgba($color-backgr, 0.8)
+            transition: all 0.3s ease-in
+        .tool_tip-cont
+            .tool_tip
+                &.left
+                    bottom: calc(10%)
+                    right: calc(130%)

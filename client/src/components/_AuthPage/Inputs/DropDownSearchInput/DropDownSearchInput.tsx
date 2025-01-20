@@ -240,14 +240,13 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             <InputError error={error} onClick={() => focusInput(inputRef)} />
             <InputCleaner opened={isCleanerOpened} onClick={clearInput} />
             <DropDown
-                isDropDownOpened={isDropDownOpened}
                 onClick={handleClickElem}
                 ref={dropDownRef}
                 isScrollContent={true}
-                clickOutsideParams={{
+                closeHooksParams={{
                     butRef: inputRef,
                     callback: () => toggleDropDown(false),
-                    condition: isDropDownOpened
+                    conditionsList: [isDropDownOpened]
                 }}
             >
                 {

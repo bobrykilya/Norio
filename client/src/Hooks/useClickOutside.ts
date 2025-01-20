@@ -2,9 +2,9 @@ import { RefObject, useEffect } from 'react'
 
 
 
-type IUseClickOutside = {
+export type IUseClickOutside = {
     ref: RefObject<HTMLElement>;
-    butRef: RefObject<HTMLElement>;
+    butRef?: RefObject<HTMLElement>;
     callback: () => void;
     condition?: boolean | 0;
 }
@@ -16,7 +16,8 @@ export const useClickOutside = ({ ref, butRef, callback, condition=0 }: IUseClic
 
         const handleClick = (e: MouseEvent) => {
             // console.log(buttonRef?.current.contains(e.target as Node))
-            if ((ref.current && !ref.current.contains(e.target as Node)) && (butRef?.current && !butRef?.current.contains(e.target as Node))) {
+            if ((ref.current && !ref.current.contains(e.target as Node)) &&
+                (butRef ? (butRef?.current && !butRef?.current.contains(e.target as Node)) : true)) {
                 callback()
             }
         }

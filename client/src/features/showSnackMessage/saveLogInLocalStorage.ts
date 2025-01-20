@@ -3,6 +3,7 @@ import { ISnack } from '../../../../common/types/Global-types'
 import DeviceService from "../../services/Device-service"
 import { LOCAL_LOG_STORAGE_TIME, RECENTLY_TIME, SAME_LOGS_QUANTITY } from "../../../constants"
 import { useUserInfoState } from "../../stores/Auth-store"
+import { showSnackMessage } from "./showSnackMessage"
 // import { useBlockError } from '../../stores/Global-store'
 
 
@@ -11,11 +12,11 @@ const filterLogListByTime = (err: ISnack) => {
 	return err.snackTime ? getLastTime(err.snackTime, 'hour') < LOCAL_LOG_STORAGE_TIME : false
 }
 
-const checkLogQuantityForRecently = (list: ISnack[]) => {
+const checkLogQuantityForRecently = (list: ISnack[], type: ISnack['type']) => {
 
 	let result = false
 
-	const filteredLogList = list.filter(err => err.type === 'e' && getLastTime(err.snackTime, 'second') < RECENTLY_TIME)
+	const filteredLogList = list.filter(err => err.type === type && getLastTime(err.snackTime, 'second') < RECENTLY_TIME)
 	const countObject = {}
 	
 	for (let err of filteredLogList) {
@@ -53,7 +54,7 @@ const saveLogInLocalStorage = (snack: ISnack) => {
 	
 	//* Error counting for short time blocking
 	if (logList.length < SAME_LOGS_QUANTITY || snack.type === 'b') return
-	if (checkLogQuantityForRecently(logList)) {
+	if (checkLogQuantityForRecently(logList, 'e')) {
 
 		DeviceService.blockDeviceInDB({
 			logTime: snack.snackTime,
@@ -61,6 +62,14 @@ const saveLogInLocalStorage = (snack: ISnack) => {
 			deviceId: JSON.parse(localStorage.getItem('deviceInfo'))?.id,
 			interCode: 807,
 		})
+	}
+	if (snack.type === 's') {
+		if (checkLogQuantityForRecently(logList, 's')) {
+			showSnackMessage({
+				type: 'w',
+				message: 'Очень не хорошо <span class=\'bold\'>дудосить</span>!'
+			})
+		}
 	}
 }
 

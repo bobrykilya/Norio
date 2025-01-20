@@ -26,6 +26,7 @@
                 height: $size-small-round-but
                 .fa-icon
                     color: $color-backgr
+                    will-change: transform
                 .link-icon
                     //margin-top: -1px
                     //margin-left: 0.5px
@@ -37,11 +38,13 @@
         .link-icon
             transform: translate(1px, -1px)
         .close-icon
-            transform: translateY(-1px)
+            transform: rotate(90deg)
     &:active
         background-color: $color-behind-icon
-        .fa-icon
-            transform: scale(0.9)
+        .link-icon
+            transform: scale(0.8)
+        .close-icon
+            transform: rotate(90deg) scale(0.8)
     &:disabled
         pointer-events: none
         .fa-icon

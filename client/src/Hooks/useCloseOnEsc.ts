@@ -2,7 +2,7 @@ import { useEffect } from "react"
 
 
 
-type IUseCloseOnEsc = {
+export type IUseCloseOnEsc = {
 	conditionsList: boolean[];
 	callback: () => void;
 }

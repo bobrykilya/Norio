@@ -1,0 +1,19 @@
+@import '../../../variables'
+
+
+
+.context_menu-cont
+    //border: 2px solid green
+    position: absolute
+    //left: 0
+    //right: 0
+    z-index: 15
+    height: auto
+    width: auto
+    overflow: visible
+    pointer-events: none
+    .dropdown-cont
+        top: calc(100% - 0.1rem)
+        min-width: 9rem
+    &.opened
+        pointer-events: auto

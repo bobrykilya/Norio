@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import ToolTip from "../../ToolTip/ToolTip"
 import { useUserInfoState } from "../../../../stores/Auth-store"
 import { AuthContext } from "../../../../context/Auth-context"
@@ -10,7 +10,7 @@ import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import { FaUserGear, FaUserPen } from "react-icons/fa6"
 import RecentUser from "./RecentUser/RecentUser"
 import { TbTrashXFilled } from "react-icons/tb"
-import { showSnackMessage } from "../../../../features/showSnackMessage/showSnackMessage"
+import UserNameCopyButton from "./UserNameCopyButton/UserNameCopyButton"
 
 
 
@@ -43,27 +43,11 @@ const UserCard = ({  }: UserCardProps) => {
 	const [isFullUserCard, setIsFullUserCard] = useState(true)
 	const { userInfoState } = useUserInfoState()
 	const { handleLogOut } = useContext(AuthContext)
-	const toggleButtonRef = useRef(null)
 
 	const toggleUserCard = () => {
 		setIsFullUserCard(prev => !prev)
 	}
 
-	const copyUsername = () => {
-		navigator.clipboard.writeText(userInfoState?.username)
-			.then(() => {
-				showSnackMessage({
-					type: "s",
-					message: `Скопировано: <span class=\'bold\'>${userInfoState?.username}</span>`,
-				})
-			})
-			.catch(() => {
-				showSnackMessage({
-					type: "e",
-					message: `Не удалось скопировать: <span class=\'bold\'>${userInfoState?.username}</span>`,
-				})
-			})
-	}
 
 	return (
 		<div
@@ -71,14 +55,12 @@ const UserCard = ({  }: UserCardProps) => {
 		>
 			<UnfoldingCard
 				isFullCard={isFullUserCard}
-				ref={toggleButtonRef}
 				toggleCard={toggleUserCard}
 			>
 				<button
 					className="account-but cont"
 					onClick={() => setIsFullUserCard(prev => !prev)}
 					tabIndex={-1}
-					ref={toggleButtonRef}
 				>
 					<div
 						className={'account_img-cont'}
@@ -117,28 +99,9 @@ const UserCard = ({  }: UserCardProps) => {
 				<div
 				    className={'unfolding_card-only_full cont'}
 				>
-					<div
-						className={'user_name-cont cont'}
-						onClick={copyUsername}
-					>
-						<span
-							className={'user-name cont'}
-						>
-							{`${userInfoState.firstName} ${userInfoState.middleName}`}
-							<span>
-								{userInfoState.lastName}
-							</span>
-						</span>
-						<span
-						    className={'user-job'}
-						>
-						    {userInfoState.job}
-						</span>
-						<ToolTip
-							text={`Скопировать логин пользователя`}
-							position={'left'}
-						/>
-					</div>
+					<UserNameCopyButton
+						userInfoState={userInfoState}
+					/>
 					{
 						RECENT_USERS_LIST[0] &&
 						<div

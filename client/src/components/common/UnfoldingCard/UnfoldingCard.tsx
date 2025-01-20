@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useClickOutside } from "../../../hooks/useClickOutside"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 
@@ -10,13 +10,12 @@ type UnfoldingCardProps = {
 	className?: string;
 	children: any;
 }
-const UnfoldingCard = forwardRef(({ isFullCard, toggleCard, className, children }: UnfoldingCardProps, toggleButtonRef: React.MutableRefObject<HTMLButtonElement>) => {
+const UnfoldingCard = ({ isFullCard, toggleCard, className, children }: UnfoldingCardProps) => {
 
 	const cardRef = useRef(null)
 
 	useClickOutside({
 		ref: cardRef,
-		butRef: toggleButtonRef,
 		callback: toggleCard,
 		condition: isFullCard
 	})
@@ -35,6 +34,6 @@ const UnfoldingCard = forwardRef(({ isFullCard, toggleCard, className, children 
 			{children}
 		</div>
 	)
-})
+}
 
 export default UnfoldingCard

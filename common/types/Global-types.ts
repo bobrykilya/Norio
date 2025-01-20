@@ -3,7 +3,14 @@ import { ExpressReq, ExpressRes } from "../../api/src/types/Global-types"
 import { IJWTPayload } from "../../api/src/services/Token-service"
 // @ts-ignore
 import React from "react"
+import { IUseClickOutside } from "../../client/src/hooks/useClickOutside"
+import { IUseCloseOnEsc } from "../../client/src/hooks/useCloseOnEsc"
 
+
+
+export type OmitBy<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+export type ICloseHooksParams = IUseCloseOnEsc & Partial<Pick<IUseClickOutside, 'ref' | 'butRef'>>
 
 
 export type TimeType = number;

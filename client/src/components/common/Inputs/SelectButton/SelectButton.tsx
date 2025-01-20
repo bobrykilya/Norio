@@ -1,47 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react'
-import DropDown from "../../DropDown/DropDown"
-import { ICommonVar } from "../../../../../../common/types/Global-types"
-import { sortByAlphabet } from "../../../../utils/sort"
 import timeout from "../../../../utils/timeout"
 import ToolTip, { ToolTipProps } from "../../../others/ToolTip/ToolTip"
 import { capitalize } from "../../../../utils/capitalize"
+import SelectDropDown, { ISelectDropDownOptionListElem } from "../../SelectDropDown/SelectDropDown"
 
 
-
-const moveFixedElemUp = (a: { isFixed?: boolean }, b: { isFixed?: boolean }) => {
-	return a?.isFixed ? -1 : b?.isFixed ? 1 : 0
-}
-
-
-export type ISelectButtonOptionListElem = {
-	id: string;
-	title: string;
-	icon?: ICommonVar['icon'];
-	isFixed?: boolean;
-}
 
 type SelectButtonProps = {
-	OPTIONS_LIST: ISelectButtonOptionListElem[];
-	selectedState: ISelectButtonOptionListElem;
-	setSelectedState?: (state: ISelectButtonOptionListElem) => void
-	onClick?: (state?: ISelectButtonOptionListElem) => void;
+	OPTIONS_LIST: ISelectDropDownOptionListElem[];
+	selectedState: ISelectDropDownOptionListElem;
+	setSelectedState?: (state: ISelectDropDownOptionListElem) => void
+	onClick?: (state?: ISelectDropDownOptionListElem) => void;
 	needToSort?: boolean;
 	toolTip?: ToolTipProps;
 }
 const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, needToSort=true, toolTip }: SelectButtonProps) => {
 
-	const SORTED_LIST: ISelectButtonOptionListElem[] = needToSort ? sortByAlphabet(OPTIONS_LIST, 'title') : OPTIONS_LIST
-	const HANDLED_LIST = SORTED_LIST.sort(moveFixedElemUp)
 	const [isDropDownOpened, setIsDropDownOpened] = useState(false)
-	const dropDownRef = useRef(null)
-	const butRef = useRef(null)
 
+	const butRef = useRef(null)
 
 	const handleClickBut = () => {
 		// console.log(HANDLED_LIST)
 		setIsDropDownOpened(!isDropDownOpened)
 	}
-	const handleClickOption = async ({ id, title }: ISelectButtonOptionListElem) => {
+	const handleClickOption = async ({ id, title }: ISelectDropDownOptionListElem) => {
 		setIsDropDownOpened(false)
 		butRef.current.classList.add('hide')
 		
@@ -79,33 +62,17 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, 
 				</p>
 				<ToolTip { ...toolTip } />
 			</button>
-			<DropDown
-				isDropDownOpened={isDropDownOpened}
-				ref={dropDownRef}
-				clickOutsideParams={{
+			<SelectDropDown
+				OPTIONS_LIST={OPTIONS_LIST}
+				handleClickOption={handleClickOption}
+				selectedState={selectedState}
+				needToSort={needToSort}
+				closeHooksParams={{
 					butRef: butRef,
 					callback: () => setIsDropDownOpened(false),
-					condition: isDropDownOpened
+					conditionsList: [isDropDownOpened]
 				}}
-				closeOnEscParams={{
-					conditionsList: [isDropDownOpened],
-					callback: () => setIsDropDownOpened(false)
-				}}
-			>
-				{HANDLED_LIST.map((el) => {
-					return <button
-						key={el.id}
-						tabIndex={-1}
-						className={`option-but cont ${el.isFixed ? 'fixed' : ''} ${(el.id === selectedState?.id) ? 'active' : ''}`}
-						onClick={() => handleClickOption({ ...el })}
-					>
-						{el?.icon}
-						<p>
-							{el.title}
-						</p>
-					</button>
-				})}
-			</DropDown>
+			/>
 		</div>
 	)
 }

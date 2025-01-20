@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { showSnackMessage } from "../../../features/showSnackMessage/showSnackMessage"
 import CardLinkButton from "../CardLinkButton/CardLinkButton"
-import SelectButton, { ISelectButtonOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
+import SelectButton, { ISelectDropDownOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
 import { FaLocationDot } from "react-icons/fa6"
 import { LOCATIONS_LIST } from "../../../assets/common/Common-data"
 import { ILocationWeather, ILocationWeatherElem, IWeatherTempObj } from "../../../../../common/types/Device-types"
@@ -126,7 +126,6 @@ const WeatherCard = () => {
 			<UnfoldingCard
 				isFullCard={isFullWeatherCard}
 				toggleCard={toggleWeatherCard}
-				ref={linkButtonRef}
 			>
 				<div
 					className={'weather_card-header cont'}
