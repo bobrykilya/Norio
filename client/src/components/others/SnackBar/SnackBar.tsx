@@ -14,7 +14,7 @@ type ISnackElem = {
 }
 
 type SnackBarProps = {
-    title: string;
+title: string;
     icon: ICommonVar['icon'];
     message: string; 
     toastElem: ISnackElem;
@@ -61,7 +61,8 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
             className={`snackbar-cont cont ${toastElem.visible ? 'opened' : 'closed'} ${type === 'b' && 'blocked'}`}
             type='button'
             tabIndex={-1}
-            onClick={() => {
+            onClick={(e) => {
+                e.stopPropagation()
                 if (type !== 'b') toast.dismiss(toastElem.id)
             }}
         >

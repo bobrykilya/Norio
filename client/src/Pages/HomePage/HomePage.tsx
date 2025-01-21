@@ -55,7 +55,7 @@ const HomePage = ({ isUserLogged, location }: HomePageProps) => {
 
     return ( 
         <ClassicAnim>
-            <div id='main_view-cont' className='cont'>
+            <div id='main_page-cont' className='cont'>
                 <NavBar location={location} />
                 <div className="center-column cont">
                     <div className="center_column-header cont">

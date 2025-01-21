@@ -15,66 +15,71 @@ $size-big-account-img: 120px
         padding: 0
         justify-content: start
         transition: all $dur-unfolding-card * 1.5 ease-out, max-height $dur-unfolding-card * 1.5 ease-out, border-radius $dur-unfolding-card ease-out
-        .account-but
-            border: 1px solid rgba($color-backgr, 0.8)
-            width: $size-little-account-img
-            height: $size-little-account-img
-            overflow: visible
-            border-radius: 50%
-            transition: all $dur-unfolding-card ease
-            padding: 0.15rem
-            &:hover
-                border-radius: 40%
-                .account_img-cont
-                    border-radius: 40%
-            &:active
-                box-shadow: rgba(255, 255, 255, 0.35) 0 0 10px
-                .account_img-cont
-                    transform: scale(0.92)
-            .account_img-cont
-                overflow: hidden
-                pointer-events: none
-                transition: all $dur-unfolding-card ease
-                border-radius: 50%
-                will-change: transform
-                img
-                    width: 100%
-                    height: 100%
-                    object-fit: cover
-                    z-index: -2
-        .account_change-buts
+        max-height: $size-little-account-img
+        .account_change_buts-cont
             //border: 2px solid red
-            position: absolute
             overflow: visible
-            top: $padding-card * 2
-            left: 50%
-            height: $size-big-account-img
-            padding: 0 $padding-card * 1.75
-            flex-direction: row
-            justify-content: space-between
-            flex-shrink: 1
-            transition: all $dur-unfolding-card * 0.5 ease-out
+            transition: all $dur-unfolding-card ease-out
+            height: $size-little-account-img
             max-width: 0
-            opacity: 0
-            transform: translate(-10%, -1rem) scale(0.1)
+            .account-but
+                border: 1px solid rgba($color-backgr, 0.8)
+                position: absolute
+                top: 50%
+                left: 50%
+                transform: translate(-50%, -50%)
+                width: $size-little-account-img
+                height: $size-little-account-img
+                overflow: visible
+                border-radius: 50%
+                transition: all $dur-unfolding-card ease
+                padding: 0.15rem
+                z-index: 1
+                &:hover
+                    border-radius: 40%
+                    .account_img-cont
+                        border-radius: 40%
+                &:active
+                    box-shadow: rgba(255, 255, 255, 0.35) 0 0 10px
+                    .account_img-cont
+                        transform: scale(0.92)
+                .account_img-cont
+                    overflow: hidden
+                    pointer-events: none
+                    transition: all $dur-unfolding-card ease
+                    border-radius: 50%
+                    will-change: transform
+                    img
+                        width: 100%
+                        height: 100%
+                        object-fit: cover
+                        z-index: -2
             .account_change-but
+                position: absolute
+                top: 50%
                 border-radius: 50%
                 $account-change-but: $size-round-but
                 width: $account-change-but
                 height: $account-change-but
                 background-color: $color-behind-icon
                 overflow: visible
-                //border: 2px solid $color-blue-main
-                //background-color: rgba($color-backgr, 0.8)
+                transition: all $dur-unfolding-card ease
+                opacity: 0
+                transform: translateY(-50%) scale(0.1)
+                pointer-events: none
+                z-index: 0
+                &.left
+                    left: 0
+                &.right
+                    right: 0
                 &:hover
-                    //background-color: $color-backgr
                     background-color: rgba($color-behind-icon, 0.3)
                     .fa-icon
                         transform: scale(1.05)
                 &:active
                     background-color: $color-behind-icon
                     .fa-icon
-                        transform: scale(0.9)
+                        transform: scale(0.8)
                 .fa-icon
                     font-size: $size-main-text + 0.25rem
                     margin-right: -0.2rem
@@ -86,14 +91,12 @@ $size-big-account-img: 120px
             //border: 2px solid green
             height: auto
             margin-top: 0.6rem
+            width: 107%
             .recent_users-cont
                 //border: 2px solid rgba($color-backgr, 0.15)
-                margin-top: 0.8rem
+                margin-top: 1rem
                 height: auto
-                width: 107%
-                //background-color: rgba($color-backgr, 0.9)
                 border-radius: $rad-main-border
-                //padding: 0.4rem
                 overflow: visible
                 .recent_users_info-cont
                     //border: 2px solid blue
@@ -102,6 +105,7 @@ $size-big-account-img: 120px
                     overflow: visible
                     //margin-bottom: 0.5rem
                     margin-bottom: 0.7rem
+                    width: 93%
                     &::after
                         content: ''
                         position: absolute
@@ -110,13 +114,9 @@ $size-big-account-img: 120px
                         transform: translateX(-50%)
                         height: 1px
                         width: 95%
-                        //background-color: rgba($color-main-text, 0.3)
                         border-radius: 3px
-                        //background: linear-gradient(90deg, rgba($color-main-text, 0.3) 0%, rgba($color-main-text, 0) 100%)
                         background: linear-gradient(90deg, rgba($color-backgr, 0.3) 0%, rgba($color-backgr, 0) 100%)
-                        //background-color: rgba($color-backgr, 0.2)
                     .recent_users-info
-                        //color: rgba($color-main-text, 0.6)
                         color: rgba($color-backgr, 0.7)
                         margin-left: 0.4rem
                     .round-button
@@ -128,23 +128,24 @@ $size-big-account-img: 120px
                             color: rgba($color-backgr, 0.6)
                             font-size: 0.9rem
             .submit-but
-                margin-top: 0.7rem
+                margin-top: 0.9rem
                 border: 1px solid rgba($color-backgr, 0.5)
                 //width: 90%
                 .fa-icon
                     font-size: $size-main-text + 0.1rem
         &.full
             width: 14.5rem
-            .account-but
-                border: 1px solid $color-backgr
-                width: $size-big-account-img
-                height: $size-big-account-img
-            .account_change-buts
+            .account_change_buts-cont
                 transition: all $dur-unfolding-card * 1.5 ease-out
+                height: $size-big-account-img
                 max-width: 100%
-                opacity: 1
-                transform: translateX(-50%)
-            .unfolding_card-only_full
-                .user_name-cont
+                .account-but
+                    border: 1px solid $color-backgr
+                    width: $size-big-account-img
+                    height: $size-big-account-img
+                .account_change-but
+                    opacity: 1
+                    transform: translateY(-50%)
+                    pointer-events: auto
 
 

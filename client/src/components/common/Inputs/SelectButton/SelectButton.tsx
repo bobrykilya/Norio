@@ -16,7 +16,7 @@ type SelectButtonProps = {
 }
 const SelectButton = ({ OPTIONS_LIST, selectedState, setSelectedState, onClick, needToSort=true, toolTip }: SelectButtonProps) => {
 
-	const [isDropDownOpened, setIsDropDownOpened] = useState(false)
+	const [isDropDownOpened, setIsDropDownOpened] = useState(true)
 
 	const butRef = useRef(null)
 

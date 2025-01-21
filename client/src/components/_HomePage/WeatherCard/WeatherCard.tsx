@@ -125,7 +125,7 @@ const WeatherCard = () => {
 		>
 			<UnfoldingCard
 				isFullCard={isFullWeatherCard}
-				toggleCard={toggleWeatherCard}
+				closeCard={toggleWeatherCard}
 			>
 				<div
 					className={'weather_card-header cont'}

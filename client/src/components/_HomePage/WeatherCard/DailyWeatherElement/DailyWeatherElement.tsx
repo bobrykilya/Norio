@@ -28,7 +28,7 @@ const DailyWeatherElement = ({ weather, label }: DailyWeatherElementProps) => {
 			ref: extraInfoRef,
 			butRef: butRef,
 			callback: switchDailyExtraInfoState,
-			condition: isDailyExtraInfoOpened
+			conditionsList: [isDailyExtraInfoOpened]
 		}
 	)
 

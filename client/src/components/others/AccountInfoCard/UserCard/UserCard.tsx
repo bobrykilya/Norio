@@ -55,28 +55,13 @@ const UserCard = ({  }: UserCardProps) => {
 		>
 			<UnfoldingCard
 				isFullCard={isFullUserCard}
-				toggleCard={toggleUserCard}
+				closeCard={toggleUserCard}
 			>
-				<button
-					className="account-but cont"
-					onClick={() => setIsFullUserCard(prev => !prev)}
-					tabIndex={-1}
-				>
-					<div
-						className={'account_img-cont'}
-					>
-						<img src={`/avatars/${userInfoState?.avatar}.jpg`} alt="Avatar error 3"/>
-					</div>
-					<ToolTip
-						text={`${isFullUserCard ? 'Закрыть' : 'Открыть'} карточку пользователя`}
-						position={`${isFullUserCard ? 'bottom' : 'bottom_left'}`}
-					/>
-				</button>
 				<div
-				    className={'account_change-buts cont'}
+				    className={'account_change_buts-cont cont'}
 				>
 					<button
-						className={'account_change-but cont'}
+						className={'account_change-but cont left'}
 						tabIndex={-1}
 						onClick={() => {}}
 					>
@@ -86,7 +71,22 @@ const UserCard = ({  }: UserCardProps) => {
 						/>
 					</button>
 					<button
-						className={'account_change-but cont'}
+						className="account-but cont"
+						onClick={toggleUserCard}
+						tabIndex={-1}
+					>
+						<div
+							className={'account_img-cont'}
+						>
+							<img src={`/avatars/${userInfoState?.avatar}.jpg`} alt="Avatar error 3"/>
+						</div>
+						<ToolTip
+							text={`${isFullUserCard ? 'Закрыть' : 'Открыть'} карточку пользователя`}
+							position={`${isFullUserCard ? 'bottom' : 'bottom_left'}`}
+						/>
+					</button>
+					<button
+						className={'account_change-but cont right'}
 						tabIndex={-1}
 						onClick={() => {}}
 					>

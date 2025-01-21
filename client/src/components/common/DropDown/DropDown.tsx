@@ -1,7 +1,8 @@
-import React, { forwardRef, useRef } from 'react'
+import React, { forwardRef, useEffect, useRef } from 'react'
 import { useClickOutside } from "../../../hooks/useClickOutside"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 import { ICloseHooksParams } from "../../../../../common/types/Global-types"
+import { useModalState } from "../../../stores/Global-store"
 
 
 
@@ -11,16 +12,19 @@ type DropDownProps = {
 	className?: string;
 	isScrollContent?: boolean;
 	closeHooksParams: ICloseHooksParams;
+	// isStopPropagation?: boolean;
 }
 const DropDown = forwardRef(({ children, onClick, className, isScrollContent, closeHooksParams }: DropDownProps, ref?: React.RefObject<HTMLUListElement>) => {
+
 	const dropDownRef = ref || useRef(null)
+	const setModalState = useModalState(s => s.setModalState) //* For forms Esc blur while any DropDown is opened
 	// console.log({ dropDownRef: dropDownRef.current, ...closeHooksParams })
 
 	useClickOutside({
 		ref: dropDownRef,
+		butRef: closeHooksParams.butRef,
 		callback: closeHooksParams.callback,
-		condition: closeHooksParams.conditionsList[0],
-		butRef: closeHooksParams.butRef
+		conditionsList: closeHooksParams.conditionsList
 	})
 
 	useCloseOnEsc({
@@ -28,10 +32,23 @@ const DropDown = forwardRef(({ children, onClick, className, isScrollContent, cl
 		conditionsList: closeHooksParams.conditionsList
 	})
 
+	useEffect(() => {
+		if (closeHooksParams.conditionsList[0]) {
+			setModalState(true)
+		} else {
+			setModalState(false)
+		}
+	}, [closeHooksParams.conditionsList[0]])
+
 	return (
 		<ul
 			className={`${className ? className : ''} ${isScrollContent ? 'scroll' : ''} dropdown-cont ${closeHooksParams.conditionsList[0] ? 'opened' : ''}`}
-			onClick={onClick}
+			onClick={(e) => {
+				e.stopPropagation()
+				if (onClick) {
+					onClick(e)
+				}
+			}}
 			tabIndex={-1}
 			ref={dropDownRef}
 		>

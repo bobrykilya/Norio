@@ -28,7 +28,7 @@ const AuthPage = ({ blockErrorMessage }: AuthPageProps) => {
                 <LogBookButton isAuthPage={true} />
             </div>
             <AuthPageAnim>
-                <div id="auth_panel-cont" className={`cont ${blockErrorMessage && 'block'}`}>
+                <div id="auth_page-cont" className={`cont ${blockErrorMessage && 'block'}`}>
                     <div id="signs-cont" className="cont">
                         <SignInCont
                             actForm={coverPanelState}
