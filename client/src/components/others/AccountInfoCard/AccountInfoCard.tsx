@@ -13,24 +13,26 @@ const AccountInfoCard = () => {
     return ( 
         <div className='account_info-card cont card'>
             <FastRoundButton
-                icon={
-                    <IoNotificationsSharp className={'fa-icon'} />
-                }
+                onClick={() => {}}
                 toolTip={{
                     text: 'Уведомления',
                     position: 'bottom',
                 }}
+                size={'big'}
                 notif={12}
-            />
+            >
+                <IoNotificationsSharp className={'fa-icon'} />
+            </FastRoundButton>
             <FastRoundButton
-                icon={
-                    <HiDocumentText className={'fa-icon'} />
-                }
+                onClick={() => {}}
                 toolTip={{
                     text: 'Реквизиты',
                     position: 'bottom',
                 }}
-            />
+                size={'big'}
+            >
+                <HiDocumentText className={'fa-icon'} />
+            </FastRoundButton>
             <DateTime />
             <UserCard />
         </div>

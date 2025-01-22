@@ -1,14 +1,13 @@
 import React, { useRef, useState } from 'react'
 import AppTitle from '../../common/AppTitle/AppTitle'
 import { NAV_BAR_LIST } from '../../../assets/common/Common-data'
+import LogBookButton from "../LogBook/LogBookButton"
+import { TbInfoSquareRoundedFilled } from "react-icons/tb"
+import SettingsButton from "../Settings/SettingsButton"
+import { TOOLTIP_DELAY_TIME } from "../../../../constants"
 // @ts-ignore
 import appIcon from '../../../assets/common/logos/app_icon.png'
-import LogBookButton from "../LogBook/LogBookButton"
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
-import ToolTip from "../ToolTip/ToolTip"
-import { TbInfoSquareRoundedFilled } from "react-icons/tb"
-import SettingsButton from "../SettingsButton/SettingsButton"
-import { TOOLTIP_DELAY_TIME } from "../../../../constants"
 
 
 
@@ -55,17 +54,21 @@ const NavBar = ({ location }: NavBarProps) => {
                 className='nav_bar-cont cont card'
             >
                 {
-                    NAV_BAR_LIST.map((el) => {
+                    NAV_BAR_LIST.map(el => {
                         return (
-                            <a className={`cont ${el.id === curr_path ? 'selected' : ''}`} key={el.id}>
+                            <RoundButton
+                                key={el.id}
+                                onClick={() => {}}
+                                className={`clear-but ${el.id === curr_path ? 'selected' : ''}`}
+                                toolTip={{
+                                    text: el.title,
+                                    position: 'right',
+                                    isAlwaysToolTip: true
+                                }}
+                                size={'big'}
+                            >
                                 {el.icon}
-                                <ToolTip
-                                    text={el.title}
-                                    position={'right'}
-                                    delayTimeMS={toolTipDelayTimeMS}
-                                    isAlwaysToolTip={true}
-                                />
-                            </a>
+                            </RoundButton>
                         )
                     })
                 }
@@ -73,18 +76,23 @@ const NavBar = ({ location }: NavBarProps) => {
             <div
                 className={'nav_bar-footer cont'}
             >
-                <LogBookButton delayTimeMS={toolTipDelayTimeMS} />
+                <LogBookButton
+                    delayTimeMS={toolTipDelayTimeMS}
+                />
                 <RoundButton
-                    icon={<TbInfoSquareRoundedFilled className='fa-icon' />}
                     onClick={() => {}}
-                    className={'info-button'}
+                    className={'info-but before_hover-but'}
                     toolTip={{
                         text: 'Описание приложения и инструкция',
                         position: 'right',
                         delayTimeMS: toolTipDelayTimeMS
                     }}
+                >
+                    <TbInfoSquareRoundedFilled className='fa-icon' />
+                </RoundButton>
+                <SettingsButton
+                    delayTimeMS={toolTipDelayTimeMS}
                 />
-                <SettingsButton delayTimeMS={toolTipDelayTimeMS} />
             </div>
         </div>
      )

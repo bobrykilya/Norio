@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6"
-import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import { getTemp } from "../WeatherCard"
 import { getTimeParams } from "../../../../utils/getTime"
 import { debounceWithStart } from "../../../../utils/debounce"
+import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 
 
 
@@ -73,11 +73,13 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 			className={'hourly_weather_slider-cont cont'}
 		>
 			<RoundButton
-				icon={<FaAngleLeft className={'fa-icon'} />}
 				onClick={handleScrollToTheStart}
-				className={'left'}
+				className={'left before_hover-but'}
 				disabled={scrollTest()}
-			/>
+				size={'tiny'}
+			>
+				<FaAngleLeft className={'fa-icon'} />
+			</RoundButton>
 			<ul
 				className={'hourly_weather_list-cont cont'}
 				onWheel={debounceWithStart(handleScrollList, debounceScrollDelay)}
@@ -109,11 +111,13 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 				}
 			</ul>
 			<RoundButton
-				icon={<FaAngleRight className={'fa-icon'} />}
 				onClick={handleScrollToTheEnd}
-				className={'right'}
+				className={'right before_hover-but'}
 				disabled={scrollTest('end')}
-			/>
+				size={'tiny'}
+			>
+				<FaAngleRight className={'fa-icon'} />
+			</RoundButton>
 		</div>
 	)
 }

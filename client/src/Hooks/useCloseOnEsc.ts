@@ -3,10 +3,10 @@ import { useEffect } from "react"
 
 
 export type IUseCloseOnEsc = {
-	conditionsList: boolean[];
 	callback: () => void;
+	conditionsList: boolean[];
 }
-const useCloseOnEsc = ({ conditionsList, callback }: IUseCloseOnEsc) => {
+const useCloseOnEsc = ({ callback, conditionsList }: IUseCloseOnEsc) => {
 	const closeOnEsc = async (e: KeyboardEvent) => {
 		// console.log(e.code)
 		if (e.code === 'Escape') {

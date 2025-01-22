@@ -3,28 +3,18 @@
 
 
 .inputs_cleaner-but
-    // border: 2px solid orange
+    //border: 2px solid orange
     position: absolute
-    // right: -1.8rem
     right: -1.5rem
-    width: $size-input-float-but
-    height: $size-input-float-but
-    overflow: visible
-    border-radius: 50%
     z-index: 3
     transform: scale(0.8) + translateX(-0.5rem)
     opacity: 0
     pointer-events: none
+    .tool_tip-cont
+        .tool_tip
+            width: 4rem
+            left: calc(50% - 2rem)
     &.opened
         transform: scale(1) + translateX(0)
         opacity: 1
         pointer-events: auto
-    .fa-icon
-        // border: 2px solid red
-        transition-duration: 0.2s
-        width: $size-input-float-but - 0.72rem
-        font-size: 1.5rem
-    .tool_tip-cont
-        .tool_tip
-            left: calc(50% - 2.3rem)
-            width: 4rem

@@ -91,22 +91,11 @@
             transform: translateX(480px)
             mix-blend-mode: screen
             z-index: -1
-            &.opened
-                button
-                    transform: translateX(0)
-                .avatar_list_up-but
-                    transition: all 0.7s 0.2s $trans-bounce-style
-                .avatar_list_down-but
-                    transition: all 0.7s 0.4s $trans-bounce-style
-            button
+            .round-but
                 //border: 1px solid black
                 width: $size-scroll-but
                 height: $size-scroll-but
-                border-radius: 50%
                 transition: all 0.1s ease
-                z-index: 1
-                overflow: visible
-                font-weight: 900
                 &::before
                     width: 140%
                     height: 140%
@@ -119,9 +108,7 @@
                     .scroll_but-cont
                         transform: scale(0.9)
                 &:disabled
-                    pointer-events: none
-                    // .scroll_but-cont
-                    //     background-color: red
+                    opacity: 1
                 .scroll_but-cont
                     border-radius: 50%
                     background-color: $color-backgr
@@ -131,10 +118,17 @@
                         font-size: 1.8rem
                         color:  #2f4866d2
                         transition: all 0.2s ease
-            .avatar_list_up-but
+            .up
                 transform: translate(-150px, 600px)
-            .avatar_list_down-but
+            .down
                 transform: translate(-200px, 600px)
             .tool_tip
                 &.right
                     bottom: 25%
+            &.opened
+                .round-but
+                    transform: translateX(0)
+                .up
+                    transition: all 0.7s 0.2s $trans-bounce-style
+                .down
+                    transition: all 0.7s 0.4s $trans-bounce-style

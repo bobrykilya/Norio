@@ -254,7 +254,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                                 tabIndex={-1}
                                 onKeyDown={handleKeyDownOnElem}
                                 disabled={disabled}
-                                className={i===0 ? `active` : null}
+                                className={i===0 ? `active` : ''}
                             >
                                 {el.title}
                             </button>

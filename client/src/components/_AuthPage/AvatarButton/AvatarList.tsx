@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import JumpingList from '../../common/JumpingList/JumpingList'
 import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
-import ToolTip from '../../others/ToolTip/ToolTip'
 import { AuthContext } from '../../../context/Auth-context'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import timeout from "../../../utils/timeout"
 import { sortByAlphabet } from "../../../utils/sort"
+import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 
 
 
@@ -111,30 +111,32 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
 
     const scrollButsJSX = (
         <div className={`scroll_buts-cont cont ${isAvatarListOpened ? 'opened' : ''}`}>
-            <button
-                className='avatar_list_up-but before_but-hover cont'
-                type='button'
-                tabIndex={-1}
+            <RoundButton
                 onClick={() => listRef.current.scrollTo({ top: 0, behavior: 'smooth'})}
+                className={'up before_hover-but'}
                 disabled={!isArrowButsActive}
-                >
+                toolTip={{
+                    text: 'Пролистать список вверх',
+                    position: 'right'
+                }}
+            >
                 <div className='scroll_but-cont cont'>
                     <IoMdArrowRoundUp className='fa-icon' />
                 </div>
-                <ToolTip text='Пролистать список вверх' position='right' />
-            </button>
-            <button
-                className='avatar_list_down-but before_but-hover cont'
-                type='button'
-                tabIndex={-1}
+            </RoundButton>
+            <RoundButton
                 onClick={() => listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth'})}
+                className={'down before_hover-but'}
                 disabled={!isArrowButsActive}
-                >
+                toolTip={{
+                    text: 'Пролистать список вниз',
+                    position: 'right'
+                }}
+            >
                 <div className='scroll_but-cont cont'>
                     <IoMdArrowRoundDown className='fa-icon' />
                 </div>
-                <ToolTip text='Пролистать список вниз' position='right' />
-            </button>
+            </RoundButton>
         </div>
     )
 
@@ -148,7 +150,6 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
                 <ul
                     className='avatar-list cont'
                     ref={listRef}
-                    // onKeyDown={handleKeyDownOnList}
                 >
                     {
                         !SORTED_AND_FILTERED_LIST[0] ?

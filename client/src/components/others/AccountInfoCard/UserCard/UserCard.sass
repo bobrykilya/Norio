@@ -31,10 +31,10 @@ $size-big-account-img: 120px
                 width: $size-little-account-img
                 height: $size-little-account-img
                 overflow: visible
+                z-index: 1
                 border-radius: 50%
                 transition: all $dur-unfolding-card ease
                 padding: 0.15rem
-                z-index: 1
                 &:hover
                     border-radius: 40%
                     .account_img-cont
@@ -54,39 +54,21 @@ $size-big-account-img: 120px
                         height: 100%
                         object-fit: cover
                         z-index: -2
-            .account_change-but
+            .round-but
+                //border: 2px solid green
                 position: absolute
                 top: 50%
-                border-radius: 50%
-                $account-change-but: $size-round-but
-                width: $account-change-but
-                height: $account-change-but
-                background-color: $color-behind-icon
-                overflow: visible
                 transition: all $dur-unfolding-card ease
                 opacity: 0
                 transform: translateY(-50%) scale(0.1)
                 pointer-events: none
-                z-index: 0
+                .fa-icon
+                    margin-right: -0.2rem
+                    margin-top: -0.05rem
                 &.left
                     left: 0
                 &.right
                     right: 0
-                &:hover
-                    background-color: rgba($color-behind-icon, 0.3)
-                    .fa-icon
-                        transform: scale(1.05)
-                &:active
-                    background-color: $color-behind-icon
-                    .fa-icon
-                        transform: scale(0.8)
-                .fa-icon
-                    font-size: $size-main-text + 0.25rem
-                    margin-right: -0.2rem
-                    margin-top: -0.05rem
-                    color: rgba($color-backgr, 0.9)
-                    //color: #2b3c55
-                    will-change: transform
         .unfolding_card-only_full
             //border: 2px solid green
             height: auto
@@ -119,14 +101,9 @@ $size-big-account-img: 120px
                     .recent_users-info
                         color: rgba($color-backgr, 0.7)
                         margin-left: 0.4rem
-                    .round-button
-                        $size-trash-but: $size-round-but - 0.5rem
-                        width: $size-trash-but
-                        height: $size-trash-but
+                    .round-but
                         .fa-icon
-                            //color: rgba($color-main-text, 0.5)
                             color: rgba($color-backgr, 0.6)
-                            font-size: 0.9rem
             .submit-but
                 margin-top: 0.9rem
                 border: 1px solid rgba($color-backgr, 0.5)
@@ -143,7 +120,7 @@ $size-big-account-img: 120px
                     border: 1px solid $color-backgr
                     width: $size-big-account-img
                     height: $size-big-account-img
-                .account_change-but
+                .round-but
                     opacity: 1
                     transform: translateY(-50%)
                     pointer-events: auto

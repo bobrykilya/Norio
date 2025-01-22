@@ -1,6 +1,6 @@
 import React from 'react'
-import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import { TbSettings, TbSettingsFilled } from "react-icons/tb"
+import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 
 
 
@@ -13,18 +13,20 @@ const SettingsButton = ({ isAuthPage=false, delayTimeMS }: SettingsButtonProps) 
 
 	return (
 		<RoundButton
-			icon={isAuthPage ?
-				<TbSettings className='fa-icon' /> :
-				<TbSettingsFilled className='fa-icon' />
-			}
 			onClick={() => {}}
-			className={'settings-button'}
+			className={'settings-but before_hover-but'}
 			toolTip={{
 				text: 'Открыть панель ошибок',
 				position: isAuthPage ? 'bottom_left' : 'right',
 				delayTimeMS
 			}}
-		/>
+		>
+			{
+				isAuthPage ?
+				<TbSettings className='fa-icon' /> :
+				<TbSettingsFilled className='fa-icon' />
+			}
+		</RoundButton>
 	)
 }
 

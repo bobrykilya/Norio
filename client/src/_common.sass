@@ -45,8 +45,10 @@ img, .fa-icon
     overscroll-behavior: contain
     flex-shrink: 0
 
-.before_but-hover
+.before_hover-but
     //border: 1px solid black
+    .fa-icon
+        color: $color-icon
     &::before
         content: ''
         position: absolute
@@ -60,9 +62,20 @@ img, .fa-icon
     &:hover
         &::before
             transform: scale(1)
-    &:active
+
+.clear-but
+    background-color: $color-behind-icon
+    .fa-icon
+        color: $color-backgr-clear
+    &:hover
+        background-color: rgba($color-behind-icon, 0.3)
         .fa-icon
-            transform: scale(0.7)
+            transform: scale(1.05)
+    &:disabled
+        .fa-icon
+            color: rgba($color-backgr, 0.3) !important
+    &:active
+        background-color: $color-behind-icon
 
 .before_lines-hover
     $trans-hover-duration: 0.25s

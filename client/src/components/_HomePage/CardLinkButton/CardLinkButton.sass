@@ -1,14 +1,7 @@
 @import '../../../variables'
 
 
-
-.card_link-button
-    //border: 2px solid black
-    width: $size-small-round-but
-    height: $size-small-round-but
-    border-radius: 50%
-    background-color: $color-behind-icon
-    overflow: visible
+.card_link-but
     .fa_icons_tooltip-cont
         pointer-events: none
         .fa_icons_switch-cont
@@ -22,33 +15,23 @@
             will-change: transform
             transform: translateY(-50%)
             .fa_icon-cont
+                //border: 2px solid red
                 width: $size-small-round-but
                 height: $size-small-round-but
-                .fa-icon
-                    color: $color-backgr
-                    will-change: transform
                 .link-icon
-                    //margin-top: -1px
-                    //margin-left: 0.5px
                     font-size: 18px
                 .close-icon
                     font-size: 23px
     &:hover
-        background-color: rgba($color-behind-icon, 0.3)
         .link-icon
             transform: translate(1px, -1px)
         .close-icon
             transform: rotate(90deg)
     &:active
-        background-color: $color-behind-icon
         .link-icon
             transform: scale(0.8)
         .close-icon
             transform: rotate(90deg) scale(0.8)
-    &:disabled
-        pointer-events: none
-        .fa-icon
-            color: rgba($color-backgr, 0.3) !important
     &.close_icon_opened
         .fa_icons_switch-cont
             transform: translateY(0)

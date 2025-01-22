@@ -19,14 +19,13 @@
     &:hover
         transform: none
         box-shadow: 2px 10px 30px #00000063
-        .snackbar_close-but
+        .snackbar_close-icon
             &::before
-                background-color: #bbbbbb4e
                 transform: scale(0.8)
     &:active
-        .snackbar_close-but
+        .snackbar_close-icon
             .fa-icon
-                transform: scale(0.6)
+                transform: scale(0.8)
     &.opened
         visibility: visible
         pointer-events: auto
@@ -92,15 +91,15 @@
                     background-color: #0303031e
                     border-radius: 10px
                 
-    .snackbar_close-but
+    .snackbar_close-icon
         //border: 2px solid black
         margin-left: 0.5rem
         border-radius: 50%
-        width: $size-big-round-but
-        height: $size-big-round-but
+        width: $size-round-but
+        height: $size-round-but
         overflow: visible
         pointer-events: none
-        .close-icon
+        .fa-icon
             transition: transform 0.2s ease
             font-size: 1rem
 

@@ -1,30 +1,27 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 import { BsArrowUpRight } from "react-icons/bs"
 import { IoClose } from "react-icons/io5"
-import ToolTip, { ToolTipProps } from "../../others/ToolTip/ToolTip"
+import RoundButton, { RoundButtonProps } from "../../common/Buttons/RoundButton/RoundButton"
 
 
 
-type CardLinkButtonProps = {
-	link?: string;
+type CardLinkButtonProps = Pick<RoundButtonProps, 'toolTip' | 'disabled'> & {
 	onClick?: () => void;
-	toolTip?: ToolTipProps;
-	disabled?: boolean;
+	link?: string;
 	isCloseIcon?: boolean;
 }
-const CardLinkButton = forwardRef(({ link, onClick, toolTip, disabled, isCloseIcon }: CardLinkButtonProps, ref?: React.LegacyRef<HTMLButtonElement>) => {
+const CardLinkButton = ({ onClick, link, isCloseIcon, ...props }: CardLinkButtonProps) => {
 
 	const openLink = () => {
 		document.location = `/home/${openLink}`
 	}
 
 	return (
-		<button
-			className={`card_link-button cont ${isCloseIcon ? 'close_icon_opened' : ''}`}
+		<RoundButton
+			className={`card_link-but clear-but ${isCloseIcon ? 'close_icon_opened' : ''}`}
 			onClick={onClick ? onClick : openLink}
-			ref={ref}
-			disabled={disabled}
-			tabIndex={-1}
+			size={'small'}
+			{...props}
 		>
 			<div
 			    className={'fa_icons_tooltip-cont cont'}
@@ -44,9 +41,8 @@ const CardLinkButton = forwardRef(({ link, onClick, toolTip, disabled, isCloseIc
 					</div>
 				</div>
 			</div>
-			{toolTip && <ToolTip {...toolTip} />}
-		</button>
+		</RoundButton>
 	)
-})
+}
 
 export default CardLinkButton

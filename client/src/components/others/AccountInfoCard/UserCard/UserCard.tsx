@@ -5,12 +5,12 @@ import { AuthContext } from "../../../../context/Auth-context"
 import UnfoldingCard from "../../../common/UnfoldingCard/UnfoldingCard"
 import SubmitBut from "../../../_AuthPage/SubmitBut/SubmitBut"
 import { LuLogOut } from "react-icons/lu";
-import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 // import { FaUserCircle } from "react-icons/fa"
 import { FaUserGear, FaUserPen } from "react-icons/fa6"
 import RecentUser from "./RecentUser/RecentUser"
 import { TbTrashXFilled } from "react-icons/tb"
 import UserNameCopyButton from "./UserNameCopyButton/UserNameCopyButton"
+import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 
 
 
@@ -60,16 +60,15 @@ const UserCard = ({  }: UserCardProps) => {
 				<div
 				    className={'account_change_buts-cont cont'}
 				>
-					<button
-						className={'account_change-but cont left'}
-						tabIndex={-1}
+					<RoundButton
+						className={'left clear-but'}
 						onClick={() => {}}
+						toolTip={{
+							text: 'Редактировать личные данные пользователя'
+						}}
 					>
-						<FaUserPen className={'fa-icon'}/>
-						<ToolTip
-							text={'Редактировать личные данные пользователя'}
-						/>
-					</button>
+						<FaUserPen className={'fa-icon'} />
+					</RoundButton>
 					<button
 						className="account-but cont"
 						onClick={toggleUserCard}
@@ -85,16 +84,15 @@ const UserCard = ({  }: UserCardProps) => {
 							position={`${isFullUserCard ? 'bottom' : 'bottom_left'}`}
 						/>
 					</button>
-					<button
-						className={'account_change-but cont right'}
-						tabIndex={-1}
+					<RoundButton
+						className={'right clear-but'}
 						onClick={() => {}}
+						toolTip={{
+							text: 'Редактировать данные аккаунта'
+						}}
 					>
-						<FaUserGear className={'fa-icon'}/>
-						<ToolTip
-							text={'Редактировать данные аккаунта'}
-						/>
-					</button>
+						<FaUserGear className={'fa-icon'} />
+					</RoundButton>
 				</div>
 				<div
 				    className={'unfolding_card-only_full cont'}
@@ -116,12 +114,15 @@ const UserCard = ({  }: UserCardProps) => {
 									Недавние аккаунты
 								</span>
 								<RoundButton
-									icon={<TbTrashXFilled className={'fa-icon'} />}
+									className={'before_hover-but'}
 									onClick={() => {}}
 									toolTip={{
 										text: 'Забыть недавние аккаунты'
 									}}
-								/>
+									size={'tiny'}
+								>
+									<TbTrashXFilled className={'fa-icon'} />
+								</RoundButton>
 							</div>
 							{
 								RECENT_USERS_LIST.map(user =>

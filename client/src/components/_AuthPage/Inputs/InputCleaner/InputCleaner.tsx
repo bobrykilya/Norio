@@ -1,6 +1,6 @@
 import { IoCloseCircleOutline } from "react-icons/io5"
-import ToolTip from '../../../others/ToolTip/ToolTip'
 import React from "react";
+import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 
 
 
@@ -11,15 +11,16 @@ type InputCleanerProps = {
 const InputCleaner = ({ opened, onClick }: InputCleanerProps) => {
 
     return ( 
-        <button 
-            className={`inputs_cleaner-but before_but-hover cont ${opened ? 'opened' : ''}`}
-            tabIndex={-1}
-            type='button'
+        <RoundButton
             onClick={onClick}
+            className={`inputs_cleaner-but before_hover-but ${opened ? 'opened' : ''}`}
+            toolTip={{
+                text: 'Очистить поле'
+            }}
+            size={'tiny'}
         >
             <IoCloseCircleOutline className='fa-icon' />
-            <ToolTip text='Очистить поле' />
-        </button>
+        </RoundButton>
      )
 }
  

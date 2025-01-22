@@ -9,19 +9,13 @@ $icon-size: 1.4rem
     flex-direction: row
     overflow: visible
     z-index: 12
-    button
+    .round-but
+        //border: 2px solid black
         position: absolute
-        $arrow-position: 1.75rem
-        &::before
-            width: $size-round-but - 0.7rem
-            height: $size-round-but - 0.7rem
-        &:disabled
-            opacity: 0.4
-            pointer-events: none
+        $arrow-position: 1.45rem
         .fa-icon
             margin-top: -0.05rem
             color: rgba($color-backgr, 0.3)
-            font-size: $size-main-text
         &.left
             left: -$arrow-position
             .fa-icon

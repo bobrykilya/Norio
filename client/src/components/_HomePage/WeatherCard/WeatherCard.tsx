@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { showSnackMessage } from "../../../features/showSnackMessage/showSnackMessage"
 import CardLinkButton from "../CardLinkButton/CardLinkButton"
-import SelectButton, { ISelectDropDownOptionListElem } from "../../common/Inputs/SelectButton/SelectButton"
+import SelectButton from "../../common/Inputs/SelectButton/SelectButton"
 import { FaLocationDot } from "react-icons/fa6"
 import { LOCATIONS_LIST } from "../../../assets/common/Common-data"
 import { ILocationWeather, ILocationWeatherElem, IWeatherTempObj } from "../../../../../common/types/Device-types"
@@ -50,7 +50,6 @@ const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIS
 const WeatherCard = () => {
 
 	const [isFullWeatherCard, setIsFullWeatherCard] = useState(false)
-	const linkButtonRef = useRef(null)
 	const toggleWeatherCard = () => {
 		setIsFullWeatherCard(prev => !prev)
 	}
@@ -148,7 +147,6 @@ const WeatherCard = () => {
 						}}
 						disabled={!weather}
 						isCloseIcon={isFullWeatherCard}
-						ref={linkButtonRef}
 					/>
 				</div>
 				{

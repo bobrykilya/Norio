@@ -1,33 +1,32 @@
-import React from "react"
+import React, { forwardRef } from 'react'
 import ToolTip, { ToolTipProps } from "../../../others/ToolTip/ToolTip"
-import { ICommonVar } from "../../../../../../common/types/Global-types"
 
 
 
-type RoundButtonProps = {
-	onClick: () => void;
-	icon?: ICommonVar['icon'];
+export type RoundButtonProps = {
+	onClick: (...arg: any[]) => void;
 	className?: string;
 	disabled?: boolean;
 	toolTip?: ToolTipProps;
+	size?: 'tiny' | 'norm' | 'small' | 'big'
 	children?: any;
 }
-const RoundButton = ({ icon, onClick, className, disabled, toolTip, children }: RoundButtonProps) => {
+const RoundButton = forwardRef<HTMLButtonElement, RoundButtonProps>(({ onClick, className, disabled, toolTip, size='norm', children }, ref) => {
 
 
 	return (
 		<button
-			className={`round-button cont before_but-hover ${className || ''}`}
+			className={`${className || ''} round-but ${size} cont`}
 			onClick={onClick}
 			type='button'
 			tabIndex={-1}
 			disabled={disabled}
+			ref={ref}
 		>
-			{icon}
 			{children}
 			{toolTip && <ToolTip {...toolTip} />}
 		</button>
 	)
-}
+})
 
 export default RoundButton

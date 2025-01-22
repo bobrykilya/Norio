@@ -73,10 +73,10 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
             </div>
             {
                 type !== 'b' ? 
-                    <div 
-                        className='snackbar_close-but before_but-hover cont'
+                    <div
+                        className='snackbar_close-icon before_hover-but cont'
                     >
-                        <IoCloseCircleOutline className='close-icon fa-icon' />
+                        <IoCloseCircleOutline className='fa-icon' />
                     </div>
                 :
                     null

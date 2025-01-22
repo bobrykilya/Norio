@@ -17,39 +17,29 @@
             //border: 2px solid black
             z-index: 100
             width: 2.15rem
-            margin-bottom: 1px
+            margin-bottom: 0.05rem
         .app_title-cont
             opacity: 0.6
             .app_title_name
                 font-size: 0.73rem
     .nav_bar-cont
         height: auto
-        padding: 7px 0
+        padding: 0.28rem 0
         overflow: visible
-        a
+        .round-but
             //border: 1px solid orange
-            height: 53px
-            width: 53px
-            border-radius: 25px
-            cursor: pointer
             margin: 0.5px 0
-            overflow: visible
-            transition: all 0.1s ease
+            background-color: rgba($color-behind-icon, 0)
             .fa-icon
-                font-size: 27px
-                color: $color-backgr-clear
+                margin-right: -1.5px
             .tool_tip-cont
                 .tool_tip
                     &.right
                         bottom: calc(10%)
             &:hover
                 background-color: $color-behind-icon
-                .fa-icon
-                    transform: scale(1.05)
             &:active
                 background-color: rgba($color-behind-icon, 0.2)
-                .fa-icon
-                    transform: scale(0.97)
             &.selected
                 pointer-events: none
                 background-color: $color-backgr
@@ -68,16 +58,16 @@
             margin-bottom: 0.7rem
             pointer-events: none
             //display: none
-        .round-button
+        .round-but
             .fa-icon
                 color: $color-backgr-clear
-        .log_book-button
+        .log_book-but
             .fa-icon
-                font-size: 23px
-        .info-button
+                font-size: $size-round-but - 1.08rem
+        .info-but
             margin-bottom: 0.15rem
             .fa-icon
-                font-size: 28px
-        .settings-button
+                font-size: $size-round-but - 0.88rem
+        .settings-but
             .fa-icon
-                font-size: 34px
+                font-size: $size-round-but - 0.64rem

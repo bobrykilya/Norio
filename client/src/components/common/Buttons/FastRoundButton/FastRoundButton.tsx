@@ -1,24 +1,22 @@
 import React from 'react'
-import ToolTip, { ToolTipProps } from "../../../others/ToolTip/ToolTip"
-import { ICommonVar } from "../../../../../../common/types/Global-types"
+import RoundButton, { RoundButtonProps } from "../RoundButton/RoundButton"
 
 
 
-type FastRoundButtonProps = {
-	icon: ICommonVar['icon'];
-	toolTip?: ToolTipProps;
+type FastRoundButtonProps = RoundButtonProps & {
 	notif?: number;
 }
-const FastRoundButton = ({ icon, toolTip, notif }: FastRoundButtonProps) => {
+const FastRoundButton = ({ notif, className, children, ...props  }: FastRoundButtonProps) => {
 
 
 	return (
-		<button
-			className={'fast_button cont'}
-			tabIndex={-1}
+		<RoundButton
+			className={className + ' fast_round-but'}
+			{...props}
 		>
-			{icon}
-			{notif &&
+			{children}
+			{
+				notif &&
 				<>
 					<div
 						className={'notif_circle_cover'}
@@ -32,8 +30,7 @@ const FastRoundButton = ({ icon, toolTip, notif }: FastRoundButtonProps) => {
 					</div>
 				</>
 			}
-			{toolTip && <ToolTip {...toolTip} />}
-		</button>
+		</RoundButton>
 	)
 }
 

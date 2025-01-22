@@ -2,48 +2,79 @@
 
 
 
-.recent_user-but
+.recent_user-cont
     //border: 2px solid black
     overflow: visible
-    flex-direction: row
     height: auto
-    border-radius: $rad-main-border * 0.75
-    padding: 0.2rem 0.4rem
     margin-bottom: 0.2rem
-    background-color: rgba($color-backgr, 0.9)
     &:hover
-        background-color: rgba($color-backgr, 1)
-    .recent_user_img-cont
-        //border: 2px solid yellow
-        overflow: hidden
-        $size-user-img: 2.2rem
-        width: $size-user-img
-        height: $size-user-img
-        border-radius: 20px
-        img
-            width: 100%
-            height: 100%
-            object-fit: cover
-    .recent_user_text-cont
-        //border: 2px solid red
-        flex-shrink: 1
+        .recent_user-but
+            background-color: #dce8f1
+            //.recent_user_img-cont
+            //    border-radius: 25px
+        .round-but
+            transform: none
+            opacity: 1
+            pointer-events: auto
+    .recent_user-but
+        //border: 2px solid black
+        overflow: visible
+        flex-direction: row
         height: auto
-        margin-left: 0.5rem
-        align-items: start
-        text-align: start
-        .recent_user-name
-            //text-align: start
+        border-radius: $rad-main-border * 0.75
+        padding: 0.2rem 0.4rem
+        background-color: rgba($color-backgr, 0.9)
+        transition: all 0.05s ease-out
+        &:active
+            background-color: #cee3f1
+            box-shadow: 0 0 7px rgba(255, 255, 255, 0.3)
+        .recent_user_img-cont
+            //border: 2px solid yellow
+            overflow: hidden
+            $size-user-img: 2.2rem
+            width: $size-user-img
+            height: $size-user-img
+            transition: all 0.2s ease-out
+            border-radius: 20px
+            img
+                width: 100%
+                height: 100%
+                object-fit: cover
+        .recent_user_text-cont
             //border: 2px solid red
-            font-size: $size-main-text
-            line-height: $size-main-text
-            font-weight: 600
-        .recent_user-job
-            //border: 2px solid red
-            margin-top: 0.15rem
-            color: rgba($color-main-text, 0.9)
-            font-size: $size-main-text - 0.05rem
-            line-height: $size-main-text - 0.05rem
-    .tool_tip-cont
-        .tool_tip
-            &.left
-                bottom: calc(-20%)
+            flex-shrink: 1
+            height: auto
+            margin-left: 0.5rem
+            align-items: start
+            text-align: start
+            .recent_user-name
+                //text-align: start
+                //border: 2px solid red
+                font-size: $size-main-text
+                line-height: $size-main-text
+                font-weight: 600
+            .recent_user-job
+                //border: 2px solid red
+                margin-top: 0.15rem
+                color: rgba($color-main-text, 0.9)
+                font-size: $size-main-text - 0.05rem
+                line-height: $size-main-text - 0.05rem
+        .tool_tip-cont
+            .tool_tip
+                &.left
+                    bottom: calc(-20%)
+    .round-but
+        position: absolute
+        right: 0
+        bottom: 0
+        background-color: rgba($color-blue-main, 0.2)
+        transition: all 0.2s ease-out
+        transform: translateX(0.7rem) rotate(180deg)
+        opacity: 0
+        pointer-events: none
+        .fa-icon
+            color: rgba($color-blue-main, 0.6)
+        &:hover
+            background-color: rgba($color-blue-main, 0.4)
+        &:active
+            background-color: rgba($color-blue-main, 0.2)

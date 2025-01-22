@@ -2,16 +2,39 @@
 
 
 
-.round-button
+$differenceButAndIcon: 0.7rem
+.round-but
     //border: 1px solid red
     border-radius: 50%
-    width: $size-round-but
-    height: $size-round-but
     overflow: visible
+    z-index: 1
     .fa-icon
         will-change: transform
-        font-size: 1.3rem
-    .tool_tip-cont
-        .tool_tip
-            &.right
-                bottom: calc(-20%)
+    &:active
+        .fa-icon
+            transform: scale(0.8)
+    &:disabled
+        pointer-events: none
+        opacity: 0.4
+    &.tiny
+        width: $size-tiny-round-but
+        height: $size-tiny-round-but
+        .fa-icon
+            font-size: $size-tiny-round-but - $differenceButAndIcon
+    &.small
+        width: $size-small-round-but
+        height: $size-small-round-but
+        .fa-icon
+            font-size: $size-small-round-but - $differenceButAndIcon * 1.2
+    &.norm
+        width: $size-round-but
+        height: $size-round-but
+        .fa-icon
+            //width: $size-round-but - $differenceButAndIcon * 1.5
+            //height: $size-round-but - $differenceButAndIcon * 1.5
+            font-size: $size-round-but - $differenceButAndIcon * 1.5
+    &.big
+        width: $size-big-round-but
+        height: $size-big-round-but
+        .fa-icon
+            font-size: $size-big-round-but - $differenceButAndIcon * 1.45

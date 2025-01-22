@@ -7,6 +7,7 @@ import { focusInput } from "../../../../utils/focusInput"
 import { useClickOutside } from "../../../../hooks/useClickOutside"
 import ToolTip from '../../../others/ToolTip/ToolTip'
 import { ISignFormInput, SignFormInputTypesOptions } from '../../../../types/Auth-types'
+import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 
 
 
@@ -150,17 +151,21 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
             </div>
             <InputError error={error} onClick={() => focusInput(inputRef)} />
             <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
-            <button
-                className={`lock-but cont before_but-hover ${isLockVisible ? 'opened' : ''}`}
-                type='button'
-                tabIndex={-1}
+            <RoundButton
                 onClick={(handleSwitchLockPosition)}
+                className={`lock-but before_hover-but ${isLockVisible ? 'opened' : ''}`}
+                toolTip={{
+                    text: !isLockOpened ? 'Показать пароль' : 'Скрыть пароль'
+                }}
+                size={'tiny'}
                 ref={lockButtonRef}
             >
-                {!isLockOpened ? <VscEye className='fa-icon' /> :
-                <VscEyeClosed className='fa-icon' />}
-                <ToolTip text={!isLockOpened ? 'Показать пароль' : 'Скрыть пароль'} />
-            </button>
+                {
+                    !isLockOpened ?
+                    <VscEye className='fa-icon' /> :
+                    <VscEyeClosed className='fa-icon' />
+                }
+            </RoundButton>
         </div>
     )
 }
