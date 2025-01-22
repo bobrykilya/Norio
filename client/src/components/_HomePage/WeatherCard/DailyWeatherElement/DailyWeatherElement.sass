@@ -26,13 +26,15 @@ $icon-size: 1.4rem
             margin-right: 0.7rem
             .daily_weather_el-day
                 //border: 1px solid brown
+                white-space: nowrap
                 font-weight: 600
                 color: $color-backgr
             .daily_weather_el-description
                 //border: 1px solid brown
                 text-align: end
                 line-height: $size-main-text + 0.1rem
-                max-width: 7.5rem
+                margin-left: 0.5rem
+                //max-width: 7.5rem
                 color: rgba($color-backgr, 0.8)
         .daily_weather_el_weather-cont
             //border: 1px solid black
@@ -58,7 +60,7 @@ $icon-size: 1.4rem
         padding: $padding-card
         background: linear-gradient(rgba($color-bg-light, 0.97), rgba($color-blue-main, 0.97))
         will-change: scale
-        transition: all 0.25s ease-out
+        transition: all 0.15s ease-out
         transform: translate(calc(100% + 2rem), -50%)
         scale: 0.95
         opacity: 0

@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { IRecentUser } from "../UserCard"
 import ToolTip from "../../../ToolTip/ToolTip"
 import { IoClose } from "react-icons/io5"
 import RoundButton from "../../../../common/Buttons/RoundButton/RoundButton"
+import timeout from "../../../../../utils/timeout"
 
 
 
@@ -11,17 +12,31 @@ type RecentUserProps = {
 }
 const RecentUser = ({ user }: RecentUserProps) => {
 
+	const userContRef = useRef(null)
+
+
+	const handleChangeUser = () => {
+
+	}
+
+	const handleRemoveUser = async () => {
+		userContRef.current.classList.add('hide')
+
+		await timeout(200)
+
+		
+	}
 
 	return (
 
 		<div
 			className={'recent_user-cont cont'}
+			ref={userContRef}
 		>
 			<button
 				className={'recent_user-but cont'}
 				tabIndex={-1}
-				onClick={() => {
-				}}
+				onClick={handleChangeUser}
 			>
 				<div
 					className={'recent_user_img-cont cont'}
@@ -48,10 +63,9 @@ const RecentUser = ({ user }: RecentUserProps) => {
 				/>
 			</button>
 			<RoundButton
-				onClick={() => {}}
+				onClick={handleRemoveUser}
 				toolTip={{
 					text: `Забыть пользователя ${user.username}`,
-					position: 'bottom'
 				}}
 				size={'tiny'}
 			>

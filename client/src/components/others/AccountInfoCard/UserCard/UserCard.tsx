@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import ToolTip from "../../ToolTip/ToolTip"
 import { useUserInfoState } from "../../../../stores/Auth-store"
 import { AuthContext } from "../../../../context/Auth-context"
@@ -11,6 +11,7 @@ import RecentUser from "./RecentUser/RecentUser"
 import { TbTrashXFilled } from "react-icons/tb"
 import UserNameCopyButton from "./UserNameCopyButton/UserNameCopyButton"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
+import timeout from "../../../../utils/timeout"
 
 
 
@@ -43,9 +44,19 @@ const UserCard = ({  }: UserCardProps) => {
 	const [isFullUserCard, setIsFullUserCard] = useState(true)
 	const { userInfoState } = useUserInfoState()
 	const { handleLogOut } = useContext(AuthContext)
+	const usersContRef = useRef(null)
+
 
 	const toggleUserCard = () => {
 		setIsFullUserCard(prev => !prev)
+	}
+
+	const handleRemoveAllUsers = async () => {
+		usersContRef.current.classList.add('hide')
+
+		await timeout(400)
+
+
 	}
 
 
@@ -100,40 +111,38 @@ const UserCard = ({  }: UserCardProps) => {
 					<UserNameCopyButton
 						userInfoState={userInfoState}
 					/>
-					{
-						RECENT_USERS_LIST[0] &&
+					<div
+						className={`recent_users-cont cont ${!RECENT_USERS_LIST[0] ? 'hide' : ''}`}
+						ref={usersContRef}
+					>
 						<div
-							className={'recent_users-cont cont'}
+							className={'recent_users_info-cont cont'}
 						>
-							<div
-								className={'recent_users_info-cont cont'}
+							<span
+								className={'recent_users-info'}
 							>
-								<span
-									className={'recent_users-info'}
-								>
-									Недавние аккаунты
-								</span>
-								<RoundButton
-									className={'before_hover-but'}
-									onClick={() => {}}
-									toolTip={{
-										text: 'Забыть недавние аккаунты'
-									}}
-									size={'tiny'}
-								>
-									<TbTrashXFilled className={'fa-icon'} />
-								</RoundButton>
-							</div>
-							{
-								RECENT_USERS_LIST.map(user =>
-									<RecentUser
-										key={user.username}
-										user={user}
-									/>
-								)
-							}
+								Сменить аккаунт
+							</span>
+							<RoundButton
+								className={'before_hover-but'}
+								onClick={handleRemoveAllUsers}
+								toolTip={{
+									text: 'Забыть недавние аккаунты'
+								}}
+								size={'tiny'}
+							>
+								<TbTrashXFilled className={'fa-icon'} />
+							</RoundButton>
 						</div>
-					}
+						{
+							RECENT_USERS_LIST.map(user =>
+								<RecentUser
+									key={user.username}
+									user={user}
+								/>
+							)
+						}
+					</div>
 				    <SubmitBut
 						icon={<LuLogOut className={'fa-icon'} />}
 						onClick={handleLogOut}

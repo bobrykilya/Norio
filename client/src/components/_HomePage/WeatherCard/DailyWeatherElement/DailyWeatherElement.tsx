@@ -2,9 +2,9 @@ import React, { useRef, useState } from 'react'
 import { getTemp } from "../WeatherCard"
 import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
 import { getDayOfWeek, getMonth, getTimeParams } from "../../../../utils/getTime"
-import { capitalize } from "../../../../utils/capitalize"
 import WeatherExtraInfo from "../WeatherExtraInfo/WeatherExtraInfo"
 import { useClickOutside } from "../../../../hooks/useClickOutside"
+import { capitalize } from "../../../../utils/capitalize"
 
 
 
@@ -23,14 +23,13 @@ const DailyWeatherElement = ({ weather, label }: DailyWeatherElementProps) => {
 		setIsDailyExtraInfoOpened(prev => !prev)
 	}
 
-	useClickOutside(
-		{
+	useClickOutside({
 			ref: extraInfoRef,
 			butRef: butRef,
 			callback: switchDailyExtraInfoState,
 			conditionsList: [isDailyExtraInfoOpened]
-		}
-	)
+	})
+
 
 	return (
 		<div

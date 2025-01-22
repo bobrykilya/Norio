@@ -13,18 +13,23 @@ $icon-size: 1.4rem
         //border: 2px solid black
         position: absolute
         $arrow-position: 1.45rem
+        $arrow-icon-shift: 0.03rem
+        $before-size: $size-tiny-round-but - 0.25rem
+        &::before
+            width: $before-size
+            height: $before-size
         .fa-icon
-            margin-top: -0.05rem
+            //margin-top: -0.05rem
             color: rgba($color-backgr, 0.3)
         &.left
             left: -$arrow-position
             .fa-icon
-                margin-left: -0.05rem
+                margin-left: -$arrow-icon-shift
                 left: -1rem
         &.right
             right: -$arrow-position
             .fa-icon
-                margin-right: -0.05rem
+                margin-right: -$arrow-icon-shift
                 right: -1rem
     .hourly_weather_list-cont
         //border: 2px solid black

@@ -6,12 +6,15 @@
     //border: 2px solid black
     overflow: visible
     height: auto
+    transition: all 0.2s ease-out
+    max-height: 5rem
     margin-bottom: 0.2rem
     &:hover
         .recent_user-but
-            background-color: #dce8f1
-            //.recent_user_img-cont
-            //    border-radius: 25px
+            //background-color: #d5e5f1
+            .recent_user_img-cont
+                border: 3px solid $color-blue-main
+                box-shadow: 0 0 7px rgba($color-blue-main, 0.6)
         .round-but
             transform: none
             opacity: 1
@@ -21,25 +24,27 @@
         overflow: visible
         flex-direction: row
         height: auto
-        border-radius: $rad-main-border * 0.75
-        padding: 0.2rem 0.4rem
+        border-radius: $rad-main-border
+        padding: 0.2rem
         background-color: rgba($color-backgr, 0.9)
         transition: all 0.05s ease-out
         &:active
-            background-color: #cee3f1
-            box-shadow: 0 0 7px rgba(255, 255, 255, 0.3)
+            background-color: #d5e5f1
+            //background-color: #c2ddee
+            box-shadow: 0 0 7px rgba(255, 255, 255, 0.5)
         .recent_user_img-cont
-            //border: 2px solid yellow
+            border: 3px solid $color-cover-light
             overflow: hidden
-            $size-user-img: 2.2rem
+            $size-user-img: 2.8rem
             width: $size-user-img
             height: $size-user-img
             transition: all 0.2s ease-out
-            border-radius: 20px
+            border-radius: 50%
+            padding: 0.1rem
             img
                 width: 100%
                 height: 100%
-                object-fit: cover
+                border-radius: 50%
         .recent_user_text-cont
             //border: 2px solid red
             flex-shrink: 1
@@ -55,7 +60,7 @@
                 font-weight: 600
             .recent_user-job
                 //border: 2px solid red
-                margin-top: 0.15rem
+                margin-top: 0.2rem
                 color: rgba($color-main-text, 0.9)
                 font-size: $size-main-text - 0.05rem
                 line-height: $size-main-text - 0.05rem
@@ -65,16 +70,24 @@
                     bottom: calc(-20%)
     .round-but
         position: absolute
-        right: 0
+        right: 0.1rem
         bottom: 0
         background-color: rgba($color-blue-main, 0.2)
         transition: all 0.2s ease-out
-        transform: translateX(0.7rem) rotate(180deg)
+        transform: translateX(0.7rem) rotate(90deg)
         opacity: 0
         pointer-events: none
+        z-index: 3
         .fa-icon
-            color: rgba($color-blue-main, 0.6)
+            color: rgba($color-blue-main, 0.8)
         &:hover
             background-color: rgba($color-blue-main, 0.4)
         &:active
             background-color: rgba($color-blue-main, 0.2)
+    &.hide
+        max-height: 0
+        margin: 0
+        opacity: 0
+        filter: blur(5px)
+        z-index: -1
+        pointer-events: none

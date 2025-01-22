@@ -73,13 +73,14 @@ $size-big-account-img: 120px
             //border: 2px solid green
             height: auto
             margin-top: 0.6rem
-            width: 107%
+            width: 110%
             .recent_users-cont
-                //border: 2px solid rgba($color-backgr, 0.15)
-                margin-top: 1rem
+                //border: 2px solid blue
                 height: auto
-                border-radius: $rad-main-border
                 overflow: visible
+                transition: all 0.4s ease
+                max-height: 20rem
+                margin-top: 1rem
                 .recent_users_info-cont
                     //border: 2px solid blue
                     flex-direction: row
@@ -87,7 +88,7 @@ $size-big-account-img: 120px
                     overflow: visible
                     //margin-bottom: 0.5rem
                     margin-bottom: 0.7rem
-                    width: 93%
+                    width: 90%
                     &::after
                         content: ''
                         position: absolute
@@ -104,6 +105,13 @@ $size-big-account-img: 120px
                     .round-but
                         .fa-icon
                             color: rgba($color-backgr, 0.6)
+                &.hide
+                    max-height: 0
+                    margin: 0
+                    opacity: 0
+                    filter: blur(5px)
+                    z-index: -1
+                    pointer-events: none
             .submit-but
                 margin-top: 0.9rem
                 border: 1px solid rgba($color-backgr, 0.5)
