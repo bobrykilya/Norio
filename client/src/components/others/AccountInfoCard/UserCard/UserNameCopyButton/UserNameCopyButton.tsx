@@ -18,6 +18,10 @@ type UserNameCopyButtonProps = {
 }
 const UserNameCopyButton = ({ userInfoState }: UserNameCopyButtonProps) => {
 
+	if(!userInfoState) {
+		return
+	}
+
 	const [isDropDownOpened, setIsDropDownOpened] = useState(false)
 	const userNameRef = useRef(null)
 	const copyIcon = <BiSolidCopy className={'fa-icon'} />

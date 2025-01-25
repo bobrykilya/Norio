@@ -1,40 +1,16 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import ToolTip from "../../ToolTip/ToolTip"
 import { useUserInfoState } from "../../../../stores/Auth-store"
 import { AuthContext } from "../../../../context/Auth-context"
 import UnfoldingCard from "../../../common/UnfoldingCard/UnfoldingCard"
 import SubmitBut from "../../../_AuthPage/SubmitBut/SubmitBut"
 import { LuLogOut } from "react-icons/lu";
-// import { FaUserCircle } from "react-icons/fa"
 import { FaUserGear, FaUserPen } from "react-icons/fa6"
-import RecentUser from "./RecentUser/RecentUser"
-import { TbTrashXFilled } from "react-icons/tb"
 import UserNameCopyButton from "./UserNameCopyButton/UserNameCopyButton"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
-import timeout from "../../../../utils/timeout"
+import SwitchUser from "../../../others/SwitchUser/SwitchUser"
 
 
-
-export type IRecentUser = {
-	username: string;
-	name: string;
-	job: string;
-	avatar: string;
-}
-const RECENT_USERS_LIST: IRecentUser[] = [
-	{
-		username: 'sonya',
-		name: 'Василевич Светлана',
-		job: 'Главный бухгалтер',
-		avatar: 'dog_9'
-	},
-	{
-		username: 'sekr',
-		name: 'Шнигир Виктория',
-		job: 'Секретарь',
-		avatar: 'antelope'
-	},
-]
 
 type UserCardProps = {
 
@@ -44,19 +20,10 @@ const UserCard = ({  }: UserCardProps) => {
 	const [isFullUserCard, setIsFullUserCard] = useState(true)
 	const { userInfoState } = useUserInfoState()
 	const { handleLogOut } = useContext(AuthContext)
-	const usersContRef = useRef(null)
 
 
 	const toggleUserCard = () => {
 		setIsFullUserCard(prev => !prev)
-	}
-
-	const handleRemoveAllUsers = async () => {
-		usersContRef.current.classList.add('hide')
-
-		await timeout(400)
-
-
 	}
 
 
@@ -75,7 +42,7 @@ const UserCard = ({  }: UserCardProps) => {
 						className={'left clear-but'}
 						onClick={() => {}}
 						toolTip={{
-							text: 'Редактировать личные данные пользователя'
+							text: 'Личные данные пользователя'
 						}}
 					>
 						<FaUserPen className={'fa-icon'} />
@@ -99,7 +66,7 @@ const UserCard = ({  }: UserCardProps) => {
 						className={'right clear-but'}
 						onClick={() => {}}
 						toolTip={{
-							text: 'Редактировать данные аккаунта'
+							text: 'Данные аккаунта'
 						}}
 					>
 						<FaUserGear className={'fa-icon'} />
@@ -111,38 +78,9 @@ const UserCard = ({  }: UserCardProps) => {
 					<UserNameCopyButton
 						userInfoState={userInfoState}
 					/>
-					<div
-						className={`recent_users-cont cont ${!RECENT_USERS_LIST[0] ? 'hide' : ''}`}
-						ref={usersContRef}
-					>
-						<div
-							className={'recent_users_info-cont cont'}
-						>
-							<span
-								className={'recent_users-info'}
-							>
-								Сменить аккаунт
-							</span>
-							<RoundButton
-								className={'before_hover-but'}
-								onClick={handleRemoveAllUsers}
-								toolTip={{
-									text: 'Забыть недавние аккаунты'
-								}}
-								size={'tiny'}
-							>
-								<TbTrashXFilled className={'fa-icon'} />
-							</RoundButton>
-						</div>
-						{
-							RECENT_USERS_LIST.map(user =>
-								<RecentUser
-									key={user.username}
-									user={user}
-								/>
-							)
-						}
-					</div>
+					<SwitchUser
+						userInfo={userInfoState}
+					/>
 				    <SubmitBut
 						icon={<LuLogOut className={'fa-icon'} />}
 						onClick={handleLogOut}

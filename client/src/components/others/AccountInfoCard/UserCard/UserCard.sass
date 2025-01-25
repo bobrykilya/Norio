@@ -74,44 +74,9 @@ $size-big-account-img: 120px
             height: auto
             margin-top: 0.6rem
             width: 110%
-            .recent_users-cont
+            .switch_user-cont
                 //border: 2px solid blue
-                height: auto
-                overflow: visible
-                transition: all 0.4s ease
-                max-height: 20rem
                 margin-top: 1rem
-                .recent_users_info-cont
-                    //border: 2px solid blue
-                    flex-direction: row
-                    justify-content: space-between
-                    overflow: visible
-                    //margin-bottom: 0.5rem
-                    margin-bottom: 0.7rem
-                    width: 90%
-                    &::after
-                        content: ''
-                        position: absolute
-                        bottom: -0.2rem
-                        left: 50%
-                        transform: translateX(-50%)
-                        height: 1px
-                        width: 95%
-                        border-radius: 3px
-                        background: linear-gradient(90deg, rgba($color-backgr, 0.3) 0%, rgba($color-backgr, 0) 100%)
-                    .recent_users-info
-                        color: rgba($color-backgr, 0.7)
-                        margin-left: 0.4rem
-                    .round-but
-                        .fa-icon
-                            color: rgba($color-backgr, 0.6)
-                &.hide
-                    max-height: 0
-                    margin: 0
-                    opacity: 0
-                    filter: blur(5px)
-                    z-index: -1
-                    pointer-events: none
             .submit-but
                 margin-top: 0.9rem
                 border: 1px solid rgba($color-backgr, 0.5)

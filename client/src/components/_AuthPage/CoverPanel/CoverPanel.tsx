@@ -26,7 +26,7 @@ const CoverPanel = ({ disabled }: CoverPanelProps) => {
                 <div id='cover-content' className='cont'>
                     <section id='sign_up_info-cont' className='cont'>
                         <h1>Нет аккаунта?</h1>
-                        <p>Подай заявку на<br/>регистрацию и дождись<br/>активации профиля<br/>пользователя</p>
+                        <p>Подай заявку на<br/>регистрацию и дождись<br/>активации аккаунта<br/>пользователя</p>
                         <button
                             id='open_sign_up-but'
                             type='button'

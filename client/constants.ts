@@ -19,3 +19,6 @@ export const MY_LOC = 'myLocation'
 
 //* Weather settings
 	export const WEATHER_ACCURACY = 3 					//* Number of decimal places for weather-service's coords (default: 3)
+
+//* Users settings
+	export const MAX_SWITCH_USERS = 3					//* Max quantity of authorized users on client

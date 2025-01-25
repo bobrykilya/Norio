@@ -1,25 +1,28 @@
-@import '../../../../../variables'
+@import '../../../../variables'
 
 
-
-.recent_user-cont
+$dur-hide: 0.3s
+.switch_user_elem-cont
     //border: 2px solid black
     overflow: visible
     height: auto
-    transition: all 0.2s ease-out
+    transition: all $dur-hide $dur-hide / 4 ease-out
     max-height: 5rem
     margin-bottom: 0.2rem
     &:hover
-        .recent_user-but
+        .switch_user_elem-but
             //background-color: #d5e5f1
-            .recent_user_img-cont
-                border: 3px solid $color-blue-main
-                box-shadow: 0 0 7px rgba($color-blue-main, 0.6)
+            .switch_user_elem_img-cont
+                border: 3px solid rgba($color-blue-main, 0.8)
+                box-shadow: 0 0 5px rgba($color-blue-main, 0.7)
+                .fa-icon
+                    color: rgba($color-blue-main, 0.8)
+                    transform: scale(1.05)
         .round-but
             transform: none
             opacity: 1
             pointer-events: auto
-    .recent_user-but
+    .switch_user_elem-but
         //border: 2px solid black
         overflow: visible
         flex-direction: row
@@ -27,12 +30,15 @@
         border-radius: $rad-main-border
         padding: 0.2rem
         background-color: rgba($color-backgr, 0.9)
-        transition: all 0.05s ease-out
+        transition: all 0.1s ease-out
         &:active
+            transition: all 0.05s ease-out
             background-color: #d5e5f1
-            //background-color: #c2ddee
             box-shadow: 0 0 7px rgba(255, 255, 255, 0.5)
-        .recent_user_img-cont
+            .switch_user_elem_img-cont
+                .fa-icon
+                    transform: scale(0.85)
+        .switch_user_elem_img-cont
             border: 3px solid $color-cover-light
             overflow: hidden
             $size-user-img: 2.8rem
@@ -45,20 +51,24 @@
                 width: 100%
                 height: 100%
                 border-radius: 50%
-        .recent_user_text-cont
+            .fa-icon
+                transition: all 0.1s ease-out
+                font-size: 1.65rem
+                color: $color-cover-light
+        .switch_user_elem_text-cont
             //border: 2px solid red
             flex-shrink: 1
             height: auto
             margin-left: 0.5rem
             align-items: start
             text-align: start
-            .recent_user-name
+            .switch_user_elem-name
                 //text-align: start
                 //border: 2px solid red
                 font-size: $size-main-text
                 line-height: $size-main-text
                 font-weight: 600
-            .recent_user-job
+            .switch_user_elem-job
                 //border: 2px solid red
                 margin-top: 0.2rem
                 color: rgba($color-main-text, 0.9)
@@ -67,7 +77,7 @@
         .tool_tip-cont
             .tool_tip
                 &.left
-                    bottom: calc(-20%)
+                    bottom: calc(-5%)
     .round-but
         position: absolute
         right: 0.1rem
@@ -85,9 +95,11 @@
         &:active
             background-color: rgba($color-blue-main, 0.2)
     &.hide
+        transition: all $dur-hide ease-out
         max-height: 0
         margin: 0
         opacity: 0
         filter: blur(5px)
         z-index: -1
         pointer-events: none
+        //transform: translateY(0.4rem)

@@ -19,7 +19,7 @@ const UnfoldingCard = ({ isFullCard, closeCard, className, children }: Unfolding
 	useClickOutside({
 		ref: cardRef,
 		callback: closeCard,
-		conditionsList: [isFullCard, !modalState, !blurModalState]
+		conditionsList: [isFullCard]
 	})
 
 	useCloseOnEsc({

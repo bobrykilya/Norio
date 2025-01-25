@@ -96,6 +96,7 @@ const AuthProvider = ({ children }) => {
 
 	const saveUserDataOnBrowser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId }: ILoginServiceRes & { lsDeviceId?: number }) => {
 		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
+
 		testAndUpdateLSDeviceId(deviceId, lsDeviceId)
 		useUserInfoState.setState({ userInfoState: userInfo })
 		localStorage.setItem('activeUserName', JSON.stringify({

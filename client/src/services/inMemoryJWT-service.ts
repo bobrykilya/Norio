@@ -21,7 +21,8 @@ const inMemoryJWTService = () => {
 
     const abortRefreshToken = () => {
         if (refreshTimeoutId) {
-            clearInterval(refreshTimeoutId)
+            // clearInterval(refreshTimeoutId)
+            clearTimeout(refreshTimeoutId)
         }
     }
 

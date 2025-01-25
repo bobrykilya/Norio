@@ -10,7 +10,7 @@
     }
     export const ACCESS_TOKEN_EXPIRATION = 18e5 //* Access token maxAge: 1800 * 1000 (30 minutes)
 
-    export const FAST_SESSION_DURATION = 600     //* Fast session duration in seconds (default: 600)
+    export const FAST_SESSION_DURATION = 10     //* Fast session duration in seconds (default: 600?)
     export const AUTO_LOGOUT_INTERVAL = 60      //* AutoLogout checking interval in seconds (default: 60)
     export const DEFAULT_BLOCK_DURATION = 3     //* Block duration in minutes (default: 3)
 

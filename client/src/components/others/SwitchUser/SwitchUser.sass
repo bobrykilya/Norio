@@ -1,0 +1,39 @@
+@import '../../../variables'
+
+
+
+.switch_user-cont
+    //border: 2px solid blue
+    overflow: visible
+    .switch_user_info-cont
+        //border: 2px solid blue
+        flex-direction: row
+        justify-content: space-between
+        overflow: visible
+        margin-bottom: 0.7rem
+        width: 90%
+        &::after
+            content: ''
+            position: absolute
+            bottom: -0.2rem
+            left: 50%
+            transform: translateX(-50%)
+            height: 1px
+            width: 95%
+            border-radius: 3px
+            background: linear-gradient(90deg, rgba($color-backgr, 0.3) 0%, rgba($color-backgr, 0) 100%)
+        .switch_user-info
+            //border: 2px solid blue
+            width: auto
+            height: $size-tiny-round-but
+            color: rgba($color-backgr, 0.7)
+            margin-left: 0.4rem
+            overflow: visible
+            .tool_tip-cont
+                .tool_tip
+                    &.left
+                        right: calc(100% + 0.5rem)
+                        bottom: -2rem
+        .round-but
+            .fa-icon
+                color: rgba($color-backgr, 0.6)
