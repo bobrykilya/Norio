@@ -4,25 +4,34 @@ import ToolTip from "../../ToolTip/ToolTip"
 // import { ISwitchUserElem } from "../SwitchUser"
 import { IoAdd, IoClose } from "react-icons/io5"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
-import { ISwitchUserElem } from "../SwitchUser"
+import logOut from "../../../../features/auth/logOut"
+import { IUserRepository } from "../../../../../../api/src/types/DB-types"
+import timeout from "../../../../utils/timeout"
 // import { ISwitchUserElem } from "../SwitchUser"
 
 
 
 type SwitchUserElemProps = {
 	isHide: boolean;
-	setUsersList?: React.Dispatch<React.SetStateAction<ISwitchUserElem[]>>;
-	user?: ISwitchUserElem;
+	setUsersList?: React.Dispatch<React.SetStateAction<IUserRepository[]>>;
+	user?: IUserRepository;
 	isNewUser?: boolean;
 }
 const SwitchUserElem = ({ isHide, setUsersList, user, isNewUser }: SwitchUserElemProps) => {
 
-	const handleChangeUser = () => {
 
+	const handleChangeUser = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.stopPropagation()
+		logOut.handleSwitchUser(user?.username)
 	}
 
-	const handleRemoveUser = async () => {
+	const handleRemoveUser = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.stopPropagation()
 		setUsersList(prev => prev.filter(el => el.username !== user.username))
+
+		await timeout(300)
+		
+		logOut.handleRemoveSwitchUser(user.username)
 	}
 
 	return (
@@ -52,7 +61,7 @@ const SwitchUserElem = ({ isHide, setUsersList, user, isNewUser }: SwitchUserEle
 					>
 						{
 							!isNewUser ?
-							user.name :
+							`${user.lastName} ${user.firstName}` :
 							'Новый аккаунт'
 						}
 					</span>

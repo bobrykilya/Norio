@@ -1,7 +1,7 @@
 import ky from "ky"
-import inMemoryJWTService from '../services/inMemoryJWT-service.js'
 import { CHECK_IP_AND_COUNTRY } from "../../constants"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
+import { useJwtInfoListState, useUserInfoState } from "../stores/Auth-store"
 
 
 
@@ -22,7 +22,8 @@ const $apiSecureResource = ky.create({
 	hooks: {
 		beforeRequest: [
 		  (req) => {
-			const accessToken = inMemoryJWTService.getToken()
+			const currentUserName = useUserInfoState.getState().userInfoState.username
+			const accessToken = useJwtInfoListState.getState().getJwtInfoState(currentUserName)?.token
 			if (accessToken) {
 				req.headers.set("Authorization", `Bearer ${accessToken}`)
 			}

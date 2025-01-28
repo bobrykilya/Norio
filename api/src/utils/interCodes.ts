@@ -48,6 +48,13 @@ const getCodeDescription = (interCode: ICommonVar['interCode']) => {
             notifForAdmin: true,
             notifForUser: false,
         }
+		case 206 : return {
+			interCode,
+			name: 'Auto log-out user',
+			description: 'Фоновый выход из аккаунта (забыть пользователя)',
+			notifForAdmin: false,
+			notifForUser: false,
+		}
         case 210 : return {
             interCode,
             name: 'Activation user',

@@ -14,6 +14,9 @@ import { ICommonVar } from "../../../common/types/Global-types"
 
 
 
+const getUserCookieName = (username: string) => {
+	return `token-${username}`
+}
 class AuthController {
 
 	static async signIn(req: ICommonVar['req'], res: ICommonVar['res']) {
@@ -36,7 +39,7 @@ class AuthController {
 			})
 
 			// console.log('signIn')
-			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+			res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
 			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
@@ -106,7 +109,7 @@ class AuthController {
 				queryTime,
 			})
 			
-			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+			res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
@@ -117,8 +120,8 @@ class AuthController {
 
 
 	static async logOut(req: ICommonVar['req'], res: ICommonVar['res']) {
-		const refreshToken = req.cookies.refreshToken
-		const { interCode }: ILogOutReq = req.body
+		const { interCode, username }: ILogOutReq = req.body
+		const refreshToken = req.cookies[getUserCookieName(username)]
 		const { fingerprint } = req
         const queryTime = getTime()
 
@@ -127,7 +130,7 @@ class AuthController {
 			await AuthService.logOut({ refreshToken, queryTime, interCode })
 
 			// console.log('logOut')
-			res.clearCookie("refreshToken")
+			res.clearCookie(getUserCookieName(username))
 
 			return res.sendStatus(200)
 		} catch (err) {
@@ -139,11 +142,10 @@ class AuthController {
 
 	
 	static async refresh(req: ICommonVar['req'], res: ICommonVar['res']) {
-		const { lsDeviceId }: IRefreshReq = req.body
+		const { lsDeviceId, username }: IRefreshReq = req.body
 		const { fingerprint } = req
         const queryTime = getTime()
-		const currentRefreshToken = req.cookies.refreshToken
-
+		const currentRefreshToken = req.cookies[getUserCookieName(username)]
 
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } =
@@ -154,7 +156,7 @@ class AuthController {
 					lsDeviceId,
 				})
 
-			res.cookie("refreshToken", refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+			res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
 		} catch (err) {

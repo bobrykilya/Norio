@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import ToolTip from "../../ToolTip/ToolTip"
 import { useUserInfoState } from "../../../../stores/Auth-store"
-import { AuthContext } from "../../../../context/Auth-context"
 import UnfoldingCard from "../../../common/UnfoldingCard/UnfoldingCard"
 import SubmitBut from "../../../_AuthPage/SubmitBut/SubmitBut"
 import { LuLogOut } from "react-icons/lu";
@@ -9,6 +8,7 @@ import { FaUserGear, FaUserPen } from "react-icons/fa6"
 import UserNameCopyButton from "./UserNameCopyButton/UserNameCopyButton"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import SwitchUser from "../../../others/SwitchUser/SwitchUser"
+import LogOut from "../../../../features/auth/logOut"
 
 
 
@@ -17,9 +17,8 @@ type UserCardProps = {
 }
 const UserCard = ({  }: UserCardProps) => {
 
-	const [isFullUserCard, setIsFullUserCard] = useState(true)
+	const [isFullUserCard, setIsFullUserCard] = useState(false)
 	const { userInfoState } = useUserInfoState()
-	const { handleLogOut } = useContext(AuthContext)
 
 
 	const toggleUserCard = () => {
@@ -83,7 +82,7 @@ const UserCard = ({  }: UserCardProps) => {
 					/>
 				    <SubmitBut
 						icon={<LuLogOut className={'fa-icon'} />}
-						onClick={handleLogOut}
+						onClick={LogOut.handleLogOut}
 						useOnClick={true}
 						toolTip={{
 							text: 'Выйти из аккаунта пользователя',

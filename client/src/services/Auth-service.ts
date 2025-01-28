@@ -65,7 +65,6 @@ const preRequest = async <T>(data: IPreprocessing & T) => {
 
 class AuthService {
     static async signIn(data: ISignInReq) {
-        // console.log(data)
         try {
             return await $apiAuth.post("sign-in" ,{ json: await preRequest(data) }).json<ILoginServiceRes>()
         } catch (err) {

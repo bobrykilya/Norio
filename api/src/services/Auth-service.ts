@@ -187,7 +187,7 @@ class AuthService {
 
 
 
-	static async logOut({ refreshToken, queryTime, interCode }: IService<ILogOutReq> & Pick<ICommonVar, 'refreshToken'>) {
+	static async logOut({ refreshToken, queryTime, interCode }: IService<Omit<ILogOutReq, 'username'>> & Pick<ICommonVar, 'refreshToken'>) {
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(refreshToken)
 
 		if (refreshSession){

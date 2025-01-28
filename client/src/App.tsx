@@ -1,20 +1,20 @@
-import React, { useContext } from "react"
+import React from "react"
 import { Navigate, Route, Routes, useLocation } from "react-router-dom"
 import { Toaster } from 'react-hot-toast'
 import { AnimatePresence } from 'framer-motion'
-import { AuthContext } from "./context/Auth-context"
 import AuthPage from './pages/AuthPage/AuthPage'
 import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
 import CoverAppTitle from "./components/common/CoverAppTitle/CoverAppTitle"
 import { useBlockErrorState } from "./stores/Device-store"
 import LogBookList from "./components/others/LogBook/LogBookList"
+import { useUserInfoState } from "./stores/Auth-store"
 
 
 
 const App = () => {
 
-    const isUserLogged = useContext(AuthContext)?.isUserLogged
+    const userLoggedState = Boolean(useUserInfoState(s => s.userInfoState))
     const blockErrorState = useBlockErrorState(s => s.blockErrorState)
 
     const location = useLocation()
@@ -35,14 +35,14 @@ const App = () => {
                     location={location}
                     key={location.pathname}
                 >
-                    <Route path="*" element={<Navigate to={isUserLogged ? "home" : "auth"} />} />
-                    {!isUserLogged ? (
+                    <Route path="*" element={<Navigate to={userLoggedState ? "home" : "auth"} />} />
+                    {!userLoggedState ? (
                         <Route path="auth" element={
                             <AuthPage blockErrorMessage={blockErrorState} />
                         } />
                     ) : (
                         <Route path="home" element={
-                            <HomePage isUserLogged={isUserLogged} location={location}/>
+                            <HomePage isUserLogged={userLoggedState} location={location}/>
                         } />
                     )}
                 </Routes>

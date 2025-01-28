@@ -6,7 +6,7 @@ import ToolTip from '../../others/ToolTip/ToolTip'
 import AvatarList from './AvatarList'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import { IReactHookForm } from "../../../types/Auth-types"
-import { useAvatarListState } from "../../../stores/Auth-store"
+import { useAvatarListState } from "../../../stores/Global-store"
 
 
 

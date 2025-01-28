@@ -29,11 +29,13 @@ export type ISignUpReq = ISignUp & {
 }
 
 export type ILogOutReq = {
+	username: ICommonVar['username'];
 	interCode?: ICommonVar['interCode'];
 }
 
 export type IRefreshReq = {
 	lsDeviceId?: ICommonVar['lsDeviceId'];
+	username?: ICommonVar['username'];
 }
 
 export type IPreprocessing = {
@@ -55,7 +57,7 @@ export type ILoginServiceRes = {
 export type ICheckUserRes = {
 	username: ICommonVar['username'];
 	hashedPassword: ICommonVar['hashedPassword'];
-	avatarsList: ICommonVar['IAvatarListElement'][];
+	avatarsList: ICommonVar['avatar'][];
 }
 
 

@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import { AuthContext } from '../../../context/Auth-context'
+import React from 'react'
 // @ts-ignore
 import SignUpImg from '../../../assets/AuthPage/sign_up.png'
 // @ts-ignore
@@ -7,6 +6,7 @@ import SignInImg from '../../../assets/AuthPage/sign_in.png'
 import { IoArrowBackCircleOutline } from "react-icons/io5"
 import ToolTip from '../../others/ToolTip/ToolTip'
 import { useCoverPanelState } from "../../../stores/Auth-store"
+import SignUp from "../../../features/auth/signUp"
 // import CoverBgImg from '../../../assets/cover_bg.jpg'
 
 
@@ -15,8 +15,7 @@ type CoverPanelProps = {
     disabled: boolean;
 }
 const CoverPanel = ({ disabled }: CoverPanelProps) => {
-    
-    const { handleReturnToSignUp } = useContext(AuthContext)
+
     const { coverPanelState, setCoverPanelState } = useCoverPanelState()
 
     return ( 
@@ -61,7 +60,7 @@ const CoverPanel = ({ disabled }: CoverPanelProps) => {
                     id='close_sign_up_info-button'
                     type='button'
                     tabIndex={-1}
-                    onClick={() => handleReturnToSignUp()}
+                    onClick={() => SignUp.handleReturnToSignUp()}
                     disabled={disabled}
                     className={'cont'}
                 >

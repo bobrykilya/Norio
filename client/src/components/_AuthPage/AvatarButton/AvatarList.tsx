@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import JumpingList from '../../common/JumpingList/JumpingList'
 import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
-import { AuthContext } from '../../../context/Auth-context'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import timeout from "../../../utils/timeout"
 import { sortByAlphabet } from "../../../utils/sort"
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
+import { useAuthState } from "../../../stores/Auth-store"
 
 
 
@@ -21,11 +21,11 @@ type AvatarListProps = {
 }
 const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleClickElem, isArrowButsActive, disabled, createPathToAvatars }: AvatarListProps) => {
     
-    const { listOfUsedAvatars } = useContext(AuthContext)
+    const listOfUsedAvatarsState = useAuthState(s => s.listOfUsedAvatarsState)
     const listRef = useRef<HTMLUListElement>(null)
     const activeElemRef = useRef<HTMLButtonElement>(null)
 
-    const FILTERED_LIST = listOfUsedAvatars[0] ? LIST.filter(avatar => !listOfUsedAvatars.includes(avatar.id)) : LIST //* Filtering of used avatars
+    const FILTERED_LIST = listOfUsedAvatarsState[0] ? LIST.filter(avatar => !listOfUsedAvatarsState.includes(avatar.id)) : LIST //* Filtering of used avatars
     const SORTED_AND_FILTERED_LIST = sortByAlphabet(FILTERED_LIST, 'title') //* Sorting of avatar list by title
 
     const handleKeyDownOnElem = (e: React.KeyboardEvent<HTMLButtonElement>) => {

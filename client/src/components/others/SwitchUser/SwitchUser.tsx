@@ -2,10 +2,12 @@ import React, { useRef, useState } from 'react'
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import SwitchUserElem from "./SwitchUserElem/SwitchUserElem"
 import { TbTrashXFilled } from "react-icons/tb"
-import timeout from "../../../utils/timeout"
 import ToolTip from "../ToolTip/ToolTip"
 import { IUserRepository } from "../../../../../api/src/types/DB-types"
 import { MAX_SWITCH_USERS } from "../../../../constants"
+import LogOut from "../../../features/auth/logOut"
+import { useJwtInfoListState } from "../../../stores/Auth-store"
+import timeout from "../../../utils/timeout"
 
 
 
@@ -15,20 +17,6 @@ export type ISwitchUserElem = {
 	job: string;
 	avatar: string;
 }
-const SWITCH_USERS_LIST: ISwitchUserElem[] = [
-	{
-		username: 'sonya',
-		name: 'Василевич Светлана',
-		job: 'Главный бухгалтер',
-		avatar: 'dog_9'
-	},
-	{
-		username: 'sekr',
-		name: 'Шнигир Виктория',
-		job: 'Секретарь',
-		avatar: 'antelope'
-	},
-]
 
 type SwitchUserProps = {
 	userInfo: IUserRepository;
@@ -39,15 +27,20 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 		return
 	}
 
-	const [usersList, setUsersList] = useState<ISwitchUserElem[]>(SWITCH_USERS_LIST)
+	const SAVED_USERS_LIST = useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo)
+
+	const [usersList, setUsersList] = useState(SAVED_USERS_LIST)
+	// console.log(usersList)
 	const usersContRef = useRef(null)
 
 	const handleForgetAllUsers = async () => {
 		setUsersList([])
 
-		await timeout(400)
+		await timeout(300)
 
+		LogOut.handleRemoveAllSwitchUsers()
 	}
+
 
 	return (
 		<div
@@ -57,15 +50,15 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 			<div
 				className={'switch_user_info-cont cont'}
 			>
-							<span
-								className={'switch_user-info cont'}
-							>
-								Сменить аккаунт
-								<ToolTip
-									text={`Текущий аккаунт будет сохранён в фоне для быстрого возврата`}
-									position={'left'}
-								/>
-							</span>
+				<span
+					className={'switch_user-info cont'}
+				>
+					Сменить аккаунт
+					<ToolTip
+						text={`Текущий аккаунт будет сохранён в фоне для быстрого возврата`}
+						position={'left'}
+					/>
+				</span>
 				<RoundButton
 					className={'before_hover-but'}
 					onClick={handleForgetAllUsers}
@@ -73,24 +66,29 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 						text: 'Забыть все аккаунты'
 					}}
 					size={'tiny'}
-					disabled={!usersList[0]}
+					disabled={!usersList[1]}
 				>
 					<TbTrashXFilled className={'fa-icon'} />
 				</RoundButton>
 			</div>
 			{
-				SWITCH_USERS_LIST.map(user =>
-					<SwitchUserElem
-						key={user.username}
-						user={user}
-						isHide={!usersList.includes(user)}
-						setUsersList={setUsersList}
-					/>
+				SAVED_USERS_LIST.map(user => {
+					if (user.username === userInfo.username) {
+						return
+					}
+
+					return <SwitchUserElem
+								key={user.username}
+								user={user}
+								isHide={!usersList.includes(user)}
+								setUsersList={setUsersList}
+							/>
+					}
 				)
 			}
 			<SwitchUserElem
 				isNewUser={true}
-				isHide={!!usersList[MAX_SWITCH_USERS - 2]}
+				isHide={!!usersList[MAX_SWITCH_USERS - 1]}
 			/>
 		</div>
 	)

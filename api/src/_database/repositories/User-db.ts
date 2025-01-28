@@ -1,5 +1,6 @@
 import queryDB from '../../utils/queryDB'
 import { IUserRepository } from "../../types/DB-types"
+import { ICommonVar } from "../../../../common/types/Global-types.ts"
 
 
 
@@ -72,7 +73,7 @@ class UserRepository {
 	static async getUsedAvatarsList() {
 		const response = await queryDB("SELECT avatar FROM users")
 
-		return response.rows.map(el => el.avatar) as string[]
+		return response.rows.map(el => el.avatar) as ICommonVar['avatar'][]
 	}
 
 	static async setStatusForUser({ userId, status }: Pick<IUserRepository, 'userId' | 'status'>) {

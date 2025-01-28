@@ -1,164 +1,30 @@
-import React, { createContext, useEffect, useState } from "react"
+import React, { createContext, useEffect } from "react"
 import { Circles } from 'react-loader-spinner'
-import inMemoryJWT from '../services/inMemoryJWT-service'
-import { LOGOUT_STORAGE_KEY } from "../../constants"
 import AuthService from "../services/Auth-service"
-import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
-import { IUserNameInfo } from "../types/Auth-types"
 import io from "socket.io-client"
-import { useCoverPanelState, useUserInfoState } from "../stores/Auth-store"
-import { ICheckUserReq, ILoginServiceRes, ILogOutReq, ISignInReq, ISignUpReq } from "../../../common/types/Auth-types"
-import timeout from "../utils/timeout"
-import { useDeviceInfoState } from "../stores/Device-store"
-import { IDeviceInfo } from "../types/Device-types"
-import { queryClient } from "../http/tanstackQuery-client"
+import { ILoginServiceRes } from "../../../common/types/Auth-types"
+import LogOut from "../features/auth/logOut"
+import { useAuthState } from "../stores/Auth-store"
+import authCommon from "../features/auth/authCommon"
+import JWTInfoService from "../services/JWTInfoService"
 
 
 
 type IAuthContext = {
-	// data,
-	handleReturnToSignUp: () => void,
-	handleCheckUser: (data: ICheckUserReq) => Promise<void>,
-	// handleFetchProtected: (data: any) => Promise<void>,
-	handleSignUp: (data: ISignUpReq) => Promise<void>,
-	handleSignIn: (data: ISignInReq) => Promise<void>,
-	handleLogOut: (data?: ILogOutReq) => void,
-	isUserLogged: boolean,
-	isAppReady: boolean,
-	listOfUsedAvatars: string[],
+
 }
 
 export const AuthContext = createContext<IAuthContext | null>(null)
 export const socket = io(import.meta.env.VITE_API_URL)
 
 const AuthProvider = ({ children }) => {
+	const {
+		appReadyState,
+		setAppReadyState,
+		setSocketSessIdState,
+	} = useAuthState()
+
 	// const [data, setData] = useState<Record<string, any> | null>(null)
-	const [isAppReady, setIsAppReady] = useState(false)
-	const [isUserLogged, setIsUserLogged] = useState(false)
-	const [listOfUsedAvatars, setListOfUsedAvatars] = useState<string[]>([])
-	const [signUpUserName, setSignUpUserName] = useState('')
-	const [signUpUserPassword, setSignUpUserPassword] = useState('')
-	const [socketSessId, setSocketSessId] = useState('')
-	const setCoverPanelState = useCoverPanelState(s => s.setCoverPanelState)
-
-
-	const getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
-		return lastName ? `${lastName} ${firstName} "${username}"` : username
-	}
-	const autoLogOut = (userNameInfo: IUserNameInfo) => {
-		// console.log('Auto logOut')
-		showSnackMessage({
-			type: 'w',
-			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`
-		})
-		handleLogOut({ interCode: 204 })
-	}
-
-	const resetSignUpVariables = () => {
-		setSignUpUserName('')
-		setSignUpUserPassword('')
-		setListOfUsedAvatars([])
-	}
-	const resetSignInVariables = () => {
-		useUserInfoState.setState({ userInfoState: null })
-		localStorage.removeItem('activeUserName')
-	}
-	const handleReturnToSignUp = () => {
-		resetSignUpVariables()
-		
-		setCoverPanelState('sign_up')
-	}
-	const userHasLogged = () => {
-		setIsUserLogged(true)
-		setCoverPanelState('sign_in')
-	}
-
-	const checkDoubleSessions = async (newUsername: string) => {
-		const activeUserName = JSON.parse(localStorage.getItem('activeUserName') || null)
-
-		if (activeUserName) {
-			if (newUsername !== activeUserName.username) {
-				handleLogOut()
-				showSnackMessage({
-					type: 'i',
-					message: `Был выполнен фоновый выход из аккаунта пользователя: <span class='bold'>${getUserAccountInfo({ lastName: activeUserName.lastName, firstName: activeUserName.firstName, username: activeUserName.username })}</span>`
-				})
-			} else {
-				location.reload()
-			}
-		}
-	}
-
-	const loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes) => {
-		saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId })
-		userHasLogged()
-	}
-
-	const saveUserDataOnBrowser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId }: ILoginServiceRes & { lsDeviceId?: number }) => {
-		inMemoryJWT.setToken(accessToken, accessTokenExpiration)
-
-		testAndUpdateLSDeviceId(deviceId, lsDeviceId)
-		useUserInfoState.setState({ userInfoState: userInfo })
-		localStorage.setItem('activeUserName', JSON.stringify({
-			username: userInfo.username,
-			firstName: userInfo.firstName,
-			lastName: userInfo.lastName,
-		}))
-	}
-
-	const testAndUpdateLSDeviceId = (deviceId: number, lsDeviceId?: number) => {
-		const lsDeviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
-		const lsDeviceId_2 = lsDeviceId || lsDeviceInfo?.id
-
-		if (!lsDeviceId_2 || (lsDeviceId_2 !== deviceId)) {
-			useDeviceInfoState.getState().setDeviceIdState(deviceId)
-		}
-	}
-
-	const handleSignIn = async (data: ISignInReq) => {
-		await checkDoubleSessions(data.username)
-		await timeout(300)
-
-		const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signIn(data)
-		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
-	}
-
-	const handleCheckUser = async (data: ICheckUserReq) => {
-
-		const { username, hashedPassword, avatarsList } = await AuthService.checkUser(data)
-
-		setSignUpUserName(username)
-		setSignUpUserPassword(hashedPassword)
-		setListOfUsedAvatars(avatarsList)
-
-		setCoverPanelState('sign_up_info')
-	}
-
-	const handleSignUp = async (data: ISignUpReq) => {
-		await checkDoubleSessions(data.username)
-		await timeout(300)
-
-		data.username = signUpUserName
-		data.hashedPassword = signUpUserPassword
-
-		const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp(data)
-		loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
-
-		resetSignUpVariables()
-	}
-
-	const handleLogOut = ({ interCode }: ILogOutReq = {}) => {
-		// console.log('logOut')
-
-		AuthService.logOut({ interCode })
-
-		resetSignInVariables()
-
-		inMemoryJWT.deleteToken()
-		queryClient.removeQueries()
-
-		setIsUserLogged(false)
-	}
 
 	// const handleFetchProtected = () => {
 	// 	const res = AuthService.fetchProtected()
@@ -172,51 +38,64 @@ const AuthProvider = ({ children }) => {
 			try {
 				// console.log('refresh')
 				const lsDeviceId = JSON.parse(localStorage.getItem('deviceInfo'))?.id || null
+				const username = JSON.parse(localStorage.getItem('currentUser'))?.username || null
+				const switchUsersList = JSON.parse(localStorage.getItem('switchUsers'))
 
-				const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId })
-				saveUserDataOnBrowser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
+				if (switchUsersList) {
+					switchUsersList.map(async (username: string) => {
+						try {
+							const { accessToken, accessTokenExpiration, userInfo }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
 
-				setIsAppReady(true)
-				setIsUserLogged(true)
+							JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
+						} catch (err) {
+							console.log('Switch users refresh error: ', err)
+						}
+					})
+				}
 
+				const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
+				authCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
+
+				setAppReadyState(true)
 			} catch (err) {
-				setIsAppReady(true)
-				setIsUserLogged(false)
-				resetSignInVariables()
+				setAppReadyState(true)
+				LogOut.userHasLogOut()
 			}
 		}
 
 		refresh()
 	}, [])
 
-	//* Exiting from all tabs when log out
-	useEffect(() => {
-		const handlePersistedLogOut = (event: StorageEvent) => {
-			// console.log(event.key)
-			if (event.key === LOGOUT_STORAGE_KEY) {
-				handleLogOut({ interCode: 204 })
-				// inMemoryJWT.deleteToken()
-				// setIsUserLogged(false)
-				// resetSignInVariables()
-			}
-		}
 
-		window.addEventListener("storage", handlePersistedLogOut)
-		return () => {
-			window.removeEventListener("storage", handlePersistedLogOut)
-		}
-	}, [])
+	//! Delete ?
+	// //* Exiting from all tabs when log out
+	// useEffect(() => {
+	// 	const handlePersistedLogOut = (event: StorageEvent) => {
+	// 		// console.log(event.key)
+	// 		if (event.key === LOGOUT_STORAGE_KEY) {
+	// 			LogOut.handleLogOut({ interCode: 204 })
+	// 			// JWTInfoService.deleteJWTInfo()
+	// 			// resetSignInVariables()
+	// 		}
+	// 	}
+	//
+	// 	window.addEventListener("storage", handlePersistedLogOut)
+	// 	return () => {
+	// 		window.removeEventListener("storage", handlePersistedLogOut)
+	// 	}
+	// }, [])
+
 
 	//* Socket events handling
 	useEffect(() => {
 		const socketEvents = () => {
 			socket.on('connect', () => {
-				setSocketSessId(socket.id)
 				// console.log(socket.id)
+				setSocketSessIdState(socket.id)
 			})
 			socket.on('autoLogOut', ({ isLogOut, userNameInfo }) => {
 				// console.log(isLogOut)
-				if (isLogOut) autoLogOut(userNameInfo)
+				if (isLogOut) LogOut.autoFastSessionLogOut(userNameInfo)
 			})
 		}
 		socketEvents()
@@ -225,19 +104,10 @@ const AuthProvider = ({ children }) => {
 	return (
 		<AuthContext.Provider
 			value={{
-				// data,
-				handleReturnToSignUp,
-				handleCheckUser,
-				// handleFetchProtected,
-				handleSignUp,
-				handleSignIn,
-				handleLogOut,
-				isUserLogged,
-				isAppReady,
-				listOfUsedAvatars,
+
 			}}
 		>
-			{isAppReady ? (
+			{appReadyState ? (
 				children
 			) : (
 				<div className='cont main_bg-gradient'>

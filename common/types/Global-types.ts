@@ -101,7 +101,7 @@ export type ICommonVar = {
 			userId: ICommonVar['userId'];
 		};
 		cookies: {
-			refreshToken: string;
+			// refreshToken: string;
 		}
 		fingerprint: ICommonVar['fingerprint'];
 	}

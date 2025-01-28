@@ -68,7 +68,7 @@ class WeatherService {
 
 			await redisWeatherSet(getCashKeyForWeather(location), locationWeather)
 		}
-
+		console.log(locationWeather)
 		return locationWeather
 	}
 

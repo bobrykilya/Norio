@@ -1,6 +1,5 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { AuthContext } from '../../../../../context/Auth-context'
 import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
 import UserNameInput from '../../../Inputs/NameInput/NameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
@@ -14,6 +13,7 @@ import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
 import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
 import { ISignUp, ISignUpReq } from "../../../../../../../common/types/Auth-types"
 import { useModalState } from "../../../../../stores/Global-store"
+import SignUp from "../../../../../features/auth/signUp"
 
 
 
@@ -27,7 +27,6 @@ type SignUpInfoFormProps = {
 const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled, isAvatarButDisabled }: SignUpInfoFormProps) => {
     // console.log('SignUpInfoForm')
 
-    const { handleSignUp, handleReturnToSignUp } = useContext(AuthContext)
     const modalState = useModalState(s => s.modalState)
     const [avatar, setAvatar] = useState<string>('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
@@ -64,7 +63,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
     //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
     useCloseOnEsc({
         conditionsList: [!isFormDisabled, !modalState],
-        callback: () => handleReturnToSignUp()
+        callback: () => SignUp.handleReturnToSignUp()
     })
     
     const onSubmit = async (data: ISignUp) => {
@@ -72,7 +71,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
         data.avatar = avatar
 
         setIsLoading(true)
-        await handleSignUp(data as ISignUpReq)
+        await SignUp.handleSignUp(data as ISignUpReq)
             .catch(() => {
                 focusInput(inputRefPhone)
             })

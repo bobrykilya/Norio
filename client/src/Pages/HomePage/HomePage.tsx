@@ -9,9 +9,9 @@ import { STORES_LIST } from "../../assets/AuthPage/AuthPage-data"
 import { useDeviceInfoState } from "../../stores/Device-store"
 import { LOCATIONS_LIST } from "../../assets/common/Common-data"
 import { IDeviceLocation } from "../../../../common/types/Device-types"
-import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
 import HoroscopeCard from "../../components/_HomePage/HoroscopeCard/HoroscopeCard"
 import { handleLocationCoords } from "../../services/Device-service"
+import WeatherCard from "../../components/_HomePage/WeatherCard/WeatherCard"
 
 
 

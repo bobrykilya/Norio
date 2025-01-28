@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput'
-import { AuthContext } from '../../../../../context/Auth-context'
 import { FaArrowRightLong } from "react-icons/fa6"
 import UserNameInput from '../../../Inputs/NameInput/NameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
@@ -12,6 +11,7 @@ import { useCoverPanelState } from "../../../../../stores/Auth-store"
 import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
 import { ICheckUserReq } from "../../../../../../../common/types/Auth-types"
 import { useModalState } from "../../../../../stores/Global-store"
+import SignUp from "../../../../../features/auth/signUp"
 
 
 
@@ -21,8 +21,7 @@ type SignUpFormProps = {
 }
 const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
     // console.log('SignUp')
-    
-    const { handleCheckUser } = useContext(AuthContext)
+
     const { setCoverPanelState } = useCoverPanelState()
     const modalState = useModalState(s => s.modalState)
     const [isLoading, setIsLoading] = useState(false)
@@ -67,7 +66,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
         delete data.confirmPassword
 
         setIsLoading(true)
-        await handleCheckUser(data)
+        await SignUp.handleCheckUser(data)
             .catch(() => {
                 focusInput(inputRefLogin)
             })

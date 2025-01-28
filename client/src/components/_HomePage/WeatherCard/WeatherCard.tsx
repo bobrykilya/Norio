@@ -57,7 +57,7 @@ const WeatherCard = () => {
 	const { deviceInfoState, setDeviceLocationState, setDeviceLocationTitleState } = useDeviceInfoState()
 	const deviceLocationState = deviceInfoState?.location
 
-	const { data: weather, isPending } = useFetchWeather(deviceLocationState, {
+	const { data: weather, isPending, isError } = useFetchWeather(deviceLocationState, {
 		enabled: !!deviceLocationState && !!deviceLocationState?.coords
 	})
 	// console.log(weather)
@@ -131,7 +131,10 @@ const WeatherCard = () => {
 				>
 					<SelectButton
 						OPTIONS_LIST={CITIES_AND_MY_LOCATION_LIST}
-						selectedState={deviceLocationState?.city}
+						selectedState={deviceLocationState?.city || isError && {
+							id: MY_LOC,
+							title: 'Сервис погоды не отвечает'
+						}}
 						onClick={saveSelectedValue}
 						needToSort={true}
 						toolTip={{

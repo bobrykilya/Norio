@@ -1,7 +1,6 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput';
-import { AuthContext } from "../../../../../context/Auth-context"
 import UserNameInput from '../../../Inputs/NameInput/NameInput'
 import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
 import CheckBox from '../../../../common/Inputs/CheckBox/CheckBox'
@@ -10,6 +9,7 @@ import { BiLogInCircle } from "react-icons/bi"
 import { FaUser } from "react-icons/fa"
 import ToolTip from '../../../../others/ToolTip/ToolTip'
 import { ISignInReq } from "../../../../../../../common/types/Auth-types"
+import SignIn from "../../../../../features/auth/signIn"
 
 
 
@@ -18,7 +18,6 @@ type SignInFormProps = {
 }
 const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     // console.log('SignIn')
-    const { handleSignIn } = useContext(AuthContext)
     const [notSaveUser, setNotSaveUser] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefLogin = useRef(null)
@@ -50,7 +49,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
         reset()
 
         setIsLoading(true)
-        await handleSignIn(data)
+        await SignIn.handleSignIn(data)
             .catch(() => {
                 setValue('username', data.username)
                 setValue('password', data.password)
@@ -63,7 +62,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     const onSubmit = async (data: ISignInReq) => {
         // console.log(data)
         setIsLoading(true)
-        await handleSignIn(data)
+        await SignIn.handleSignIn(data)
             .catch(() => {
                 focusInput(inputRefLogin)
             })

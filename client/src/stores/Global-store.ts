@@ -15,7 +15,6 @@ const useModalState = create<IUseModalState>(set => ({
 	setBlurModalState: (state) => set({ blurModalState: state })
 }))
 
-
 type IUseLogBookListState = {
 	logBookListState: boolean;
 	setLogBookListState: (state: boolean) => void;
@@ -25,8 +24,18 @@ const useLogBookListState = create<IUseLogBookListState>(set => ({
 	setLogBookListState: (state) => set({ logBookListState: state }),
 }))
 
+type IUseAvatarListState = {
+	avatarListState: boolean;
+	setAvatarListState: (status: boolean) => void;
+}
+const useAvatarListState = create<IUseAvatarListState>(set => ({
+	avatarListState: false,
+	setAvatarListState: (state) => set({ avatarListState: state }),
+}))
+
 
 export {
 	useModalState,
 	useLogBookListState,
+	useAvatarListState,
 }

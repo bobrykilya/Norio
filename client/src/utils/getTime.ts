@@ -49,7 +49,7 @@ export const getTimeParams = (paramsList: paramsListOptions[], timeInSec?: numbe
         ...(paramsList.includes('dateString') && { dateString: now.toLocaleDateString() }),
     }
 
-    // return paramsList.length === 1 ? result[`${paramsList[0]}`] as number : result
+    // return paramsList.length === 1 ? result[paramsList[0]] as number : result
 }
 
 export const zeroHandler = (time: number) => {
