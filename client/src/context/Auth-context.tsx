@@ -41,22 +41,27 @@ const AuthProvider = ({ children }) => {
 				const username = JSON.parse(localStorage.getItem('currentUser'))?.username || null
 				const switchUsersList = JSON.parse(localStorage.getItem('switchUsers'))
 
-				if (switchUsersList) {
-					switchUsersList.map(async (username: string) => {
-						try {
-							const { accessToken, accessTokenExpiration, userInfo }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
+				const refreshSwitchUsersTokens = async () => {
+					if (switchUsersList) {
+						switchUsersList.map(async (username: string) => {
+							try {
+								const { accessToken, accessTokenExpiration, userInfo }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
 
-							JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
-						} catch (err) {
-							console.log('Switch users refresh error: ', err)
-						}
-					})
+								JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
+							} catch (err) {
+								console.log('Switch users refresh error: ', err)
+							}
+						})
+					}
 				}
 
-				const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
-				authCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
+				await refreshSwitchUsersTokens()
+					.finally( async () => {
+						const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
+						authCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
 
-				setAppReadyState(true)
+						setAppReadyState(true)
+					})
 			} catch (err) {
 				setAppReadyState(true)
 				LogOut.userHasLogOut()

@@ -9,6 +9,7 @@ import UserNameCopyButton from "./UserNameCopyButton/UserNameCopyButton"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import SwitchUser from "../../../others/SwitchUser/SwitchUser"
 import LogOut from "../../../../features/auth/logOut"
+import SwapImg from "../../../common/SwapImg/SwapImg"
 
 
 
@@ -54,7 +55,9 @@ const UserCard = ({  }: UserCardProps) => {
 						<div
 							className={'account_img-cont'}
 						>
-							<img src={`/avatars/${userInfoState?.avatar}.jpg`} alt="Avatar error 3"/>
+							<SwapImg
+								path={`/avatars/${userInfoState?.avatar}.jpg`}
+							/>
 						</div>
 						<ToolTip
 							text={`${isFullUserCard ? 'Закрыть' : 'Открыть'} карточку пользователя`}

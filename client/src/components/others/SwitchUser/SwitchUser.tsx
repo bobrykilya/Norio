@@ -28,9 +28,9 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 	}
 
 	const SAVED_USERS_LIST = useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo)
+	// console.log(SAVED_USERS_LIST)
 
 	const [usersList, setUsersList] = useState(SAVED_USERS_LIST)
-	// console.log(usersList)
 	const usersContRef = useRef(null)
 
 	const handleForgetAllUsers = async () => {
@@ -80,7 +80,7 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 					return <SwitchUserElem
 								key={user.username}
 								user={user}
-								isHide={!usersList.includes(user)}
+								isVisible={usersList.includes(user)}
 								setUsersList={setUsersList}
 							/>
 					}
@@ -88,7 +88,7 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 			}
 			<SwitchUserElem
 				isNewUser={true}
-				isHide={!!usersList[MAX_SWITCH_USERS - 1]}
+				isVisible={!usersList[MAX_SWITCH_USERS - 1]}
 			/>
 		</div>
 	)

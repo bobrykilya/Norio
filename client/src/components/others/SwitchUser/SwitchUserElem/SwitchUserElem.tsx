@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ToolTip from "../../ToolTip/ToolTip"
 // import { IoIosAddCircle } from "react-icons/io"
 // import { ISwitchUserElem } from "../SwitchUser"
@@ -12,16 +12,23 @@ import timeout from "../../../../utils/timeout"
 
 
 type SwitchUserElemProps = {
-	isHide: boolean;
+	isVisible: boolean;
 	setUsersList?: React.Dispatch<React.SetStateAction<IUserRepository[]>>;
 	user?: IUserRepository;
 	isNewUser?: boolean;
 }
-const SwitchUserElem = ({ isHide, setUsersList, user, isNewUser }: SwitchUserElemProps) => {
+const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUserElemProps) => {
+
+	const [isRendered, setIsRendered] = useState(false)
 
 
-	const handleChangeUser = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const handleChangeUser = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.stopPropagation()
+		if (!isNewUser) {
+			setIsRendered(false)
+			await timeout(300)
+		}
+
 		logOut.handleSwitchUser(user?.username)
 	}
 
@@ -30,14 +37,18 @@ const SwitchUserElem = ({ isHide, setUsersList, user, isNewUser }: SwitchUserEle
 		setUsersList(prev => prev.filter(el => el.username !== user.username))
 
 		await timeout(300)
-		
 		logOut.handleRemoveSwitchUser(user.username)
 	}
+
+
+	useEffect(() => {
+		setTimeout(() => setIsRendered(true));
+	}, [])
 
 	return (
 
 		<div
-			className={`switch_user_elem-cont cont ${isHide ? 'hide' : ''}`}
+			className={`switch_user_elem-cont cont ${isRendered && isVisible ? 'opened' : ''}`}
 		>
 			<button
 				className={'switch_user_elem-but cont'}
@@ -49,7 +60,10 @@ const SwitchUserElem = ({ isHide, setUsersList, user, isNewUser }: SwitchUserEle
 				>
 					{
 						!isNewUser ?
-						<img src={`/avatars/${user.avatar}.jpg`} alt="Avatar error 3"/> :
+						<img
+							src={`/avatars/${user.avatar}.jpg`}
+							alt="IMG Error 6"
+						/> :
 						<IoAdd className={'fa-icon'} />
 					}
 				</div>

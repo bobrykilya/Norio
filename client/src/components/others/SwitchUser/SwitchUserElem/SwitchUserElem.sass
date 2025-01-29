@@ -5,10 +5,15 @@ $dur-hide: 0.3s
 .switch_user_elem-cont
     //border: 2px solid black
     overflow: visible
-    height: auto
-    transition: all $dur-hide $dur-hide / 4 ease-out
-    max-height: 5rem
-    margin-bottom: 0.2rem
+
+    transition: all $dur-hide ease-out
+    max-height: 0
+    margin: 0
+    opacity: 0
+    filter: blur(5px)
+    -webkit-filter: blur(5px)
+    z-index: -1
+    pointer-events: none
     &:hover
         .switch_user_elem-but
             //background-color: #d5e5f1
@@ -94,12 +99,13 @@ $dur-hide: 0.3s
             background-color: rgba($color-blue-main, 0.4)
         &:active
             background-color: rgba($color-blue-main, 0.2)
-    &.hide
-        transition: all $dur-hide ease-out
-        max-height: 0
-        margin: 0
-        opacity: 0
-        filter: blur(5px)
-        z-index: -1
-        pointer-events: none
-        //transform: translateY(0.4rem)
+    &.opened
+        height: auto
+        transition: all $dur-hide $dur-hide / 4 ease-out
+        max-height: 5rem
+        margin-bottom: 0.2rem
+        opacity: 1
+        filter: none
+        -webkit-filter: none
+        z-index: 1
+        pointer-events: auto

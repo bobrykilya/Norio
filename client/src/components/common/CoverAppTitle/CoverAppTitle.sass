@@ -8,6 +8,7 @@
     color: white
     pointer-events: none
     filter: blur(4px)
+    -webkit-filter: blur(4px)
     opacity: 0.015
     transition-duration: 3s
     animation: fadeInAppTitle 1s ease
@@ -22,11 +23,13 @@
 @keyframes fadeInAppTitle
     0%
         filter: blur(0)
+        -webkit-filter: blur(0)
         opacity: 0
         font-size: 92vh
         letter-spacing: -22vh
     100%
         filter: blur(4px)
+        -webkit-filter: blur(4px)
         opacity: 0.015
         //transform: scale(1)
         font-size: 100vh
@@ -35,9 +38,11 @@
 @keyframes fadeInBlurAppTitle
     0%
         filter: blur(4px)
+        -webkit-filter: blur(4px)
         opacity: 0.015
         transform: scale(1)
     100%
         filter: blur(6px)
+        -webkit-filter: blur(6px)
         opacity: 0.05
         transform: scale(1.05)
