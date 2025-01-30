@@ -26,10 +26,6 @@ const useUserInfoState = create<IUseUserInfoState>(set => ({
 }))
 
 
-type IJWTInfo = {
-	userInfo: IUserRepository;
-	token: string;
-}
 
 type IUseAuthState = {
 	appReadyState: boolean;
@@ -51,6 +47,12 @@ const useAuthState = create<IUseAuthState>(set => ({
 }))
 
 
+
+type IJWTInfo = {
+	userInfo: IUserRepository;
+	token: string;
+	isFast?: boolean;
+}
 type IUseJwtInfoState = {
 	jwtInfoListState: IJWTInfo[];
 	getJwtInfoState: (username: string) => IJWTInfo;

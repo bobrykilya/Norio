@@ -52,6 +52,7 @@ export type ILoginServiceRes = {
 	accessTokenExpiration: ICommonVar['accessTokenExpiration'];
 	userInfo: IUserRepository;
 	deviceId: ICommonVar['deviceId'];
+	isFast?: boolean;
 }
 
 export type ICheckUserRes = {

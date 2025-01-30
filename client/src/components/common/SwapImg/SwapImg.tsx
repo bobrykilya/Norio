@@ -12,11 +12,11 @@ const SwapImg = ({ path }: SwapImgProps) => {
 	const [pathState, setPathState] = useState(path)
 
 	const swapImg = async (path: string) => {
-		imgRef.current.classList.add('hide')
+		imgRef.current?.classList.add('hide')
 		await timeout(300)
 
 		setPathState(path)
-		imgRef.current.classList.remove('hide')
+		imgRef.current?.classList.remove('hide')
 	}
 
 	useEffect(() => {

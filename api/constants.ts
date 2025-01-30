@@ -2,17 +2,17 @@
     export const COOKIE_SETTINGS = {
         REFRESH_TOKEN: {
             httpOnly: true,
-            maxAge: 1296e6,                     //* Refresh token maxAge: 15 * 24 * 3600 * 1000 (15 days)
+            maxAge: 1296e6,                     		//* Refresh token maxAge: 15 * 24 * 3600 * 1000 (15 days)
             secure: true,
             strict: true,
-            // sameSite: "strict",                 //* /"lax"
+            // sameSite: "strict",                 		//* /"lax"
         },
     }
-    export const ACCESS_TOKEN_EXPIRATION = 18e5 //* Access token maxAge: 1800 * 1000 (30 minutes)
+    export const ACCESS_TOKEN_EXPIRATION = 18e5 		//* Access token maxAge: 1800 * 1000 (30 minutes)
 
-    export const FAST_SESSION_DURATION = 10     //* Fast session duration in seconds (default: 600?)
-    export const AUTO_LOGOUT_INTERVAL = 60      //* AutoLogout checking interval in seconds (default: 60)
-    export const DEFAULT_BLOCK_DURATION = 3     //* Block duration in minutes (default: 3)
+    export const FAST_SESSION_DURATION = 60 * 60 * 3    //* Fast session duration in seconds (default: 60 * 60 * 3)
+    export const AUTO_LOGOUT_INTERVAL = 60 * 10      	//* AutoLogout checking interval in seconds (default: 60 * 10)
+    export const DEFAULT_BLOCK_DURATION = 3     		//* Block duration in minutes (default: 3)
 
 //* HomePage settings
-export const WEATHER_UPDATE_TIME_IN_MIN = 15       //* in minutes (default: 15)
+	export const WEATHER_UPDATE_TIME_IN_MIN = 15      	//* in minutes (default: 15)

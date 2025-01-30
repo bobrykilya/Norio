@@ -217,7 +217,7 @@ class AuthService {
 		}
 
 		//* Checking for fast session end
-		if (Number(refreshSession.log_out_time) && (Number(refreshSession.log_out_time) < queryTime)) {
+		if (refreshSession.log_out_time && (Number(refreshSession.log_out_time) < queryTime)) {
 			await AuthService.sessionsAutoLogOut(refreshSession)
 			throw new Unauthorized()
 		}
@@ -274,6 +274,7 @@ class AuthService {
 			logOutTime: Number(refreshSession.log_out_time),
 			userInfo,
 			deviceId,
+			isFast: Boolean(refreshSession.log_out_time),
 		}
 	}
 

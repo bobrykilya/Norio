@@ -14,14 +14,15 @@ import { useUserInfoState } from "./stores/Auth-store"
 
 const App = () => {
 
-    const userLoggedState = Boolean(useUserInfoState(s => s.userInfoState))
+    const userLoggedState = useUserInfoState(s => s.userInfoState)
     const blockErrorState = useBlockErrorState(s => s.blockErrorState)
 
     const location = useLocation()
 
     // window.onbeforeunload = function() {
-    //     return 'Нажатие на кнопки перехода по браузеру некорректно работают с такими приложениями';
+    //     return 'Нажатие на кнопки перехода по браузеру некорректно работают с такими приложениями'
     // }
+
 
     return (
         <div 
@@ -35,14 +36,14 @@ const App = () => {
                     location={location}
                     key={location.pathname}
                 >
-                    <Route path="*" element={<Navigate to={userLoggedState ? "home" : "auth"} />} />
+                    <Route path="*" element={<Navigate to={Boolean(userLoggedState) ? "home" : "auth"} />} />
                     {!userLoggedState ? (
                         <Route path="auth" element={
                             <AuthPage blockErrorMessage={blockErrorState} />
                         } />
                     ) : (
                         <Route path="home" element={
-                            <HomePage isUserLogged={userLoggedState} location={location}/>
+                            <HomePage isUserLogged={Boolean(userLoggedState)} location={location}/>
                         } />
                     )}
                 </Routes>

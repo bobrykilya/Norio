@@ -8,6 +8,7 @@ type ISetJWTInfo = {
     userInfo: IUserRepository;
     accessToken: string;
     accessTokenExpiration: number;
+    isFast?: boolean;
 }
 
 const { addJwtInfoState, removeJwtInfoState } = useJwtInfoListState.getState()
@@ -29,10 +30,11 @@ class JWTInfoService {
         refreshTimeoutsObject[username] = setTimeout(refresh, timeoutTrigger)
     }
 
-    static setJWTInfo = ({ userInfo, accessToken, accessTokenExpiration }: ISetJWTInfo) => {
+    static setJWTInfo = ({ userInfo, accessToken, accessTokenExpiration, isFast }: ISetJWTInfo) => {
         addJwtInfoState({
             userInfo,
-            token: accessToken
+            token: accessToken,
+            isFast
         })
         this.refreshJWTInfo(userInfo.username, accessTokenExpiration)
     }

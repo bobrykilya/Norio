@@ -4,7 +4,7 @@ import { useJwtInfoListState, useUserInfoState } from "../../stores/Auth-store"
 import AuthService from "../../services/Auth-service"
 import { queryClient } from "../../http/tanstackQuery-client"
 import { IUserNameInfo } from "../../types/Auth-types"
-import authCommon from "./authCommon"
+import AuthCommon from "./authCommon"
 import JWTInfoService from "../../services/JWTInfoService"
 
 
@@ -21,38 +21,43 @@ class LogOut {
 		// console.log('Auto logOut')
 		showSnackMessage({
 			type: 'w',
-			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${authCommon.getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`
+			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${AuthCommon.getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`
 		})
 		this.handleLogOut({ interCode: 204 })
 	}
 
 	static logOut = ({ interCode, username }: ILogOutReq) => {
-		authCommon.removeSwitchUserFromLS(username)
+		AuthCommon.removeSwitchUserFromLS(username)
 		JWTInfoService.deleteJWTInfo(username)
 		AuthService.logOut({ interCode, username })
 	}
 
 
 
-	static handleLogOut = ({ interCode }: Omit<ILogOutReq, 'username'> = {}) => {
-		const username = useUserInfoState.getState().userInfoState.username
+	static handleLogOut = ({ interCode, username }: Partial<ILogOutReq> = {}) => {
+		const userName = username || useUserInfoState.getState().userInfoState.username
 
-		this.logOut({ interCode, username })
+		this.logOut({ interCode, username: userName })
 
 		this.userHasLogOut()
 	}
 
 
 
-	static handleSwitchUser = (username?: string) => {
-		authCommon.addSwitchUserInLS(useUserInfoState.getState().userInfoState.username)
-		this.userHasLogOut()
+	static handleSwitchUser = (newUserName?: string) => {
+		const currentUserName = useUserInfoState.getState().userInfoState.username
+
+		if (useJwtInfoListState.getState().getJwtInfoState(currentUserName).isFast) {
+			this.handleLogOut({ interCode: 204, username: currentUserName })
+		} else {
+			this.userHasLogOut()
+		}
 
 
-		if (!username) {
+		if (!newUserName) {
 			return
 		}
-		authCommon.saveUserInfoOnBrowser(useJwtInfoListState.getState().getJwtInfoState(username).userInfo)
+		AuthCommon.saveUserInfoOnBrowser(useJwtInfoListState.getState().getJwtInfoState(newUserName).userInfo)
 	}
 
 	static handleRemoveSwitchUser = (username: string) => {

@@ -14,14 +14,32 @@ import { ICommonVar } from "../../../common/types/Global-types"
 
 
 
+type ICheckPrevRefreshToken = {
+	prevRefreshToken: ICommonVar['refreshToken'];
+	res: ICommonVar['res'];
+	username: ICommonVar['username'];
+	queryTime: number;
+}
+const checkPrevRefreshToken = async ({ prevRefreshToken, res, username, queryTime }: ICheckPrevRefreshToken) => {
+	if (!prevRefreshToken) {
+		return
+	}
+
+	await AuthService.logOut({ refreshToken: prevRefreshToken, queryTime, interCode: 207 })
+	res.clearCookie(getUserCookieName(username))
+}
+
 const getUserCookieName = (username: string) => {
 	return `token-${username}`
 }
+
+
 class AuthController {
 
 	static async signIn(req: ICommonVar['req'], res: ICommonVar['res']) {
 		// console.log(req.body)
 		const { username, password, fastSession, deviceType, lsDeviceId, deviceIP }: ISignInController = req.body
+		const prevRefreshToken: ICommonVar['refreshToken'] = req.cookies[getUserCookieName(username)]
 		const { fingerprint } = req
 		const queryTime = getTime()
 
@@ -30,7 +48,7 @@ class AuthController {
 			const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes & Pick<ICommonVar, 'refreshToken'> = await AuthService.signIn({
 				username,
 				password,
-				fingerprint, 
+				fingerprint,
 				fastSession,
 				queryTime,
 				deviceType,
@@ -38,10 +56,11 @@ class AuthController {
 				deviceIP,
 			})
 
-			// console.log('signIn')
-			res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
-
-			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
+			checkPrevRefreshToken({ prevRefreshToken, res, username, queryTime })
+				.finally(() => {
+					res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+					return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
+				})
 		} catch (err) {
 			return ErrorsUtils.catchError({ interCode: !fastSession ? 201 : 202, req, res, err, username, fingerprint, queryTime })
 		}
@@ -120,20 +139,20 @@ class AuthController {
 
 
 	static async logOut(req: ICommonVar['req'], res: ICommonVar['res']) {
+		// console.log('logOut')
 		const { interCode, username }: ILogOutReq = req.body
-		const refreshToken = req.cookies[getUserCookieName(username)]
+		const refreshToken: string = req.cookies[getUserCookieName(username)]
 		const { fingerprint } = req
         const queryTime = getTime()
 
 
 		try {
 			await AuthService.logOut({ refreshToken, queryTime, interCode })
-
-			// console.log('logOut')
 			res.clearCookie(getUserCookieName(username))
 
 			return res.sendStatus(200)
 		} catch (err) {
+			res.clearCookie(getUserCookieName(username))
 			return ErrorsUtils.catchError({ interCode: 203, req, res, err, fingerprint, queryTime })
 		}
 	}
@@ -148,7 +167,7 @@ class AuthController {
 		const currentRefreshToken = req.cookies[getUserCookieName(username)]
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId } =
+			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId, isFast } =
 				await AuthService.refresh({
 					fingerprint,
 					currentRefreshToken,
@@ -156,10 +175,12 @@ class AuthController {
 					lsDeviceId,
 				})
 
-			res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+			res.cookie(getUserCookieName(username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 			
-			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId })
+			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, isFast })
 		} catch (err) {
+			// console.log('Error refresh', username)
+			res.clearCookie(getUserCookieName(username))
 			return ErrorsUtils.catchError({ interCode: 701, req, res, err, fingerprint, queryTime })
 		}
 	}

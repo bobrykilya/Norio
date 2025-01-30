@@ -45,6 +45,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUser
 		setTimeout(() => setIsRendered(true));
 	}, [])
 
+
 	return (
 
 		<div
@@ -61,7 +62,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUser
 					{
 						!isNewUser ?
 						<img
-							src={`/avatars/${user.avatar}.jpg`}
+							src={`/avatars/${user?.avatar}.jpg`}
 							alt="IMG Error 6"
 						/> :
 						<IoAdd className={'fa-icon'} />
@@ -75,7 +76,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUser
 					>
 						{
 							!isNewUser ?
-							`${user.lastName} ${user.firstName}` :
+							`${user?.lastName} ${user?.firstName}` :
 							'Новый аккаунт'
 						}
 					</span>
@@ -84,7 +85,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUser
 					>
 						{
 							!isNewUser ?
-							user.job :
+							user?.job :
 							'Выполнить вход'
 						}
 					</span>
@@ -92,7 +93,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUser
 				<ToolTip
 					text={
 						!isNewUser ?
-						`Сменить аккаунт на ${user.username}` :
+						`Сменить аккаунт на ${user?.username}` :
 						'Сменить аккаунт на нового пользователя'
 					}
 					position={'left'}
@@ -103,7 +104,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUser
 				<RoundButton
 					onClick={handleRemoveUser}
 					toolTip={{
-						text: `Забыть аккаунт ${user.username}`,
+						text: `Забыть аккаунт ${user?.username}`,
 					}}
 					size={'tiny'}
 				>

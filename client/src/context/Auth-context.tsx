@@ -4,9 +4,11 @@ import AuthService from "../services/Auth-service"
 import io from "socket.io-client"
 import { ILoginServiceRes } from "../../../common/types/Auth-types"
 import LogOut from "../features/auth/logOut"
+import logOut from "../features/auth/logOut"
 import { useAuthState } from "../stores/Auth-store"
-import authCommon from "../features/auth/authCommon"
 import JWTInfoService from "../services/JWTInfoService"
+import AuthCommon from "../features/auth/authCommon"
+import FastSession from "../features/auth/fastSession"
 
 
 
@@ -43,28 +45,39 @@ const AuthProvider = ({ children }) => {
 
 				const refreshSwitchUsersTokens = async () => {
 					if (switchUsersList) {
-						switchUsersList.map(async (username: string) => {
+						return Promise.all(switchUsersList.map(async (userName: string) => {
+
+							if (userName === username) {
+								return
+							}
+
 							try {
-								const { accessToken, accessTokenExpiration, userInfo }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
+								const { accessToken, accessTokenExpiration, userInfo, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username: userName })
+
+								if (isFast) {
+									logOut.logOut({ interCode: 204, username: userName })
+									return
+								}
 
 								JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
 							} catch (err) {
-								console.log('Switch users refresh error: ', err)
+								// AuthCommon.removeSwitchUserFromLS(userName)
+								logOut.logOut({ interCode: 206, username: userName })
 							}
-						})
+						}))
 					}
 				}
 
 				await refreshSwitchUsersTokens()
-					.finally( async () => {
-						const { accessToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
-						authCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId })
-
-						setAppReadyState(true)
+					.then( async () => {
+						const { accessToken, accessTokenExpiration, userInfo, deviceId, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
+						AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId, isFast })
 					})
 			} catch (err) {
-				setAppReadyState(true)
+				// console.log(err)
 				LogOut.userHasLogOut()
+			} finally {
+				setAppReadyState(true)
 			}
 		}
 
@@ -105,6 +118,25 @@ const AuthProvider = ({ children }) => {
 		}
 		socketEvents()
 	}, [])
+
+
+	//* Fast session refresh and closing checking
+	useEffect(() => {
+		const handleBeforeUnload = () => {
+			FastSession.handleFastSessionRefresh()
+		}
+		window.addEventListener("beforeunload", handleBeforeUnload)
+		return () => {
+			window.removeEventListener("beforeunload", handleBeforeUnload)
+		}
+	}, [])
+	useEffect(() => {
+		const fastSession = localStorage.getItem('fastSession')
+		if (fastSession) {
+			FastSession.checkFastSessionLogOut(fastSession)
+		}
+	}, [])
+
 
 	return (
 		<AuthContext.Provider

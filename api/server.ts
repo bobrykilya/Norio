@@ -12,6 +12,8 @@ import killPort from "kill-port"
 import { UnprotectedRouter } from "./src/routers/Unprotected-router.ts"
 import { createClient } from "redis"
 import { Conflict } from "./src/utils/Errors.ts"
+import AuthService from "./src/services/Auth-service.ts"
+import { AUTO_LOGOUT_INTERVAL } from "./constants.ts"
 
 
 
@@ -77,4 +79,4 @@ await portListeningTest()
 		})
 	})
 
-// setInterval(AuthService.intervalTestFunc, AUTO_LOGOUT_INTERVAL * 1000)
+setInterval(AuthService.intervalTestFunc, AUTO_LOGOUT_INTERVAL * 1000)

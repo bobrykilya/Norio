@@ -18,13 +18,14 @@ const testAndUpdateLSDeviceId = (deviceId: number, lsDeviceId?: number) => {
 }
 
 
-class authCommon {
+class AuthCommon {
 
-	static loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId }: ILoginServiceRes & { lsDeviceId?: number }) => {
-		JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
+	static loginUser = ({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId, isFast }: ILoginServiceRes & { lsDeviceId?: number, isFast?: boolean }) => {
+		JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration, isFast })
 
 		testAndUpdateLSDeviceId(deviceId, lsDeviceId)
 		this.saveUserInfoOnBrowser(userInfo)
+		AuthCommon.addSwitchUserInLS(userInfo.username)
 	}
 
 	static saveUserInfoOnBrowser = (userInfo: IUserRepository ) => {
@@ -34,7 +35,7 @@ class authCommon {
 			firstName: userInfo.firstName,
 			lastName: userInfo.lastName,
 		}))
-		this.removeSwitchUserFromLS(userInfo.username)
+		// this.removeSwitchUserFromLS(userInfo.username)
 	}
 
 	static getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
@@ -56,14 +57,13 @@ class authCommon {
 		if (username) {
 			const prevSwitchUsers: string[] = JSON.parse(localStorage.getItem('switchUsers') || null) || []
 
+			// console.log(prevSwitchUsers)
 			if (!prevSwitchUsers) {
 				return
 			}
-			const filteredSwitchUsers = prevSwitchUsers.filter(user => user !== username)
 
-			if (!filteredSwitchUsers) {
-				return
-			}
+			const filteredSwitchUsers = prevSwitchUsers.filter(userName => userName !== username)
+
 			localStorage.setItem('switchUsers', JSON.stringify(filteredSwitchUsers))
 		} else {
 			localStorage.removeItem('switchUsers')
@@ -72,4 +72,4 @@ class authCommon {
 }
 
 
-export default authCommon
+export default AuthCommon

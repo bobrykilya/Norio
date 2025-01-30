@@ -1,6 +1,6 @@
 import { ICheckUserReq, ISignUpReq } from "../../../../common/types/Auth-types"
 import AuthService from "../../services/Auth-service"
-import authCommon from "./authCommon"
+import AuthCommon from "./authCommon"
 import { useAuthState, useCoverPanelState } from "../../stores/Auth-store"
 
 
@@ -49,7 +49,7 @@ class SignUp {
 		data.hashedPassword = signUpUserInfo.hashedPassword
 
 		const { accessToken, accessTokenExpiration, userInfo, deviceId } = await AuthService.signUp(data)
-		authCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
+		AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId })
 
 		resetSignUpVariables()
 		setCoverPanelState('sign_in')

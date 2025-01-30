@@ -50,8 +50,15 @@ const getCodeDescription = (interCode: ICommonVar['interCode']) => {
         }
 		case 206 : return {
 			interCode,
-			name: 'Auto log-out user',
-			description: 'Фоновый выход из аккаунта (забыть пользователя)',
+			name: 'Log-out (Forget user)',
+			description: 'Забыть пользователя',
+			notifForAdmin: false,
+			notifForUser: false,
+		}
+		case 207 : return {
+			interCode,
+			name: 'Log-out due to Re-login to authorized user',
+			description: 'Фоновый выход из аккаунта (повторный вход)',
 			notifForAdmin: false,
 			notifForUser: false,
 		}

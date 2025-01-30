@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import SwitchUserElem from "./SwitchUserElem/SwitchUserElem"
 import { TbTrashXFilled } from "react-icons/tb"
@@ -8,15 +8,9 @@ import { MAX_SWITCH_USERS } from "../../../../constants"
 import LogOut from "../../../features/auth/logOut"
 import { useJwtInfoListState } from "../../../stores/Auth-store"
 import timeout from "../../../utils/timeout"
+import { sortByAlphabet } from "../../../utils/sort"
 
 
-
-export type ISwitchUserElem = {
-	username: string;
-	name: string;
-	job: string;
-	avatar: string;
-}
 
 type SwitchUserProps = {
 	userInfo: IUserRepository;
@@ -27,17 +21,15 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 		return
 	}
 
-	const SAVED_USERS_LIST = useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo)
-	// console.log(SAVED_USERS_LIST)
+	const SAVED_USERS_LIST = sortByAlphabet(useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo), 'lastName')
 
 	const [usersList, setUsersList] = useState(SAVED_USERS_LIST)
-	const usersContRef = useRef(null)
+	// console.log({ SAVED_USERS_LIST, usersList })
 
 	const handleForgetAllUsers = async () => {
 		setUsersList([])
 
 		await timeout(300)
-
 		LogOut.handleRemoveAllSwitchUsers()
 	}
 
@@ -45,7 +37,6 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 	return (
 		<div
 			className={`switch_user-cont cont`}
-			ref={usersContRef}
 		>
 			<div
 				className={'switch_user_info-cont cont'}
