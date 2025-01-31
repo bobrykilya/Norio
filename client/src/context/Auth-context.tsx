@@ -9,7 +9,7 @@ import { useAuthState } from "../stores/Auth-store"
 import JWTInfoService from "../services/JWTInfoService"
 import AuthCommon from "../features/auth/authCommon"
 import FastSession from "../features/auth/fastSession"
-import { DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_LS, USER_LS } from "../../constants"
+import { CURRENT_USER_LS, DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_LS } from "../../constants"
 
 
 
@@ -41,7 +41,7 @@ const AuthProvider = ({ children }) => {
 			try {
 				// console.log('refresh')
 				const lsDeviceId = JSON.parse(localStorage.getItem(DEVICE_LS))?.id || null
-				const username = JSON.parse(localStorage.getItem(USER_LS))?.username || null
+				const username = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username || null
 				const switchUsersList = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
 
 				const refreshSwitchUsersTokens = async () => {
@@ -92,8 +92,8 @@ const AuthProvider = ({ children }) => {
 			if (event.key === LOGOUT_LS) {
 				LogOut.handleSwitchUser()
 			}
-			if (event.key === USER_LS) {
-				if (localStorage.getItem(USER_LS)) {
+			if (event.key === CURRENT_USER_LS) {
+				if (localStorage.getItem(CURRENT_USER_LS)) {
 					location.reload()
 				}
 			}

@@ -85,7 +85,7 @@ const UserCard = ({  }: UserCardProps) => {
 					/>
 				    <SubmitBut
 						icon={<LuLogOut className={'fa-icon'} />}
-						onClick={LogOut.handleLogOut}
+						onClick={LogOut.currentUserLogOut}
 						useOnClick={true}
 						toolTip={{
 							text: 'Выйти из аккаунта пользователя',

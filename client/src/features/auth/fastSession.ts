@@ -1,14 +1,14 @@
 import { useJwtInfoListState } from "../../stores/Auth-store"
 import { getEndTime, getTime } from "../../utils/getTime"
 import logOut from "./logOut"
-import { FAST_LS, USER_LS } from "../../../constants"
+import { CURRENT_USER_LS, FAST_LS } from "../../../constants"
 
 
 
 class FastSession {
 
 	static handleFastSessionRefresh = () => {
-		const username = JSON.parse(localStorage.getItem(USER_LS))?.username
+		const username = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
 		
 		if (!username || !useJwtInfoListState.getState().getJwtInfoState(username)?.isFast) {
 			return
@@ -20,10 +20,10 @@ class FastSession {
 	static checkFastSessionLogOut = (time: string) => {
 
 		if (Number(time) < getTime()) {
-			const username = JSON.parse(localStorage.getItem(USER_LS))?.username
+			const username = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
 
 			try {
-				logOut.handleLogOut({ interCode: 204, username })
+				logOut.currentUserLogOut({ interCode: 204, username })
 			} catch (err) {
 				console.log('Error fastSession logout after closing', err)
 				logOut.userHasLogOut()

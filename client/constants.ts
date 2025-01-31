@@ -1,5 +1,5 @@
 export const LOGOUT_LS = 'lastLogout'
-export const USER_LS = 'currentUser'
+export const CURRENT_USER_LS = 'currentUser'
 export const DEVICE_LS = 'deviceInfo'
 export const LOG_LIST_LS = 'localLogList'
 export const SWITCH_USERS_LS = 'switchUsers'

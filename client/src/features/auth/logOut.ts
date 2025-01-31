@@ -6,7 +6,8 @@ import { queryClient } from "../../http/tanstackQuery-client"
 import { IUserNameInfo } from "../../types/Auth-types"
 import AuthCommon from "./authCommon"
 import JWTInfoService from "../../services/JWTInfoService"
-import { USER_LS } from "../../../constants"
+import { CURRENT_USER_LS, LOGOUT_LS } from "../../../constants"
+import { getTime } from "../../utils/getTime"
 
 
 
@@ -23,21 +24,27 @@ class LogOut {
 			type: 'w',
 			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${AuthCommon.getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`
 		})
-		this.handleLogOut({ interCode: 204 })
+		this.currentUserLogOut({ interCode: 204 })
 	}
 
 	static logOut = ({ interCode, username }: ILogOutReq) => {
+		// console.log('logout')
 		AuthCommon.removeSwitchUserFromLS(username)
 		JWTInfoService.deleteJWTInfo(username)
 		AuthService.logOut({ interCode, username })
-		localStorage.removeItem(USER_LS)
 	}
 
 
 
-	static handleLogOut = ({ interCode, username }: Partial<ILogOutReq> = {}) => {
-		const userName = username || useUserInfoState.getState().userInfoState.username
+	static currentUserLogOut = ({ interCode, username }: Partial<ILogOutReq> = {}) => {
+		const userName = username || useUserInfoState.getState().userInfoState?.username
 
+		if (!userName) {
+			return
+		}
+		
+		localStorage.removeItem(CURRENT_USER_LS)
+		localStorage.setItem(LOGOUT_LS, String(getTime()))
 		this.logOut({ interCode, username: userName })
 
 		this.userHasLogOut()
@@ -47,13 +54,13 @@ class LogOut {
 
 	static handleSwitchUser = (newUserName?: string) => {
 		const currentUserName = useUserInfoState.getState().userInfoState?.username
-		console.log(useJwtInfoListState.getState().getJwtInfoState(currentUserName))
+		// console.log(useJwtInfoListState.getState().getJwtInfoState(currentUserName))
 		if (!currentUserName) {
 			return
 		}
 
 		if (useJwtInfoListState.getState().getJwtInfoState(currentUserName).isFast) {
-			this.handleLogOut({ interCode: 204, username: currentUserName })
+			this.currentUserLogOut({ interCode: 204, username: currentUserName })
 		} else {
 			this.userHasLogOut()
 		}

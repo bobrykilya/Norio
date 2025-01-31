@@ -66,7 +66,7 @@ const useJwtInfoListState = create<IUseJwtInfoState>()(immer((set, get) => ({
 		const jwtInfoListState = get().jwtInfoListState
 		const duplicatePos = jwtInfoListState.findIndex(el => el.userInfo.username === state.userInfo.username)
 
-		if (duplicatePos || duplicatePos === 0) {
+		if (duplicatePos !== -1) {
 			jwtInfoListState.splice(duplicatePos, 1)
 		}
 

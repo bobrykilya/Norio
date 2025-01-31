@@ -1,8 +1,7 @@
 import { IUserRepository } from "../../../api/src/types/DB-types"
 import AuthService from "./Auth-service"
 import { useJwtInfoListState } from "../stores/Auth-store"
-import { DEVICE_LS, LOGOUT_LS } from "../../constants"
-import { getTime } from "../utils/getTime"
+import { DEVICE_LS } from "../../constants"
 
 
 
@@ -33,6 +32,7 @@ class JWTInfoService {
     }
 
     static setJWTInfo = ({ userInfo, accessToken, accessTokenExpiration, isFast }: ISetJWTInfo) => {
+        // console.log(userInfo)
         addJwtInfoState({
             userInfo,
             token: accessToken,
@@ -54,8 +54,6 @@ class JWTInfoService {
                 clearTimeout(refreshTimeoutsObject[timer])
             }
         }
-        // console.log('deleteJWTInfo. Set LOGOUT_STORAGE_KEY')
-        localStorage.setItem(LOGOUT_LS, String(getTime()))
     }
 }
 
