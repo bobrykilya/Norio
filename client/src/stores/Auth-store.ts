@@ -64,10 +64,10 @@ const useJwtInfoListState = create<IUseJwtInfoState>()(immer((set, get) => ({
 	getJwtInfoState: (username) => get().jwtInfoListState.find(el => el.userInfo.username === username),
 	addJwtInfoState: (state) => {
 		const jwtInfoListState = get().jwtInfoListState
-		// console.log('addJwtInfoState')
+		const duplicatePos = jwtInfoListState.findIndex(el => el.userInfo.username === state.userInfo.username)
 
-		if (Boolean(jwtInfoListState.find(el => el.userInfo.username === state.userInfo.username))) {
-			return
+		if (duplicatePos || duplicatePos === 0) {
+			jwtInfoListState.splice(duplicatePos, 1)
 		}
 
 		jwtInfoListState.push(state)

@@ -59,6 +59,7 @@ class AuthController {
 			checkPrevRefreshToken({ prevRefreshToken, res, username, queryTime })
 				.finally(() => {
 					res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+
 					return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 				})
 		} catch (err) {
@@ -152,6 +153,7 @@ class AuthController {
 
 			return res.sendStatus(200)
 		} catch (err) {
+			// console.log('Logout refresh', err)
 			res.clearCookie(getUserCookieName(username))
 			return ErrorsUtils.catchError({ interCode: 203, req, res, err, fingerprint, queryTime })
 		}
@@ -165,6 +167,7 @@ class AuthController {
 		const { fingerprint } = req
         const queryTime = getTime()
 		const currentRefreshToken = req.cookies[getUserCookieName(username)]
+		// console.log(currentRefreshToken)
 
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId, isFast } =
@@ -179,7 +182,7 @@ class AuthController {
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, isFast })
 		} catch (err) {
-			// console.log('Error refresh', username)
+			console.log('Error refresh', err)
 			res.clearCookie(getUserCookieName(username))
 			return ErrorsUtils.catchError({ interCode: 701, req, res, err, fingerprint, queryTime })
 		}

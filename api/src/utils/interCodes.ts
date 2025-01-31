@@ -62,6 +62,13 @@ const getCodeDescription = (interCode: ICommonVar['interCode']) => {
 			notifForAdmin: false,
 			notifForUser: false,
 		}
+		case 208 : return {
+			interCode,
+			name: 'Session has been expired',
+			description: 'Истёк срок действия неактивной сессии',
+			notifForAdmin: false,
+			notifForUser: false,
+		}
         case 210 : return {
             interCode,
             name: 'Activation user',

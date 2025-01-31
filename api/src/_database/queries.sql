@@ -41,7 +41,7 @@ CREATE TABLE refresh_sessions(
     sess_id SERIAL PRIMARY KEY,
     user_id SMALLINT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     device_id SMALLINT NOT NULL REFERENCES auth_devices(device_id) ON DELETE CASCADE,
-    auth_time BIGINT NOT NULL,
+    refresh_time BIGINT NOT NULL,
     log_in_time BIGINT UNIQUE NOT NULL,
     log_out_time BIGINT,
     refresh_token VARCHAR(400) UNIQUE NOT NULL

@@ -1,6 +1,6 @@
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import { $apiAuth, getApiInfo } from "../http/http"
-import { PERMITTED_COUNTRIES } from "../../constants"
+import { DEVICE_LS, PERMITTED_COUNTRIES } from "../../constants"
 import {
     ICheckUserReq,
     ICheckUserRes,
@@ -31,7 +31,7 @@ const getAndSaveDeviceType = (lsDeviceInfo: IDeviceInfo) => {
     }
     
     useDeviceInfoState.getState().setDeviceTypeState(deviceType)
-    localStorage.setItem('deviceInfo', JSON.stringify({ ...lsDeviceInfo, type: deviceType }))
+    localStorage.setItem(DEVICE_LS, JSON.stringify({ ...lsDeviceInfo, type: deviceType }))
 
     return deviceType
 }
@@ -55,7 +55,7 @@ const checkCountryCodeAndGetIP = async () => {
 const preRequest = async <T>(data: IPreprocessing & T) => {
     data.deviceIP = await checkCountryCodeAndGetIP()
 
-    const lsDeviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem('deviceInfo'))
+    const lsDeviceInfo: IDeviceInfo = JSON.parse(localStorage.getItem(DEVICE_LS))
     const lsDeviceId = lsDeviceInfo?.id
     const deviceType = lsDeviceInfo?.type || getAndSaveDeviceType(lsDeviceInfo)
 

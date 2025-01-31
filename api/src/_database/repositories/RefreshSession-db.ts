@@ -1,15 +1,16 @@
 import queryDB from '../../utils/queryDB'
 import { getTime } from "../../utils/getTime"
 import { IRefreshSessionRepository } from "../../types/DB-types"
+import { COOKIE_SETTINGS } from "../../../constants.ts"
 
 
 
 class RefreshSessionRepository {
 	static async createRefreshSession({ userId, deviceId, logInTime, logOutTime=null, refreshToken }: IRefreshSessionRepository) {
-		await queryDB("INSERT INTO refresh_sessions (user_id, device_id, auth_time, log_in_time, log_out_time, refresh_token) VALUES ($1, $2, $3, $4, $5, $6)", [
+		await queryDB("INSERT INTO refresh_sessions (user_id, device_id, refresh_time, log_in_time, log_out_time, refresh_token) VALUES ($1, $2, $3, $4, $5, $6)", [
 			userId,
 			deviceId,
-            getTime(), //* auth_time
+            getTime(), //* refresh_time
 			logInTime,
             logOutTime,
 			refreshToken,
@@ -52,6 +53,12 @@ class RefreshSessionRepository {
 
 	static async getRefreshSessionsWithLogOutTime() {
 		const response = await queryDB("SELECT sess_id, user_id, device_id, log_out_time FROM refresh_sessions WHERE log_out_time != 0 AND log_out_time < $1", [getTime()])
+
+		return response?.rows
+	}
+
+	static async getRefreshSessionsWithExpireRefreshTime() {
+		const response = await queryDB("SELECT sess_id FROM refresh_sessions WHERE refresh_time < $1", [getTime() - COOKIE_SETTINGS.REFRESH_TOKEN.maxAge / 1000])
 
 		return response?.rows
 	}

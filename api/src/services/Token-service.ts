@@ -2,6 +2,7 @@ import jwt, { JwtPayload } from "jsonwebtoken"
 import { Forbidden, Unauthorized } from "../utils/Errors"
 import { ICommonVar } from "../../../common/types/Global-types"
 import dotenv from "dotenv"
+import { ACCESS_TOKEN_EXPIRATION, COOKIE_SETTINGS } from "../../constants.ts"
 
 
 
@@ -12,13 +13,13 @@ export type IJWTPayload = JwtPayload
 class TokenService {
 	static async generateAccessToken(payload: ICommonVar['payload']) {
 		return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-			expiresIn: "30m",
+			expiresIn: String(ACCESS_TOKEN_EXPIRATION),
 		})
 	}
 
 	static async generateRefreshToken(payload: ICommonVar['payload']) {
 		return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
-			expiresIn: "15d",
+			expiresIn: String(COOKIE_SETTINGS.REFRESH_TOKEN.maxAge),
 		})
 	}
 

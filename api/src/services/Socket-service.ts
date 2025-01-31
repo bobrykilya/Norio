@@ -24,9 +24,9 @@ export const socketConnection = (HTTPServer: any) => {
         // console.log('Socket connected')
 
         socket.on('join', ({ userId, deviceId }) => {
-            console.log('Joined to room: ' + userId + deviceId)
+            // console.log('Joined to room: ' + userId + deviceId)
             socket.join(userId?.toString() + deviceId?.toString())
-            console.log(socket.rooms)
+            // console.log(socket.rooms)
         })
         
         socket.on('disconnect', () => {

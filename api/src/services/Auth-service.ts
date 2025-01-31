@@ -9,7 +9,7 @@ import _logAttentionRepository from '../_database/repositories/_logAttention-db'
 import _logAuthRepository from '../_database/repositories/_LogAuth-db'
 import DeviceService from './Device-service'
 import { sendToClient } from './Socket-service'
-import { getEndTime } from '../utils/getTime'
+import { getEndTime, getTime } from '../utils/getTime'
 import { IService, ISignInController, ISignUpController } from "../types/Auth-types"
 import { ICheckUserReq, ILogOutReq, IRefreshReq } from "../../../common/types/Auth-types"
 import { IRefreshSessionRepository, IUserRepository } from "../types/DB-types"
@@ -216,9 +216,10 @@ class AuthService {
 			throw new Unauthorized()
 		}
 
+
 		//* Checking for fast session end
-		if (refreshSession.log_out_time && (Number(refreshSession.log_out_time) < queryTime)) {
-			await AuthService.sessionsAutoLogOut(refreshSession)
+		if (Number(refreshSession.log_out_time) && (Number(refreshSession.log_out_time) < queryTime)) {
+			await AuthService.fastSessionsExpireChecking(refreshSession)
 			throw new Unauthorized()
 		}
 
@@ -274,17 +275,22 @@ class AuthService {
 			logOutTime: Number(refreshSession.log_out_time),
 			userInfo,
 			deviceId,
-			isFast: Boolean(refreshSession.log_out_time),
+			isFast: Boolean(Number(refreshSession.log_out_time)),
 		}
 	}
 
-	static async sessionsAutoLogOut(sessionInfo?: IRefreshSessionRepository) {
+
+
+
+	static async fastSessionsExpireChecking(sessionInfo?: IRefreshSessionRepository) {
 		const sessionsLogOutList = sessionInfo ? [sessionInfo] : await RefreshSessionsRepository.getRefreshSessionsWithLogOutTime()
 		// console.log(sessionsLogOutList)
 
-		if (!sessionsLogOutList[0]) return
+		if (!sessionsLogOutList[0]) {
+			return
+		}
 		
-		sessionsLogOutList.map(async ({ sess_id, user_id, device_id, log_out_time }) => {
+		sessionsLogOutList.map( async ({ sess_id, user_id, device_id, log_out_time }) => {
 			await RefreshSessionsRepository.deleteRefreshSessionById(sess_id)
 				.then(async () => {
 					await _logAuthRepository.createLogAuth({ interCode: 204, userId: user_id, deviceId: device_id, logTime: log_out_time })
@@ -307,10 +313,32 @@ class AuthService {
 		})
 	}
 
+	static async sessionExpireChecking() {
+		const expireSessionsList = await RefreshSessionsRepository.getRefreshSessionsWithExpireRefreshTime()
+		console.log(expireSessionsList)
+
+		if (!expireSessionsList[0]) {
+			return
+		}
+
+		expireSessionsList.map( async ({ sess_id, user_id, device_id }) => {
+			await RefreshSessionsRepository.deleteRefreshSessionById(sess_id)
+				.then(async () => {
+					await _logAuthRepository.createLogAuth({
+						interCode: 208,
+						userId: user_id,
+						deviceId: device_id,
+						logTime: getTime()
+					})
+				})
+		})
+	}
+
 
 	
 	static async intervalTestFunc() {
-		await AuthService.sessionsAutoLogOut()
+		await AuthService.fastSessionsExpireChecking()
+		await AuthService.sessionExpireChecking()
 	}
 }
 

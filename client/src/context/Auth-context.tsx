@@ -9,6 +9,7 @@ import { useAuthState } from "../stores/Auth-store"
 import JWTInfoService from "../services/JWTInfoService"
 import AuthCommon from "../features/auth/authCommon"
 import FastSession from "../features/auth/fastSession"
+import { DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_LS, USER_LS } from "../../constants"
 
 
 
@@ -39,9 +40,9 @@ const AuthProvider = ({ children }) => {
 		const refresh = async () => {
 			try {
 				// console.log('refresh')
-				const lsDeviceId = JSON.parse(localStorage.getItem('deviceInfo'))?.id || null
-				const username = JSON.parse(localStorage.getItem('currentUser'))?.username || null
-				const switchUsersList = JSON.parse(localStorage.getItem('switchUsers'))
+				const lsDeviceId = JSON.parse(localStorage.getItem(DEVICE_LS))?.id || null
+				const username = JSON.parse(localStorage.getItem(USER_LS))?.username || null
+				const switchUsersList = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
 
 				const refreshSwitchUsersTokens = async () => {
 					if (switchUsersList) {
@@ -61,7 +62,7 @@ const AuthProvider = ({ children }) => {
 
 								JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
 							} catch (err) {
-								// AuthCommon.removeSwitchUserFromLS(userName)
+								console.log('Error refresh for switch user: ', userName)
 								logOut.logOut({ interCode: 206, username: userName })
 							}
 						}))
@@ -85,23 +86,24 @@ const AuthProvider = ({ children }) => {
 	}, [])
 
 
-	//! Delete ?
-	// //* Exiting from all tabs when log out
-	// useEffect(() => {
-	// 	const handlePersistedLogOut = (event: StorageEvent) => {
-	// 		// console.log(event.key)
-	// 		if (event.key === LOGOUT_STORAGE_KEY) {
-	// 			LogOut.handleLogOut({ interCode: 204 })
-	// 			// JWTInfoService.deleteJWTInfo()
-	// 			// resetSignInVariables()
-	// 		}
-	// 	}
-	//
-	// 	window.addEventListener("storage", handlePersistedLogOut)
-	// 	return () => {
-	// 		window.removeEventListener("storage", handlePersistedLogOut)
-	// 	}
-	// }, [])
+	//* Exiting from all tabs after logOut, tab reload after user login
+	useEffect(() => {
+		const handlePersistedLogOut = (event: StorageEvent) => {
+			if (event.key === LOGOUT_LS) {
+				LogOut.handleSwitchUser()
+			}
+			if (event.key === USER_LS) {
+				if (localStorage.getItem(USER_LS)) {
+					location.reload()
+				}
+			}
+		}
+
+		window.addEventListener("storage", handlePersistedLogOut)
+		return () => {
+			window.removeEventListener("storage", handlePersistedLogOut)
+		}
+	}, [])
 
 
 	//* Socket events handling
@@ -131,7 +133,7 @@ const AuthProvider = ({ children }) => {
 		}
 	}, [])
 	useEffect(() => {
-		const fastSession = localStorage.getItem('fastSession')
+		const fastSession = localStorage.getItem(FAST_LS)
 		if (fastSession) {
 			FastSession.checkFastSessionLogOut(fastSession)
 		}

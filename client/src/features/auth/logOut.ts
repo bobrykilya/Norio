@@ -6,19 +6,19 @@ import { queryClient } from "../../http/tanstackQuery-client"
 import { IUserNameInfo } from "../../types/Auth-types"
 import AuthCommon from "./authCommon"
 import JWTInfoService from "../../services/JWTInfoService"
+import { USER_LS } from "../../../constants"
 
 
 
 class LogOut {
 
 	static userHasLogOut = () => {
+		// console.log('userHasLogOut')
 		useUserInfoState.setState({ userInfoState: null })
-		localStorage.removeItem('currentUser')
 		queryClient.removeQueries() //! Delete?
 	}
 
 	static autoFastSessionLogOut = (userNameInfo: IUserNameInfo) => {
-		// console.log('Auto logOut')
 		showSnackMessage({
 			type: 'w',
 			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${AuthCommon.getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`
@@ -30,6 +30,7 @@ class LogOut {
 		AuthCommon.removeSwitchUserFromLS(username)
 		JWTInfoService.deleteJWTInfo(username)
 		AuthService.logOut({ interCode, username })
+		localStorage.removeItem(USER_LS)
 	}
 
 
@@ -45,7 +46,11 @@ class LogOut {
 
 
 	static handleSwitchUser = (newUserName?: string) => {
-		const currentUserName = useUserInfoState.getState().userInfoState.username
+		const currentUserName = useUserInfoState.getState().userInfoState?.username
+		console.log(useJwtInfoListState.getState().getJwtInfoState(currentUserName))
+		if (!currentUserName) {
+			return
+		}
 
 		if (useJwtInfoListState.getState().getJwtInfoState(currentUserName).isFast) {
 			this.handleLogOut({ interCode: 204, username: currentUserName })

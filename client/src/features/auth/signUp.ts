@@ -42,8 +42,6 @@ class SignUp {
 	}
 
 	static handleSignUp = async (data: ISignUpReq) => {
-		// await checkDoubleSessions(data.username)
-		// await timeout(300)
 
 		data.username = signUpUserInfo.username
 		data.hashedPassword = signUpUserInfo.hashedPassword

@@ -1,4 +1,11 @@
-export const LOGOUT_STORAGE_KEY = 'lastLogout'
+export const LOGOUT_LS = 'lastLogout'
+export const USER_LS = 'currentUser'
+export const DEVICE_LS = 'deviceInfo'
+export const LOG_LIST_LS = 'localLogList'
+export const SWITCH_USERS_LS = 'switchUsers'
+export const FAST_LS = 'fastSession'
+
+
 export const APP_TITLE = 'NORIO'
 export const MY_LOC = 'myLocation'
 

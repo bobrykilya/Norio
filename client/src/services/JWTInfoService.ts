@@ -1,6 +1,8 @@
 import { IUserRepository } from "../../../api/src/types/DB-types"
 import AuthService from "./Auth-service"
 import { useJwtInfoListState } from "../stores/Auth-store"
+import { DEVICE_LS, LOGOUT_LS } from "../../constants"
+import { getTime } from "../utils/getTime"
 
 
 
@@ -20,7 +22,7 @@ class JWTInfoService {
         const timeoutTrigger = expiration - 10000
 
         const refresh = async () => {
-            const lsDeviceId = JSON.parse(localStorage.getItem('deviceInfo'))?.id
+            const lsDeviceId = JSON.parse(localStorage.getItem(DEVICE_LS))?.id
             if (!lsDeviceId) return
 
             const { userInfo, accessToken, accessTokenExpiration } = await AuthService.refresh({ lsDeviceId, username })
@@ -52,9 +54,8 @@ class JWTInfoService {
                 clearTimeout(refreshTimeoutsObject[timer])
             }
         }
-
-        //! Delete?
-        // localStorage.setItem(LOGOUT_STORAGE_KEY, String(getTime()))
+        // console.log('deleteJWTInfo. Set LOGOUT_STORAGE_KEY')
+        localStorage.setItem(LOGOUT_LS, String(getTime()))
     }
 }
 
