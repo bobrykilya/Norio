@@ -10,22 +10,21 @@ export type IUseClickOutside = {
 }
 export const useClickOutside = ({ ref, butRef, callback, conditionsList }: IUseClickOutside) => {
 
+    const clickOutside = (e: MouseEvent) => {
+        // console.log(butRef.current)
+        // console.log(e.target)
+        if ((ref.current && !ref.current.contains(e.target as Node)) &&
+            (butRef ? (butRef.current && !butRef.current.contains(e.target as Node)) : true)) {
+            callback()
+        }
+    }
+
     useEffect(() => {
         if (!conditionsList || conditionsList.includes(false)) return
-        // console.log(condition)
 
-        const handleClick = (e: MouseEvent) => {
-            // console.log(buttonRef?.current.contains(e.target as Node))
-            // console.log(e.target)
-            if ((ref.current && !ref.current.contains(e.target as Node)) &&
-                (butRef ? (butRef?.current && !butRef?.current.contains(e.target as Node)) : true)) {
-                callback()
-            }
-        }
-
-        document.addEventListener('click', handleClick)
+        document.addEventListener('click', clickOutside)
         return () => {
-            document.removeEventListener('click', handleClick)
+            document.removeEventListener('click', clickOutside)
         }
     }, [ref, conditionsList])
 

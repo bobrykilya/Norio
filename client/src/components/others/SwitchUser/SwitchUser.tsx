@@ -3,11 +3,12 @@ import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import SwitchUserElem from "./SwitchUserElem/SwitchUserElem"
 import { TbTrashXFilled } from "react-icons/tb"
 import ToolTip from "../ToolTip/ToolTip"
-import { MAX_SWITCH_USERS } from "../../../../constants"
+import { MAX_SWITCH_USERS, SWITCH_USERS_LS } from "../../../../constants"
 import LogOut from "../../../features/auth/logOut"
 import { useJwtInfoListState } from "../../../stores/Auth-store"
 import timeout from "../../../utils/timeout"
 import { sortByAlphabet } from "../../../utils/sort"
+import { IUserRepository } from "../../../../../api/src/types/DB-types"
 
 
 
@@ -22,9 +23,10 @@ const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 		return
 	}
 
-	const SAVED_USERS_LIST = sortByAlphabet(useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo), 'lastName')
+	const SAVED_USERS_LIST: IUserRepository[] = sortByAlphabet(useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo), 'lastName')
+	const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
 
-	const [usersList, setUsersList] = useState(SAVED_USERS_LIST)
+	const [usersList, setUsersList] = useState(switchUsersList)
 	// console.log({ SAVED_USERS_LIST, usersList })
 
 	const handleForgetAllUsers = async () => {
@@ -67,19 +69,22 @@ const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 				</RoundButton>
 			</div>
 			{
-				SAVED_USERS_LIST.map((user, index) => {
-					if ((currentUser && user.username === currentUser) ) {
+				switchUsersList.map((username) => {
+					if ((currentUser && username === currentUser) ) {
 						return
 					}
-					// if ((index > MAX_SWITCH_USERS - 2)) {
-					// 	return
-					// }
+
+					const user = SAVED_USERS_LIST.find(userInfo => userInfo.username === username)
+
+					if (!user) {
+						return
+					}
 
 
 					return <SwitchUserElem
-								key={user.username}
+								key={username}
 								user={user}
-								isVisible={usersList.includes(user)}
+								isVisible={usersList.includes(username)}
 								isAuthPage={isAuthPage}
 								setUsersList={setUsersList}
 							/>

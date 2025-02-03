@@ -7,6 +7,7 @@ export type IUseCloseOnEsc = {
 	conditionsList: boolean[];
 }
 const useCloseOnEsc = ({ callback, conditionsList }: IUseCloseOnEsc) => {
+	
 	const closeOnEsc = async (e: KeyboardEvent) => {
 		// console.log(e.code)
 		if (e.code === 'Escape') {

@@ -9,13 +9,14 @@ import { IUserRepository } from "../../../../../../api/src/types/DB-types"
 import timeout from "../../../../utils/timeout"
 import { useJwtInfoListState } from "../../../../stores/Auth-store"
 import AuthCommon from "../../../../features/auth/authCommon"
+import { SWITCH_USERS_LS } from "../../../../../constants"
 // import { ISwitchUserElem } from "../SwitchUser"
 
 
 
 type SwitchUserElemProps = {
 	isVisible: boolean;
-	setUsersList?: React.Dispatch<React.SetStateAction<IUserRepository[]>>;
+	setUsersList?: React.Dispatch<React.SetStateAction<string[]>>;
 	user?: IUserRepository;
 	isNewUser?: boolean;
 	isAuthPage?: boolean;
@@ -36,13 +37,19 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 	}
 
 	const handleAuthUser = () => {
+		const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
+
+		if (switchUsersList[0] && !switchUsersList.includes(user.username)) {
+			setUsersList(prev => prev.filter(username => username !== user.username))
+			return
+		}
 		AuthCommon.saveUserInfoOnBrowser(useJwtInfoListState.getState().getJwtInfoState(user.username).userInfo)
 	}
 
 
 	const handleRemoveUser = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.stopPropagation()
-		setUsersList(prev => prev.filter(el => el.username !== user.username))
+		setUsersList(prev => prev.filter(username => username !== user.username))
 
 		await timeout(300)
 		logOut.handleRemoveSwitchUser(user.username)
