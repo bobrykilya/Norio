@@ -5,7 +5,7 @@ import { ICommonVar } from "../../../common/types/Global-types"
 export type CoverPanelOptions = 'sign_in' | 'sign_up' | 'sign_up_info';
 
 export type SignContProps = {
-    actForm: string;
+    actForm: CoverPanelOptions;
     isFormDisabled: boolean;
 }
 

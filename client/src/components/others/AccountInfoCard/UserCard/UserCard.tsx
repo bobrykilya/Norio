@@ -81,7 +81,8 @@ const UserCard = ({  }: UserCardProps) => {
 						userInfoState={userInfoState}
 					/>
 					<SwitchUser
-						userInfo={userInfoState}
+						currentUser={userInfoState.username}
+						disabled={!isFullUserCard}
 					/>
 				    <SubmitBut
 						icon={<LuLogOut className={'fa-icon'} />}

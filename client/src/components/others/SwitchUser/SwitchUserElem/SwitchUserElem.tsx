@@ -7,6 +7,8 @@ import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import logOut from "../../../../features/auth/logOut"
 import { IUserRepository } from "../../../../../../api/src/types/DB-types"
 import timeout from "../../../../utils/timeout"
+import { useJwtInfoListState } from "../../../../stores/Auth-store"
+import AuthCommon from "../../../../features/auth/authCommon"
 // import { ISwitchUserElem } from "../SwitchUser"
 
 
@@ -16,8 +18,9 @@ type SwitchUserElemProps = {
 	setUsersList?: React.Dispatch<React.SetStateAction<IUserRepository[]>>;
 	user?: IUserRepository;
 	isNewUser?: boolean;
+	isAuthPage?: boolean;
 }
-const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUserElemProps) => {
+const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }: SwitchUserElemProps) => {
 
 	const [isRendered, setIsRendered] = useState(false)
 
@@ -31,6 +34,11 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUser
 
 		logOut.handleSwitchUser(user?.username)
 	}
+
+	const handleAuthUser = () => {
+		AuthCommon.saveUserInfoOnBrowser(useJwtInfoListState.getState().getJwtInfoState(user.username).userInfo)
+	}
+
 
 	const handleRemoveUser = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.stopPropagation()
@@ -54,7 +62,13 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUser
 			<button
 				className={'switch_user_elem-but cont'}
 				tabIndex={-1}
-				onClick={handleChangeUser}
+				onClick={(e) => {
+					if (!isAuthPage) {
+						handleChangeUser(e)
+					} else {
+						handleAuthUser()
+					}
+				}}
 			>
 				<div
 					className={'switch_user_elem_img-cont cont'}
@@ -90,14 +104,21 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser }: SwitchUser
 						}
 					</span>
 				</div>
-				<ToolTip
-					text={
-						!isNewUser ?
-						`Сменить аккаунт на ${user?.username}` :
-						'Сменить аккаунт на нового пользователя'
-					}
-					position={'left'}
-				/>
+				{
+					!isAuthPage ?
+					<ToolTip
+						text={
+							!isNewUser ?
+							`Сменить аккаунт на ${user?.username}` :
+							'Сменить аккаунт на нового пользователя'
+						}
+						position={'left'}
+					/> :
+					<ToolTip
+						text={`Войти в аккаунт ${user?.username}`}
+						position={'right'}
+					/>
+				}
 			</button>
 			{
 				!isNewUser &&

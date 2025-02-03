@@ -73,15 +73,22 @@ class LogOut {
 	}
 
 	static handleRemoveSwitchUser = (username: string) => {
+		const currentUserName = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
+
+		if (currentUserName && currentUserName === username) {
+			this.currentUserLogOut({ interCode: 206, username: currentUserName })
+			return
+		}
+		
 		this.logOut({ interCode: 206, username })
 	}
 
 	static handleRemoveAllSwitchUsers = () => {
-		const currentUserName = useUserInfoState.getState().userInfoState.username
+		const currentUserName = useUserInfoState.getState().userInfoState?.username
 		const SWITCH_USERS_LIST = useJwtInfoListState.getState().jwtInfoListState
 
 		SWITCH_USERS_LIST.forEach(JWTInfo => {
-			if (JWTInfo.userInfo.username === currentUserName) {
+			if (currentUserName && JWTInfo.userInfo.username === currentUserName) {
 				return
 			}
 			this.handleRemoveSwitchUser(JWTInfo.userInfo.username)

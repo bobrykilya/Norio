@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
 				// console.log('refresh')
 				const lsDeviceId = JSON.parse(localStorage.getItem(DEVICE_LS))?.id || null
 				const username = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username || null
-				const switchUsersList = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
+				const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
 
 				const refreshSwitchUsersTokens = async () => {
 					if (switchUsersList) {

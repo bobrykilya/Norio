@@ -8,13 +8,12 @@ import { useModalState } from "../../../stores/Global-store"
 
 type DropDownProps = {
 	children: any;
+	closeHooksParams: ICloseHooksParams;
 	onClick?: (e: React.MouseEvent<HTMLUListElement, MouseEvent>) => void;
 	className?: string;
 	isScrollContent?: boolean;
-	closeHooksParams: ICloseHooksParams;
-	// isStopPropagation?: boolean;
 }
-const DropDown = forwardRef(({ children, onClick, className, isScrollContent, closeHooksParams }: DropDownProps, ref?: React.RefObject<HTMLUListElement>) => {
+const DropDown = forwardRef(({ children, closeHooksParams, onClick, className, isScrollContent }: DropDownProps, ref?: React.RefObject<HTMLUListElement>) => {
 
 	const dropDownRef = ref || useRef(null)
 	const setModalState = useModalState(s => s.setModalState) //* For forms Esc blur while any DropDown is opened

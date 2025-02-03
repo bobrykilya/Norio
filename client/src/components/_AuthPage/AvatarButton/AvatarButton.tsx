@@ -1,7 +1,8 @@
 import React, { MutableRefObject, useRef, useState } from 'react'
 import InputCleaner from '../Inputs/InputCleaner/InputCleaner'
 import InputError from '../Inputs/InputError/InputError'
-import { PiUserThin } from "react-icons/pi"
+// import { PiUserThin } from "react-icons/pi"
+import { PiUser } from "react-icons/pi"
 import ToolTip from '../../others/ToolTip/ToolTip'
 import AvatarList from './AvatarList'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
@@ -83,7 +84,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
                 ref={avatarButtonRef}
             >
                 <div className={`no_avatar-cont cont ${isNoAvatarOpened ? 'opened' : ''}`}>
-                    <PiUserThin className='fa-icon' />
+                    <PiUser className='fa-icon' />
                 </div>
                 {avatar && <img src={createPathToAvatars(avatar)} alt='Avatar error 2' />}
                 <ToolTip text='Выбрать аватар пользователя' />

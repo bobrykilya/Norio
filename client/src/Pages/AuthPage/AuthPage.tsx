@@ -16,6 +16,7 @@ type AuthPageProps = {
     blockErrorMessage: string;
 }
 const AuthPage = ({ blockErrorMessage }: AuthPageProps) => {
+    
     const coverPanelState = useCoverPanelState(s => s.coverPanelState)
     const blurModalState = useModalState(s => s.blurModalState)
 
@@ -28,7 +29,10 @@ const AuthPage = ({ blockErrorMessage }: AuthPageProps) => {
                 <LogBookButton isAuthPage={true} />
             </div>
             <AuthPageAnim>
-                <div id="auth_page-cont" className={`cont ${blockErrorMessage && 'block'}`}>
+                <div
+                    id="auth_page-cont"
+                    className={`cont ${blockErrorMessage ? 'block' : ''}`}
+                >
                     <div id="signs-cont" className="cont">
                         <SignInCont
                             actForm={coverPanelState}

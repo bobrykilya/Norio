@@ -21,7 +21,7 @@ type SignUpFormProps = {
 }
 const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
     // console.log('SignUp')
-
+    
     const { setCoverPanelState } = useCoverPanelState()
     const modalState = useModalState(s => s.modalState)
     const [isLoading, setIsLoading] = useState(false)

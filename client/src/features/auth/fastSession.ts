@@ -8,9 +8,9 @@ import { CURRENT_USER_LS, FAST_LS } from "../../../constants"
 class FastSession {
 
 	static handleFastSessionRefresh = () => {
-		const username = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
+		const currentUsername = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
 		
-		if (!username || !useJwtInfoListState.getState().getJwtInfoState(username)?.isFast) {
+		if (!currentUsername || !useJwtInfoListState.getState().getJwtInfoState(currentUsername)?.isFast) {
 			return
 		}
 
@@ -20,10 +20,10 @@ class FastSession {
 	static checkFastSessionLogOut = (time: string) => {
 
 		if (Number(time) < getTime()) {
-			const username = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
+			const currentUsername = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
 
 			try {
-				logOut.currentUserLogOut({ interCode: 204, username })
+				logOut.currentUserLogOut({ interCode: 204, username: currentUsername })
 			} catch (err) {
 				console.log('Error fastSession logout after closing', err)
 				logOut.userHasLogOut()

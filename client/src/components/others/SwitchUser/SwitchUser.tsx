@@ -3,7 +3,6 @@ import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import SwitchUserElem from "./SwitchUserElem/SwitchUserElem"
 import { TbTrashXFilled } from "react-icons/tb"
 import ToolTip from "../ToolTip/ToolTip"
-import { IUserRepository } from "../../../../../api/src/types/DB-types"
 import { MAX_SWITCH_USERS } from "../../../../constants"
 import LogOut from "../../../features/auth/logOut"
 import { useJwtInfoListState } from "../../../stores/Auth-store"
@@ -13,9 +12,11 @@ import { sortByAlphabet } from "../../../utils/sort"
 
 
 type SwitchUserProps = {
-	userInfo: IUserRepository;
+	currentUser?: string;
+	isAuthPage?: boolean;
+	disabled?: boolean;
 }
-const SwitchUser = ({ userInfo }: SwitchUserProps) => {
+const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 
 	if (MAX_SWITCH_USERS < 2) {
 		return
@@ -36,7 +37,7 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 
 	return (
 		<div
-			className={`switch_user-cont cont`}
+			className={`switch_user-cont cont ${disabled ? 'disabled' : ''}`}
 		>
 			<div
 				className={'switch_user_info-cont cont'}
@@ -44,11 +45,14 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 				<span
 					className={'switch_user-info cont'}
 				>
-					Сменить аккаунт
-					<ToolTip
-						text={`Текущий аккаунт будет сохранён в фоне для быстрого возврата`}
-						position={'left'}
-					/>
+					{!isAuthPage ? 'Сменить аккаунт' : 'Войти в аккаунт'}
+					{
+						!isAuthPage &&
+						<ToolTip
+							text={`Текущий аккаунт будет сохранён в фоне для быстрого возврата`}
+							position={'left'}
+						/>
+					}
 				</span>
 				<RoundButton
 					className={'before_hover-but'}
@@ -57,21 +61,26 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 						text: 'Забыть все аккаунты'
 					}}
 					size={'tiny'}
-					disabled={!usersList[1]}
+					disabled={(!isAuthPage ? !usersList[1] : !usersList[0])}
 				>
 					<TbTrashXFilled className={'fa-icon'} />
 				</RoundButton>
 			</div>
 			{
-				SAVED_USERS_LIST.map(user => {
-					if (user.username === userInfo.username) {
+				SAVED_USERS_LIST.map((user, index) => {
+					if ((currentUser && user.username === currentUser) ) {
 						return
 					}
+					// if ((index > MAX_SWITCH_USERS - 2)) {
+					// 	return
+					// }
+
 
 					return <SwitchUserElem
 								key={user.username}
 								user={user}
 								isVisible={usersList.includes(user)}
+								isAuthPage={isAuthPage}
 								setUsersList={setUsersList}
 							/>
 					}
@@ -79,7 +88,7 @@ const SwitchUser = ({ userInfo }: SwitchUserProps) => {
 			}
 			<SwitchUserElem
 				isNewUser={true}
-				isVisible={!usersList[MAX_SWITCH_USERS - 1]}
+				isVisible={!isAuthPage && !usersList[MAX_SWITCH_USERS - 1]}
 			/>
 		</div>
 	)
