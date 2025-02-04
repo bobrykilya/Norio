@@ -3,23 +3,12 @@
 
 
 .submit-but
-    // .confirm_but_bg-cont
-    //     position: absolute
-    //     border-radius: $rad-but-border
-    //     transition-duration: 0.2s
-    //     .confirm_but_bg-img
-    //         background-size: cover
-    //         opacity: 0.1
-    //         pointer-events: none
-    // border: 2px solid red
     border-radius: $rad-but-border
     width: $size-confirm-but
     height: calc($size-confirm-but / 2)
     background-color: $color-confirm-but
-    // background-color: #016d11
     overflow: visible
     z-index: 2
-    position: relative
     &:hover, &:focus
         transform: translateX(-$height-but-act-jump * 1.5)
         background-color: $color-confirm-but-act
@@ -29,6 +18,11 @@
             filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.85))
     &:disabled
         pointer-events: none
+    .fa-icon
+        margin-top: -0.07rem
+        color: $color-backgr
+    .submit-loader
+        color: $color-backgr
     &.blur
         pointer-events: none
         border: 1px solid $color-icon-border
@@ -37,8 +31,3 @@
             color: $color-icon
         .confirm_but_bg-cont
             opacity: 0
-    .fa-icon
-        margin-top: -0.07rem
-        color: $color-backgr
-    .submit-loader
-        color: $color-backgr

@@ -1,7 +1,7 @@
 import React from "react"
 import { PiWarning, PiWarningFill } from "react-icons/pi"
-import { useLogBookListState } from "../../../stores/Global-store"
-import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
+import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
+import { useLogBookCardState } from "../../../../stores/Settings-store"
 
 
 
@@ -11,12 +11,12 @@ type LogBookButtonProps = {
 }
 const LogBookButton = ({ isAuthPage=false, delayTimeMS }: LogBookButtonProps) => {
 
-    const setLogBookListState = useLogBookListState(s => s.setLogBookListState)
+    const setLogBookCardState = useLogBookCardState(s => s.setLogBookCardState)
 
 
     return (
         <RoundButton
-            onClick={() => setLogBookListState(true)}
+            onClick={() => setLogBookCardState(true)}
             className={'log_book-but before_hover-but'}
             toolTip={{
                 text: 'Открыть панель ошибок',

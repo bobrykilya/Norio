@@ -4,7 +4,7 @@ import SignUpCont from '../../components/_AuthPage/SignConts/SignUpCont/SignUpCo
 import SignUpInfoCont from '../../components/_AuthPage/SignConts/SignUpInfoCont/SignUpInfoCont'
 import CoverPanel from '../../components/_AuthPage/CoverPanel/CoverPanel'
 import AppTitle from '../../components/common/AppTitle/AppTitle'
-import LogBookButton from '../../components/others/LogBook/LogBookButton'
+import LogBookButton from '../../components/others/JumpingCards/LogBookCard/LogBookButton'
 import { AuthPageAnim } from '../../utils/pageTransitions'
 import './AuthPage.sass'
 import { useCoverPanelState } from "../../stores/Auth-store"

@@ -1,0 +1,73 @@
+@import '../../../_variables'
+
+
+
+.jumping_card_cover-cont
+    $rad-list: 120px
+    //border: 5px solid black
+    position: fixed
+    left: 0
+    bottom: 0
+    width: 100vw
+    height: 100vh
+    backdrop-filter: blur(0)
+    z-index: 12
+    transition: opacity 0.3s ease, backdrop-filter 1s ease
+    background-color: rgba(0, 0, 0, 0.13)
+    opacity: 0
+    pointer-events: none
+    &::before
+        content: ''
+        position: absolute
+        top: calc(10% - 1rem)
+        width: 6rem
+        height: 0.2rem
+        background-color: #ffffff4a
+        border-radius: 10px
+        transition: opacity 0.1s 1s ease, transform 0.6s 0.1s ease
+        opacity: 0
+        transform: translateY(14rem)
+    .jumping_card-cont
+        //border: 2px solid black
+        position: absolute
+        left: 50%
+        bottom: 0
+        height: 90%
+        background-color: $color-backgr
+        box-shadow: 2px 10px 30px #00000040
+        transform: translateX(-50%) translateY(100%)
+        transition: all 0.4s ease
+        border-radius: $rad-list * 2
+        // overflow: visible
+    &.top
+        &::before
+            top: auto
+            bottom: 7.5vh
+            transform: translateY(-14rem)
+        .jumping_card-cont
+            bottom: auto
+            top: 0
+            transform: translateX(-50%) translateY(-100%)
+    //&.left
+    //&.right
+    &.opened
+        opacity: 1
+        backdrop-filter: blur(5px)
+        -webkit-backdrop-filter: blur(5px)
+        pointer-events: auto
+        &::before
+            transition: all 0.6s 0.25s $trans-bounce-style
+            opacity: 1
+            transform: translateY(0)
+        .jumping_card-cont
+            transform: translateX(-50%)
+            border-radius: $rad-list $rad-list 0 0
+        &.top
+            .jumping_card-cont
+                border-radius: 0 0 $rad-list $rad-list
+        &.left
+            .jumping_card-cont
+                border-radius: 0 $rad-list $rad-list 0
+        &.right
+            .jumping_card-cont
+                border-radius: $rad-list 0 0 $rad-list

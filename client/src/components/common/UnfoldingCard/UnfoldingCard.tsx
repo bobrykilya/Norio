@@ -14,7 +14,7 @@ type UnfoldingCardProps = {
 const UnfoldingCard = ({ isFullCard, closeCard, className, children }: UnfoldingCardProps) => {
 
 	const cardRef = useRef(null)
-	const { modalState, blurModalState } = useModalState()
+	const { modalState, blurModalState,  } = useModalState()
 
 	useClickOutside({
 		ref: cardRef,

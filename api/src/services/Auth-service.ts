@@ -315,7 +315,7 @@ class AuthService {
 
 	static async sessionExpireChecking() {
 		const expireSessionsList = await RefreshSessionsRepository.getRefreshSessionsWithExpireRefreshTime()
-		console.log(expireSessionsList)
+		// console.log(expireSessionsList)
 
 		if (!expireSessionsList[0]) {
 			return

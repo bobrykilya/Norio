@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react'
 import AppTitle from '../../common/AppTitle/AppTitle'
 import { NAV_BAR_LIST } from '../../../assets/common/Common-data'
-import LogBookButton from "../LogBook/LogBookButton"
+import LogBookButton from "../JumpingCards/LogBookCard/LogBookButton"
 import { TbInfoSquareRoundedFilled } from "react-icons/tb"
-import SettingsButton from "../Settings/SettingsButton"
+import SettingsButton from "../JumpingCards/SettingsCard/SettingsButton"
 import { TOOLTIP_DELAY_TIME } from "../../../../constants"
 // @ts-ignore
 import appIcon from '../../../assets/common/logos/app_icon.png'

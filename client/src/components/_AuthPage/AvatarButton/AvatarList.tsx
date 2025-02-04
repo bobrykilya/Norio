@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import JumpingList from '../../common/JumpingList/JumpingList'
+import JumpingCard from '../../common/JumpingCard/JumpingCard'
 import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import timeout from "../../../utils/timeout"
@@ -109,8 +109,9 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
         }
     }, [isAvatarListOpened])
 
+
     const scrollButsJSX = (
-        <div className={`scroll_buts-cont cont ${isAvatarListOpened ? 'opened' : ''}`}>
+        <div className={'scroll_buts-cont cont'}>
             <RoundButton
                 onClick={() => listRef.current.scrollTo({ top: 0, behavior: 'smooth'})}
                 className={'up before_hover-but'}
@@ -140,47 +141,47 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
         </div>
     )
 
+
     return (
-        <div className='avatar_list-cont'>
-            <JumpingList
-                isListOpened={isAvatarListOpened}
-                closeList={closeAvatarList}
-                other_children={scrollButsJSX}
+        <JumpingCard
+            isCardOpened={isAvatarListOpened}
+            closeCard={closeAvatarList}
+            other_children={scrollButsJSX}
+            className={'avatar_list-cover'}
+        >
+            <ul
+                className='avatar-list cont'
+                ref={listRef}
             >
-                <ul
-                    className='avatar-list cont'
-                    ref={listRef}
-                >
-                    {
-                        !SORTED_AND_FILTERED_LIST[0] ?
-                        <span className='empty_list-message cont'>Аватары закончились...<br/>Обратитесь к разработчику :)</span> :
-                        SORTED_AND_FILTERED_LIST.map((el) => {
-                                return (
-                                    <div
-                                        className={'avatar_button-cont cont'}
-                                        key={el.id}
+                {
+                    !SORTED_AND_FILTERED_LIST[0] ?
+                    <span className='empty_list-message cont'>Аватары закончились...<br/>Обратитесь к разработчику :)</span> :
+                    SORTED_AND_FILTERED_LIST.map((el) => {
+                            return (
+                                <div
+                                    className={'avatar_button-cont cont'}
+                                    key={el.id}
+                                >
+                                    <button
+                                        id={el.id}
+                                        type={'button'}
+                                        tabIndex={-1}
+                                        disabled={disabled}
+                                        onClick={() => handleClickElem(el.id)}
+                                        onKeyDown={handleKeyDownOnElem}
+                                        ref={avatar === el.id ? activeElemRef : null}
                                     >
-                                        <button
-                                            id={el.id}
-                                            type={'button'}
-                                            tabIndex={-1}
-                                            disabled={disabled}
-                                            onClick={() => handleClickElem(el.id)}
-                                            onKeyDown={handleKeyDownOnElem}
-                                            ref={avatar === el.id ? activeElemRef : null}
-                                        >
-                                            <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
-                                        </button>
-                                        <label htmlFor={el.id}>
-                                            {el.title}
-                                        </label>
-                                    </div>
-                                )
-                            })
-                        }
-                </ul>
-            </JumpingList> 
-        </div> 
+                                        <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
+                                    </button>
+                                    <label htmlFor={el.id}>
+                                        {el.title}
+                                    </label>
+                                </div>
+                            )
+                        })
+                    }
+            </ul>
+        </JumpingCard>
     )
 }
  

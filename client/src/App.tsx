@@ -7,8 +7,9 @@ import HomePage from './pages/HomePage/HomePage'
 import './App.sass'
 import CoverAppTitle from "./components/common/CoverAppTitle/CoverAppTitle"
 import { useBlockErrorState } from "./stores/Device-store"
-import LogBookList from "./components/others/LogBook/LogBookList"
+import LogBookCard from "./components/others/JumpingCards/LogBookCard/LogBookCard"
 import { useUserInfoState } from "./stores/Auth-store"
+import TopCard from "./components/others/JumpingCards/TopCard/TopCard"
 
 
 
@@ -25,7 +26,11 @@ const App = () => {
             id='main_body-cont'
             className='cont'
         >
-            <LogBookList />
+            <LogBookCard />
+            {
+                Boolean(userLoggedState) &&
+                <TopCard/>
+            }
             <Toaster reverseOrder={true} />
             <AnimatePresence>
                 <Routes
@@ -33,19 +38,19 @@ const App = () => {
                     key={location.pathname}
                 >
                     <Route path="*" element={<Navigate to={Boolean(userLoggedState) ? "home" : "auth"} />} />
-                    {!userLoggedState ? (
+                    {!userLoggedState ?
                         <Route path="auth" element={
                             <AuthPage blockErrorMessage={blockErrorState} />
                         } />
-                    ) : (
+                        :
                         <Route path="home" element={
                             <HomePage isUserLogged={Boolean(userLoggedState)} location={location}/>
                         } />
-                    )}
+                    }
                 </Routes>
             </AnimatePresence>
-            <CoverAppTitle block={!!blockErrorState}/>
-            <div className="main_bg-gradient bg"></div>
+            <CoverAppTitle block={!!blockErrorState} />
+            <div className="main_bg-gradient bg" />
         </div>
     )
 }

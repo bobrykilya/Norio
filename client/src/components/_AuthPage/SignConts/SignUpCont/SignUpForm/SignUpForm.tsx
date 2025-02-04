@@ -56,7 +56,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
         }
     }, [watch('password'), watch('confirmPassword')])
 
-    //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
+    //* For forms Esc blur while any DropDown, SnackBar or JumpingCard is opened
     useCloseOnEsc({
         conditionsList: [!isFormDisabled, !modalState],
         callback: () => setCoverPanelState('sign_in')

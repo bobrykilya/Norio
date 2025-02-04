@@ -10,6 +10,7 @@ import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import SwitchUser from "../../../others/SwitchUser/SwitchUser"
 import LogOut from "../../../../features/auth/logOut"
 import SwapImg from "../../../common/SwapImg/SwapImg"
+import { useTopCardState } from "../../../../stores/Settings-store"
 
 
 
@@ -20,6 +21,7 @@ const UserCard = ({  }: UserCardProps) => {
 
 	const [isFullUserCard, setIsFullUserCard] = useState(false)
 	const { userInfoState } = useUserInfoState()
+	const { setTopCardState } = useTopCardState()
 
 
 	const toggleUserCard = () => {
@@ -40,7 +42,7 @@ const UserCard = ({  }: UserCardProps) => {
 				>
 					<RoundButton
 						className={'left clear-but'}
-						onClick={() => {}}
+						onClick={() => setTopCardState(true)}
 						toolTip={{
 							text: 'Личные данные пользователя'
 						}}
@@ -66,7 +68,7 @@ const UserCard = ({  }: UserCardProps) => {
 					</button>
 					<RoundButton
 						className={'right clear-but'}
-						onClick={() => {}}
+						onClick={() => setTopCardState(true)}
 						toolTip={{
 							text: 'Данные аккаунта'
 						}}

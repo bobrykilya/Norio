@@ -60,7 +60,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
         avatar ? onSubmit(data) : setErrorAvatar({ message: 'Выберите аватар пользователя' })
     }
 
-    //* For forms Esc blur while any DropDown, SnackBar or JumpingList is opened
+    //* For forms Esc blur while any DropDown, SnackBar or JumpingCard is opened
     useCloseOnEsc({
         conditionsList: [!isFormDisabled, !modalState],
         callback: () => SignUp.handleReturnToSignUp()

@@ -3,11 +3,11 @@ import InputCleaner from '../Inputs/InputCleaner/InputCleaner'
 import InputError from '../Inputs/InputError/InputError'
 // import { PiUserThin } from "react-icons/pi"
 import { PiUser } from "react-icons/pi"
-import ToolTip from '../../others/ToolTip/ToolTip'
 import AvatarList from './AvatarList'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import { IReactHookForm } from "../../../types/Auth-types"
-import { useAvatarListState } from "../../../stores/Global-store"
+import { useAvatarListState } from "../../../stores/Settings-store"
+import ToolTip from "../../others/ToolTip/ToolTip"
 
 
 
@@ -83,14 +83,28 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
                 onClick={handleClickAvatarButton}
                 ref={avatarButtonRef}
             >
-                <div className={`no_avatar-cont cont ${isNoAvatarOpened ? 'opened' : ''}`}>
+                <div
+                    className={`no_avatar-cont cont ${isNoAvatarOpened ? 'opened' : ''}`}
+                >
                     <PiUser className='fa-icon' />
                 </div>
-                {avatar && <img src={createPathToAvatars(avatar)} alt='Avatar error 2' />}
+                {
+                    avatar &&
+                    <img
+                        src={createPathToAvatars(avatar)}
+                        alt='Avatar error 2'
+                    />
+                }
                 <ToolTip text='Выбрать аватар пользователя' />
             </button>
-            <InputError error={error} onClick={handleClickAvatarButton} />
-            <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
+            <InputError
+                error={error}
+                onClick={handleClickAvatarButton}
+            />
+            <InputCleaner
+                opened={isCleanerOpened}
+                onClick={handleClickCleaner}
+            />
         </div>
      )
 }
