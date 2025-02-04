@@ -15,7 +15,7 @@ const SwitchUserButton = ({ disabled }: SwitchUserButtonProps) => {
 
 	const avatarsQuantity = MAX_SWITCH_USERS - 1
 	const jwtInfoListState = useJwtInfoListState(s => s.jwtInfoListState)
-	const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
+	const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS)) || []
 	const noAvatarsQuantity = avatarsQuantity - switchUsersList.length
 	const [isSwitchUserOpened, setIsSwitchUserOpened] = useState(false)
 	const butRef = useRef(null)

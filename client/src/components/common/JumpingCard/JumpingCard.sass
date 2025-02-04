@@ -3,8 +3,10 @@
 
 
 .jumping_card_cover-cont
-    $rad-list: 120px
     //border: 5px solid black
+    $rad-list: 120px
+    $before-margin: 1.2rem
+    $before-width: 6rem
     position: fixed
     left: 0
     bottom: 0
@@ -12,21 +14,10 @@
     height: 100vh
     backdrop-filter: blur(0)
     z-index: 12
-    transition: opacity 0.3s ease, backdrop-filter 1s ease
+    transition: opacity $dur-jumping-card ease, backdrop-filter calc($dur-jumping-card / 3) ease
     background-color: rgba(0, 0, 0, 0.13)
     opacity: 0
     pointer-events: none
-    &::before
-        content: ''
-        position: absolute
-        top: calc(10% - 1rem)
-        width: 6rem
-        height: 0.2rem
-        background-color: #ffffff4a
-        border-radius: 10px
-        transition: opacity 0.1s 1s ease, transform 0.6s 0.1s ease
-        opacity: 0
-        transform: translateY(14rem)
     .jumping_card-cont
         //border: 2px solid black
         position: absolute
@@ -35,39 +26,77 @@
         height: 90%
         background-color: $color-backgr
         box-shadow: 2px 10px 30px #00000040
-        transform: translateX(-50%) translateY(100%)
-        transition: all 0.4s ease
+        overflow: visible
+        transition: all calc($dur-jumping-card * 1.33) ease
         border-radius: $rad-list * 2
-        // overflow: visible
-    &.top
+        transform: translateX(-50%) translateY(100%)
+        pointer-events: none
         &::before
-            top: auto
-            bottom: 7.5vh
-            transform: translateY(-14rem)
+            content: ''
+            position: absolute
+            top: - $before-margin
+            width: $before-width
+            height: 0.2rem
+            background-color: #ffffff4a
+            border-radius: 10px
+            transition: transform 0.1s $dur-jumping-card ease
+            transform: translateY(14rem)
+    &.top
         .jumping_card-cont
             bottom: auto
             top: 0
             transform: translateX(-50%) translateY(-100%)
-    //&.left
-    //&.right
+            &::before
+                top: auto
+                bottom: - $before-margin
+                transform: translateY(-14rem)
+    &.left
+        .jumping_card-cont
+            bottom: 50%
+            left: 0
+            height: 100%
+            width: 90%
+            transform: translateX(-100%) translateY(50%)
+            &::before
+                top: auto
+                right: - $before-margin
+                width: 0.2rem
+                height: $before-width
+                transform: translateX(-14rem)
+    &.right
+        .jumping_card-cont
+            bottom: 50%
+            left: auto
+            right: 0
+            height: 100%
+            width: 90%
+            transform: translateX(100%) translateY(50%)
+            &::before
+                top: auto
+                left: - $before-margin
+                width: 0.2rem
+                height: $before-width
+                transform: translateX(14rem)
     &.opened
         opacity: 1
         backdrop-filter: blur(5px)
         -webkit-backdrop-filter: blur(5px)
         pointer-events: auto
-        &::before
-            transition: all 0.6s 0.25s $trans-bounce-style
-            opacity: 1
-            transform: translateY(0)
         .jumping_card-cont
-            transform: translateX(-50%)
             border-radius: $rad-list $rad-list 0 0
+            transform: translateX(-50%)
+            pointer-events: auto
+            &::before
+                transition: transform calc($dur-jumping-card * 1.7) calc($dur-jumping-card * 0.7) $trans-bounce-style
+                transform: none
         &.top
             .jumping_card-cont
                 border-radius: 0 0 $rad-list $rad-list
         &.left
             .jumping_card-cont
                 border-radius: 0 $rad-list $rad-list 0
+                transform: translateY(50%)
         &.right
             .jumping_card-cont
                 border-radius: $rad-list 0 0 $rad-list
+                transform: translateY(50%)

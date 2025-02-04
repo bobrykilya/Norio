@@ -7,7 +7,7 @@ import { HiOutlineHome } from "react-icons/hi"
 import { GrUserExpert, GrUserWorker } from "react-icons/gr"
 import { BiLogInCircle } from "react-icons/bi"
 import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
-import AvatarButton from '../../../AvatarButton/AvatarButton'
+import AvatarButton from '../../../AvatarListCard/AvatarButton'
 import { focusInput } from '../../../../../utils/focusInput'
 import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
 import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
@@ -151,7 +151,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
             <div className='avatar_and_submit_buts-cont cont'>
                 <AvatarButton
                     LIST={AVATARS_LIST}
-                    avatar={avatar} 
+                    currentAvatar={avatar}
                     setAvatar={setAvatar}
                     error={errorAvatar}
                     setError={setErrorAvatar}

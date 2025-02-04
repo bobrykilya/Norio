@@ -9,24 +9,24 @@ import { useAuthState } from "../../../stores/Auth-store"
 
 
 
-type AvatarListProps = {
+type AvatarListCardProps = {
     LIST: IDataListElement[];
-    avatar: string | null;
-    isAvatarListOpened: boolean;
-    closeAvatarList: () => void;
+    currentAvatar: string | null;
+    isAvatarListCardOpened: boolean;
+    closeAvatarListCard: () => void;
     handleClickElem: (avatar: string) => void;
     isArrowButsActive: boolean;
     disabled: boolean;
     createPathToAvatars: (name: string) => string;
 }
-const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleClickElem, isArrowButsActive, disabled, createPathToAvatars }: AvatarListProps) => {
+const AvatarListCard = ({ LIST, currentAvatar, isAvatarListCardOpened, closeAvatarListCard, handleClickElem, isArrowButsActive, disabled, createPathToAvatars }: AvatarListCardProps) => {
     
     const listOfUsedAvatarsState = useAuthState(s => s.listOfUsedAvatarsState)
     const listRef = useRef<HTMLUListElement>(null)
     const activeElemRef = useRef<HTMLButtonElement>(null)
 
     const FILTERED_LIST = listOfUsedAvatarsState[0] ? LIST.filter(avatar => !listOfUsedAvatarsState.includes(avatar.id)) : LIST //* Filtering of used avatars
-    const SORTED_AND_FILTERED_LIST = sortByAlphabet(FILTERED_LIST, 'title') //* Sorting of avatar list by title
+    const SORTED_AND_FILTERED_LIST = sortByAlphabet(FILTERED_LIST, 'title') //* Sorting avatarList by title
 
     const handleKeyDownOnElem = (e: React.KeyboardEvent<HTMLButtonElement>) => {
         if (e.code.includes('Arrow') || e.code === 'Tab') {
@@ -72,8 +72,8 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
     //* Active element auto-focus
     useEffect(() => {
         const focusActiveElem = async () => {
-            if (isAvatarListOpened) {
-                if (avatar){
+            if (isAvatarListCardOpened) {
+                if (currentAvatar){
                     // console.log(activeElemRef.current)
                     await timeout(400)
                     activeElemRef.current?.focus()
@@ -85,7 +85,7 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
         }
 
         focusActiveElem()
-    }, [isAvatarListOpened])
+    }, [isAvatarListCardOpened])
 
     const arrowKeyDownOnAvatarBut = (e: KeyboardEvent) => {
         if (e.target instanceof HTMLElement) {
@@ -100,14 +100,14 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
     }
 
     useEffect(() => {
-        if (isAvatarListOpened && !avatar) {
+        if (isAvatarListCardOpened && !currentAvatar) {
             window.addEventListener("keydown", arrowKeyDownOnAvatarBut)
 
             return () => {
                 window.removeEventListener("keydown", arrowKeyDownOnAvatarBut)
             }
         }
-    }, [isAvatarListOpened])
+    }, [isAvatarListCardOpened])
 
 
     const scrollButsJSX = (
@@ -144,22 +144,23 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
 
     return (
         <JumpingCard
-            isCardOpened={isAvatarListOpened}
-            closeCard={closeAvatarList}
+            isCardOpened={isAvatarListCardOpened}
+            closeCard={closeAvatarListCard}
             other_children={scrollButsJSX}
-            className={'avatar_list-cover'}
+            className={'avatar_list_card-cover'}
         >
             <ul
-                className='avatar-list cont'
+                className="avatar_list-card cont"
                 ref={listRef}
+                tabIndex={-1}
             >
                 {
                     !SORTED_AND_FILTERED_LIST[0] ?
-                    <span className='empty_list-message cont'>Аватары закончились...<br/>Обратитесь к разработчику :)</span> :
-                    SORTED_AND_FILTERED_LIST.map((el) => {
+                        <span className="empty_list-message cont">Аватары закончились...<br/>Обратитесь к разработчику :)</span> :
+                        SORTED_AND_FILTERED_LIST.map((el) => {
                             return (
                                 <div
-                                    className={'avatar_button-cont cont'}
+                                    className={'avatar_list_card_button-cont cont'}
                                     key={el.id}
                                 >
                                     <button
@@ -169,9 +170,9 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
                                         disabled={disabled}
                                         onClick={() => handleClickElem(el.id)}
                                         onKeyDown={handleKeyDownOnElem}
-                                        ref={avatar === el.id ? activeElemRef : null}
+                                        ref={currentAvatar === el.id ? activeElemRef : null}
                                     >
-                                        <img src={createPathToAvatars(el.id)} alt="Avatar error 1" />
+                                        <img src={createPathToAvatars(el.id)} alt="Avatar error 1"/>
                                     </button>
                                     <label htmlFor={el.id}>
                                         {el.title}
@@ -179,10 +180,10 @@ const AvatarList = ({ LIST, avatar, isAvatarListOpened, closeAvatarList, handleC
                                 </div>
                             )
                         })
-                    }
+                }
             </ul>
         </JumpingCard>
     )
 }
  
-export default AvatarList
+export default AvatarListCard

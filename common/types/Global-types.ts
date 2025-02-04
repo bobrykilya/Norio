@@ -116,6 +116,7 @@ export type ICommonVar = {
 export type ISnack = {
 	type: SnackBarTypeOptions;
 	message: string;
+	messageTitle?: string;
 	snackTime?: number;
 	durationInSec?: number;
 	response?: Response;

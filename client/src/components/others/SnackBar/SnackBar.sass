@@ -40,16 +40,28 @@
         //border: 3px solid orange
         font-size: 2.2rem
         transition-duration: 0s
+        $opacity: 0.1
+        $blur: 5px
         &.error
-            color: #b00a0a
+            $color: #b00a0a
+            color: $color
+            filter: drop-shadow(0 0 $blur rgba($color, $opacity))
         &.info
-            color: #8881ce
+            $color: #8881ce
+            color: $color
+            filter: drop-shadow(0 0 $blur rgba($color, $opacity))
         &.block
-            color: #9a0078
+            $color: #9a0078
+            color: $color
+            filter: drop-shadow(0 0 $blur rgba($color, $opacity))
         &.warning
-            color: #c37201
+            $color: #c37201
+            color: $color
+            filter: drop-shadow(0 0 $blur rgba($color, $opacity))
         &.success
-            color: #048814
+            $color: #048814
+            color: $color
+            filter: drop-shadow(0 0 $blur rgba($color, $opacity))
     .snackbar-message
         //border: 2px solid brown
         margin-left: 0.6rem
@@ -61,7 +73,7 @@
         //justify-content: flex-start
         //word-break: break-all
         h3
-            font-weight: 800
+            font-weight: 700
             width: 100%
             margin-bottom: 0.1rem
         p

@@ -29,7 +29,7 @@ const App = () => {
             <LogBookCard />
             {
                 Boolean(userLoggedState) &&
-                <TopCard/>
+                <TopCard />
             }
             <Toaster reverseOrder={true} />
             <AnimatePresence>

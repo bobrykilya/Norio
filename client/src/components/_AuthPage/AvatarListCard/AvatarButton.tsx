@@ -3,24 +3,24 @@ import InputCleaner from '../Inputs/InputCleaner/InputCleaner'
 import InputError from '../Inputs/InputError/InputError'
 // import { PiUserThin } from "react-icons/pi"
 import { PiUser } from "react-icons/pi"
-import AvatarList from './AvatarList'
+import AvatarListCard from './AvatarListCard'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import { IReactHookForm } from "../../../types/Auth-types"
-import { useAvatarListState } from "../../../stores/Settings-store"
+import { useAvatarListCardState } from "../../../stores/Settings-store"
 import ToolTip from "../../others/ToolTip/ToolTip"
 
 
 
 type AvatarButtonProps = IReactHookForm & {
     LIST: IDataListElement[];
-    avatar: string | null;
+    currentAvatar: string | null;
     setAvatar: (avatar: string) => void;
     disabled: boolean;
     isAvatarButTabDisabled: boolean;
 }
-const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false,  isAvatarButTabDisabled=false }: AvatarButtonProps) => {
+const AvatarButton = ({ LIST, currentAvatar, setAvatar, error, setError, disabled=false,  isAvatarButTabDisabled=false }: AvatarButtonProps) => {
     
-    const { avatarListState, setAvatarListState } = useAvatarListState()
+    const { avatarListCardState, setAvatarListCardState } = useAvatarListCardState()
     const [isNoAvatarOpened, setIsNoAvatarOpened] = useState(true)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isArrowButsActive, setIsArrowButsActive] = useState(false)
@@ -33,7 +33,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
 
     const handleClickAvatarButton = () => {
         if (error) setError(null)
-        setAvatarListState(true)
+        setAvatarListCardState(true)
         setTimeoutRef.current = setTimeout(() => {
             setIsArrowButsActive(true)
         }, 1100)
@@ -56,7 +56,7 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
     }
 
     const closeAvatarList = () => {
-        setAvatarListState(false)
+        setAvatarListCardState(false)
         clearTimeout(setTimeoutRef.current)
         setIsArrowButsActive(false)
         avatarButtonRef.current.focus()
@@ -65,11 +65,11 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
     return (
         <div className='avatar-cont cont'>
             {!disabled &&
-                <AvatarList
+                <AvatarListCard
                     LIST={LIST}
-                    avatar={avatar}
-                    isAvatarListOpened={avatarListState}
-                    closeAvatarList={closeAvatarList}
+                    currentAvatar={currentAvatar}
+                    isAvatarListCardOpened={avatarListCardState}
+                    closeAvatarListCard={closeAvatarList}
                     handleClickElem={handleClickElem}
                     isArrowButsActive={isArrowButsActive}
                     disabled={disabled}
@@ -89,9 +89,9 @@ const AvatarButton = ({ LIST, avatar, setAvatar, error, setError, disabled=false
                     <PiUser className='fa-icon' />
                 </div>
                 {
-                    avatar &&
+                    currentAvatar &&
                     <img
-                        src={createPathToAvatars(avatar)}
+                        src={createPathToAvatars(currentAvatar)}
                         alt='Avatar error 2'
                     />
                 }

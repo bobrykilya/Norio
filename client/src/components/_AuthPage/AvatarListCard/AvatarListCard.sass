@@ -2,15 +2,15 @@
 
 
 
-.avatar_list-cover
+.avatar_list_card-cover
     // border: 2px solid black
-    &::before
-        width: 4rem
-
     .jumping_card-cont
         width: 850px
-        .avatar-list
+        &::before
+            width: 4rem
+        .avatar_list-card
             //border: 2px solid red
+            border-radius: 120px 120px 0 0
             flex-direction: row
             padding: 1.5rem
             align-items: flex-start
@@ -22,7 +22,7 @@
             scrollbar-width: none
             &::-webkit-scrollbar
                 display: none
-            .avatar_button-cont
+            .avatar_list_card_button-cont
                 //border: 2px solid brown
                 $size-avatar-elem: 6rem
                 width: $size-avatar-elem
@@ -119,8 +119,8 @@
                 bottom: 25%
     &.opened
         .jumping_card-cont
-            .avatar-list
-                .avatar_button-cont
+            .avatar_list-card
+                .avatar_list_card_button-cont
                     opacity: 1
                     transform: none
         .scroll_buts-cont

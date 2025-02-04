@@ -71,12 +71,15 @@ const AuthProvider = ({ children }) => {
 
 				await refreshSwitchUsersTokens()
 					.then( async () => {
-						const { accessToken, accessTokenExpiration, userInfo, deviceId, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
-						AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId, isFast })
+						try {
+							const { accessToken, accessTokenExpiration, userInfo, deviceId, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
+							AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId, isFast })
+						} catch (err) {
+							LogOut.userHasLogOut()
+							localStorage.removeItem(CURRENT_USER_LS)
+							AuthCommon.removeSwitchUserFromLS(username)
+						}
 					})
-			} catch (err) {
-				// console.log(err)
-				LogOut.userHasLogOut()
 			} finally {
 				setAppReadyState(true)
 			}

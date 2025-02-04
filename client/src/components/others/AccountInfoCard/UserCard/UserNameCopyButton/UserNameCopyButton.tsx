@@ -50,7 +50,8 @@ const UserNameCopyButton = ({ userInfoState }: UserNameCopyButtonProps) => {
 			.then(() => {
 				showSnackMessage({
 					type: "s",
-					message: `Скопировано: <span class=\'bold\'>${title}</span>`,
+					messageTitle: 'Скопировано:',
+					message: title
 				})
 			})
 			.catch(() => {

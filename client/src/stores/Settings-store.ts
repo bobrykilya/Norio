@@ -11,13 +11,13 @@ const useLogBookCardState = create<IUseLogBookCardState>(set => ({
 	setLogBookCardState: (state) => set({ logBookCardState: state }),
 }))
 
-type IUseAvatarListState = {
-	avatarListState: boolean;
-	setAvatarListState: (status: boolean) => void;
+type IUseAvatarListCardState = {
+	avatarListCardState: boolean;
+	setAvatarListCardState: (status: boolean) => void;
 }
-const useAvatarListState = create<IUseAvatarListState>(set => ({
-	avatarListState: false,
-	setAvatarListState: (state) => set({ avatarListState: state }),
+const useAvatarListCardState = create<IUseAvatarListCardState>(set => ({
+	avatarListCardState: false,
+	setAvatarListCardState: (state) => set({ avatarListCardState: state }),
 }))
 
 type IUseTopCardState = {
@@ -33,6 +33,6 @@ const useTopCardState = create<IUseTopCardState>(set => ({
 
 export {
 	useLogBookCardState,
-	useAvatarListState,
+	useAvatarListCardState,
 	useTopCardState,
 }

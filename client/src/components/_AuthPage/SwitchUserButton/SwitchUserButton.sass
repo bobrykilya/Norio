@@ -16,7 +16,7 @@
         $y-padding: 0.3rem
         $x-padding: 0.8rem
         padding: $y-padding 0 $y-padding $x-padding
-        margin-right: $x-padding / 1.25
+        margin-right: calc($x-padding / 1.25)
         border-radius: $rad-main-border
         overflow: visible
         width: auto
@@ -72,7 +72,7 @@
             width: auto
             flex-direction: row
             overflow: visible
-            margin-right: -$size-switch-user-but * 0.25 - $x-padding / 2
+            margin-right: - calc($size-switch-user-but * 0.25) - calc($x-padding / 2)
             will-change: transform
             transition: all $trans-dur ease-out
             .switch_user_img-cont

@@ -132,6 +132,13 @@ img, .fa-icon
 
 
 //*
-    //border: 1px solid black
-    //&:focus
-    //    border: 4px solid red
+    border: 1px solid black
+    opacity: 1 !important
+    &:focus
+        border: 4px solid red !important
+        z-index: 1000 !important
+        position: fixed
+        top: 0
+        width: 10rem
+        height: 10rem
+        pointer-events: auto

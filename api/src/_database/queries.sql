@@ -10,7 +10,7 @@ CREATE TABLE users(
     job VARCHAR(23) NOT NULL,
     store VARCHAR(12) NOT NULL,
     phone VARCHAR(13) UNIQUE NOT NULL,
-    avatar VARCHAR(16) UNIQUE NOT NULL,
+    currentAvatar VARCHAR(16) UNIQUE NOT NULL,
     is_store BOOLEAN NOT NULL
 )
 

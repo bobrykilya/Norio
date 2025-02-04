@@ -54,9 +54,11 @@ export const showSnack = async (snack: ISnack) => {
 	const { snackType, title, icon, toastDuration } = getTypeDecoding(snack.type || 'e')
 	// console.log(snack.message)
 
-	if (snack?.type === 'b') await timeout(100)
+	if (snack.type === 'b') {
+		await timeout(100)
+	}
 	toast.custom((toastElem) => (
-		<SnackBar title={title} icon={icon} message={messagePreprocessing(snack.message) || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackType} />
+		<SnackBar title={snack.messageTitle || title} icon={icon} message={messagePreprocessing(snack.message) || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackType} />
 	), {
 		duration: snack.durationInSec * 1000 || toastDuration,
 		className: snackType,

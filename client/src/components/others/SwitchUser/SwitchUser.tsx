@@ -24,7 +24,7 @@ const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 	}
 
 	const SAVED_USERS_LIST: IUserRepository[] = sortByAlphabet(useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo), 'lastName')
-	const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
+	const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS)) || []
 
 	const [usersList, setUsersList] = useState(switchUsersList)
 	// console.log({ SAVED_USERS_LIST, usersList })
