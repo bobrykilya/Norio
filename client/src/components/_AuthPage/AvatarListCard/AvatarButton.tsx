@@ -1,12 +1,12 @@
 import React, { MutableRefObject, useRef, useState } from 'react'
-import InputCleaner from '../Inputs/InputCleaner/InputCleaner'
-import InputError from '../Inputs/InputError/InputError'
+import InputCleaner from '../../common/Inputs/InputFields/InputCleaner/InputCleaner'
+import InputError from '../../common/Inputs/InputFields/InputError/InputError'
 // import { PiUserThin } from "react-icons/pi"
 import { PiUser } from "react-icons/pi"
 import AvatarListCard from './AvatarListCard'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import { IReactHookForm } from "../../../types/Auth-types"
-import { useAvatarListCardState } from "../../../stores/Settings-store"
+import { useAvatarListCardState } from "../../../stores/Utils-store"
 import ToolTip from "../../others/ToolTip/ToolTip"
 
 

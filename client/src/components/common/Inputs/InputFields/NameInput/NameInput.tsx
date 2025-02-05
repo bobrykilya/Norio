@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react'
 import InputError from '../InputError/InputError'
 import InputCleaner from '../InputCleaner/InputCleaner'
-import { focusInput } from '../../../../utils/focusInput'
-import { capitalize } from '../../../../utils/capitalize'
-import { ISignFormInput, SignFormInputTypesOptions } from '../../../../types/Auth-types'
-import { ICommonVar } from "../../../../../../common/types/Global-types"
+import { focusInput } from '../../../../../utils/focusInput'
+import { capitalize } from '../../../../../utils/capitalize'
+import { ISignFormInput, SignFormInputTypesOptions } from '../../../../../types/Auth-types'
+import { ICommonVar } from "../../../../../../../common/types/Global-types"
 
 
 
@@ -104,7 +104,7 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
                 placeholder={placeholder}
                 autoComplete={(inputType === 'name' || notSaveUser) ? 'off' : 'username'}
                 disabled={disabled}
-                autoFocus
+                autoFocus={inputType !== 'name'}
             />
             {icon}
             <InputError error={error} onClick={() => focusInput(inputRef)} />

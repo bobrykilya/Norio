@@ -1,7 +1,7 @@
 import React from "react"
 import { PiWarning, PiWarningFill } from "react-icons/pi"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
-import { useLogBookCardState } from "../../../../stores/Settings-store"
+import { useLogBookCardState } from "../../../../stores/Utils-store"
 
 
 

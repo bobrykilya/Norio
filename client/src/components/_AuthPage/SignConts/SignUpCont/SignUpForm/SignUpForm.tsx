@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput'
 import { FaArrowRightLong } from "react-icons/fa6"
-import UserNameInput from '../../../Inputs/NameInput/NameInput'
-import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
+import UserNameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
+import PasswordInput from '../../../../common/Inputs/InputFields/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { LuCheckCircle } from "react-icons/lu"
 import { FaUser } from "react-icons/fa"

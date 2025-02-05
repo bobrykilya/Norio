@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput';
-import UserNameInput from '../../../Inputs/NameInput/NameInput'
-import PasswordInput from '../../../Inputs/PasswordInput/PasswordInput'
+import UserNameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
+import PasswordInput from '../../../../common/Inputs/InputFields/PasswordInput/PasswordInput'
 import CheckBox from '../../../../common/Inputs/CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { BiLogInCircle } from "react-icons/bi"

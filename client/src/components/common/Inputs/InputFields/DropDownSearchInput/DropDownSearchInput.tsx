@@ -1,14 +1,14 @@
 import React, { useRef, useState } from 'react'
-import { focusInput } from "../../../../utils/focusInput"
-import { capitalize } from '../../../../utils/capitalize'
+import { focusInput } from "../../../../../utils/focusInput"
+import { capitalize } from '../../../../../utils/capitalize'
 import InputError from '../InputError/InputError'
 import InputCleaner from '../InputCleaner/InputCleaner'
-import { IDataListElement } from "../../../../assets/AuthPage/AuthPage-data"
-import { ISignFormInput } from "../../../../types/Auth-types"
-import timeout from "../../../../utils/timeout"
-import { sortByValPosInString } from "../../../../utils/sort"
-import DropDown from "../../../common/DropDown/DropDown"
-import { ICommonVar } from "../../../../../../common/types/Global-types"
+import { IDataListElement } from "../../../../../assets/AuthPage/AuthPage-data"
+import { ISignFormInput } from "../../../../../types/Auth-types"
+import timeout from "../../../../../utils/timeout"
+import { sortByValPosInString } from "../../../../../utils/sort"
+import DropDown from "../../../DropDown/DropDown"
+import { ICommonVar } from "../../../../../../../common/types/Global-types"
 
 
 

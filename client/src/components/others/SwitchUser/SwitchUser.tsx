@@ -60,7 +60,7 @@ const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 					className={'before_hover-but'}
 					onClick={handleForgetAllUsers}
 					toolTip={{
-						text: 'Забыть все аккаунты'
+						text: 'Забыть все фоновые аккаунты'
 					}}
 					size={'tiny'}
 					disabled={(!isAuthPage ? !usersList[1] : !usersList[0])}

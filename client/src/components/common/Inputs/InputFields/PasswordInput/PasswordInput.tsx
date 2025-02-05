@@ -3,11 +3,11 @@ import { FaKey } from "react-icons/fa"
 import { VscEye, VscEyeClosed } from "react-icons/vsc"
 import InputError from '../InputError/InputError'
 import InputCleaner from '../InputCleaner/InputCleaner'
-import { focusInput } from "../../../../utils/focusInput"
-import { useClickOutside } from "../../../../hooks/useClickOutside"
-import ToolTip from '../../../others/ToolTip/ToolTip'
-import { ISignFormInput, SignFormInputTypesOptions } from '../../../../types/Auth-types'
-import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
+import { focusInput } from "../../../../../utils/focusInput"
+import { useClickOutside } from "../../../../../hooks/useClickOutside"
+import ToolTip from '../../../../others/ToolTip/ToolTip'
+import { ISignFormInput, SignFormInputTypesOptions } from '../../../../../types/Auth-types'
+import RoundButton from "../../../Buttons/RoundButton/RoundButton"
 
 
 

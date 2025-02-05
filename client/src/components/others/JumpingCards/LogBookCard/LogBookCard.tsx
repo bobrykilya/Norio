@@ -3,7 +3,7 @@ import JumpingCard from '../../../common/JumpingCard/JumpingCard'
 import { showSnack } from "../../../../features/showSnackMessage/showSnackMessage"
 import { useBlockErrorState } from "../../../../stores/Device-store"
 import toast, { useToasterStore } from 'react-hot-toast'
-import { useLogBookCardState } from "../../../../stores/Settings-store"
+import { useLogBookCardState } from "../../../../stores/Utils-store"
 
 
 
@@ -42,9 +42,11 @@ const LogBookCard = ({ }: LogBookCardProps) => {
 
     return (
         <JumpingCard
-            isCardOpened={logBookCardState}
-            closeCard={closeLogCard}
-            className={'log_book-cover'}
+            className={'log_book_card-cover'}
+            closeHooksParams={{
+                conditionsList: [logBookCardState],
+                callback: closeLogCard
+            }}
         >
             {/* <TableCollapsibleRow data={data} columns={columns} /> */}
             <div></div>

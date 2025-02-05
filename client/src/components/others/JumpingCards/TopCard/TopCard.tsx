@@ -1,6 +1,8 @@
 import React from 'react'
 import JumpingCard from "../../../common/JumpingCard/JumpingCard"
-import { useTopCardState } from "../../../../stores/Settings-store"
+import { useTopCardState } from "../../../../stores/Utils-store"
+import UserInfoEditCard from "../../AccountInfoCard/UserCard/EditCards/UserInfoEditCard/UserInfoEditCard"
+import UserEditCard from "../../AccountInfoCard/UserCard/EditCards/UserEditCard/UserEditCard"
 
 
 
@@ -9,24 +11,34 @@ type TopCardProps = {
 }
 const TopCard = ({  }: TopCardProps) => {
 
-	const { setTopCardState, topCardState } = useTopCardState()
+	const { topCardState, setTopCardState } = useTopCardState()
 
 	const closeTopCard = () => {
-		setTopCardState(false)
+		setTopCardState(null)
 	}
+
 
 	return (
 		<JumpingCard
-			isCardOpened={topCardState}
-			closeCard={closeTopCard}
 			className={'top_card-cover'}
 			position={'top'}
+			closeHooksParams={{
+				conditionsList: [Boolean(topCardState)],
+				callback: closeTopCard
+			}}
 		>
-			<div
-			    className={'top-card cont'}
-			>
-			    
-			</div>
+			{
+				topCardState === 'userInfo' &&
+				<UserInfoEditCard
+
+				/>
+			}
+			{
+				topCardState === 'user' &&
+				<UserEditCard
+
+				/>
+			}
 		</JumpingCard>
 	)
 }

@@ -500,3 +500,26 @@ export const AVATARS_LIST: IDataListElement[] = [
         title: 'Тюлень',
     },
 ]
+
+export const COMPANIES_LIST: IDataListElement[] = [
+    {
+        id: 'stroypr',
+        title: 'Стройпродукт',
+    },
+    {
+        id: 'vasya_plus',
+        title: 'Василевич Плюс',
+    },
+    {
+        id: 'vasya_ip',
+        title: 'ИП Василевич',
+    },
+    {
+        id: 'strienok_ip',
+        title: 'ИП Стриёнок',
+    },
+    {
+        id: 'knyaz_ip',
+        title: 'ИП Князев',
+    },
+]

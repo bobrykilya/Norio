@@ -1,0 +1,98 @@
+@import '../../../../../../variables'
+
+
+
+.user_info_edit-form
+    //border: 1px solid yellow
+    margin-top: 15%
+    overflow: visible
+    width: auto
+    //flex-shrink: 1
+    .input-cont
+        //border: 2px solid brown
+        margin-top: 0.3rem
+        margin-right: 2rem
+    .user_info_edit_card-header
+        //border: 3px solid orange
+        width: auto
+        flex-direction: row
+        justify-content: space-between
+        overflow: visible
+        //flex-shrink: 1
+        //margin-bottom: $margin-white-card
+        .user_info_edit_card_status-but
+            border: 2px solid $color-backgr
+            $size-status-but: 3rem
+            width: $size-status-but
+            height: $size-status-but
+            background-color: $color-blue-main
+            .fa-icon
+                font-size: 1.8rem
+                color: $color-backgr
+        .user_info_edit_card-title
+            width: auto
+            color: $color-blue-main
+            font-size: $size-h3
+            font-weight: bolder
+            margin: 0 $margin-white-card 0 $margin-white-card
+            white-space: nowrap
+        .user_info_edit_card_birth-card
+            width: 267px
+            height: 103px
+    .user_info_edit_card-footer
+        //border: 5px solid green
+        flex-direction: row
+        justify-content: space-between
+        align-items: flex-end
+        overflow: visible
+        margin-top: $margin-white-card * 0.5
+        .user_info_edit_card_main_form-card
+            width: auto
+            .input-cont
+                &:first-child
+                    margin-top: 0
+        .user_info_edit_card_footer_right-column
+            //border: 2px solid red
+            width: auto
+            overflow: visible
+            margin-left: $margin-white-card * 1.5
+            .user_info_edit_card_company-card
+                width: auto
+                .input-cont
+                    &:first-child
+                        margin-top: 0
+            .user_info_edit_card_footer_right_column-footer
+                //border: 2px solid blue
+                height: auto
+                flex-direction: row
+                justify-content: space-around
+                overflow: visible
+                margin-top: $margin-white-card * 1.2
+                .user_info_edit_card_passport-card
+                    width: auto
+                    height: auto
+                    button
+                        border: 1px solid rgba($color-main-text, 0.3)
+                        border-radius: $rad-main-border
+                        padding: 0.6rem 0.9rem
+                        flex-direction: row
+                        .fa-icon
+                            font-size: 0.9rem
+                            color: $color-main-text
+                            margin-right: 0.6rem
+                        span
+                            margin-top: 0.05rem
+                            font-size: $size-main-text
+                            line-height: $size-main-text
+                            text-align: left
+                            color: $color-main-text
+                .user_info_edit_card_submit-but
+                    border: 2px solid $color-backgr
+                    $size-submit-but: 4rem
+                    width: $size-submit-but
+                    height: $size-submit-but
+                    background-color: $color-blue-main
+                    border-radius: $rad-white-card-border
+                    .fa-icon
+                        font-size: 1.8rem
+                        color: $color-backgr

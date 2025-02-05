@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import DropDownSearchInput from '../../../Inputs/DropDownSearchInput/DropDownSearchInput'
-import UserNameInput from '../../../Inputs/NameInput/NameInput'
+import DropDownSearchInput from '../../../../common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput'
+import UserNameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { HiOutlineHome } from "react-icons/hi"
 import { GrUserExpert, GrUserWorker } from "react-icons/gr"
 import { BiLogInCircle } from "react-icons/bi"
-import PhoneInput from '../../../Inputs/PhoneInput/PhoneInput'
+import PhoneInput from '../../../../common/Inputs/InputFields/PhoneInput/PhoneInput'
 import AvatarButton from '../../../AvatarListCard/AvatarButton'
 import { focusInput } from '../../../../../utils/focusInput'
 import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
@@ -80,7 +80,11 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
 
 
     return ( 
-        <form onSubmit={handleSubmit(checkAvatar)} id='sign_up_info-form' className='form cont'>
+        <form
+            onSubmit={handleSubmit(checkAvatar)}
+            id='sign_up_info-form'
+            className='form cont'
+        >
             <div className='inputs-cont cont'>
                 <PhoneInput 
                     name='phone'

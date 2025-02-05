@@ -27,10 +27,7 @@ const App = () => {
             className='cont'
         >
             <LogBookCard />
-            {
-                Boolean(userLoggedState) &&
-                <TopCard />
-            }
+            <TopCard />
             <Toaster reverseOrder={true} />
             <AnimatePresence>
                 <Routes

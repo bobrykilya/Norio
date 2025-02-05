@@ -144,10 +144,13 @@ const AvatarListCard = ({ LIST, currentAvatar, isAvatarListCardOpened, closeAvat
 
     return (
         <JumpingCard
-            isCardOpened={isAvatarListCardOpened}
-            closeCard={closeAvatarListCard}
             other_children={scrollButsJSX}
             className={'avatar_list_card-cover'}
+            isPrerender={true}
+            closeHooksParams={{
+                conditionsList: [isAvatarListCardOpened],
+                callback: closeAvatarListCard
+            }}
         >
             <ul
                 className="avatar_list-card cont"
