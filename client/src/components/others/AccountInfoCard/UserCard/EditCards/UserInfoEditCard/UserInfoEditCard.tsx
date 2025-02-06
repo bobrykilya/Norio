@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import RoundButton from "../../../../../common/Buttons/RoundButton/RoundButton"
 // import { LiaBirthdayCakeSolid } from "react-icons/lia"
 import { IoIosSave } from "react-icons/io"
@@ -13,20 +13,38 @@ import { HiOutlineHome } from "react-icons/hi"
 import { GrUserExpert, GrUserWorker } from "react-icons/gr"
 import { MdOutlineWorkOutline } from "react-icons/md"
 import { BsPassport } from "react-icons/bs";
+import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
 
 
+// const diff = (a1, a2, key) => a1.filter(o1 => !a2.some(o2 => o1[key] === o2[key]))
 
 type UserInfoEditForm = Omit<ISignUp, 'avatar'> & {
-	company: string;
-	birthday: number;
+	company?: string;
+	birthday?: number;
 }
 type UserInfoEditCardProps = {
-
+	userInfo: IUserRepository;
 }
-const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
+const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 
 	const inputRefPhone = useRef<HTMLInputElement>(null)
 	const nameInputIcon = <GrUserExpert className='input_field-icon' />
+	const defaultValues = {
+		phone: '',
+		store: '',
+		lastName: '',
+		firstName: '',
+		middleName: '',
+		company: '',
+		job: '',
+		birthday: null,
+	}
+	const preloadValues = {
+		company: 'Стройпродукт',
+		...userInfo,
+		phone: userInfo?.phone.slice(4)
+	}
+
 
 	const {
 		register,
@@ -35,32 +53,36 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 		watch,
 		setError,
 		setValue,
-		formState: { errors }
+		formState: { errors, dirtyFields, isDirty },
 	} = useForm<UserInfoEditForm>({
 		mode: 'onChange',
 		reValidateMode: "onChange",
-		defaultValues: {
-			phone: '295697981',
-			store: 'Офис',
-			lastName: 'Бобрик',
-			firstName: 'Илья',
-			middleName: 'Юрьевич',
-			company: 'Стройпродукт',
-			job: 'Управляющий',
-			birthday: 21142,
-		}
+		defaultValues: defaultValues,
 	})
 
-	// setValue('job', 'Управляющий')
-
 	const onSubmit: SubmitHandler<UserInfoEditForm> = async (data) => {
+		if (!isDirty) {
+			return
+		}
+
 		data.phone = '+375' + data.phone
-		console.log(data)
+		let dirtyData = {}
+
+		Object.keys(dirtyFields).map(name => {
+			if (data[name] === preloadValues[name]) {
+				return
+			}
+			dirtyData[name] = data[name]
+		})
+		console.log(dirtyData)
 	}
 
-	// useEffect(() => {
-		// inputRefPhone.current.focus()
-	// }, [])
+	useEffect(() => {
+		Object.keys(defaultValues).map(name => {
+			// @ts-ignore
+			setValue(name, preloadValues[name])
+		})
+	}, [])
 
 
 	return (
@@ -100,6 +122,8 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 						error={errors?.phone}
 						reset={resetField}
 						inputRef={inputRefPhone}
+						withCopyBut={true}
+						cleanerState={true}
 					/>
 					<DropDownSearchInput
 						LIST={STORES_LIST}
@@ -112,6 +136,8 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 						setValue={setValue}
 						setError={setError}
 						watch={watch}
+						withCopyBut={true}
+						cleanerState={true}
 					/>
 					<UserNameInput
 						name='lastName'
@@ -122,6 +148,8 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 						error={errors?.lastName}
 						reset={resetField}
 						inputMaxLength={25}
+						withCopyBut={true}
+						cleanerState={true}
 					/>
 					<UserNameInput
 						name='firstName'
@@ -131,6 +159,8 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 						register={register}
 						error={errors?.firstName}
 						reset={resetField}
+						withCopyBut={true}
+						cleanerState={true}
 					/>
 					<UserNameInput
 						name='middleName'
@@ -140,6 +170,8 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 						register={register}
 						error={errors?.middleName}
 						reset={resetField}
+						withCopyBut={true}
+						cleanerState={true}
 					/>
 				</div>
 				<div
@@ -154,11 +186,13 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 							placeholder='Организация'
 							icon={<MdOutlineWorkOutline className='input_field-icon'/>}
 							register={register}
-							error={errors?.job}
+							error={errors?.company}
 							reset={resetField}
 							setValue={setValue}
 							setError={setError}
 							watch={watch}
+							withCopyBut={true}
+							cleanerState={true}
 						/>
 						<DropDownSearchInput
 							LIST={JOBS_LIST}
@@ -171,6 +205,8 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 							setValue={setValue}
 							setError={setError}
 							watch={watch}
+							withCopyBut={true}
+							cleanerState={true}
 						/>
 					</div>
 					<div

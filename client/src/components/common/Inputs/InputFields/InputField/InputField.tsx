@@ -6,6 +6,9 @@ import { ICommonVar } from "../../../../../../../common/types/Global-types"
 import { IReactHookForm } from "../../../../../types/Auth-types"
 import RoundButton from "../../../Buttons/RoundButton/RoundButton"
 import { ToolTipProps } from "../../../../others/ToolTip/ToolTip"
+import { copyText } from "../../../../../utils/copy"
+// import { BiCopy } from "react-icons/bi"
+import { RxCopy } from "react-icons/rx"
 
 
 
@@ -26,7 +29,7 @@ type InputFieldProps = Required<Pick<IReactHookForm, 'error'>> & {
 		autoFocus?: boolean;
 		onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 		onBlur?: () => void;
-		onFocus?: (e?: React.FocusEvent<HTMLInputElement>) => void;
+		onFocus?: () => void;
 		disabled?: boolean;
 		inputMode?: string;
 	};
@@ -35,19 +38,23 @@ type InputFieldProps = Required<Pick<IReactHookForm, 'error'>> & {
 		handleClickCleaner: () => void;
 	};
 	extraButParams?: {
-		icon: ICommonVar['icon'];
-		ref: React.MutableRefObject<any>;
-		isExtraButVisible: boolean;
-		onClick: () => void;
-		toolTip: ToolTipProps;
+		isCopy?: boolean
+		isExtraButVisible?: boolean;
+		icon?: ICommonVar['icon'];
+		onClick?: () => void;
+		toolTip?: ToolTipProps;
 	};
 	children?: any;
 }
 const InputField = ({ contClassName, inputIcon, register, error, inputRef, inputParams, cleanerParams, extraButParams, children }: InputFieldProps) => {
 
+	const copyInputValue = () => {
+		copyText(inputRef.current.value)
+	}
+
 
 	return (
-		<div className={`${contClassName || ''} input_field-cont cont ${error?.message ? 'error' : ''}`}>
+		<div className={`${contClassName || ''} input_field-cont cont ${extraButParams?.isCopy ? 'with_copy' : ''} ${error?.message ? 'error' : ''}`}>
             <span
 				className='input_field-label'
 				onClick={() => focusInput(inputRef)}
@@ -68,13 +75,26 @@ const InputField = ({ contClassName, inputIcon, register, error, inputRef, input
 			<InputCleaner opened={cleanerParams.isCleanerOpened} onClick={cleanerParams.handleClickCleaner} />
 			{
 				extraButParams &&
-				<RoundButton
-					className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible ? 'opened' : ''}`}
-					size={'tiny'}
-					{...extraButParams}
-				>
-					{extraButParams.icon}
-				</RoundButton>
+				(
+					extraButParams.isCopy ?
+						<RoundButton
+							className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible ? 'opened' : ''}`}
+							onClick={extraButParams.onClick || copyInputValue}
+							size={'tiny'}
+							toolTip={{
+								text: 'Скопировать поле'
+							}}
+						>
+							<RxCopy className={'fa-icon'} />
+						</RoundButton> :
+						<RoundButton
+							className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible ? 'opened' : ''}`}
+							size={'tiny'}
+							{...extraButParams}
+						>
+							{extraButParams.icon}
+						</RoundButton>
+				)
 			}
 		</div>
 	)

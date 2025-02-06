@@ -55,7 +55,7 @@
         //border: 2px solid black
         overflow: visible
         position: absolute
-        right: 0.6rem
+        right: 0.25rem
         z-index: 3
         transform: scale(0.8) + translateX(0.5rem)
         opacity: 0
@@ -64,6 +64,10 @@
             transform: scale(1) + translateX(0)
             opacity: 1
             pointer-events: auto
+    &.with_copy
+        width: $width-field-input + 1.5rem
+        input
+            padding-right: $padding-x-field-input + 0.2rem
     &.error
         .input_field-label
             transform: translateX(-1rem)

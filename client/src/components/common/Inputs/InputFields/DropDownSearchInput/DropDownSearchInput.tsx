@@ -16,11 +16,11 @@ type DropDownSearchInputProps = ISignFormInput & {
     placeholder: string;
     icon: ICommonVar['icon'];
 }
-const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=null, reset, setValue, setError, watch, disabled=false }: DropDownSearchInputProps) => {
+const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=null, reset, setValue, setError, watch, disabled=false, withCopyBut, cleanerState=false }: DropDownSearchInputProps) => {
 
+    const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
-    const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-    
+
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
     
@@ -231,6 +231,13 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                 isCleanerOpened: isCleanerOpened,
                 handleClickCleaner: clearInput
             }}
+            extraButParams={
+                withCopyBut ? {
+                    isCopy: true,
+                    isExtraButVisible: isCleanerOpened
+                } :
+                null
+            }
         >
             <DropDown
                 onClick={handleClickElem}

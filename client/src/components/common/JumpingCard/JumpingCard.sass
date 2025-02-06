@@ -5,6 +5,7 @@
 .jumping_card_cover-cont
     //border: 5px solid black
     $rad-list: 120px
+    $scale-card: 0.6
     $before-margin: 1.5rem
     $before-width: 6rem
     position: fixed
@@ -29,7 +30,7 @@
         overflow: visible
         transition: all calc($dur-jumping-card * 1.33) ease
         border-radius: $rad-list * 2
-        transform: translateX(-50%) translateY(100%)
+        transform: translateX(-50%) translateY(100%) scale($scale-card)
         pointer-events: none
         &::before
             content: ''
@@ -46,7 +47,7 @@
         .jumping_card-cont
             bottom: auto
             top: 0
-            transform: translateX(-50%) translateY(-100%)
+            transform: translateX(-50%) translateY(-100%) scale($scale-card)
             &::before
                 top: auto
                 bottom: - $before-margin
@@ -57,7 +58,7 @@
             left: 0
             height: 100%
             width: 90%
-            transform: translateX(-100%) translateY(50%)
+            transform: translateX(-100%) translateY(50%) scale($scale-card)
             &::before
                 top: auto
                 right: - $before-margin
@@ -71,7 +72,7 @@
             right: 0
             height: 100%
             width: 90%
-            transform: translateX(100%) translateY(50%)
+            transform: translateX(100%) translateY(50%) scale($scale-card)
             &::before
                 top: auto
                 left: - $before-margin

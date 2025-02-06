@@ -1,19 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
 import { ISignFormInput } from '../../../../../types/Auth-types'
 import InputField from "../InputField/InputField"
 import { FiPhoneCall } from "react-icons/fi"
+import { copyText } from "../../../../../utils/copy"
 
 
 
 type PhoneInputProps = ISignFormInput & {
     inputRef: React.MutableRefObject<HTMLInputElement>;
 }
-const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRef }: PhoneInputProps) => {
+const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRef, withCopyBut, cleanerState=false }: PhoneInputProps) => {
 
     // console.log(error)
-    const [isCleanerOpened, setIsCleanerOpened] = useState(false)
+    const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
     const [number, setNumber] = useState<string | false>(null)
+
+
+    const copyInputValue = () => {
+        copyText('+375 ' + inputRef.current.value)
+    }
 
     const handleChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '')
@@ -24,12 +30,12 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
         setIsCleanerOpened(true)
     }
 
-    const handleBlurPhone = (e: React.FocusEvent<HTMLInputElement>) => {
-        setNumber(e.target.value)
-        e.target.value = e.target.value.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4')
+    const handleBlurPhone = () => {
+        setNumber(inputRef.current.value)
+        inputRef.current.value = inputRef.current.value.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4')
     }
-    const handleFocusPhone = (e: React.FocusEvent<HTMLInputElement>) => {
-        number ? e.target.value = String(number) : null
+    const handleFocusPhone = () => {
+        number ? inputRef.current.value = String(number) : null
     }
 
     const handleClickCleaner = async () => {
@@ -64,13 +70,16 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
                 }else return true
             },
         },
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-            handleChangePhone(e)
-        },
-        onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
-            handleBlurPhone(e)
-        }
+        onChange: handleChangePhone,
+        onBlur: handleBlurPhone,
     })
+
+    useEffect(() => {
+        if (cleanerState) {
+            setTimeout(handleBlurPhone, 200)
+        }
+    }, [])
+
 
     return (
         <InputField
@@ -96,6 +105,14 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
                 isCleanerOpened: isCleanerOpened,
                 handleClickCleaner: handleClickCleaner
             }}
+            extraButParams={
+                withCopyBut ? {
+                    isCopy: true,
+                    isExtraButVisible: isCleanerOpened,
+                    onClick: copyInputValue
+                } :
+                null
+            }
         >
             <span className='phone_mask'>+375</span>
         </InputField>

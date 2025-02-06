@@ -17,7 +17,7 @@ const DropDown = forwardRef(({ children, closeHooksParams, onClick, className, i
 
 	const dropDownRef = ref || useRef(null)
 	const setModalState = useModalState(s => s.setModalState) //* For forms Esc blur while any DropDown is opened
-	// console.log({ dropDownRef: dropDownRef.current, ...closeHooksParams })
+	// console.log(closeHooksParams.conditionsList)
 
 	useClickOutside({
 		ref: dropDownRef,

@@ -14,8 +14,8 @@ type ISnackElem = {
 }
 
 type SnackBarProps = {
-title: string;
-    inputIcon: ICommonVar['icon'];
+    title: string;
+    icon: ICommonVar['icon'];
     message: string; 
     toastElem: ISnackElem;
     type: SnackBarTypeOptions;

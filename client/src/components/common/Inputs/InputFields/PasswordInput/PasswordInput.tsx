@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
-import { useClickOutside } from "../../../../../hooks/useClickOutside"
 import { ISignFormInput, SignFormInputTypesOptions } from '../../../../../types/Auth-types'
 import InputField from "../InputField/InputField"
 import { FaKey } from "react-icons/fa"
@@ -10,14 +9,12 @@ import { VscEye, VscEyeClosed } from "react-icons/vsc"
 
 
 const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset, watch=false, notSaveUser=false, disabled=false }: ISignFormInput) => {
-    
-    const [isLockVisible, setIsLockVisible] = useState(false)
+
     const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
 
     const inputRef = useRef(null)
-    const lockButtonRef = useRef(null)
     
     const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         
@@ -28,7 +25,6 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
     }
 
     const changeInput = () => {
-        setIsLockVisible(true)
         setIsCleanerOpened(true)
     }
 
@@ -39,7 +35,6 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
 
     const clearInput = () => {
         reset(name)
-        setIsLockVisible(false)
         setIsCleanerOpened(false)
         setIsCapsLockEnabled(false)
     }
@@ -54,14 +49,6 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
         setIsLockOpened((prev) => !prev)
         await focusInput(inputRef)
     }
-
-    //* CapsLock closing onBlur
-    useClickOutside({
-        ref: inputRef,
-        butRef: lockButtonRef,
-        callback: () => setIsCapsLockEnabled(false),
-        conditionsList: [isCapsLockEnabled]
-    })
 
 
     const getRegister = (type: SignFormInputTypesOptions) => {
@@ -144,8 +131,7 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
                 icon: !isLockOpened ?
                     <VscEye className='fa-icon' /> :
                     <VscEyeClosed className='fa-icon' />,
-                ref: lockButtonRef,
-                isExtraButVisible: isLockVisible,
+                isExtraButVisible: isCleanerOpened,
                 onClick: handleSwitchLockPosition,
                 toolTip: {
                     text: !isLockOpened ? 'Показать пароль' : 'Скрыть пароль'

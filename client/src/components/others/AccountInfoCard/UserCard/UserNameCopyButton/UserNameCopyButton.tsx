@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react'
 import ToolTip from "../../../ToolTip/ToolTip"
 import { IUserRepository } from "../../../../../../../api/src/types/DB-types"
-import { showSnackMessage } from "../../../../../features/showSnackMessage/showSnackMessage"
 import { BiSolidCopy } from "react-icons/bi"
 import SelectDropDown from "../../../../common/SelectDropDown/SelectDropDown"
 import { ICommonVar } from "../../../../../../../common/types/Global-types"
+import { copyText } from "../../../../../utils/copy"
 
 
 
@@ -45,21 +45,7 @@ const UserNameCopyButton = ({ userInfoState }: UserNameCopyButtonProps) => {
 
 	const handleClickOption = ({ title }: ICopyUserOptionsList) => {
 		hideDropDown()
-
-		navigator.clipboard.writeText(title)
-			.then(() => {
-				showSnackMessage({
-					type: "s",
-					messageTitle: 'Скопировано:',
-					message: title
-				})
-			})
-			.catch(() => {
-				showSnackMessage({
-					type: "e",
-					message: `Не удалось скопировать: <span class=\'bold\'>${title}</span>`,
-				})
-			})
+		copyText(title)
 	}
 
 	const hideDropDown = () => {

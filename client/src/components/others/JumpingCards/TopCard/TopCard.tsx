@@ -3,6 +3,7 @@ import JumpingCard from "../../../common/JumpingCard/JumpingCard"
 import { useTopCardState } from "../../../../stores/Utils-store"
 import UserInfoEditCard from "../../AccountInfoCard/UserCard/EditCards/UserInfoEditCard/UserInfoEditCard"
 import UserEditCard from "../../AccountInfoCard/UserCard/EditCards/UserEditCard/UserEditCard"
+import { useUserInfoState } from "../../../../stores/Auth-store"
 
 
 
@@ -12,6 +13,7 @@ type TopCardProps = {
 const TopCard = ({  }: TopCardProps) => {
 
 	const { topCardState, setTopCardState } = useTopCardState()
+	const userInfoState = useUserInfoState(s => s.userInfoState)
 
 	const closeTopCard = () => {
 		setTopCardState(null)
@@ -30,7 +32,7 @@ const TopCard = ({  }: TopCardProps) => {
 			{
 				topCardState === 'userInfo' &&
 				<UserInfoEditCard
-
+					userInfo={userInfoState}
 				/>
 			}
 			{

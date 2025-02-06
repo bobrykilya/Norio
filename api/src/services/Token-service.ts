@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from "jsonwebtoken"
 import { Forbidden, Unauthorized } from "../utils/Errors"
 import { ICommonVar } from "../../../common/types/Global-types"
 import dotenv from "dotenv"
-import { ACCESS_TOKEN_EXPIRATION, COOKIE_SETTINGS } from "../../constants.ts"
+import { ACCESS_TOKEN_EXPIRATION, COOKIE_SETTINGS } from "../../constants"
 
 
 

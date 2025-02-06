@@ -14,7 +14,7 @@ import { IDeviceLocation } from "../../../../common/types/Device-types"
 type INavBarDataListElement = {
 	id: string;
 	title: string;
-	inputIcon: ICommonVar['icon'];
+	icon: ICommonVar['icon'];
 	link: string;
 }
 export const NAV_BAR_LIST: INavBarDataListElement[] = [

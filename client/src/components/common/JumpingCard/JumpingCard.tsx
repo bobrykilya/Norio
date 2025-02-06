@@ -30,10 +30,10 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
     }
 
     const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation()
         if ([...closeHooksParams.conditionsList, !modalState].includes(false)) {
             return
         }
+        e.stopPropagation()
 
         const target = e.target as Element
 
@@ -80,12 +80,12 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
                     children :
                     isCardOpened && children
                 }
+                {
+                    isPrerender ?
+                    other_children :
+                    isCardOpened && other_children
+                }
             </div>
-            {
-                isPrerender ?
-                other_children :
-                isCardOpened && other_children
-            }
         </div>
      )
 }

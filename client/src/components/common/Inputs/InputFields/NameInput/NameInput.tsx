@@ -13,11 +13,11 @@ type NameInputProps = ISignFormInput & {
     inputMaxLength?: number;
     inputRefLogin?: React.MutableRefObject<HTMLInputElement> | null;
 }
-const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null }: NameInputProps) => {
+const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null, withCopyBut, cleanerState=false }: NameInputProps) => {
 
-    // console.log(error)
-    const [isCleanerOpened, setIsCleanerOpened] = useState(false)
+    const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
     const inputRef = inputRefLogin || useRef(null)
+
     
     const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, '')
@@ -105,6 +105,13 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
                 isCleanerOpened: isCleanerOpened,
                 handleClickCleaner: handleClickCleaner
             }}
+            extraButParams={
+                withCopyBut ? {
+                    isCopy: true,
+                    isExtraButVisible: isCleanerOpened
+                } :
+                null
+            }
         />
     )
 }
