@@ -26,7 +26,7 @@ type UserInfoEditCardProps = {
 const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 
 	const inputRefPhone = useRef<HTMLInputElement>(null)
-	const nameInputIcon = <GrUserExpert className='input-icon' />
+	const nameInputIcon = <GrUserExpert className='input_field-icon' />
 
 	const {
 		register,
@@ -99,13 +99,13 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 						register={register}
 						error={errors?.phone}
 						reset={resetField}
-						inputRefPhone={inputRefPhone}
+						inputRef={inputRefPhone}
 					/>
 					<DropDownSearchInput
 						LIST={STORES_LIST}
 						name='store'
 						placeholder='Точка'
-						icon={<HiOutlineHome className='input-icon'/>}
+						icon={<HiOutlineHome className='input_field-icon'/>}
 						register={register}
 						error={errors?.store}
 						reset={resetField}
@@ -152,7 +152,7 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 							LIST={COMPANIES_LIST}
 							name='company'
 							placeholder='Организация'
-							icon={<MdOutlineWorkOutline className='input-icon'/>}
+							icon={<MdOutlineWorkOutline className='input_field-icon'/>}
 							register={register}
 							error={errors?.job}
 							reset={resetField}
@@ -164,7 +164,7 @@ const UserInfoEditCard = ({  }: UserInfoEditCardProps) => {
 							LIST={JOBS_LIST}
 							name='job'
 							placeholder='Должность'
-							icon={<GrUserWorker className='input-icon'/>}
+							icon={<GrUserWorker className='input_field-icon'/>}
 							register={register}
 							error={errors?.job}
 							reset={resetField}

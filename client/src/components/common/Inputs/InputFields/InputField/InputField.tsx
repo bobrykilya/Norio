@@ -1,74 +1,75 @@
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
 import InputError from "../InputUtils/InputError/InputError"
 import InputCleaner from "../InputUtils/InputCleaner/InputCleaner"
 import { ICommonVar } from "../../../../../../../common/types/Global-types"
-import { ISignFormInput } from "../../../../../types/Auth-types"
+import { IReactHookForm } from "../../../../../types/Auth-types"
 import RoundButton from "../../../Buttons/RoundButton/RoundButton"
+import { ToolTipProps } from "../../../../others/ToolTip/ToolTip"
 
 
 
-type InputFieldProps = Omit<ISignFormInput, 'notSaveUser' | 'inputType'> & {
-	icon: ICommonVar['icon'];
+type InputFieldProps = Required<Pick<IReactHookForm, 'error'>> & {
+	contClassName: string;
+	inputIcon: ICommonVar['icon'];
 	register: {
 		ref: any;
 		rest_register: any;
-	}
-	inputRef?: React.MutableRefObject<HTMLInputElement> | null;
+	};
+	inputRef: React.MutableRefObject<HTMLInputElement> | null;
 	inputParams: {
-		className: string;
 		placeholder: string;
+		label?: string;
 		type?: string;
 		maxLength?: number;
-		autoComplete?: boolean;
+		autoComplete?: string;
 		autoFocus?: boolean;
+		onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+		onBlur?: () => void;
+		onFocus?: (e?: React.FocusEvent<HTMLInputElement>) => void;
+		disabled?: boolean;
+		inputMode?: string;
+	};
+	cleanerParams: {
+		isCleanerOpened: boolean;
+		handleClickCleaner: () => void;
 	};
 	extraButParams?: {
 		icon: ICommonVar['icon'];
-		[key: string]: any;
+		ref: React.MutableRefObject<any>;
+		isExtraButVisible: boolean;
+		onClick: () => void;
+		toolTip: ToolTipProps;
 	};
+	children?: any;
 }
-const InputField = ({ name, icon, register, error=null, reset, inputRef=null, inputParams, extraButParams }: InputFieldProps) => {
-
-	const [isCleanerOpened, setIsCleanerOpened] = useState(false)
-	const [isExtraButVisible, setIsExtraButVisible] = useState(false)
-	const refInput = inputRef || useRef(null)
-
-
-	const handleClickCleaner = async () => {
-		clearInput()
-		await focusInput(inputRef)
-	}
-
-	const clearInput = () => {
-		reset(name)
-		setIsCleanerOpened(false)
-	}
+const InputField = ({ contClassName, inputIcon, register, error, inputRef, inputParams, cleanerParams, extraButParams, children }: InputFieldProps) => {
 
 
 	return (
-		<div className={`user_name_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
+		<div className={`${contClassName || ''} input_field-cont cont ${error?.message ? 'error' : ''}`}>
             <span
-				className='input-label'
-				onClick={() => focusInput(refInput)}
+				className='input_field-label'
+				onClick={() => focusInput(inputRef)}
 			>
-                {inputParams.placeholder}
+                {inputParams.label || inputParams.placeholder}
             </span>
 			<input
 				{...register.rest_register}
 				ref={(e) => {
 					register.ref(e)
-					refInput.current = e
+					inputRef.current = e
 				}}
 				{...inputParams}
 			/>
-			{icon}
-			<InputError error={error} onClick={() => focusInput(refInput)} />
-			<InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
+			{inputIcon}
+			{children}
+			<InputError error={error} onClick={() => focusInput(inputRef)} />
+			<InputCleaner opened={cleanerParams.isCleanerOpened} onClick={cleanerParams.handleClickCleaner} />
 			{
 				extraButParams &&
 				<RoundButton
-					className={`extra_input-but before_hover-but ${isExtraButVisible ? 'opened' : ''}`}
+					className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible ? 'opened' : ''}`}
 					size={'tiny'}
 					{...extraButParams}
 				>

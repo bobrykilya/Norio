@@ -1,10 +1,9 @@
 import React, { useRef, useState } from 'react'
-import InputError from '../InputUtils/InputError/InputError'
-import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
 import { focusInput } from '../../../../../utils/focusInput'
 import { capitalize } from '../../../../../utils/capitalize'
 import { ISignFormInput, SignFormInputTypesOptions } from '../../../../../types/Auth-types'
 import { ICommonVar } from "../../../../../../../common/types/Global-types"
+import InputField from "../InputField/InputField"
 
 
 
@@ -85,31 +84,28 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
     const { ref, ... rest_register } = getRegister(inputType)
 
     return (
-        <div className={`user_name_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
-            <span 
-                className='input-label'
-                onClick={() => focusInput(inputRef)}
-            >
-                {placeholder}
-            </span>
-            <input
-                {... rest_register}
-                ref={(e) => {
-                    ref(e)
-                    inputRef.current = e
-                }}
-                className='name_input'
-                type='text'
-                maxLength={inputMaxLength}
-                placeholder={placeholder}
-                autoComplete={(inputType === 'name' || notSaveUser) ? 'off' : 'username'}
-                disabled={disabled}
-                autoFocus={inputType !== 'name'}
-            />
-            {icon}
-            <InputError error={error} onClick={() => focusInput(inputRef)} />
-            <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
-        </div>
+        <InputField
+            contClassName={'user_name_input-cont'}
+            inputIcon={icon}
+            register={{
+                ref,
+                rest_register
+            }}
+            error={error}
+            inputRef={inputRef}
+            inputParams={{
+                type: 'text',
+                maxLength: inputMaxLength,
+                placeholder: placeholder,
+                autoComplete: (inputType === 'name' || notSaveUser) ? 'off' : 'username',
+                disabled: disabled,
+                autoFocus: inputType !== 'name',
+            }}
+            cleanerParams={{
+                isCleanerOpened: isCleanerOpened,
+                handleClickCleaner: handleClickCleaner
+            }}
+        />
     )
 }
 

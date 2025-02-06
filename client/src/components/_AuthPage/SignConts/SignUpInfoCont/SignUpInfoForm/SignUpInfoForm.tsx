@@ -32,7 +32,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef<HTMLInputElement>(null)
-    const nameInputIcon = <GrUserExpert className='input-icon' />
+    const nameInputIcon = <GrUserExpert className='input_field-icon' />
 
 
     const {
@@ -92,13 +92,13 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     error={errors?.phone}
                     reset={resetField}
                     disabled={isFormDisabled}
-                    inputRefPhone={inputRefPhone}
+                    inputRef={inputRefPhone}
                 />
                 <DropDownSearchInput 
                     LIST={STORES_LIST}
                     name='store'
                     placeholder='Точка'
-                    icon={<HiOutlineHome className='input-icon'/>}
+                    icon={<HiOutlineHome className='input_field-icon'/>}
                     register={register}
                     error={errors?.store}
                     reset={resetField}
@@ -111,7 +111,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     LIST={JOBS_LIST}
                     name='job'
                     placeholder='Должность'
-                    icon={<GrUserWorker className='input-icon'/>}
+                    icon={<GrUserWorker className='input_field-icon'/>}
                     register={register}
                     error={errors?.job}
                     reset={resetField}

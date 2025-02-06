@@ -80,7 +80,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
                 <UserNameInput
                     name='username'
                     placeholder='Логин'
-                    icon={<FaUser className='input-icon'/>}
+                    icon={<FaUser className='input_field-icon'/>}
                     inputType='sign_up'
                     register={register}
                     error={errors?.username}

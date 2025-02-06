@@ -1,13 +1,11 @@
 import React, { useRef, useState } from 'react'
-import { FaKey } from "react-icons/fa"
-import { VscEye, VscEyeClosed } from "react-icons/vsc"
-import InputError from '../InputUtils/InputError/InputError'
-import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
 import { focusInput } from "../../../../../utils/focusInput"
 import { useClickOutside } from "../../../../../hooks/useClickOutside"
-import ToolTip from '../../../../others/ToolTip/ToolTip'
 import { ISignFormInput, SignFormInputTypesOptions } from '../../../../../types/Auth-types'
-import RoundButton from "../../../Buttons/RoundButton/RoundButton"
+import InputField from "../InputField/InputField"
+import { FaKey } from "react-icons/fa"
+import ToolTip from "../../../../others/ToolTip/ToolTip"
+import { VscEye, VscEyeClosed } from "react-icons/vsc"
 
 
 
@@ -120,53 +118,47 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
     const { ref, ... rest_register } = getRegister(inputType)
 
     return (
-        <div className={`password_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
-            <span 
-                className='input-label'
-                onClick={() => focusInput(inputRef)}
-            >
-                {inputType !== 'confirm' ? 'Пароль' : 'Повтор пароля'}
-            </span>
-            <input
-                {... rest_register}
-                ref={(e) => {
-                    ref(e)
-                    inputRef.current = e
-                }}
-                className='passw_input'
-                type={isLockOpened ? 'text' : 'password'}
-                maxLength={15}
-                placeholder={inputType !== 'confirm' ? 'Пароль' : 'Повтор пароля'}
-                autoComplete={notSaveUser ? 'off' : 'current-password'}
-                onKeyDown={handleCheckCapsLockState}
-                onBlur={() => {setIsCapsLockEnabled(false)}}
-                disabled={disabled}
-            />
-            <FaKey className='input-icon'/>
-            <div 
+        <InputField
+            contClassName={'password_input-cont'}
+            inputIcon={<FaKey className='input_field-icon'/>}
+            register={{
+                ref,
+                rest_register
+            }}
+            error={error}
+            inputRef={inputRef}
+            inputParams={{
+                type: isLockOpened ? 'text' : 'password',
+                maxLength: 15,
+                placeholder: inputType !== 'confirm' ? 'Пароль' : 'Повтор пароля',
+                autoComplete: notSaveUser ? 'off' : 'current-password',
+                onKeyDown: handleCheckCapsLockState,
+                onBlur: () => {setIsCapsLockEnabled(false)},
+                disabled,
+            }}
+            cleanerParams={{
+                isCleanerOpened: isCleanerOpened,
+                handleClickCleaner: handleClickCleaner
+            }}
+            extraButParams={{
+                icon: !isLockOpened ?
+                    <VscEye className='fa-icon' /> :
+                    <VscEyeClosed className='fa-icon' />,
+                ref: lockButtonRef,
+                isExtraButVisible: isLockVisible,
+                onClick: handleSwitchLockPosition,
+                toolTip: {
+                    text: !isLockOpened ? 'Показать пароль' : 'Скрыть пароль'
+                }
+            }}
+        >
+            <div
                 className={`caps_lock-cont ${isCapsLockEnabled ? 'opened' : ''}`}
             >
                 <span>CAPS</span>
                 <ToolTip text='Включён Caps-Lock' />
             </div>
-            <InputError error={error} onClick={() => focusInput(inputRef)} />
-            <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
-            <RoundButton
-                onClick={(handleSwitchLockPosition)}
-                className={`extra_input-but before_hover-but ${isLockVisible ? 'opened' : ''}`}
-                toolTip={{
-                    text: !isLockOpened ? 'Показать пароль' : 'Скрыть пароль'
-                }}
-                size={'tiny'}
-                ref={lockButtonRef}
-            >
-                {
-                    !isLockOpened ?
-                    <VscEye className='fa-icon' /> :
-                    <VscEyeClosed className='fa-icon' />
-                }
-            </RoundButton>
-        </div>
+        </InputField>
     )
 }
 

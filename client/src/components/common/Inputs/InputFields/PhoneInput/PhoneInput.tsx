@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import InputError from '../InputUtils/InputError/InputError'
-import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
-import { FiPhoneCall } from "react-icons/fi"
 import { focusInput } from "../../../../../utils/focusInput"
 import { ISignFormInput } from '../../../../../types/Auth-types'
+import InputField from "../InputField/InputField"
+import { FiPhoneCall } from "react-icons/fi"
 
 
 
 type PhoneInputProps = ISignFormInput & {
-    inputRefPhone: React.MutableRefObject<HTMLInputElement>;
+    inputRef: React.MutableRefObject<HTMLInputElement>;
 }
-const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRefPhone }: PhoneInputProps) => {
+const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRef }: PhoneInputProps) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -35,7 +34,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
 
     const handleClickCleaner = async () => {
         setNumber(null)
-        await focusInput(inputRefPhone)
+        await focusInput(inputRef)
         clearInput()
     }
 
@@ -73,35 +72,33 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
         }
     })
 
-    return ( 
-        <div className={`phone_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
-            <span 
-                className='input-label'
-                onClick={() => focusInput(inputRefPhone)}
-            >
-                Номер телефона
-            </span>
-            <input
-                {... rest_register}
-                ref={(e) => {
-                    ref(e)
-                    inputRefPhone.current = e
-                }}
-                className='phone_input'
-                type='tel'
-                inputMode='number'
-                maxLength={9}
-                placeholder='(29) 555-35-35'
-                disabled={disabled}
-                // autoComplete='cc-number'
-                autoComplete='off'
-                onFocus={handleFocusPhone}
-            />
-            <FiPhoneCall className='input-icon' />
+    return (
+        <InputField
+            contClassName={'phone_input-cont'}
+            inputIcon={<FiPhoneCall className='input_field-icon' />}
+            register={{
+                ref,
+                rest_register
+            }}
+            error={error}
+            inputRef={inputRef}
+            inputParams={{
+                type: 'tel',
+                inputMode: 'number',
+                maxLength: 9,
+                label: 'Номер телефона',
+                placeholder: '(29) 555-35-35',
+                disabled: disabled,
+                autoComplete: 'off',
+                onFocus: handleFocusPhone,
+            }}
+            cleanerParams={{
+                isCleanerOpened: isCleanerOpened,
+                handleClickCleaner: handleClickCleaner
+            }}
+        >
             <span className='phone_mask'>+375</span>
-            <InputError error={error} onClick={() => focusInput(inputRefPhone)} />
-            <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
-        </div>
+        </InputField>
      )
 }
  

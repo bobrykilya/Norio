@@ -1,14 +1,13 @@
 import React, { useRef, useState } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
 import { capitalize } from '../../../../../utils/capitalize'
-import InputError from '../InputUtils/InputError/InputError'
-import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
 import { IDataListElement } from "../../../../../assets/AuthPage/AuthPage-data"
 import { ISignFormInput } from "../../../../../types/Auth-types"
 import timeout from "../../../../../utils/timeout"
 import { sortByValPosInString } from "../../../../../utils/sort"
-import DropDown from "../../../DropDown/DropDown"
 import { ICommonVar } from "../../../../../../../common/types/Global-types"
+import InputField from "../InputField/InputField"
+import DropDown from "../../../DropDown/DropDown"
 
 
 
@@ -209,32 +208,30 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     })
 
 
-    return ( 
-        <div className={`dropdown_input-cont input-cont cont ${error?.message ? 'error' : ''}`}>
-            <span 
-                className='input-label'
-                onClick={() => focusInput(inputRef)}
-            >
-                {placeholder}
-            </span>
-            <input
-                {... rest_register}
-                ref={(e) => {
-                    ref(e)
-                    inputRef.current = e
-                }}
-                maxLength={23}
-                className='dropdown_input'
-                placeholder={placeholder}
-                autoComplete='none'
-                onKeyDown={handleKeyDownOnInput}
-                onFocus={handleFocusInput}
-                onBlur={handleBlurInput}
-                disabled={disabled}
-            />
-            {icon}
-            <InputError error={error} onClick={() => focusInput(inputRef)} />
-            <InputCleaner opened={isCleanerOpened} onClick={clearInput} />
+    return (
+        <InputField
+            contClassName={'dropdown_input-cont'}
+            inputIcon={icon}
+            register={{
+                ref,
+                rest_register
+            }}
+            error={error}
+            inputRef={inputRef}
+            inputParams={{
+                maxLength: 23,
+                placeholder,
+                autoComplete: 'none',
+                onKeyDown: handleKeyDownOnInput,
+                onFocus: handleFocusInput,
+                onBlur: handleBlurInput,
+                disabled,
+            }}
+            cleanerParams={{
+                isCleanerOpened: isCleanerOpened,
+                handleClickCleaner: clearInput
+            }}
+        >
             <DropDown
                 onClick={handleClickElem}
                 ref={dropDownRef}
@@ -261,7 +258,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                         })
                 }
             </DropDown>
-        </div>
+        </InputField>
      )
 }
  

@@ -76,7 +76,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
                 <UserNameInput
                     name='username'
                     placeholder='Логин'
-                    icon={<FaUser className='input-icon'/>}
+                    icon={<FaUser className='input_field-icon'/>}
                     register={register}
                     reset={resetField}
                     notSaveUser={notSaveUser}
