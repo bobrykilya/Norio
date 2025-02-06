@@ -13,8 +13,9 @@ type JumpingCardProps = {
     position?: JumpingCardOptions;
     other_children?: any;
     isPrerender?: boolean;
+    forceCloseJumpingCard?: boolean;
 }
-const JumpingCard = ({ children, className, position, other_children, isPrerender, closeHooksParams }: JumpingCardProps) => {
+const JumpingCard = ({ children, className, position, other_children, isPrerender, closeHooksParams, forceCloseJumpingCard }: JumpingCardProps) => {
 
     const setBlurModalState = useModalState(s => s.setBlurModalState)
     const isCardOpened = closeHooksParams.conditionsList[0]
@@ -23,6 +24,7 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
 
 
     const handleCloseJumpingCard = () => {
+        // console.log('close list')
         setIsJumpingCardOpened(false)
         setTimeout(closeHooksParams.callback, 300)
     }
@@ -46,15 +48,23 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
     })
 
 
-    //* For forms Esc blur while JumpingCard is opened
+    //* BlurModalState - For forms Esc blur while JumpingCard is opened
     useEffect(() => {
         if (isCardOpened) {
             setBlurModalState(true)
             setIsJumpingCardOpened(true)
         } else {
             setBlurModalState(false)
+            setIsJumpingCardOpened(false)
         }
     }, [isCardOpened])
+
+    //* Handling for force closing without prerender
+    useEffect(() => {
+        if (forceCloseJumpingCard) {
+            handleCloseJumpingCard()
+        }
+    }, [forceCloseJumpingCard])
 
 
     return ( 

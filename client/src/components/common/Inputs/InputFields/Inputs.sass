@@ -50,6 +50,23 @@
         transition: all 0.6s ease
         color: $color-main-text
         overflow: visible
+    .extra_input-but
+        //border: 2px solid black
+        overflow: visible
+        position: absolute
+        right: 0.6rem
+        z-index: 3
+        transform: scale(0.8) + translateX(0.5rem)
+        opacity: 0
+        pointer-events: none
+        .tool_tip-cont
+            .tool_tip
+                left: calc(50% - 2.2rem)
+                width: 4.4rem
+        &.opened
+            transform: scale(1) + translateX(0)
+            opacity: 1
+            pointer-events: auto
     &.error
         .input-label
             transform: translateX(-1rem)

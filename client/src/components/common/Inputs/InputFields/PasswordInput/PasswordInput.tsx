@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { FaKey } from "react-icons/fa"
 import { VscEye, VscEyeClosed } from "react-icons/vsc"
-import InputError from '../InputError/InputError'
-import InputCleaner from '../InputCleaner/InputCleaner'
+import InputError from '../InputUtils/InputError/InputError'
+import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
 import { focusInput } from "../../../../../utils/focusInput"
 import { useClickOutside } from "../../../../../hooks/useClickOutside"
 import ToolTip from '../../../../others/ToolTip/ToolTip'
@@ -153,7 +153,7 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
             <InputCleaner opened={isCleanerOpened} onClick={handleClickCleaner} />
             <RoundButton
                 onClick={(handleSwitchLockPosition)}
-                className={`lock-but before_hover-but ${isLockVisible ? 'opened' : ''}`}
+                className={`extra_input-but before_hover-but ${isLockVisible ? 'opened' : ''}`}
                 toolTip={{
                     text: !isLockOpened ? 'Показать пароль' : 'Скрыть пароль'
                 }}

@@ -12,7 +12,7 @@ type IUseCoverPanelState = {
     setCoverPanelState: (state: CoverPanelOptions) => void;
 }
 const useCoverPanelState = create<IUseCoverPanelState>(set => ({
-    coverPanelState: 'sign_in',
+    coverPanelState: 'sign_up_info',
     setCoverPanelState: (state) => set({ coverPanelState: state })
 }))
 

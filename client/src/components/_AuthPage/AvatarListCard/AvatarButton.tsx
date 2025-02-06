@@ -1,6 +1,6 @@
 import React, { MutableRefObject, useRef, useState } from 'react'
-import InputCleaner from '../../common/Inputs/InputFields/InputCleaner/InputCleaner'
-import InputError from '../../common/Inputs/InputFields/InputError/InputError'
+import InputCleaner from '../../common/Inputs/InputFields/InputUtils/InputCleaner/InputCleaner'
+import InputError from '../../common/Inputs/InputFields/InputUtils/InputError/InputError'
 // import { PiUserThin } from "react-icons/pi"
 import { PiUser } from "react-icons/pi"
 import AvatarListCard from './AvatarListCard'
@@ -26,6 +26,7 @@ const AvatarButton = ({ LIST, currentAvatar, setAvatar, error, setError, disable
     const [isArrowButsActive, setIsArrowButsActive] = useState(false)
     const setTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null) as MutableRefObject<ReturnType<typeof setTimeout>>
     const avatarButtonRef = useRef<HTMLButtonElement>(null)
+
 
     const createPathToAvatars = (name: string) => {
         return `/avatars/${name}.jpg`

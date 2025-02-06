@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
-import InputError from '../InputError/InputError'
-import InputCleaner from '../InputCleaner/InputCleaner'
+import InputError from '../InputUtils/InputError/InputError'
+import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
 import { focusInput } from '../../../../../utils/focusInput'
 import { capitalize } from '../../../../../utils/capitalize'
 import { ISignFormInput, SignFormInputTypesOptions } from '../../../../../types/Auth-types'

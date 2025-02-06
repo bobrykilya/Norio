@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
 import { capitalize } from '../../../../../utils/capitalize'
-import InputError from '../InputError/InputError'
-import InputCleaner from '../InputCleaner/InputCleaner'
+import InputError from '../InputUtils/InputError/InputError'
+import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
 import { IDataListElement } from "../../../../../assets/AuthPage/AuthPage-data"
 import { ISignFormInput } from "../../../../../types/Auth-types"
 import timeout from "../../../../../utils/timeout"
