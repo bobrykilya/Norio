@@ -62,12 +62,12 @@ const InputField = ({ contClassName, inputIcon, register, error, inputRef, input
                 {inputParams.label || inputParams.placeholder}
             </span>
 			<input
-				{...register.rest_register}
+				{ ...register.rest_register }
 				ref={(e) => {
 					register.ref(e)
 					inputRef.current = e
 				}}
-				{...inputParams}
+				{ ...inputParams }
 			/>
 			{inputIcon}
 			{children}

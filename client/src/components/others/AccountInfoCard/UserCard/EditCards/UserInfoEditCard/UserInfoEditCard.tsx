@@ -12,8 +12,10 @@ import { COMPANIES_LIST, JOBS_LIST, STORES_LIST } from "../../../../../../assets
 import { HiOutlineHome } from "react-icons/hi"
 import { GrUserExpert, GrUserWorker } from "react-icons/gr"
 import { MdOutlineWorkOutline } from "react-icons/md"
-import { BsPassport } from "react-icons/bs";
+import { BsPassport } from "react-icons/bs"
+import { LiaBirthdayCakeSolid } from "react-icons/lia"
 import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
+import DateInput from "../../../../../common/Inputs/InputFields/DateInput/DateInput"
 
 
 // const diff = (a1, a2, key) => a1.filter(o1 => !a2.some(o2 => o1[key] === o2[key]))
@@ -27,7 +29,8 @@ type UserInfoEditCardProps = {
 }
 const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 
-	const inputRefPhone = useRef<HTMLInputElement>(null)
+	const inputPhoneRef = useRef<HTMLInputElement>(null)
+	const inputBirthdayRef = useRef<HTMLInputElement>(null)
 	const nameInputIcon = <GrUserExpert className='input_field-icon' />
 	const defaultValues = {
 		phone: '',
@@ -74,6 +77,10 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 			}
 			dirtyData[name] = data[name]
 		})
+		if (!Object.keys(dirtyData)[0]) {
+			return
+		}
+
 		console.log(dirtyData)
 	}
 
@@ -94,7 +101,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 				className={'user_info_edit_card-header cont'}
 			>
 				<RoundButton
-					className={'user_info_edit_card_status-but white-card'}
+					className={'user_info_edit_card_status-but'}
 					onClick={() => {}}
 				>
 					<BiBadgeCheck className={'fa-icon'} />
@@ -107,7 +114,16 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 				<div
 					className={'user_info_edit_card_birth-card cont white-card'}
 				>
-					Дата рождения
+					<DateInput
+						name='birthday'
+						register={register}
+						error={errors?.birthday}
+						reset={resetField}
+						inputRef={inputBirthdayRef}
+						withCopyBut={true}
+						cleanerState={Boolean(watch('birthday'))}
+						icon={<LiaBirthdayCakeSolid className='input_field-icon' />}
+					/>
 				</div>
 			</div>
 			<div
@@ -121,7 +137,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						register={register}
 						error={errors?.phone}
 						reset={resetField}
-						inputRef={inputRefPhone}
+						inputRef={inputPhoneRef}
 						withCopyBut={true}
 						cleanerState={true}
 					/>

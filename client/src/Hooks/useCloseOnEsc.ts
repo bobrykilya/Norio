@@ -18,7 +18,7 @@ const useCloseOnEsc = ({ callback, conditionsList }: IUseCloseOnEsc) => {
 
 	//* Esc keyDown handling
 	useEffect(() => {
-		if (!conditionsList || conditionsList.includes(false)) return
+		if (conditionsList.includes(false)) return
 
 		window.addEventListener("keydown", closeOnEsc)
 

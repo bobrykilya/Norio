@@ -4,6 +4,7 @@ import { ISignFormInput } from '../../../../../types/Auth-types'
 import InputField from "../InputField/InputField"
 import { FiPhoneCall } from "react-icons/fi"
 import { copyText } from "../../../../../utils/copy"
+import { CODES_LIST } from "../../../../../../constants"
 
 
 
@@ -51,23 +52,20 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
 
     const { ref, ... rest_register } = register(name, {
         required: true,
-        // mask: '{(}00{)}000-00-00',
         minLength: {
             value: 9,
             message: `Номер должен содержать код и 7 цифр`
         },
         validate: {
             isCorrectCode: (val: string) => {
-                // console.log(val.length)
-                const code_list = ['29', '33', '44', '25']
                 const message = 'Неизвестный код оператора связи'
                 if (val.length >= 10) {
-                    // console.log(val.substr(1,2))
-                    return (code_list.includes(val.substring(1,2)) || message)
-                }else if (val.length === 9){
-                    // console.log(val.substr(0,2))
-                    return (code_list.includes(val.substring(0,2)) || message)
-                }else return true
+                    return (CODES_LIST.includes(val.substring(1,2)) || message)
+                } else if (val.length === 9) {
+                    return (CODES_LIST.includes(val.substring(0,2)) || message)
+                } else {
+                    return true
+                }
             },
         },
         onChange: handleChangePhone,
@@ -95,7 +93,7 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
                 type: 'tel',
                 inputMode: 'number',
                 maxLength: 9,
-                label: 'Номер телефона',
+                label: 'Мобильный номер',
                 placeholder: '(29) 555-35-35',
                 disabled: disabled,
                 autoComplete: 'off',

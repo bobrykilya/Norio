@@ -23,6 +23,7 @@ export const MY_LOC = 'myLocation'
 //* Auth settings
 	export const CHECK_IP_AND_COUNTRY = false 			//* IP and Country checking before request on Api (ipapi.co, ip-api.com services)
 	export const PERMITTED_COUNTRIES = ['BY', 'PL'] 	//* Permitted countries for working with app
+	export const CODES_LIST = ['29', '33', '44', '25']   //* Permitted for registration phone codes
 
 //* Weather settings
 	export const WEATHER_ACCURACY = 3 					//* Number of decimal places for weather-service's coords (default: 3)

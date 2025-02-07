@@ -9,14 +9,15 @@
     $before-margin: 1.5rem
     $before-width: 6rem
     position: fixed
-    left: 0
-    bottom: 0
+    left: 50%
+    top: 0
     width: 100vw
     height: 100vh
     backdrop-filter: blur(0)
     z-index: 15
+    transform: translateX(-50%)
     transition: all $dur-jumping-card * 1.25 ease
-    background-color: rgba(0, 0, 0, 0.25)
+    background-color: rgba(0, 0, 0, 0.35)
     opacity: 0
     pointer-events: none
     .jumping_card-cont

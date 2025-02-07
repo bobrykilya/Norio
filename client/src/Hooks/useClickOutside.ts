@@ -20,7 +20,7 @@ export const useClickOutside = ({ ref, butRef, callback, conditionsList }: IUseC
     }
 
     useEffect(() => {
-        if (!conditionsList || conditionsList.includes(false)) return
+        if (conditionsList.includes(false)) return
 
         document.addEventListener('click', clickOutside)
         return () => {

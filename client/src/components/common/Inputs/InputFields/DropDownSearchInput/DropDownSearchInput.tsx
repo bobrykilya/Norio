@@ -26,15 +26,20 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     
     
     const filterAndSortList = ({ search, list }) => {
+        if (!search) {
+            return list
+        }
+        
         const val = search.toLowerCase().trim()
         const filtered_list = list.filter((el: IDataListElement) => el.title.toLowerCase().includes(val))
         return sortByValPosInString(filtered_list, val, 'title')
     }
         
-    const LIST_FILTERED = watch(name) ? filterAndSortList({ search: watch(name), list: LIST }) : LIST
+    const LIST_FILTERED = watch(name) ? filterAndSortList({ search: inputRef.current?.value, list: LIST }) : LIST
     // console.log(error)
     
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // console.log(e.target.value)
         e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/, '')
         e.target.value = capitalize(e.target.value)
 
@@ -60,8 +65,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
 
     const changeInput = () => {
-        if (!isCleanerOpened)
+        if (!isCleanerOpened) {
             setIsCleanerOpened(true)
+        }
     }
 
     const setInputValue = (value: string)=> {
@@ -93,7 +99,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
     }
 
     const handleFocusInput = () => {
-        if (watch(name) && !isValueInList(watch(name)) && !isDropDownOpened) {
+        if (watch(name) && !isValueInList(inputRef.current?.value) && !isDropDownOpened) {
             toggleDropDown(true)
         }
         dropDownRef.current.firstChild.classList.add('active')
@@ -201,7 +207,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         validate: {
             isNotLatin: (val: string) => !/[a-zA-Z]/.test(val) ||
                 `Поле '${placeholder}' должно содержать лишь кириллицу`,
-            isInList: (val: string) => isValueInList(val) ||
+            isInList: () => isValueInList(inputRef.current?.value) ||
                 `Введена неизвестная ${placeholder.toLowerCase()}`
         },
         onChange: handleChangeInput,

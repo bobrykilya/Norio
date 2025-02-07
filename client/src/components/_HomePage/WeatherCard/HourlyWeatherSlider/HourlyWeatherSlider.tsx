@@ -84,6 +84,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 				className={'hourly_weather_list-cont cont'}
 				onWheel={debounceWithStart(handleScrollList, debounceScrollDelay)}
 				ref={scrollListRef}
+				tabIndex={-1}
 			>
 				{
 					hourlyWeatherList.slice(1, 19).map(weather =>
