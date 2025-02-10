@@ -12,8 +12,9 @@ type DropDownProps = {
 	onClick?: (e: React.MouseEvent<HTMLUListElement, MouseEvent>) => void;
 	className?: string;
 	isScrollContent?: boolean;
+	onKeyDown?: (e: React.KeyboardEvent<HTMLUListElement>) => void;
 }
-const DropDown = forwardRef(({ children, closeHooksParams, onClick, className, isScrollContent }: DropDownProps, ref?: React.RefObject<HTMLUListElement>) => {
+const DropDown = forwardRef(({ children, closeHooksParams, onClick, className, isScrollContent, ...restProps }: DropDownProps, ref?: React.RefObject<HTMLUListElement>) => {
 
 	const dropDownRef = ref || useRef(null)
 	const setModalState = useModalState(s => s.setModalState) //* For forms Esc blur while any DropDown is opened
@@ -50,6 +51,7 @@ const DropDown = forwardRef(({ children, closeHooksParams, onClick, className, i
 			}}
 			tabIndex={-1}
 			ref={dropDownRef}
+			{...restProps}
 		>
 			{children}
 		</ul>

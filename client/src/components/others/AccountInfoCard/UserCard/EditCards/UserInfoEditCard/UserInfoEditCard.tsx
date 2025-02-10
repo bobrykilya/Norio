@@ -1,8 +1,4 @@
-import React, { useEffect, useRef } from 'react'
-import RoundButton from "../../../../../common/Buttons/RoundButton/RoundButton"
-// import { LiaBirthdayCakeSolid } from "react-icons/lia"
-import { IoIosSave } from "react-icons/io"
-import { BiBadgeCheck } from "react-icons/bi"
+import React, { useEffect, useRef, useState } from 'react'
 import { ISignUp } from "../../../../../../../../common/types/Auth-types"
 import { SubmitHandler, useForm } from 'react-hook-form'
 import PhoneInput from "../../../../../common/Inputs/InputFields/PhoneInput/PhoneInput"
@@ -16,9 +12,13 @@ import { BsPassport } from "react-icons/bs"
 import { LiaBirthdayCakeSolid } from "react-icons/lia"
 import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
 import DateInput from "../../../../../common/Inputs/InputFields/DateInput/DateInput"
+import FormStatusButton, { FormStatusButOptions } from "../FormStatusButton/FormStatusButton"
+import FormSubmitButton from "../FormSubmitButton/FormSubmitButton"
+import GenderSelectButton from "./GenderSelectButton/GenderSelectButton"
+import { GENDER_LIST } from "../../../../../../assets/common/Common-data"
+import { ISelectDropDownOptionListElem } from "../../../../../common/SelectDropDown/SelectDropDown"
 
 
-// const diff = (a1, a2, key) => a1.filter(o1 => !a2.some(o2 => o1[key] === o2[key]))
 
 type UserInfoEditForm = Omit<ISignUp, 'avatar'> & {
 	company?: string;
@@ -29,6 +29,8 @@ type UserInfoEditCardProps = {
 }
 const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 
+	const [statusState, setStatusState] = useState<FormStatusButOptions>('ok')
+	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(GENDER_LIST.find(el => el.id === userInfo?.gender) || null)
 	const inputPhoneRef = useRef<HTMLInputElement>(null)
 	const inputBirthdayRef = useRef<HTMLInputElement>(null)
 	const nameInputIcon = <GrUserExpert className='input_field-icon' />
@@ -41,11 +43,12 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		company: '',
 		job: '',
 		birthday: null,
+		gender: null,
 	}
 	const preloadValues = {
 		company: 'Стройпродукт',
 		...userInfo,
-		phone: userInfo?.phone.slice(4)
+		phone: userInfo?.phone.slice(4),
 	}
 
 
@@ -63,8 +66,32 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		defaultValues: defaultValues,
 	})
 
+	const commonProps = {
+		register: register,
+		errors: errors,
+		reset: resetField,
+		withCopyBut: true,
+		cleanerState: true,
+		isEmptyIcon: true,
+	}
+	const dropDownSearchInputProps = {
+		...commonProps,
+		setValue: setValue,
+		setError: setError,
+		watch: watch,
+	}
+
+	const changeGender = (state: ISelectDropDownOptionListElem) => {
+		setGenderState(state)
+		inputBirthdayRef.current.focus()
+	}
+
+	const formHasBeenUpdated = () => {
+		setStatusState('ok')
+	}
+
 	const onSubmit: SubmitHandler<UserInfoEditForm> = async (data) => {
-		if (!isDirty) {
+		if (!isDirty && (!genderState?.id || genderState.id === preloadValues.gender)) {
 			return
 		}
 
@@ -77,11 +104,16 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 			}
 			dirtyData[name] = data[name]
 		})
+
+		if (genderState?.id && genderState.id !== preloadValues.gender) {
+			dirtyData['gender'] = genderState.id
+		}
 		if (!Object.keys(dirtyData)[0]) {
 			return
 		}
 
 		console.log(dirtyData)
+		formHasBeenUpdated()
 	}
 
 	useEffect(() => {
@@ -90,6 +122,12 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 			setValue(name, preloadValues[name])
 		})
 	}, [])
+
+	useEffect(() => {
+		if (isDirty || (genderState?.id && genderState.id !== preloadValues.gender)) {
+			setStatusState('undo')
+		}
+	}, [isDirty, genderState?.id])
 
 
 	return (
@@ -100,29 +138,44 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 			<div
 				className={'user_info_edit_card-header cont'}
 			>
-				<RoundButton
-					className={'user_info_edit_card_status-but'}
-					onClick={() => {}}
-				>
-					<BiBadgeCheck className={'fa-icon'} />
-				</RoundButton>
 				<div
-					className={'user_info_edit_card-title cont white-card'}
+					className={'user_info_edit_card_status_and_title-cont cont'}
 				>
-					Личные данные пользователя
+					<FormStatusButton
+						state={statusState}
+					/>
+					<div
+						className={'user_info_edit_card-title cont white-card'}
+					>
+						Личные данные
+					</div>
+				</div>
+				<div
+					className={'user_info_edit_card_gender-card cont white-card'}
+				>
+					<div
+					    className={'user_info_edit_card_gender-cont cont'}
+					>
+					    <span
+					        className={'user_info_edit_card_gender-title'}
+					    >
+							Пол
+					    </span>
+						<GenderSelectButton
+							selectedState={genderState}
+							onClick={changeGender}
+						/>
+					</div>
 				</div>
 				<div
 					className={'user_info_edit_card_birth-card cont white-card'}
 				>
 					<DateInput
 						name='birthday'
-						register={register}
-						error={errors?.birthday}
-						reset={resetField}
 						inputRef={inputBirthdayRef}
-						withCopyBut={true}
-						cleanerState={Boolean(watch('birthday'))}
 						icon={<LiaBirthdayCakeSolid className='input_field-icon' />}
+						{ ...commonProps }
+						cleanerState={Boolean(watch('birthday'))}
 					/>
 				</div>
 			</div>
@@ -134,60 +187,37 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 				>
 					<PhoneInput
 						name='phone'
-						register={register}
-						error={errors?.phone}
-						reset={resetField}
 						inputRef={inputPhoneRef}
-						withCopyBut={true}
-						cleanerState={true}
+						{ ...commonProps }
 					/>
 					<DropDownSearchInput
 						LIST={STORES_LIST}
 						name='store'
 						placeholder='Точка'
 						icon={<HiOutlineHome className='input_field-icon'/>}
-						register={register}
-						error={errors?.store}
-						reset={resetField}
-						setValue={setValue}
-						setError={setError}
-						watch={watch}
-						withCopyBut={true}
-						cleanerState={true}
+						{ ...dropDownSearchInputProps }
 					/>
 					<UserNameInput
 						name='lastName'
 						placeholder='Фамилия'
-						icon={nameInputIcon}
-						inputType='name'
-						register={register}
-						error={errors?.lastName}
-						reset={resetField}
 						inputMaxLength={25}
-						withCopyBut={true}
-						cleanerState={true}
+						inputType='name'
+						icon={nameInputIcon}
+						{ ...commonProps }
 					/>
 					<UserNameInput
 						name='firstName'
 						placeholder='Имя'
-						icon={nameInputIcon}
 						inputType='name'
-						register={register}
-						error={errors?.firstName}
-						reset={resetField}
-						withCopyBut={true}
-						cleanerState={true}
+						icon={nameInputIcon}
+						{ ...commonProps }
 					/>
 					<UserNameInput
 						name='middleName'
 						placeholder='Отчество'
-						icon={nameInputIcon}
 						inputType='name'
-						register={register}
-						error={errors?.middleName}
-						reset={resetField}
-						withCopyBut={true}
-						cleanerState={true}
+						icon={nameInputIcon}
+						{ ...commonProps }
 					/>
 				</div>
 				<div
@@ -201,28 +231,14 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 							name='company'
 							placeholder='Организация'
 							icon={<MdOutlineWorkOutline className='input_field-icon'/>}
-							register={register}
-							error={errors?.company}
-							reset={resetField}
-							setValue={setValue}
-							setError={setError}
-							watch={watch}
-							withCopyBut={true}
-							cleanerState={true}
+							{ ...dropDownSearchInputProps }
 						/>
 						<DropDownSearchInput
 							LIST={JOBS_LIST}
 							name='job'
 							placeholder='Должность'
 							icon={<GrUserWorker className='input_field-icon'/>}
-							register={register}
-							error={errors?.job}
-							reset={resetField}
-							setValue={setValue}
-							setError={setError}
-							watch={watch}
-							withCopyBut={true}
-							cleanerState={true}
+							{ ...dropDownSearchInputProps }
 						/>
 					</div>
 					<div
@@ -232,7 +248,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 							className={'user_info_edit_card_passport-card cont white-card'}
 						>
 							<button
-								className={'cont'}
+								className={'user_info_edit_card_passport-but cont'}
 								type={'button'}
 							>
 								<BsPassport className={'fa-icon'} />
@@ -241,12 +257,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 								</span>
 							</button>
 						</div>
-						<RoundButton
-							className={'user_info_edit_card_submit-but'}
-							isSubmitBut={true}
-						>
-							<IoIosSave className={'fa-icon'} />
-						</RoundButton>
+						<FormSubmitButton />
 					</div>
 				</div>
 			</div>

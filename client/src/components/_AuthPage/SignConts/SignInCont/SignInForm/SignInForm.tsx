@@ -38,6 +38,13 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
         }
     })
 
+    const commonProps = {
+        register: register,
+        reset: resetField,
+        notSaveUser: notSaveUser,
+        disabled: isFormDisabled,
+    }
+
     const handleChangeCheckBox = () => {
         setNotSaveUser((prev) => !prev)
     }
@@ -77,20 +84,14 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
                     name='username'
                     placeholder='Логин'
                     icon={<FaUser className='input_field-icon'/>}
-                    register={register}
-                    reset={resetField}
-                    notSaveUser={notSaveUser}
-                    disabled={isFormDisabled}
                     inputRefLogin={inputRefLogin}
-                /> 
+                    { ...commonProps }
+                />
                 <PasswordInput
                     name='password'
                     inputType='sign_in'
-                    register={register}
-                    reset={resetField}
                     watch={watch}
-                    notSaveUser={notSaveUser}
-                    disabled={isFormDisabled}
+                    { ...commonProps }
                 />
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser} disabled={isFormDisabled} />

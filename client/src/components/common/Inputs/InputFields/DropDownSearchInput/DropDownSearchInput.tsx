@@ -16,7 +16,7 @@ type DropDownSearchInputProps = ISignFormInput & {
     placeholder: string;
     icon: ICommonVar['icon'];
 }
-const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=null, reset, setValue, setError, watch, disabled=false, withCopyBut, cleanerState=false }: DropDownSearchInputProps) => {
+const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={}, reset, setValue, setError, watch, disabled=false, withCopyBut, cleanerState=false, isEmptyIcon }: DropDownSearchInputProps) => {
 
     const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
@@ -29,7 +29,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
         if (!search) {
             return list
         }
-        
+
         const val = search.toLowerCase().trim()
         const filtered_list = list.filter((el: IDataListElement) => el.title.toLowerCase().includes(val))
         return sortByValPosInString(filtered_list, val, 'title')
@@ -56,7 +56,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
 
     const toggleDropDown = (pos: boolean) => {
         if (pos) {
-            if (error?.type === 'isNotLatin') return
+            if (errors[name]?.type === 'isNotLatin') return
             setIsDropDownOpened(true)
             dropDownRef.current.scrollTo({ top: 0, behavior: 'smooth'})
         } else {
@@ -220,9 +220,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
             inputIcon={icon}
             register={{
                 ref,
-                rest_register
+                rest_register,
+                error: errors[name]
             }}
-            error={error}
             inputRef={inputRef}
             inputParams={{
                 maxLength: 23,
@@ -243,6 +243,11 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, error=nu
                     isExtraButVisible: isCleanerOpened
                 } :
                 null
+            }
+            emptyIconParams={
+                isEmptyIcon && {
+                    isOpened: !isCleanerOpened
+                }
             }
         >
             <DropDown

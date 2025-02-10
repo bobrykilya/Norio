@@ -11,7 +11,7 @@ import { CODES_LIST } from "../../../../../../constants"
 type PhoneInputProps = ISignFormInput & {
     inputRef: React.MutableRefObject<HTMLInputElement>;
 }
-const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRef, withCopyBut, cleanerState=false }: PhoneInputProps) => {
+const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputRef, withCopyBut, cleanerState=false, isEmptyIcon }: PhoneInputProps) => {
 
     // console.log(error)
     const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
@@ -85,9 +85,9 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
             inputIcon={<FiPhoneCall className='input_field-icon' />}
             register={{
                 ref,
-                rest_register
+                rest_register,
+                error: errors[name]
             }}
-            error={error}
             inputRef={inputRef}
             inputParams={{
                 type: 'tel',
@@ -110,6 +110,11 @@ const PhoneInput = ({ name, register, error=null, reset, disabled=false, inputRe
                     onClick: copyInputValue
                 } :
                 null
+            }
+            emptyIconParams={
+                isEmptyIcon && {
+                    isOpened: !isCleanerOpened
+                }
             }
         >
             <span className='phone_mask'>+375</span>

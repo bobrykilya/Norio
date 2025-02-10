@@ -22,6 +22,7 @@ export type ISignUp = {
 	firstName: ICommonVar['firstName'];
 	middleName: ICommonVar['middleName'];
 	avatar: ICommonVar['avatar'];
+	gender: ICommonVar['gender'];
 }
 export type ISignUpReq = ISignUp & {
 	username: string;

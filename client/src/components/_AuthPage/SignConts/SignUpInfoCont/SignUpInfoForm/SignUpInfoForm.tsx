@@ -17,6 +17,19 @@ import SignUp from "../../../../../features/auth/signUp"
 
 
 
+const getDefaultGenderByMiddleName = (middleName: string) => {
+
+    // console.log(middleName.slice(-2))
+    switch (middleName.slice(-2)) {
+        case 'ич':
+        case 'лы': return 'male'
+        case 'на':
+        case 'ва':
+        case 'зы': return 'female'
+        default: return null
+    }
+}
+
 type SignUpInfoFormProps = {
     STORES_LIST: IDataListElement[];
     JOBS_LIST: IDataListElement[];
@@ -56,6 +69,19 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
         }
     })
 
+    const commonProps = {
+        register: register,
+        errors: errors,
+        reset: resetField,
+        disabled: isFormDisabled,
+    }
+    const dropDownSearchInputProps = {
+        ...commonProps,
+        setValue: setValue,
+        setError: setError,
+        watch: watch,
+    }
+
     const checkAvatar: SubmitHandler<ISignUp> = (data) => {
         avatar ? onSubmit(data) : setErrorAvatar({ message: 'Выберите аватар пользователя' })
     }
@@ -69,6 +95,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
     const onSubmit = async (data: ISignUp) => {
         data.phone = '+375' + data.phone
         data.avatar = avatar
+        data.gender = getDefaultGenderByMiddleName(data.middleName)
 
         setIsLoading(true)
         await SignUp.handleSignUp(data as ISignUpReq)
@@ -88,68 +115,43 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
             <div className='inputs-cont cont'>
                 <PhoneInput 
                     name='phone'
-                    register={register}
-                    error={errors?.phone}
-                    reset={resetField}
-                    disabled={isFormDisabled}
                     inputRef={inputRefPhone}
+                    { ...commonProps }
                 />
                 <DropDownSearchInput 
                     LIST={STORES_LIST}
                     name='store'
                     placeholder='Точка'
                     icon={<HiOutlineHome className='input_field-icon'/>}
-                    register={register}
-                    error={errors?.store}
-                    reset={resetField}
-                    setValue={setValue}
-                    setError={setError}
-                    watch={watch}
-                    disabled={isFormDisabled}
+                    { ...dropDownSearchInputProps }
                 />
                 <DropDownSearchInput 
                     LIST={JOBS_LIST}
                     name='job'
                     placeholder='Должность'
                     icon={<GrUserWorker className='input_field-icon'/>}
-                    register={register}
-                    error={errors?.job}
-                    reset={resetField}
-                    setValue={setValue}
-                    setError={setError}
-                    watch={watch}
-                    disabled={isFormDisabled}
+                    { ...dropDownSearchInputProps }
                 />
                 <UserNameInput
                     name='lastName'
                     placeholder='Фамилия'
                     icon={nameInputIcon}
                     inputType='name'
-                    register={register}
-                    error={errors?.lastName}
-                    reset={resetField}
-                    inputMaxLength={25}
-                    disabled={isFormDisabled}
+                    { ...commonProps }
                 />
                 <UserNameInput
                     name='firstName'
                     placeholder='Имя'
                     icon={nameInputIcon}
                     inputType='name'
-                    register={register}
-                    error={errors?.firstName}
-                    reset={resetField}
-                    disabled={isFormDisabled}
+                    { ...commonProps }
                 />
                 <UserNameInput
                     name='middleName'
                     placeholder='Отчество'
                     icon={nameInputIcon}
                     inputType='name'
-                    register={register}
-                    error={errors?.middleName}
-                    reset={resetField}
-                    disabled={isFormDisabled}
+                    { ...commonProps }
                 />
             </div>
             <div className='avatar_and_submit_buts-cont cont'>
@@ -160,7 +162,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     error={errorAvatar}
                     setError={setErrorAvatar}
                     disabled={isAvatarButDisabled}
-                    isAvatarButTabDisabled={isFormDisabled}
+                    isTabDisabled={isFormDisabled}
                 />
                 <SubmitBut
                     icon={<BiLogInCircle className='fa-icon'/>}

@@ -3,22 +3,12 @@
 
 
 .jumping_card_cover-cont
-    //border: 5px solid black
+    //border: 5px solid green
     $rad-list: 120px
     $scale-card: 0.6
     $before-margin: 1.5rem
     $before-width: 6rem
-    position: fixed
-    left: 50%
-    top: 0
-    width: 100vw
-    height: 100vh
-    backdrop-filter: blur(0)
     z-index: 15
-    transform: translateX(-50%)
-    transition: all $dur-jumping-card * 1.25 ease
-    background-color: rgba(0, 0, 0, 0.35)
-    opacity: 0
     pointer-events: none
     .jumping_card-cont
         //border: 2px solid black
@@ -32,6 +22,7 @@
         transition: all calc($dur-jumping-card * 1.33) ease
         border-radius: $rad-list * 2
         transform: translateX(-50%) translateY(100%) scale($scale-card)
+        opacity: 0
         pointer-events: none
         &::before
             content: ''
@@ -44,6 +35,17 @@
             transition: all 0 0.1s $dur-jumping-card ease
             opacity: 0
             transform: translateY(14rem)
+    .jumping_card-cover
+        //border: 2px solid red
+        width: 100%
+        height: 100%
+        z-index: -5
+        background-color: rgba(0, 0, 0, 0.35)
+        transition: all $dur-jumping-card * 1.25 ease
+        opacity: 0
+        backdrop-filter: blur(0)
+        -webkit-backdrop-filter: blur(0)
+        pointer-events: none
     &.top
         .jumping_card-cont
             bottom: auto
@@ -81,18 +83,22 @@
                 height: $before-width
                 transform: translateX(14rem)
     &.opened
-        opacity: 1
-        backdrop-filter: blur(10px)
-        -webkit-backdrop-filter: blur(10px)
         pointer-events: auto
         .jumping_card-cont
+            transition: all calc($dur-jumping-card * 1.33) ease, opacity calc($dur-jumping-card * 0.7) ease
             border-radius: $rad-list $rad-list 0 0
             transform: translateX(-50%)
+            opacity: 1
             pointer-events: auto
             &::before
                 transition: all calc($dur-jumping-card * 1.7) calc($dur-jumping-card * 0.7) $trans-bounce-style
                 opacity: 1
                 transform: none
+        .jumping_card-cover
+            pointer-events: auto
+            opacity: 1
+            backdrop-filter: blur(10px)
+            -webkit-backdrop-filter: blur(10px)
         &.top
             .jumping_card-cont
                 border-radius: 0 0 $rad-list $rad-list

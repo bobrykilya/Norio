@@ -141,6 +141,7 @@ const WeatherCard = () => {
 							text: 'Выбрать город для прогноза погоды',
 							position: 'bottom',
 						}}
+						isTabDisabled={true}
 					/>
 					<CardLinkButton
 						onClick={toggleWeatherCard}

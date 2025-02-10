@@ -16,11 +16,12 @@ class UserRepository {
 		lastName,
 		firstName,
 		middleName,
+		gender,
 		avatar,
 		isStore,
 	}: IUserRepository) {
 
-		const response = await queryDB("INSERT INTO users (username, password, role, status, phone, store, job, last_name, first_name, middle_name, avatar, is_store) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING user_id", [
+		const response = await queryDB("INSERT INTO users (username, password, role, status, phone, store, job, last_name, first_name, middle_name, gender, avatar, is_store) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING user_id", [
 			username, 
 			hashedPassword, 
 			role, 
@@ -31,8 +32,9 @@ class UserRepository {
 			lastName, 
 			firstName, 
 			middleName, 
-			avatar, 
-			isStore
+			gender,
+			avatar,
+			isStore,
 		])
 
 		return response.rows[0].user_id

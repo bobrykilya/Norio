@@ -13,7 +13,7 @@ type NameInputProps = ISignFormInput & {
     inputMaxLength?: number;
     inputRefLogin?: React.MutableRefObject<HTMLInputElement> | null;
 }
-const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, error=null, reset, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null, withCopyBut, cleanerState=false }: NameInputProps) => {
+const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, errors={}, reset, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null, withCopyBut, cleanerState=false, isEmptyIcon }: NameInputProps) => {
 
     const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
     const inputRef = inputRefLogin || useRef(null)
@@ -89,9 +89,9 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
             inputIcon={icon}
             register={{
                 ref,
-                rest_register
+                rest_register,
+                error: errors[name]
             }}
-            error={error}
             inputRef={inputRef}
             inputParams={{
                 type: 'text',
@@ -111,6 +111,11 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
                     isExtraButVisible: isCleanerOpened
                 } :
                 null
+            }
+            emptyIconParams={
+                isEmptyIcon && {
+                    isOpened: !isCleanerOpened
+                }
             }
         />
     )

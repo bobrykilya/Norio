@@ -30,6 +30,10 @@ export type ICommonVar = {
 	firstName: string;
 	middleName: string;
 	avatar: string;
+	isStore: boolean;
+	company: string;
+	birthday: number;
+	gender: 'male' | 'female';
 	fastSession: boolean;
 	id: number;
 	userId: ICommonVar['id'];

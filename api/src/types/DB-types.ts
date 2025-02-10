@@ -16,7 +16,10 @@ export type IUserRepository = {
 	firstName: ICommonVar['firstName'];
 	middleName: ICommonVar['middleName'];
 	avatar: ICommonVar['avatar'];
-	isStore: boolean;
+	isStore: ICommonVar['isStore'];
+	company?: ICommonVar['company'];
+	birthday?: ICommonVar['birthday'];
+	gender?: ICommonVar['gender'];
 }
 
 export type IAuthDeviceRepository = {

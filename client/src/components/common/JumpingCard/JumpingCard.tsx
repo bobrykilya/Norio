@@ -24,22 +24,16 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
 
 
     const handleCloseJumpingCard = () => {
-        // console.log('close list')
         setIsJumpingCardOpened(false)
         setTimeout(closeHooksParams.callback, 300)
     }
 
-    const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleClickOutside = () => {
         if ([...closeHooksParams.conditionsList, !modalState].includes(false)) {
             return
         }
-        e.stopPropagation()
 
-        const target = e.target as Element
-
-        if (target?.className.includes('jumping_card_cover-cont')) {
-            handleCloseJumpingCard()
-        }
+        handleCloseJumpingCard()
     }
 
     useCloseOnEsc({
@@ -69,8 +63,7 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
 
     return ( 
         <div 
-            className={`${className || ''} jumping_card_cover-cont cont cover ${isJumpingCardOpened ? 'opened' : ''} ${position || ''}`}
-            onClick={handleClickOutside}
+            className={`${className || ''} jumping_card_cover-cont cover cont ${isJumpingCardOpened ? 'opened' : ''} ${position || ''}`}
         >
             <div
                 className={'jumping_card-cont cont'}
@@ -86,6 +79,10 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
                     isCardOpened && other_children
                 }
             </div>
+            <div
+                className={'jumping_card-cover'}
+                onClick={handleClickOutside}
+            />
         </div>
      )
 }

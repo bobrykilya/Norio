@@ -11,14 +11,17 @@ import ToolTip from "../../others/ToolTip/ToolTip"
 
 
 
-type AvatarButtonProps = IReactHookForm & {
+type AvatarButtonProps = Omit<IReactHookForm, 'errors'> & {
     LIST: IDataListElement[];
     currentAvatar: string | null;
     setAvatar: (avatar: string) => void;
     disabled: boolean;
-    isAvatarButTabDisabled: boolean;
+    isTabDisabled: boolean;
+    error?: {
+        message: string
+    }
 }
-const AvatarButton = ({ LIST, currentAvatar, setAvatar, error, setError, disabled=false,  isAvatarButTabDisabled=false }: AvatarButtonProps) => {
+const AvatarButton = ({ LIST, currentAvatar, setAvatar, error, setError, disabled=false,  isTabDisabled=false }: AvatarButtonProps) => {
     
     const { avatarListCardState, setAvatarListCardState } = useAvatarListCardState()
     const [isNoAvatarOpened, setIsNoAvatarOpened] = useState(true)
@@ -80,7 +83,7 @@ const AvatarButton = ({ LIST, currentAvatar, setAvatar, error, setError, disable
             <button
                 className={`avatar-but ${error?.message ? 'error' : ''}`}
                 type='button'
-                tabIndex={isAvatarButTabDisabled ? -1 : 0}
+                tabIndex={isTabDisabled ? -1 : 0}
                 onClick={handleClickAvatarButton}
                 ref={avatarButtonRef}
             >

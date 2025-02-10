@@ -6,6 +6,7 @@ import timeout from "../../../utils/timeout"
 import { sortByAlphabet } from "../../../utils/sort"
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import { useAuthState } from "../../../stores/Auth-store"
+import { nextElems, prevElems } from "../../../utils/focusElementSibling"
 
 
 
@@ -33,73 +34,54 @@ const AvatarListCard = ({ LIST, currentAvatar, isAvatarListCardOpened, closeAvat
             e.preventDefault()
         }
 
-        const nextElems= (elem: HTMLElement, steps?: number) => {
-            const getNextElem = (elem: HTMLElement) => {
-                return elem.parentElement.nextElementSibling?.children[0] as HTMLElement
-            }
-            if (steps && steps !== 1) {
-                return nextElems(getNextElem(elem), steps - 1)
-            }
-            return getNextElem(elem)
-        }
-        const prevElems= (elem: HTMLElement, steps?: number) => {
-            const getNextElem = (elem: HTMLElement) => {
-                return elem.parentElement.previousElementSibling?.children[0] as HTMLElement
-            }
-            if (steps && steps !== 1) {
-                return prevElems(getNextElem(elem), steps - 1)
-            }
-            return getNextElem(elem)
-        }
 
         const active: HTMLElement = e.target as HTMLElement
         switch(e.code) {
             case 'ArrowUp':
-                prevElems(active, 4).focus()
+                prevElems(active, 4, true)?.focus()
                 break
             case 'ArrowDown':
-                nextElems(active, 4).focus()
+                nextElems(active, 4, true)?.focus()
                 break
             case 'ArrowLeft':
-                prevElems(active).focus()
+                prevElems(active, 1, true)?.focus()
                 break
             case 'ArrowRight':
-                nextElems(active).focus()
+                nextElems(active, 1, true)?.focus()
                 break
         }
     }
 
-    //* Active element auto-focus
+    //* Active element auto-focus after list opening
     useEffect(() => {
         const focusActiveElem = async () => {
-            if (isAvatarListCardOpened) {
-                if (currentAvatar){
-                    // console.log(activeElemRef.current)
-                    await timeout(400)
-                    activeElemRef.current?.focus()
-                } else {
-                    // console.log('list focus')
-                    // listRef.current.focus()
+                if (!currentAvatar) {
+                    return
                 }
-            }
+                
+                await timeout(500)
+                activeElemRef.current?.focus()
         }
 
-        focusActiveElem()
+        if (isAvatarListCardOpened) {
+            focusActiveElem()
+        }
     }, [isAvatarListCardOpened])
 
-    const arrowKeyDownOnAvatarBut = (e: KeyboardEvent) => {
-        if (e.target instanceof HTMLElement) {
-            if (e.target.classList.contains('avatar-but')) {
-                if (e.code.includes('Arrow')) {
-                    e.preventDefault()
-                    // @ts-ignore
-                    listRef.current.children[0]?.children[0].focus()
+
+    useEffect(() => {
+        const arrowKeyDownOnAvatarBut = (e: KeyboardEvent) => {
+            if (e.target instanceof HTMLElement) {
+                if (e.target.classList.contains('avatar-but')) {
+                    if (e.code.includes('Arrow')) {
+                        e.preventDefault()
+                        // @ts-ignore
+                        listRef.current.children[0]?.children[0].focus()
+                    }
                 }
             }
         }
-    }
 
-    useEffect(() => {
         if (isAvatarListCardOpened && !currentAvatar) {
             window.addEventListener("keydown", arrowKeyDownOnAvatarBut)
 

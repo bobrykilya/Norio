@@ -3,7 +3,6 @@ import { focusInput } from "../../../../../utils/focusInput"
 import InputError from "../InputUtils/InputError/InputError"
 import InputCleaner from "../InputUtils/InputCleaner/InputCleaner"
 import { ICommonVar } from "../../../../../../../common/types/Global-types"
-import { IReactHookForm } from "../../../../../types/Auth-types"
 import RoundButton from "../../../Buttons/RoundButton/RoundButton"
 import { ToolTipProps } from "../../../../others/ToolTip/ToolTip"
 import { copyText } from "../../../../../utils/copy"
@@ -12,12 +11,15 @@ import { RxCopy } from "react-icons/rx"
 
 
 
-type InputFieldProps = Required<Pick<IReactHookForm, 'error'>> & {
+type InputFieldProps = {
 	contClassName: string;
 	inputIcon: ICommonVar['icon'];
 	register: {
 		ref: any;
 		rest_register: any;
+		error?: {
+			message: string;
+		};
 	};
 	inputRef: React.MutableRefObject<HTMLInputElement> | null;
 	inputParams: {
@@ -44,9 +46,12 @@ type InputFieldProps = Required<Pick<IReactHookForm, 'error'>> & {
 		onClick?: () => void;
 		toolTip?: ToolTipProps;
 	};
+	emptyIconParams?: {
+		isOpened: boolean;
+	};
 	children?: any;
 }
-const InputField = ({ contClassName, inputIcon, register, error, inputRef, inputParams, cleanerParams, extraButParams, children }: InputFieldProps) => {
+const InputField = ({ contClassName, inputIcon, register, inputRef, inputParams, cleanerParams, extraButParams, emptyIconParams, children }: InputFieldProps) => {
 
 	const copyInputValue = () => {
 		copyText(inputRef.current.value)
@@ -54,7 +59,7 @@ const InputField = ({ contClassName, inputIcon, register, error, inputRef, input
 
 
 	return (
-		<div className={`${contClassName || ''} input_field-cont cont ${extraButParams?.isCopy ? 'with_copy' : ''} ${error?.message ? 'error' : ''}`}>
+		<div className={`${contClassName || ''} input_field-cont cont ${extraButParams?.isCopy ? 'with_copy' : ''} ${register.error?.message ? 'error' : ''}`}>
             <span
 				className='input_field-label'
 				onClick={() => focusInput(inputRef)}
@@ -71,8 +76,14 @@ const InputField = ({ contClassName, inputIcon, register, error, inputRef, input
 			/>
 			{inputIcon}
 			{children}
-			<InputError error={error} onClick={() => focusInput(inputRef)} />
+			<InputError error={register.error} onClick={() => focusInput(inputRef)} />
 			<InputCleaner opened={cleanerParams.isCleanerOpened} onClick={cleanerParams.handleClickCleaner} />
+			{
+				emptyIconParams &&
+				<div
+				    className={`input_field_empty-icon ${emptyIconParams.isOpened ? 'opened' : ''}`}
+				/>
+			}
 			{
 				extraButParams &&
 				(

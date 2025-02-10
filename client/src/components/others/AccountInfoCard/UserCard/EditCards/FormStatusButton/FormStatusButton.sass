@@ -1,0 +1,31 @@
+@import '../../../../../../variables'
+
+
+
+.user_info_edit_card_status-but
+    border: 2px solid $color-backgr
+    $size-status-but: 3.5rem
+    width: $size-status-but !important
+    height: $size-status-but !important
+    background-color: $color-blue-main
+    pointer-events: none
+    .fa-icon
+        color: $color-backgr
+    .switch_status-elem
+        position: absolute
+        width: 100%
+        height: $size-status-but
+        transition: all 0.3s ease
+        transform: scale(0.5)
+        opacity: 0
+        &.active
+            transform: none
+            opacity: 1
+    .undo-cont
+        .fa-icon
+            font-size: 1.3rem
+    .ok-cont
+        .fa-icon
+            font-size: 1.8rem
+    &.undo
+        pointer-events: auto

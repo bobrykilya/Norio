@@ -44,6 +44,13 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
         }
     })
 
+    const commonProps = {
+        register: register,
+        errors: errors,
+        reset: resetField,
+        disabled: isFormDisabled,
+    }
+
     //* confirmPassword's error react validation
     useEffect(() => {
         // console.log(watch('password'), watch('confirmPassword'))
@@ -82,28 +89,19 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
                     placeholder='Логин'
                     icon={<FaUser className='input_field-icon'/>}
                     inputType='sign_up'
-                    register={register}
-                    error={errors?.username}
-                    reset={resetField}
-                    disabled={isFormDisabled}
                     inputRefLogin={inputRefLogin}
+                    { ...commonProps }
                 />
                 <PasswordInput
                     name='password'
                     inputType='sign_up'
-                    register={register}
-                    error={errors?.password}
-                    reset={resetField}
-                    disabled={isFormDisabled}
+                    { ...commonProps }
                 />
                 <PasswordInput
                     name='confirmPassword'
                     inputType='confirm'
-                    register={register}
-                    error={errors?.confirmPassword}
-                    reset={resetField}
                     watch={watch}
-                    disabled={isFormDisabled}
+                    { ...commonProps }
                 />
             </div>
             <div className={`blur_icon-cont cont ${isFormBlur ? 'active' : ''}`}>

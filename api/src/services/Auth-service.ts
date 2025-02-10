@@ -114,6 +114,7 @@ class AuthService {
 							firstName,
 							middleName,
 							avatar,
+							gender,
 							fingerprint,
 							queryTime,
 							deviceType,
@@ -145,6 +146,7 @@ class AuthService {
 				firstName,
 				middleName,
 				avatar,
+				gender,
 				isStore,
 			}
 			userId = await UserRepository.createUser(userInfo)

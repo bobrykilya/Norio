@@ -7,6 +7,7 @@ export type IDataListElement = {
     title: string;
     cityId?: DefaultCityOptions;
 }
+
 export const STORES_LIST: IDataListElement[] = [
     {
         id: 'office',

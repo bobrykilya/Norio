@@ -10,8 +10,8 @@ type DateInputProps = ISignFormInput & {
 	inputRef: React.MutableRefObject<HTMLInputElement>;
 	icon: ICommonVar['icon'];
 }
-const DateInput = ({ name, register, error=null, reset, disabled=false, inputRef, icon, withCopyBut, cleanerState=false }: DateInputProps) => {
-	
+const DateInput = ({ name, register, errors={}, reset, disabled=false, inputRef, icon, withCopyBut, cleanerState=false, isEmptyIcon }: DateInputProps) => {
+
 	const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
 	// const opts = {
 	//
@@ -64,8 +64,8 @@ const DateInput = ({ name, register, error=null, reset, disabled=false, inputRef
 			register={{
 				ref,
 				rest_register,
+				error: errors[name]
 			}}
-			error={error}
 			inputRef={inputRef}
 			inputParams={{
 				inputMode: 'number',
@@ -86,6 +86,11 @@ const DateInput = ({ name, register, error=null, reset, disabled=false, inputRef
 					// onClick: copyInputValue
 				} :
 				null
+			}
+			emptyIconParams={
+				isEmptyIcon && {
+					isOpened: !isCleanerOpened
+				}
 			}
 		/>
 	)

@@ -8,7 +8,7 @@ import { VscEye, VscEyeClosed } from "react-icons/vsc"
 
 
 
-const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset, watch=false, notSaveUser=false, disabled=false }: ISignFormInput) => {
+const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, watch=false, notSaveUser=false, disabled=false }: ISignFormInput) => {
 
     const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCleanerOpened, setIsCleanerOpened] = useState(false)
@@ -110,9 +110,9 @@ const PasswordInput = ({ name, inputType='sign_in', register, error=null, reset,
             inputIcon={<FaKey className='input_field-icon'/>}
             register={{
                 ref,
-                rest_register
+                rest_register,
+                error: errors[name]
             }}
-            error={error}
             inputRef={inputRef}
             inputParams={{
                 type: isLockOpened ? 'text' : 'password',

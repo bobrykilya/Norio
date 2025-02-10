@@ -47,7 +47,7 @@ const App = () => {
                 </Routes>
             </AnimatePresence>
             <CoverAppTitle block={!!blockErrorState} />
-            <div className="main_bg-gradient bg" />
+            <div className="main_bg-gradient cover" />
         </div>
     )
 }

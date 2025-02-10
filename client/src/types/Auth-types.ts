@@ -10,7 +10,7 @@ export type SignContProps = {
 }
 
 export type IReactHookForm = {
-    error?: any;
+	errors?: any;
     reset?: any;
     watch?: any
     setError?: any;
@@ -25,6 +25,7 @@ export type ISignFormInput = IReactHookForm & {
     inputType?: SignFormInputTypesOptions;
 	withCopyBut?: boolean;
 	cleanerState?: boolean;
+	isEmptyIcon?: boolean;
 }
 
 export type SignFormInputTypesOptions = 'sign_in' | 'sign_up' | 'name' | 'confirm';

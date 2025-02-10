@@ -6,8 +6,10 @@ import { HiDocumentSearch } from "react-icons/hi"
 import { TbTableFilled } from "react-icons/tb"
 import { IoMdAnalytics } from "react-icons/io"
 import { RiAppsFill } from "react-icons/ri"
+import { IoFemaleOutline, IoMaleOutline } from "react-icons/io5"
 import { ICommonVar } from "../../../../common/types/Global-types"
 import { IDeviceLocation } from "../../../../common/types/Device-types"
+import { ISelectDropDownOptionListElem } from "../../components/common/SelectDropDown/SelectDropDown"
 
 
 
@@ -140,5 +142,18 @@ export const LOCATIONS_LIST: IDeviceLocation[] = [
 			lat: 54.282272,
 			lon: 26.820829,
 		}
+	},
+]
+
+export const GENDER_LIST: ISelectDropDownOptionListElem[] = [
+	{
+		id: 'male',
+		title: 'Муж',
+		icon: <IoMaleOutline className={'fa-icon'} />,
+	},
+	{
+		id: 'female',
+		title: 'Жен',
+		icon: <IoFemaleOutline className={'fa-icon'} />,
 	},
 ]
