@@ -59,8 +59,8 @@ class WeatherService {
 			locationWeather = {
 				cityId: location.city.id,
 				cityTitle: location.city.title || (await this.getLocationCityTitleByCoords(location.coords)).toLowerCase(),
-				forecastTimeInSec: currentTime,
-				forecastDeadTimeInSec: currentTime + (WEATHER_UPDATE_TIME_IN_MIN * 60) + 10,
+				timeInSec: currentTime,
+				deadTimeInSec: currentTime + (WEATHER_UPDATE_TIME_IN_MIN * 60) + 10,
 				current: getWeatherObjectByKeys<ILocationWeatherElem>(weatherData.current, REQUIRED_KEYS_LIST),
 				hourly: weatherData.hourly.map((item) => getWeatherObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),
 				daily: weatherData.daily.map((item) => getWeatherObjectByKeys<ILocationWeatherElem>(item, REQUIRED_KEYS_LIST)),

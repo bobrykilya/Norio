@@ -4,7 +4,7 @@
 
 .user_info_edit-form
     //border: 1px solid yellow
-    margin-top: 15%
+    margin-top: 15vh
     overflow: visible
     width: auto
     //flex-shrink: 1
@@ -14,9 +14,9 @@
         margin-right: 1.2rem
     .user_info_edit_card-header
         //border: 3px solid orange
-        width: auto
+        width: 100%
         flex-direction: row
-        justify-content: space-between
+        justify-content: flex-end
         align-items: flex-start
         overflow: visible
         //flex-shrink: 1
@@ -33,25 +33,15 @@
                 font-weight: bolder
                 margin-left: $margin-white-card
                 white-space: nowrap
-        .user_info_edit_card_gender-card
+        .user_info_edit_card_birth_and_gender-cont
             width: auto
-            padding: 1.3rem 0.8rem
-            margin-left: $margin-white-card
-            .user_info_edit_card_gender-cont
-                height: 2rem
-                width: auto
-                overflow: visible
-                .user_info_edit_card_gender-title
-                    //border: 1px solid green
-                    width: 100%
-                    padding-left: 0.9rem
-                    font-size: $size-main-text - 0.2rem
-                    font-weight: 600
-        .user_info_edit_card_birth-card
-            width: auto
+            flex-direction: row
+            overflow: visible
             margin-left: $margin-white-card
             .input_field-cont
                 margin-top: 0
+            .gender_select_but_card-cont
+                margin-left: $margin-white-card * 2
     .user_info_edit_card-footer
         //border: 5px solid green
         flex-direction: row

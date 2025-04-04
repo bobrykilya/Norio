@@ -6,7 +6,7 @@ import { HiDocumentSearch } from "react-icons/hi"
 import { TbTableFilled } from "react-icons/tb"
 import { IoMdAnalytics } from "react-icons/io"
 import { RiAppsFill } from "react-icons/ri"
-import { IoFemaleOutline, IoMaleOutline } from "react-icons/io5"
+import { IoFemaleOutline, IoMaleFemaleOutline, IoMaleOutline } from "react-icons/io5"
 import { ICommonVar } from "../../../../common/types/Global-types"
 import { IDeviceLocation } from "../../../../common/types/Device-types"
 import { ISelectDropDownOptionListElem } from "../../components/common/SelectDropDown/SelectDropDown"
@@ -155,5 +155,10 @@ export const GENDER_LIST: ISelectDropDownOptionListElem[] = [
 		id: 'female',
 		title: 'Жен',
 		icon: <IoFemaleOutline className={'fa-icon'} />,
+	},
+	{
+		id: 'gay',
+		title: 'Аниме',
+		icon: <IoMaleFemaleOutline className={'fa-icon'} />,
 	},
 ]

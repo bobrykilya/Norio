@@ -12,8 +12,8 @@ import { BsPassport } from "react-icons/bs"
 import { LiaBirthdayCakeSolid } from "react-icons/lia"
 import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
 import DateInput from "../../../../../common/Inputs/InputFields/DateInput/DateInput"
-import FormStatusButton, { FormStatusButOptions } from "../FormStatusButton/FormStatusButton"
-import FormSubmitButton from "../FormSubmitButton/FormSubmitButton"
+import FormStatusButton, { FormStatusButOptions } from "../common/FormStatusButton/FormStatusButton"
+import FormSubmitButton from "../common/FormSubmitButton/FormSubmitButton"
 import GenderSelectButton from "./GenderSelectButton/GenderSelectButton"
 import { GENDER_LIST } from "../../../../../../assets/common/Common-data"
 import { ISelectDropDownOptionListElem } from "../../../../../common/SelectDropDown/SelectDropDown"
@@ -29,6 +29,7 @@ type UserInfoEditCardProps = {
 }
 const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 
+	// console.log('UserInfoEditCard form has been updated')
 	const [statusState, setStatusState] = useState<FormStatusButOptions>('ok')
 	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(GENDER_LIST.find(el => el.id === userInfo?.gender) || null)
 	const inputPhoneRef = useRef<HTMLInputElement>(null)
@@ -58,6 +59,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		resetField,
 		watch,
 		setError,
+		getValues,
 		setValue,
 		formState: { errors, dirtyFields, isDirty },
 	} = useForm<UserInfoEditForm>({
@@ -65,6 +67,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		reValidateMode: "onChange",
 		defaultValues: defaultValues,
 	})
+	// console.log(watch('phone'))
 
 	const commonProps = {
 		register: register,
@@ -98,12 +101,12 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		data.phone = '+375' + data.phone
 		let dirtyData = {}
 
-		Object.keys(dirtyFields).map(name => {
+		for (let name in dirtyFields) {
 			if (data[name] === preloadValues[name]) {
 				return
 			}
 			dirtyData[name] = data[name]
-		})
+		}
 
 		if (genderState?.id && genderState.id !== preloadValues.gender) {
 			dirtyData['gender'] = genderState.id
@@ -117,10 +120,10 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 	}
 
 	useEffect(() => {
-		Object.keys(defaultValues).map(name => {
+		 for (let name in defaultValues) {
 			// @ts-ignore
 			setValue(name, preloadValues[name])
-		})
+		}
 	}, [])
 
 	useEffect(() => {
@@ -151,31 +154,18 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 					</div>
 				</div>
 				<div
-					className={'user_info_edit_card_gender-card cont white-card'}
-				>
-					<div
-					    className={'user_info_edit_card_gender-cont cont'}
-					>
-					    <span
-					        className={'user_info_edit_card_gender-title'}
-					    >
-							Пол
-					    </span>
-						<GenderSelectButton
-							selectedState={genderState}
-							onClick={changeGender}
-						/>
-					</div>
-				</div>
-				<div
-					className={'user_info_edit_card_birth-card cont white-card'}
+					className={'user_info_edit_card_birth_and_gender-cont cont white-card'}
 				>
 					<DateInput
-						name='birthday'
+						name="birthday"
 						inputRef={inputBirthdayRef}
-						icon={<LiaBirthdayCakeSolid className='input_field-icon' />}
-						{ ...commonProps }
+						icon={<LiaBirthdayCakeSolid className="input_field-icon"/>}
+						{...commonProps}
 						cleanerState={Boolean(watch('birthday'))}
+					/>
+					<GenderSelectButton
+						selectedState={genderState}
+						onClick={changeGender}
 					/>
 				</div>
 			</div>
@@ -188,6 +178,8 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 					<PhoneInput
 						name='phone'
 						inputRef={inputPhoneRef}
+						getValues={getValues}
+						setValue={setValue}
 						{ ...commonProps }
 					/>
 					<DropDownSearchInput

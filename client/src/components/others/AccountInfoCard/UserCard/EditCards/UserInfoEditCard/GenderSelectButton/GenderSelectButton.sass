@@ -2,60 +2,76 @@
 
 
 
-.gender_select_but-cont
-    //border: 1px solid black
-    //border: none
-    max-width: none
-    width: 3.8rem
-    height: 1.6rem
-    &::before
-        content: ''
-        position: absolute
-        bottom: 0
-        width: 75%
-        height: 1px
-        background-color: rgba($color-main-text, 0.3)
-    .select-but
-        //border: 1px solid blue
-        min-height: 0
-        height: 100%
-        &:hover, &:focus
-            background-color: rgba($color-blue-main, 0.1)
-            &::before
-                opacity: 0
-            .select_but_selected
-                color: rgba($color-blue-main, 0.8)
-        &:active
-            background-color: rgba($color-blue-main, 0.2)
-        .select_but-content
-            .select_but_selected
-                //border: 1px solid black
-                color: $color-main-text
-                font-size: $size-main-text
-                font-weight: 600
-            &.active
+.gender_select_but_card-cont
+    //border: 1px solid green
+    height: 2rem
+    width: auto
+    overflow: visible
+    .gender_select_but-title
+        //border: 1px solid green
+        width: 100%
+        margin-left: 1.2rem
+        margin-bottom: 0.1rem
+        font-size: $size-main-text - 0.2rem
+        font-weight: 600
+    .gender_select_but-cont
+        border: 1px solid rgba($color-main-text, 0.3)
+        //border: none
+        max-width: none
+        width: 4rem
+        height: 1.8rem
+        //&::before
+        //    content: ''
+        //    position: absolute
+        //    bottom: 0
+        //    width: 75%
+        //    height: 1px
+        //    background-color: rgba($color-main-text, 0.3)
+        .select-but
+            //border: 1px solid blue
+            width: 100%
+            min-height: 0
+            height: 100%
+            &:hover, &:focus
                 background-color: rgba($color-blue-main, 0.1)
-                text-shadow: rgba($color-cover-light, 0.4) 0 0 10px
-                .fa-icon
-                    color: rgba($color-blue-main, 0.8)
+                &::before
+                    opacity: 0
                 .select_but_selected
                     color: rgba($color-blue-main, 0.8)
-    .dropdown-cont
-        .option-but
-            .fa-icon
-                margin-right: 0.1rem
-.user_info_edit_card_gender_empty-icon
-    position: absolute
-    right: 0.3rem
-    top: 1.1rem
-    $size: 0.4rem
-    width: $size
-    height: $size
-    border-radius: 50%
-    transition: all 0.2s ease
-    opacity: 0
-    transform: scale(2)
-    background-color: $color-notif
-    &.visible
-        opacity: 1
-        transform: none
+            &:active
+                background-color: rgba($color-blue-main, 0.2)
+                .select_but-content
+                    .fa-icon
+                        transform: rotate(-45deg)
+            .select_but-content
+                .select_but_selected
+                    //border: 1px solid black
+                    color: $color-main-text
+                    font-size: $size-main-text
+                    font-weight: 600
+                &.active
+                    background-color: rgba($color-blue-main, 0.1)
+                    text-shadow: rgba($color-cover-light, 0.4) 0 0 10px
+                    .fa-icon
+                        color: rgba($color-blue-main, 0.8)
+                    .select_but_selected
+                        color: rgba($color-blue-main, 0.8)
+        .dropdown-cont
+            .option-but
+                .fa-icon
+                    margin-right: 0.1rem
+    .gender_select_but_empty-icon
+        position: absolute
+        right: 0.3rem
+        top: 1.14rem
+        $size: 0.4rem
+        width: $size
+        height: $size
+        border-radius: 50%
+        transition: all 0.2s ease
+        opacity: 0
+        transform: scale(2)
+        background-color: $color-notif
+        &.visible
+            opacity: 1
+            transform: none

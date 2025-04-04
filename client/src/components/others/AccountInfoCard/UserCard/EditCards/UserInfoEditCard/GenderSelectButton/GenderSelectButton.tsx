@@ -13,7 +13,14 @@ const GenderSelectButton = ({ selectedState, onClick }: GenderSelectButtonProps)
 
 
 	return (
-		<>
+		<div
+			className={'gender_select_but_card-cont cont'}
+		>
+			<span
+				className={'gender_select_but-title'}
+			>
+				Пол
+			</span>
 			<SelectButton
 				contClassName={'gender_select_but-cont'}
 				OPTIONS_LIST={GENDER_LIST}
@@ -22,9 +29,9 @@ const GenderSelectButton = ({ selectedState, onClick }: GenderSelectButtonProps)
 				onClick={onClick}
 			/>
 			<div
-				className={`user_info_edit_card_gender_empty-icon ${!Boolean(selectedState) ? 'visible' : ''}`}
+				className={`gender_select_but_empty-icon ${!Boolean(selectedState) ? 'visible' : ''}`}
 			/>
-		</>
+		</div>
 	)
 }
 

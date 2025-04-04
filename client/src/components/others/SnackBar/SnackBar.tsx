@@ -23,7 +23,8 @@ type SnackBarProps = {
 const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
     const { toasts } = useToasterStore()
-    const setModalState = useModalState(s => s.setModalState)
+    // const setModalState = useModalState(s => s.setModalState)
+    const setSnackBarState = useModalState(s => s.setSnackBarState)
 
     useEffect(() => {
         toasts
@@ -48,9 +49,9 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
     useEffect(() => {
         if (toasts[0]) {
             if (toasts.find(t => t.visible && t.duration !== Infinity)) {
-                setModalState(true)
+                setSnackBarState(true)
             } else {
-                setModalState(false)
+                setSnackBarState(false)
             }
         }
     }, [toasts])
@@ -68,7 +69,7 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
         >
             {icon}
             <div className='snackbar-message cont'>
-                <h3>{title}</h3>
+                <h4>{title}</h4>
                 <p dangerouslySetInnerHTML={{ __html: message}}></p>
             </div>
             {

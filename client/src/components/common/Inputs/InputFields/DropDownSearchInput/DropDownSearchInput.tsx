@@ -202,7 +202,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
         }
     }
 
-    const { ref, ... rest_register } = register(name, {
+    const { ref, ... restRegister } = register(name, {
         required: true,
         validate: {
             isNotLatin: (val: string) => !/[a-zA-Z]/.test(val) ||
@@ -218,9 +218,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
         <InputField
             contClassName={'dropdown_input-cont'}
             inputIcon={icon}
-            register={{
-                ref,
-                rest_register,
+            registerForm={{
+                refForm: ref,
+                restRegister,
                 error: errors[name]
             }}
             inputRef={inputRef}

@@ -48,7 +48,7 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputRef,
 		setIsCleanerOpened(false)
 	}
 
-	const { ref, ... rest_register } = register(name, {
+	const { ref, ... restRegister } = register(name, {
 		minLength: {
 			value: 8,
 			message: `Введена не полная дата`
@@ -61,9 +61,9 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputRef,
 		<InputField
 			contClassName={'date_input-cont'}
 			inputIcon={icon}
-			register={{
-				ref,
-				rest_register,
+			registerForm={{
+				refForm: ref,
+				restRegister,
 				error: errors[name]
 			}}
 			inputRef={inputRef}

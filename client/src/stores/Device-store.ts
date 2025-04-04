@@ -11,7 +11,7 @@ type IUseBlockErrorState = {
 	blockErrorState: string;
 	setBlockErrorState: (blockErrorMessage: string) => void;
 }
-const useBlockErrorState = create<IUseBlockErrorState>((set) => ({
+const useBlockErrorState = create<IUseBlockErrorState>(set => ({
 	blockErrorState: '',
 	setBlockErrorState: (blockErrorMessage: string) => set({ blockErrorState: blockErrorMessage }),
 }))

@@ -21,7 +21,10 @@ const $apiLocation = ky.extend({
 	},
 })
 
+const $apiHoroscope = 'https://horo.mail.ru/prediction'
+
 export {
 	$apiWeather,
 	$apiLocation,
+	$apiHoroscope,
 }

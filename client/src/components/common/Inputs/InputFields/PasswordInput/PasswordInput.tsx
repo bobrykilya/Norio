@@ -102,15 +102,15 @@ const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, 
         }
     }
     
-    const { ref, ... rest_register } = getRegister(inputType)
+    const { ref, ... restRegister } = getRegister(inputType)
 
     return (
         <InputField
             contClassName={'password_input-cont'}
             inputIcon={<FaKey className='input_field-icon'/>}
-            register={{
-                ref,
-                rest_register,
+            registerForm={{
+                refForm: ref,
+                restRegister,
                 error: errors[name]
             }}
             inputRef={inputRef}

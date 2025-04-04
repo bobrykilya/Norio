@@ -27,3 +27,13 @@ export const getTimeInShortString = (time: number) => {
     const date = new Date(time * 1000)
     return date.toLocaleString().split(',')[1]
 }
+
+export const getDateInShortString = (time: number) => {
+	const date = new Date(time * 1000)
+	return date.toLocaleString().split(',')[0]
+}
+
+export const getTimeToNextDayInSec = () => {
+	const tomorrow = new Date().setHours(24, 0, 0)
+	return (tomorrow - getTime(true)) / 1000
+}

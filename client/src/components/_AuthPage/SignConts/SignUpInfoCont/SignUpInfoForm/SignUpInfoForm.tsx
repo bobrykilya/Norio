@@ -60,7 +60,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
         mode: 'onChange',
         reValidateMode: "onChange",
         defaultValues: {
-            phone: '295697981',
+            phone: '',
             store: 'Офис',
             job: 'Управляющий',
             lastName: 'Бобрик',

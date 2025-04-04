@@ -17,10 +17,9 @@ type JumpingCardProps = {
 }
 const JumpingCard = ({ children, className, position, other_children, isPrerender, closeHooksParams, forceCloseJumpingCard }: JumpingCardProps) => {
 
-    const setBlurModalState = useModalState(s => s.setBlurModalState)
+    const [setBlurModalState, dropDownState, snackBarState] = useModalState(s => [s.setBlurModalState, s.dropDownState, s.snackBarState])
     const isCardOpened = closeHooksParams.conditionsList[0]
     const [isJumpingCardOpened, setIsJumpingCardOpened] = useState(isCardOpened)
-    const modalState = useModalState(s => s.modalState)
 
 
     const handleCloseJumpingCard = () => {
@@ -29,7 +28,7 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
     }
 
     const handleClickOutside = () => {
-        if ([...closeHooksParams.conditionsList, !modalState].includes(false)) {
+        if ([...closeHooksParams.conditionsList, !dropDownState].includes(false)) {
             return
         }
 
@@ -37,7 +36,7 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
     }
 
     useCloseOnEsc({
-        conditionsList: [...closeHooksParams.conditionsList, !modalState],
+        conditionsList: [...closeHooksParams.conditionsList, !dropDownState, !snackBarState],
         callback: handleCloseJumpingCard
     })
 

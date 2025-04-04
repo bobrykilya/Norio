@@ -173,7 +173,7 @@ const WeatherCard = () => {
 								currentWeather={weather?.current}
 							/>
 							<ToolTip
-								text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weather?.forecastTimeInSec).timeString}`}
+								text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weather?.timeInSec).timeString}`}
 								position={'left'}
 								delayTimeMS={2000}
 								isAlwaysToolTip={true}

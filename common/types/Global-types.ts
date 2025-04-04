@@ -16,8 +16,10 @@ export type ICloseHooksParams = IUseCloseOnEsc & Partial<Pick<IUseClickOutside, 
 export type TimeType = number;
 export type DeviceTypeOptions = 'Tablet' | 'Mobile' | 'Desktop' | 'Unknown';
 export type SnackBarTypeOptions = 'e' | 'i' |'w' | 'b' | 's';
-export type DefaultCityOptions = 'krasnaye' | 'polatsk' | 'turly' | 'hlybokaye' | 'radashkovichy' | 'maladzyechna'
-export type DurationTypeOptions = 'second' | 'minute' | 'hour' | null
+export type DefaultCityOptions = 'krasnaye' | 'polatsk' | 'turly' | 'hlybokaye' | 'radashkovichy' | 'maladzyechna';
+export type DurationTypeOptions = 'second' | 'minute' | 'hour' | null;
+export type HoroscopeTypeOptions = 'capricorn' | 'aquarius' | 'pisces' | 'aries' | 'taurus' | 'gemini' | 'cancer' |
+	'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius';
 
 export type ICommonVar = {
 	username: string;

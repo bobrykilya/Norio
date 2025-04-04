@@ -6,7 +6,6 @@ import { ICommonVar } from "../../../../../../../common/types/Global-types"
 import RoundButton from "../../../Buttons/RoundButton/RoundButton"
 import { ToolTipProps } from "../../../../others/ToolTip/ToolTip"
 import { copyText } from "../../../../../utils/copy"
-// import { BiCopy } from "react-icons/bi"
 import { RxCopy } from "react-icons/rx"
 
 
@@ -14,14 +13,14 @@ import { RxCopy } from "react-icons/rx"
 type InputFieldProps = {
 	contClassName: string;
 	inputIcon: ICommonVar['icon'];
-	register: {
-		ref: any;
-		rest_register: any;
+	registerForm: {
+		refForm: any;
+		restRegister: any;
 		error?: {
 			message: string;
 		};
 	};
-	inputRef: React.MutableRefObject<HTMLInputElement> | null;
+	inputRef: React.MutableRefObject<HTMLInputElement>;
 	inputParams: {
 		placeholder: string;
 		label?: string;
@@ -34,6 +33,7 @@ type InputFieldProps = {
 		onFocus?: () => void;
 		disabled?: boolean;
 		inputMode?: string;
+		value?: string;
 	};
 	cleanerParams: {
 		isCleanerOpened: boolean;
@@ -51,15 +51,16 @@ type InputFieldProps = {
 	};
 	children?: any;
 }
-const InputField = ({ contClassName, inputIcon, register, inputRef, inputParams, cleanerParams, extraButParams, emptyIconParams, children }: InputFieldProps) => {
+const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputParams, cleanerParams, extraButParams, emptyIconParams, children }: InputFieldProps) => {
 
+	// console.log(registerForm.restRegister)
 	const copyInputValue = () => {
 		copyText(inputRef.current.value)
 	}
 
 
 	return (
-		<div className={`${contClassName || ''} input_field-cont cont ${extraButParams?.isCopy ? 'with_copy' : ''} ${register.error?.message ? 'error' : ''}`}>
+		<div className={`${contClassName || ''} input_field-cont cont ${extraButParams?.isCopy ? 'with_copy' : ''} ${registerForm.error?.message ? 'error' : ''}`}>
             <span
 				className='input_field-label'
 				onClick={() => focusInput(inputRef)}
@@ -67,16 +68,16 @@ const InputField = ({ contClassName, inputIcon, register, inputRef, inputParams,
                 {inputParams.label || inputParams.placeholder}
             </span>
 			<input
-				{ ...register.rest_register }
+				{ ...registerForm.restRegister }
 				ref={(e) => {
-					register.ref(e)
+					registerForm.refForm(e)
 					inputRef.current = e
 				}}
 				{ ...inputParams }
 			/>
 			{inputIcon}
 			{children}
-			<InputError error={register.error} onClick={() => focusInput(inputRef)} />
+			<InputError error={registerForm.error} onClick={() => focusInput(inputRef)} />
 			<InputCleaner opened={cleanerParams.isCleanerOpened} onClick={cleanerParams.handleClickCleaner} />
 			{
 				emptyIconParams &&

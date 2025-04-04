@@ -3,16 +3,22 @@ import { create } from "zustand"
 
 
 type IUseModalState = {
-	modalState: boolean;
+	dropDownState: boolean;
 	blurModalState: boolean;
-	setModalState: (state: boolean) => void;
+	snackBarState: boolean;
+	setDropDownState: (state: boolean) => void;
 	setBlurModalState: (state: boolean) => void;
+	setSnackBarState: (state: boolean) => void;
+	getAllModalsState: () => boolean;
 }
-const useModalState = create<IUseModalState>(set => ({
-	modalState: false,
+const useModalState = create<IUseModalState>((set, get) => ({
+	dropDownState: false,
 	blurModalState: false,
-	setModalState: (state) => set({ modalState: state }),
-	setBlurModalState: (state) => set({ blurModalState: state })
+	snackBarState: false,
+	setDropDownState: (state) => set({ dropDownState: state }),
+	setBlurModalState: (state) => set({ blurModalState: state }),
+	setSnackBarState: (state) => set({ snackBarState: state }),
+	getAllModalsState: () => ![get().dropDownState, get().blurModalState, get().snackBarState].includes(false),
 }))
 
 

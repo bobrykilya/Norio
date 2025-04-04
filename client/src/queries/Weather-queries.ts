@@ -23,7 +23,7 @@ const useFetchWeather = (location: IDeviceLocation, options?: { enabled: boolean
 	
 	if (location) {
 		cashedData = queryClient.getQueryData(getWeatherQueryOptions(location).queryKey)
-		forecastUntilDeadTime = (cashedData?.forecastDeadTimeInSec - getTime()) * 1000
+		forecastUntilDeadTime = (cashedData?.deadTimeInSec - getTime()) * 1000
 	}
 
 	return useQuery({

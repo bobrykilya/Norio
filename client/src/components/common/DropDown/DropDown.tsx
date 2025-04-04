@@ -17,7 +17,7 @@ type DropDownProps = {
 const DropDown = forwardRef(({ children, closeHooksParams, onClick, className, isScrollContent, ...restProps }: DropDownProps, ref?: React.RefObject<HTMLUListElement>) => {
 
 	const dropDownRef = ref || useRef(null)
-	const setModalState = useModalState(s => s.setModalState) //* For forms Esc blur while any DropDown is opened
+	const setDropDownState = useModalState(s => s.setDropDownState) //* For forms Esc blur while any DropDown is opened
 	// console.log(closeHooksParams.conditionsList)
 
 	useClickOutside({
@@ -34,9 +34,9 @@ const DropDown = forwardRef(({ children, closeHooksParams, onClick, className, i
 
 	useEffect(() => {
 		if (closeHooksParams.conditionsList[0]) {
-			setModalState(true)
+			setDropDownState(true)
 		} else {
-			setModalState(false)
+			setDropDownState(false)
 		}
 	}, [closeHooksParams.conditionsList[0]])
 
