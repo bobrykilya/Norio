@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-import AppTitle from '../../common/AppTitle/AppTitle'
 import { NAV_BAR_LIST } from '../../../assets/common/Common-data'
 import LogBookButton from "../JumpingCards/LogBookCard/LogBookButton"
 import { TbInfoSquareRoundedFilled } from "react-icons/tb"
@@ -8,6 +7,7 @@ import { TOOLTIP_DELAY_TIME } from "../../../../constants"
 // @ts-ignore
 import appIcon from '../../../assets/common/logos/app_icon.png'
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
+import ToolTip from "../ToolTip/ToolTip"
 
 
 
@@ -48,7 +48,13 @@ const NavBar = ({ location }: NavBarProps) => {
                 // title='Улыбнись, заяц)'
             >
                 <img className="app_icon-img" src={appIcon} alt="*" />
-                <AppTitle />
+                <ToolTip
+                    text={'Улыбнись, заяц)'}
+                    position={'bottom_right'}
+                    isAlwaysToolTip={true}
+                    delayTimeMS={5000}
+                />
+                {/*<AppTitle />*/}
             </button>
             <nav
                 className='nav_bar-cont cont card'
@@ -63,7 +69,8 @@ const NavBar = ({ location }: NavBarProps) => {
                                 toolTip={{
                                     text: el.title,
                                     position: 'right',
-                                    isAlwaysToolTip: true
+                                    isAlwaysToolTip: true,
+                                    delayTimeMS: toolTipDelayTimeMS
                                 }}
                                 size={'big'}
                             >

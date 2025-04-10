@@ -1,8 +1,8 @@
 import React from 'react'
 import RoundButton from "../../../../../../common/Buttons/RoundButton/RoundButton"
 import { BiBadgeCheck } from "react-icons/bi"
-import { Circles } from 'react-loader-spinner'
 import { IoArrowUndoSharp } from "react-icons/io5"
+import { Loader } from "../../../../../../common/Loader/Loader"
 
 
 
@@ -27,9 +27,9 @@ const FormStatusButton = ({ state }: FormStatusButProps) => {
 			    <div
 			        className={`switch_status-elem cont loading-cont ${state === 'loading' ? 'active' : ''}`}
 			    >
-					<Circles
-						color="#E9EDF0CC"
-						width="50"
+					<Loader
+						type={'circles'}
+						width={'50'}
 					/>
 			    </div>
 				<div

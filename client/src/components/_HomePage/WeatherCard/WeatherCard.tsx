@@ -5,7 +5,6 @@ import SelectButton from "../../common/Inputs/SelectButton/SelectButton"
 import { FaLocationDot } from "react-icons/fa6"
 import { LOCATIONS_LIST } from "../../../assets/common/Common-data"
 import { ILocationWeather, ILocationWeatherElem, IWeatherTempObj } from "../../../../../common/types/Device-types"
-import { ThreeDots } from 'react-loader-spinner'
 import { useDeviceInfoState } from "../../../stores/Device-store"
 import { getTimeParams } from "../../../utils/getTime"
 import WeatherWithDescription from "./WeatherWithDescription/WeatherWithDescription"
@@ -18,6 +17,7 @@ import UnfoldingCard from "../../common/UnfoldingCard/UnfoldingCard"
 import HourlyWeatherSlider from "./HourlyWeatherSlider/HourlyWeatherSlider"
 import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
 import FutureWeather from "./FutureWeather/FutureWeather"
+import { Loader } from "../../common/Loader/Loader"
 
 
 
@@ -202,12 +202,9 @@ const WeatherCard = () => {
 						</div>
 					</div>
 					:
-					<div className="weather-progress cont">
-						<ThreeDots
-							color="#E9EDF0CC"
-							width="60"
-						/>
-					</div>
+					<Loader
+						contClassName={'weather_progress-cont'}
+					/>
 				}
 			</UnfoldingCard>
 		</div>

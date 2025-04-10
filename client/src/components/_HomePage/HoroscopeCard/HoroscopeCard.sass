@@ -1,6 +1,87 @@
+@import '../../../_variables'
 
-
-
-.horoscope-card
-    //flex-shrink: 1
-    height: 500px
+$height-short-horoscope-card: 130px
+$width-full-horoscope-card: 28rem
+.horoscope_card-frame
+    //border: 1px solid yellow
+    overflow: visible
+    border-radius: $rad-main-border
+    height: $height-short-horoscope-card
+    max-height: 15%
+    .unfolding-card
+        border: 1px solid rgba($color-backgr, 0.5)
+        color: $color-backgr
+        flex-direction: row
+        min-height: 100%
+        top: auto
+        bottom: 0
+        justify-content: space-between
+        transition-property: all, max-height
+        transition-duration: $dur-unfolding-card * 2, $dur-unfolding-card * 5
+        transition-timing-function: ease-out
+        .horoscope_icon-cont
+            //border: solid 1px green
+            width: auto
+            .fa-icon
+                font-size: 2.5rem
+                color: $color-backgr
+                stroke-width: 1.1
+        .horoscope_info-frame
+            margin: 0 0.5rem
+            flex-shrink: 1
+            transition: all 0.7s ease-out
+            .horoscope_info
+                //border: solid 1px red
+                justify-content: flex-start
+                align-items: flex-start
+                h2
+                    transition: margin-bottom $dur-unfolding-card $dur-unfolding-card * 0.5 ease
+                    margin-bottom: 0.3rem
+                .horoscope-message
+                    //border: solid 1px green
+                    .horoscope_info-short
+                        position: absolute
+                        bottom: 0
+                        font-size: $size-main-text - 0.1rem
+                        max-width: 8rem
+                        will-change: transform
+                        transition-property: opacity, transform
+                        transition-duration: $dur-unfolding-card * 2
+                        transition-delay: $dur-unfolding-card * 1.25
+                    .horoscope_info-full
+                        font-size: $size-main-text + 0.07rem
+                        line-height: $size-main-text + 0.2rem
+                        min-width: $width-full-horoscope-card - 8.5rem
+                        //will-change: transform
+                        transition-property: max-height, opacity, transform
+                        transition-duration: $dur-unfolding-card * 1.75, $dur-unfolding-card * 1.25, $dur-unfolding-card * 0.7
+                        transition-timing-function: ease-out
+                        max-height: calc($height-short-horoscope-card - $padding-card * 2 - 1.5rem)
+                        //transform: translate(1rem, 3rem)
+                        opacity: 0
+        .horoscope_link-cont
+            //border: solid 1px blue
+            width: auto
+        .unfolding_card-only_full
+            min-width: 10rem
+        &.full
+            width: $width-full-horoscope-card
+            .horoscope_info-frame
+                .horoscope_info
+                    h2
+                        margin-bottom: 0.7rem
+                    .horoscope-message
+                        .horoscope_info-short
+                            transition-property: opacity, transform
+                            transition-duration: $dur-unfolding-card * 0.5
+                            transition-delay: 0s
+                            opacity: 0
+                            transform: translateY(-2rem)
+                        .horoscope_info-full
+                            transition-property: max-height, opacity, transform
+                            transition-duration: $dur-unfolding-card * 8, $dur-unfolding-card * 3, $dur-unfolding-card * 1.75
+                            transition-delay: 0s, $dur-unfolding-card * 0.5, $dur-unfolding-card * 0.5
+                            transition-timing-function: ease-out
+                            transform: none
+                            opacity: 1
+                            max-height: 40rem

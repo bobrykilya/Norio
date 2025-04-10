@@ -1,14 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useUserInfoState } from "../../../stores/Auth-store"
 import { IUserRepository } from "../../../../../api/src/types/DB-types"
 import { HoroscopeTypeOptions } from "../../../../../common/types/Global-types"
 import { getTimeParams, zeroHandler } from "../../../utils/getTime"
 import { useFetchHoroscope } from "../../../queries/Horoscope-queries"
+import { HOROSCOPE_DATA } from "../../../assets/HomePage/Horoscope-data"
+import { capitalize } from "../../../utils/capitalize"
+import { CURRENT_USER_LS } from "../../../../constants"
+import CardLinkButton from "../CardLinkButton/CardLinkButton"
+import UnfoldingCard from "../../common/UnfoldingCard/UnfoldingCard"
+import WriteBirthdayButton from "./WriteBirthdayButton/WriteBirthdayButton"
+import { Loader } from "../../common/Loader/Loader"
 
 
 
 const getHoroscopeType = (birthdayInSec: IUserRepository['birthday']): HoroscopeTypeOptions => {
 
+	// console.log('getHoroscopeType')
 	const { month, day } = getTimeParams(['month', 'day'], birthdayInSec)
 	const date = Number(`${month}.${zeroHandler(day)}`)
 
@@ -39,23 +47,104 @@ const getHoroscopeType = (birthdayInSec: IUserRepository['birthday']): Horoscope
 	}
 }
 
+const checkHoroscopeInLS = (birthday: IUserRepository['birthday']) => {
+	const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_LS))
+	let horoscopeType = currentUser?.horoscopeType
+
+	if (currentUser && !horoscopeType) {
+		horoscopeType = getHoroscopeType(birthday)
+		localStorage.setItem(CURRENT_USER_LS, JSON.stringify({
+			...currentUser,
+			horoscopeType
+		}))
+	}
+
+	return horoscopeType
+}
+
+const getFirstPhrase = (text: string, quantityOfPhrases: number) => {
+	if (!text) {
+		return ''
+	}
+	const phrase = text.slice(0, quantityOfPhrases).split(' ')
+	return phrase.slice(0, phrase.length - 1).join(' ')
+}
 type HoroscopeCardProps = {}
 const HoroscopeCard = ({}: HoroscopeCardProps) => {
 
-	const userInfoState = useUserInfoState(s => s.userInfoState)
-	// console.log(userInfoState.birthday)
+	const [isFullHoroscopeCard, setIsFullHoroscopeCard] = useState(false)
+	const toggleHoroscopeCard = () => {
+		setIsFullHoroscopeCard(prev => !prev)
+	}
 
-	const { data: horoscopeData, isPending, isError } = useFetchHoroscope(getHoroscopeType(userInfoState.birthday), {
+	const userInfoState = useUserInfoState(s => s.userInfoState)
+	const horoscopeType = checkHoroscopeInLS(userInfoState.birthday)
+	const horoscopeExtraInfo = HOROSCOPE_DATA[horoscopeType]
+
+	const { data: horoscopeData } = useFetchHoroscope(horoscopeType, {
 		enabled: !!userInfoState && !!userInfoState.birthday
 	})
-	console.log(horoscopeData)
+	// console.log(horoscopeData)
 
 
 	return (
 		<div
-		    className={'horoscope-card cont card'}
+			className={'horoscope_card-frame cont'}
 		>
-			{horoscopeData?.message}
+			{
+				!userInfoState?.birthday ?
+					<WriteBirthdayButton />
+					:
+					<UnfoldingCard
+						isFullCard={isFullHoroscopeCard}
+						closeCard={toggleHoroscopeCard}
+					>
+						<div
+							className={'horoscope_icon-cont cont'}
+						>
+							{horoscopeExtraInfo.icon}
+						</div>
+						<div
+							className={'horoscope_info-frame cont'}
+						>
+							{
+								horoscopeData ?
+									<div
+										className={'horoscope_info cont'}
+									>
+										<h2>
+											{capitalize(horoscopeExtraInfo.ruName)}
+										</h2>
+										<div
+										    className={'horoscope-message cont'}
+										>
+											<p
+												className={'horoscope_info-short'}
+											>
+												{getFirstPhrase(horoscopeData?.message, 57)}...
+											</p>
+											<p
+												className={'horoscope_info-full'}
+											>
+												{horoscopeData?.message}
+											</p>
+										</div>
+									</div>
+									:
+									<Loader />
+							}
+						</div>
+						<CardLinkButton
+							onClick={toggleHoroscopeCard}
+							toolTip={{
+								text: `${isFullHoroscopeCard ? 'Закрыть' : 'Открыть'} карточку гороскопа`,
+								position: 'top_left',
+							}}
+							disabled={!horoscopeData}
+							isCloseIcon={isFullHoroscopeCard}
+						/>
+					</UnfoldingCard>
+				}
 		</div>
 	)
 }

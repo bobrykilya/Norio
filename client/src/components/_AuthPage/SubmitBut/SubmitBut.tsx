@@ -1,7 +1,7 @@
 import React from 'react'
 import ToolTip, { ToolTipProps } from '../../others/ToolTip/ToolTip'
-import { ThreeDots } from 'react-loader-spinner'
 import { ICommonVar } from "../../../../../common/types/Global-types"
+import { Loader } from "../../common/Loader/Loader"
 
 
 
@@ -27,14 +27,9 @@ const SubmitBut = ({ icon, onClick, isLoading, useOnClick, disabled, blur, toolT
         >
             {!isLoading ?
                 icon :
-                <div
-                    className={'submit-loader cont'}
-                >
-                    <ThreeDots
-                        color='#E9EDF0CC'
-                        width="40"
-                    />
-                </div>
+                <Loader
+                    width="40"
+                />
             }
             {toolTip && <ToolTip {...toolTip} />}
         </button>

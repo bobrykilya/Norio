@@ -111,3 +111,8 @@ export const getEndTime = (startTimeInSec: number, duration: number, durationTyp
         default: return startTimeInSec + duration
     }
 }
+
+export const getDateInShortString = (time: number) => {
+    const date = new Date(time * 1000)
+    return date.toLocaleString().split(',')[0]
+}

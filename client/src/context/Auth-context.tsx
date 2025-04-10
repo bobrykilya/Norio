@@ -1,5 +1,4 @@
 import React, { createContext, useEffect } from "react"
-import { Circles } from 'react-loader-spinner'
 import AuthService from "../services/Auth-service"
 import io from "socket.io-client"
 import { ILoginServiceRes } from "../../../common/types/Auth-types"
@@ -10,6 +9,7 @@ import JWTInfoService from "../services/JWTInfoService"
 import AuthCommon from "../features/auth/authCommon"
 import FastSession from "../features/auth/fastSession"
 import { CURRENT_USER_LS, DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_LS } from "../../constants"
+import { Loader } from "../components/common/Loader/Loader"
 
 
 
@@ -151,14 +151,13 @@ const AuthProvider = ({ children }) => {
 		>
 			{appReadyState ? (
 				children
-			) : (
-				<div className='cont main_bg-gradient'>
-					<Circles
-						color='#E9EDF0CC'
-						width="100"
-					/>
-				</div>
-			)}
+			) :
+				<Loader
+					type={'circles'}
+					contClassName={'main_bg-gradient'}
+					width="100"
+				/>
+			}
 		</AuthContext.Provider>
 	)
 }

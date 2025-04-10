@@ -65,11 +65,11 @@
         &.top_left
             bottom: calc(100% + $tooltip-margin)
             right: 0
-            transform: translate(-$tooltip-step, -$tooltip-step) scale($tooltip-scale)
+            transform: translate($tooltip-step, $tooltip-step) scale($tooltip-scale)
         &.top_right
             bottom: calc(100% + $tooltip-margin)
             left: 0
-            transform: translate(-$tooltip-step, -$tooltip-step) scale($tooltip-scale)
+            transform: translate(-$tooltip-step, $tooltip-step) scale($tooltip-scale)
         &.active
             opacity: 1
             transform: none

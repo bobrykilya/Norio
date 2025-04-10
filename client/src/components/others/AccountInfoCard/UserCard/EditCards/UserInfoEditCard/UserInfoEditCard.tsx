@@ -17,6 +17,7 @@ import FormSubmitButton from "../common/FormSubmitButton/FormSubmitButton"
 import GenderSelectButton from "./GenderSelectButton/GenderSelectButton"
 import { GENDER_LIST } from "../../../../../../assets/common/Common-data"
 import { ISelectDropDownOptionListElem } from "../../../../../common/SelectDropDown/SelectDropDown"
+import { getDateInShortString } from "../../../../../../utils/getTime"
 
 
 
@@ -50,6 +51,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		company: 'Стройпродукт',
 		...userInfo,
 		phone: userInfo?.phone.slice(4),
+		birthday: getDateInShortString(userInfo?.birthday),
 	}
 
 
@@ -162,6 +164,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						icon={<LiaBirthdayCakeSolid className="input_field-icon"/>}
 						{...commonProps}
 						cleanerState={Boolean(watch('birthday'))}
+						isEmptyIcon={!preloadValues.birthday}
 					/>
 					<GenderSelectButton
 						selectedState={genderState}
