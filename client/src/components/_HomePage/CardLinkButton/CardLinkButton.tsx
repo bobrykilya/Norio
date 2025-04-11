@@ -9,8 +9,9 @@ type CardLinkButtonProps = Pick<RoundButtonProps, 'toolTip' | 'disabled'> & {
 	onClick?: () => void;
 	link?: string;
 	isCloseIcon?: boolean;
+	className?: string;
 }
-const CardLinkButton = ({ onClick, link, isCloseIcon, ...props }: CardLinkButtonProps) => {
+const CardLinkButton = ({ onClick, link, isCloseIcon, className, ...props }: CardLinkButtonProps) => {
 
 	const openLink = () => {
 		document.location = `/home/${openLink}`
@@ -18,7 +19,7 @@ const CardLinkButton = ({ onClick, link, isCloseIcon, ...props }: CardLinkButton
 
 	return (
 		<RoundButton
-			className={`card_link-but clear-but ${isCloseIcon ? 'close_icon_opened' : ''}`}
+			className={`card_link-but clear-but ${className || ''} ${isCloseIcon ? 'close_icon_opened' : ''}`}
 			onClick={onClick ? onClick : openLink}
 			size={'small'}
 			{...props}

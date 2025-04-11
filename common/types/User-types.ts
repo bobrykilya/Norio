@@ -9,5 +9,5 @@ export type IHoroscopeDataRes = {
 	horoscopeType: HoroscopeTypeOptions;
 	date: string;
 	untilDeadTimeInSec: number;
-	message: string;
+	messages: string[];
 }

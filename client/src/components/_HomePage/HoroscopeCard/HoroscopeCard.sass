@@ -9,16 +9,17 @@ $width-full-horoscope-card: 28rem
     height: $height-short-horoscope-card
     max-height: 15%
     .unfolding-card
-        border: 1px solid rgba($color-backgr, 0.5)
+        border: 1px solid rgba($color-backgr, 0.3)
         color: $color-backgr
         flex-direction: row
-        min-height: 100%
+        min-height: $height-short-horoscope-card
+        max-height: none
         top: auto
         bottom: 0
         justify-content: space-between
-        transition-property: all, max-height
-        transition-duration: $dur-unfolding-card * 2, $dur-unfolding-card * 5
-        transition-timing-function: ease-out
+        //transition-property: all
+        //transition-duration: $dur-unfolding-card * 2
+        //transition-timing-function: ease-out
         .horoscope_icon-cont
             //border: solid 1px green
             width: auto
@@ -27,16 +28,16 @@ $width-full-horoscope-card: 28rem
                 color: $color-backgr
                 stroke-width: 1.1
         .horoscope_info-frame
+            //border: solid 1px red
             margin: 0 0.5rem
             flex-shrink: 1
-            transition: all 0.7s ease-out
             .horoscope_info
-                //border: solid 1px red
-                justify-content: flex-start
+                //border: solid 1px brown
+                pointer-events: none
                 align-items: flex-start
                 h2
                     transition: margin-bottom $dur-unfolding-card $dur-unfolding-card * 0.5 ease
-                    margin-bottom: 0.3rem
+                    margin-bottom: 0.25rem
                 .horoscope-message
                     //border: solid 1px green
                     .horoscope_info-short
@@ -47,18 +48,20 @@ $width-full-horoscope-card: 28rem
                         will-change: transform
                         transition-property: opacity, transform
                         transition-duration: $dur-unfolding-card * 2
-                        transition-delay: $dur-unfolding-card * 1.25
+                        transition-delay: $dur-unfolding-card * 1.75
                     .horoscope_info-full
+                        //text-indent: 20px
                         font-size: $size-main-text + 0.07rem
                         line-height: $size-main-text + 0.2rem
-                        min-width: $width-full-horoscope-card - 8.5rem
-                        //will-change: transform
-                        transition-property: max-height, opacity, transform
-                        transition-duration: $dur-unfolding-card * 1.75, $dur-unfolding-card * 1.25, $dur-unfolding-card * 0.7
+                        width: $width-full-horoscope-card - 8.5rem
+                        transition-property: max-height, opacity
+                        transition-duration: $dur-unfolding-card * 1.75, $dur-unfolding-card * 1.25
                         transition-timing-function: ease-out
                         max-height: calc($height-short-horoscope-card - $padding-card * 2 - 1.5rem)
-                        //transform: translate(1rem, 3rem)
                         opacity: 0
+            .horoscope-spinner
+                //border: solid 1px green
+                margin-left: -1rem
         .horoscope_link-cont
             //border: solid 1px blue
             width: auto
@@ -66,6 +69,7 @@ $width-full-horoscope-card: 28rem
             min-width: 10rem
         &.full
             width: $width-full-horoscope-card
+            max-height: none
             .horoscope_info-frame
                 .horoscope_info
                     h2
@@ -78,10 +82,9 @@ $width-full-horoscope-card: 28rem
                             opacity: 0
                             transform: translateY(-2rem)
                         .horoscope_info-full
-                            transition-property: max-height, opacity, transform
-                            transition-duration: $dur-unfolding-card * 8, $dur-unfolding-card * 3, $dur-unfolding-card * 1.75
-                            transition-delay: 0s, $dur-unfolding-card * 0.5, $dur-unfolding-card * 0.5
+                            transition-property: max-height, opacity
+                            transition-duration: $dur-unfolding-card * 6, $dur-unfolding-card * 3
+                            transition-delay: 0s, $dur-unfolding-card * 0.75
                             transition-timing-function: ease-out
-                            transform: none
-                            opacity: 1
                             max-height: 40rem
+                            opacity: 1

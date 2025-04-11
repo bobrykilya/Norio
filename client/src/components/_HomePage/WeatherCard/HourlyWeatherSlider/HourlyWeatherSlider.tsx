@@ -3,7 +3,7 @@ import { ILocationWeatherElem } from "../../../../../../common/types/Device-type
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6"
 import { getTemp } from "../WeatherCard"
 import { getTimeParams } from "../../../../utils/getTime"
-import { debounceWithStart } from "../../../../utils/debounce"
+import { throttle } from "../../../../utils/debounce"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 
 
@@ -82,7 +82,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 			</RoundButton>
 			<ul
 				className={'hourly_weather_list-cont cont'}
-				onWheel={debounceWithStart(handleScrollList, debounceScrollDelay)}
+				onWheel={throttle(handleScrollList, debounceScrollDelay)}
 				ref={scrollListRef}
 				tabIndex={-1}
 			>

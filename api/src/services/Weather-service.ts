@@ -35,7 +35,7 @@ const getWeatherObjectByKeys = <T> (object: T, keysList: string[]) => {
 }
 
 const getCashKeyForWeather = (location: IDeviceLocation) => {
-	return `${location.coords?.lat},${location.coords?.lon}`
+	return `weather-${location.coords?.lat},${location.coords?.lon}`
 }
 
 class WeatherService {

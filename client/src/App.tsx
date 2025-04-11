@@ -34,7 +34,15 @@ const App = () => {
                     location={location}
                     key={location.pathname}
                 >
-                    <Route path="*" element={<Navigate to={Boolean(userLoggedState) ? "home" : "auth"} />} />
+                    <Route
+                        path="*"
+                        element={
+                            <Navigate
+                                replace={true}
+                                to={Boolean(userLoggedState) ? "home" : "auth"}
+                            />
+                        }
+                    />
                     {!userLoggedState ?
                         <Route path="auth" element={
                             <AuthPage blockErrorMessage={blockErrorState} />

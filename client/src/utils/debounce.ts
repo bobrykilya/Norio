@@ -1,8 +1,8 @@
-type IDebounceCallback = (...args: any[]) => void
+type ICallback = (...args: any[]) => void
 
-const debounceWithStart = (callback: IDebounceCallback, delayInMS: number) => {
+export const throttle = (callback: ICallback, delayInMS: number) => {
 	let timer = 0
-	return function debouncedFn(...args: any[]) {
+	return function (...args: any[]) {
 		if (Date.now() - timer > delayInMS) {
 			// console.log('callback')
 			callback(...args)
@@ -11,17 +11,29 @@ const debounceWithStart = (callback: IDebounceCallback, delayInMS: number) => {
 	}
 }
 
-const debounce = (callback: IDebounceCallback, delayInMS: number) => {
-	let timeoutId = null
-	return (...args: any[]) => {
-		clearTimeout(timeoutId)
-		timeoutId = setTimeout(() => {
-			callback(...args)
-		}, delayInMS)
-	};
+const lightThrottle = (callback: ICallback , time: number) => {
+	let allowed = true
+	return function (...args: any[]) {
+		if (!allowed) {
+			return
+		}
+		allowed = false
+
+		setTimeout(() => {
+			allowed = true
+		}, time)
+		// callback.apply(null, ...args)
+		callback(...args)
+	}
 }
 
+const debounce = (callback: ICallback, delayInMS: number) => {
+	let timeoutId = null
+	return function(...args: any[]) {
+		clearTimeout(timeoutId)
 
-export {
-	debounceWithStart,
+		timeoutId = setTimeout(() => {
+			callback.apply(this, ...args)
+		}, delayInMS)
+	}
 }
