@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ToolTip from "../../ToolTip/ToolTip"
-// import { IoIosAddCircle } from "react-icons/io"
-// import { ISwitchUserElem } from "../SwitchUser"
-import { IoAdd, IoClose } from "react-icons/io5"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import logOut from "../../../../features/auth/logOut"
 import { IUserRepository } from "../../../../../../api/src/types/DB-types"
@@ -10,7 +7,7 @@ import timeout from "../../../../utils/timeout"
 import { useJwtInfoListState } from "../../../../stores/Auth-store"
 import AuthCommon from "../../../../features/auth/authCommon"
 import { SWITCH_USERS_LS } from "../../../../../constants"
-// import { ISwitchUserElem } from "../SwitchUser"
+import { ICONS } from "../../../../assets/common/Icons-data"
 
 
 
@@ -86,7 +83,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 							src={`/avatars/${user?.avatar}.jpg`}
 							alt="IMG Error 6"
 						/> :
-						<IoAdd className={'fa-icon'} />
+						ICONS.add
 					}
 				</div>
 				<div
@@ -136,7 +133,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 					}}
 					size={'tiny'}
 				>
-					<IoClose className={'fa-icon'} />
+					{ICONS.close}
 				</RoundButton>
 			}
 		</div>

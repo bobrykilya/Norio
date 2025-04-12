@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react'
 import ToolTip from "../../../ToolTip/ToolTip"
 import { IUserRepository } from "../../../../../../../api/src/types/DB-types"
-import { BiSolidCopy } from "react-icons/bi"
 import SelectDropDown from "../../../../common/SelectDropDown/SelectDropDown"
 import { ICommonVar } from "../../../../../../../common/types/Global-types"
 import { copyText } from "../../../../../utils/copy"
+import { ICONS } from "../../../../../assets/common/Icons-data"
 
 
 
@@ -24,22 +24,21 @@ const UserNameCopyButton = ({ userInfoState }: UserNameCopyButtonProps) => {
 
 	const [isDropDownOpened, setIsDropDownOpened] = useState(false)
 	const userNameRef = useRef(null)
-	const copyIcon = <BiSolidCopy className={'fa-icon'} />
 	const COPY_USER_OPTIONS_LIST: ICopyUserOptionsList[] = [
 		{
 			id: 'username',
 			title: userInfoState.username,
-			icon: copyIcon
+			icon: ICONS.copyFilled
 		},
 		{
 			id: 'name',
 			title: `${userInfoState.lastName} ${userInfoState.firstName} ${userInfoState.middleName}`,
-			icon: copyIcon
+			icon: ICONS.copyFilled
 		},
 		{
 			id: 'job',
 			title: userInfoState.job,
-			icon: copyIcon
+			icon: ICONS.copyFilled
 		},
 	]
 

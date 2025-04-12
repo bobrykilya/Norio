@@ -3,9 +3,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import DropDownSearchInput from '../../../../common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput'
 import UserNameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
-import { HiOutlineHome } from "react-icons/hi"
-import { GrUserExpert, GrUserWorker } from "react-icons/gr"
-import { BiLogInCircle } from "react-icons/bi"
 import PhoneInput from '../../../../common/Inputs/InputFields/PhoneInput/PhoneInput'
 import AvatarButton from '../../../AvatarListCard/AvatarButton'
 import { focusInput } from '../../../../../utils/focusInput'
@@ -14,12 +11,12 @@ import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
 import { ISignUp, ISignUpReq } from "../../../../../../../common/types/Auth-types"
 import { useModalState } from "../../../../../stores/Global-store"
 import SignUp from "../../../../../features/auth/signUp"
+import { ICONS } from "../../../../../assets/common/Icons-data"
 
 
 
 const getDefaultGenderByMiddleName = (middleName: string) => {
 
-    // console.log(middleName.slice(-2))
     switch (middleName.slice(-2)) {
         case 'ич':
         case 'лы': return 'male'
@@ -40,12 +37,11 @@ type SignUpInfoFormProps = {
 const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled, isAvatarButDisabled }: SignUpInfoFormProps) => {
     // console.log('SignUpInfoForm')
 
-    const modalState = useModalState(s => s.modalState)
+    const modalState = useModalState(s => s.allModalsState)
     const [avatar, setAvatar] = useState<string>('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef<HTMLInputElement>(null)
-    const nameInputIcon = <GrUserExpert className='input_field-icon' />
 
 
     const {
@@ -115,41 +111,41 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
             <div className='inputs-cont cont'>
                 <PhoneInput 
                     name='phone'
-                    inputRef={inputRefPhone}
+                    inputPhoneRef={inputRefPhone}
                     { ...commonProps }
                 />
                 <DropDownSearchInput 
                     LIST={STORES_LIST}
                     name='store'
                     placeholder='Точка'
-                    icon={<HiOutlineHome className='input_field-icon'/>}
+                    icon={ICONS.store}
                     { ...dropDownSearchInputProps }
                 />
                 <DropDownSearchInput 
                     LIST={JOBS_LIST}
                     name='job'
                     placeholder='Должность'
-                    icon={<GrUserWorker className='input_field-icon'/>}
+                    icon={ICONS.job}
                     { ...dropDownSearchInputProps }
                 />
                 <UserNameInput
                     name='lastName'
                     placeholder='Фамилия'
-                    icon={nameInputIcon}
+                    icon={ICONS.name}
                     inputType='name'
                     { ...commonProps }
                 />
                 <UserNameInput
                     name='firstName'
                     placeholder='Имя'
-                    icon={nameInputIcon}
+                    icon={ICONS.name}
                     inputType='name'
                     { ...commonProps }
                 />
                 <UserNameInput
                     name='middleName'
                     placeholder='Отчество'
-                    icon={nameInputIcon}
+                    icon={ICONS.name}
                     inputType='name'
                     { ...commonProps }
                 />
@@ -165,7 +161,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     isTabDisabled={isFormDisabled}
                 />
                 <SubmitBut
-                    icon={<BiLogInCircle className='fa-icon'/>}
+                    icon={ICONS.enter}
                     disabled={isFormDisabled}
                     isLoading={isLoading}
                     tabNotBlur={true}

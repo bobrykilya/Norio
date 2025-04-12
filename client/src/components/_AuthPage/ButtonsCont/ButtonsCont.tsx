@@ -1,7 +1,6 @@
 import React from 'react'
-import { MdInstallDesktop } from "react-icons/md"
-import { FaInfo } from "react-icons/fa6"
 import ToolTip from '../../others/ToolTip/ToolTip'
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -30,7 +29,7 @@ const ButtonsCont = ({ disabled }: ButtonsContProps) => {
                     // onClick={askAppInstall}
                     disabled={disabled}
                 >
-                    <MdInstallDesktop className='fa-icon'/>
+                    {ICONS.desktop}
                     <ToolTip text='Создать ярлык на рабочем столе' />
                 </button>
                 <button
@@ -38,7 +37,7 @@ const ButtonsCont = ({ disabled }: ButtonsContProps) => {
                     tabIndex={-1}
                     disabled={disabled}
                 >
-                    <FaInfo className='fa-icon'/>
+                    {ICONS.instructions}
                     <ToolTip text='Описание приложения и инструкция' />
                 </button>
         </div>

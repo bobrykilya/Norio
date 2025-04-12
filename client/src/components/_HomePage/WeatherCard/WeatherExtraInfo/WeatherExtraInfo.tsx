@@ -1,9 +1,6 @@
 import React from 'react'
 import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-import { MdOutlineWaterDrop } from "react-icons/md"
-import { FiWind } from "react-icons/fi"
-import { BsCloudRain } from "react-icons/bs"
-import { IoSnowOutline } from "react-icons/io5"
+import { ICONS } from "../../../../assets/common/Icons-data"
 
 
 
@@ -53,7 +50,7 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 				<div
 					className={`weather_extra_info_el-cont cont`}
 				>
-					<MdOutlineWaterDrop className={'fa-icon'}/>
+					{ICONS.humidity}
 					<span>
 						{weather.humidity}%
 				</span>
@@ -61,7 +58,7 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 				<div
 					className={'weather_extra_info_el-cont cont'}
 				>
-					<FiWind className={'fa-icon'}/>
+					{ICONS.wind}
 					<span
 						className={`${getWindDescription(wind)}`}
 					>
@@ -77,7 +74,7 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 					<div
 						className={'weather_extra_info_el-cont cont'}
 					>
-						<BsCloudRain className={'fa-icon'}/>
+						{ICONS.rain}
 						<span
 							className={`${getRainDescription(weather.rain)}`}
 						>
@@ -87,7 +84,7 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 					<div
 						className={'weather_extra_info_el-cont cont'}
 					>
-						<IoSnowOutline className={'fa-icon'}/>
+						{ICONS.snow}
 						<span
 							className={`${getSnowDescription(weather.snow)}`}
 						>

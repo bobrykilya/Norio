@@ -1,54 +1,64 @@
-import React, { useEffect, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
 import { ISignFormInput } from '../../../../../types/Auth-types'
 import { copyText } from "../../../../../utils/copy"
-import { CODES_LIST } from "../../../../../../constants"
 import { useIMask } from 'react-imask'
 import InputField from "../InputField/InputField"
-import { FiPhoneCall } from "react-icons/fi"
-import timeout from "../../../../../utils/timeout"
+import { ICONS } from "../../../../../assets/common/Icons-data"
+import { PHONE_CODES_LIST } from "../../../../../assets/AuthPage/AuthPage-data"
 
 
 
 type PhoneInputProps = ISignFormInput & {
-    inputRef: React.MutableRefObject<HTMLInputElement>;
-    getValues: any;
+    inputPhoneRef?: React.MutableRefObject<HTMLInputElement>;
 }
-const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputRef, withCopyBut, cleanerState=false, isEmptyIcon, getValues, setValue }: PhoneInputProps) => {
+const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPhoneRef, withCopyBut, cleanerState, isEmptyIcon }: PhoneInputProps) => {
 
-    // console.log('phone has been updated')
-    const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
-    const inputIcon = <FiPhoneCall className='input_field-icon' />
-
-    const maskOptions = {
+    // console.log('PhoneInput has been updated')
+    const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState || false)
+    const inputRef = inputPhoneRef || useRef(null)
+    const phoneMaskOptions = {
         mask: [{
             mask: '(00)-000-00-00',
         }],
     }
+
+    const { ref: formRef, onChange: onFormChange, ...restRegister } = register(name, {
+        required: true,
+        minLength: {
+            value: 14,
+            message: `Номер должен содержать код и 7 цифр`
+        },
+        validate: {
+            isCorrectCode: (val: string) => {
+                // console.log('isCorrectCode validate: ', val)
+                const message = 'Неизвестный код оператора связи'
+                if (val.length >= 9) {
+                    return (PHONE_CODES_LIST.includes(val.substring(1,3)) || message)
+                } else {
+                    return true
+                }
+            },
+        },
+    })
+
     const {
         ref: maskedInputRef,
-        setValue: setMaskedValue,
-        value: maskedValue,
-        unmaskedValue,
         setUnmaskedValue,
-    } = useIMask(maskOptions, {
+    } = useIMask(phoneMaskOptions, {
         ref: inputRef,
+        onAccept: (val, _, e) => {
+            onFormChange(e)
+            handleChangePhone(val)
+        }
     })
-    // console.log({ formValue: getValues(name), maskedValue })
-    // console.log({ maskedValue,  inputRef: inputRef.current.value, error: errors[name] })
+
+    const handleChangePhone = (maskedValue: string) => {
+        maskedValue && maskedValue !== '(' ? setIsCleanerOpened(true) : clearInput()
+    }
 
     const copyInputValue = () => {
-        copyText('+375 ' + maskedValue)
-    }
-
-    const handleChangePhone = (unmaskedValue: string) => {
-        // console.log(unmaskedValue)
-        unmaskedValue ? changeInput(unmaskedValue) : clearInput()
-    }
-
-    const changeInput = (value: string) => {
-        // setValue(name, maskedValue)
-        setIsCleanerOpened(true)
+        copyText('+375 ' + inputRef.current?.value)
     }
 
     const handleClickCleaner = async () => {
@@ -57,50 +67,24 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputRef
     }
 
     const clearInput = () => {
+        setUnmaskedValue('')
         reset(name)
-        setMaskedValue('')
         setIsCleanerOpened(false)
     }
 
-    const { ref, ...restRegister } = register(name, {
-        required: true,
-        minLength: {
-            value: 14,
-            message: `Номер должен содержать код и 7 цифр`
-        },
-        validate: {
-            isCorrectCode: (val: string) => {
-                const message = 'Неизвестный код оператора связи'
-                if (val.length >= 9) {
-                    return (CODES_LIST.includes(val.substring(1,3)) || message)
-                } else {
-                    return true
-                }
-            },
-        },
 
-    })
-
-    useEffect(() => {
-        handleChangePhone(unmaskedValue)
-    }, [unmaskedValue])
-
-    useEffect(() => {
-        const setValueForInput = async () => {
-            await timeout(100)
-            setUnmaskedValue(getValues(name))
-        }
-
-        setValueForInput()
-    }, [])
+    //* First value setting for IMask
+    useLayoutEffect(() => {
+        setUnmaskedValue(inputRef.current?.value)
+    }, [!inputRef.current && inputRef.current?.value])
 
 
     return (
         <InputField
             contClassName={'phone_input-cont'}
-            inputIcon={inputIcon}
+            inputIcon={ICONS.phone}
             registerForm={{
-                refForm: ref,
+                formRef,
                 restRegister,
                 error: errors[name],
             }}
@@ -111,9 +95,8 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputRef
                 maxLength: 14,
                 label: 'Мобильный номер',
                 placeholder: '(29) 555-35-35',
-                disabled: disabled,
                 autoComplete: 'off',
-                value: maskedValue,
+                disabled: disabled,
             }}
             cleanerParams={{
                 isCleanerOpened: isCleanerOpened,

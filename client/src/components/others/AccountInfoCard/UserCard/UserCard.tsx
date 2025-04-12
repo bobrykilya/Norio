@@ -3,14 +3,13 @@ import ToolTip from "../../ToolTip/ToolTip"
 import { useUserInfoState } from "../../../../stores/Auth-store"
 import UnfoldingCard from "../../../common/UnfoldingCard/UnfoldingCard"
 import SubmitBut from "../../../_AuthPage/SubmitBut/SubmitBut"
-import { LuLogOut } from "react-icons/lu";
-import { FaUserGear, FaUserPen } from "react-icons/fa6"
 import UserNameCopyButton from "./UserNameCopyButton/UserNameCopyButton"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import SwitchUser from "../../../others/SwitchUser/SwitchUser"
 import LogOut from "../../../../features/auth/logOut"
 import SwapImg from "../../../common/SwapImg/SwapImg"
 import { useTopCardState } from "../../../../stores/Utils-store"
+import { ICONS } from "../../../../assets/common/Icons-data"
 
 
 
@@ -47,7 +46,7 @@ const UserCard = ({  }: UserCardProps) => {
 							text: 'Личные данные пользователя'
 						}}
 					>
-						<FaUserPen className={'fa-icon'} />
+						{ICONS.userEdit}
 					</RoundButton>
 					<button
 						className="account-but cont"
@@ -73,7 +72,7 @@ const UserCard = ({  }: UserCardProps) => {
 							text: 'Данные аккаунта'
 						}}
 					>
-						<FaUserGear className={'fa-icon'} />
+						{ICONS.accountEdit}
 					</RoundButton>
 				</div>
 				<div
@@ -87,7 +86,7 @@ const UserCard = ({  }: UserCardProps) => {
 						disabled={!isFullUserCard}
 					/>
 				    <SubmitBut
-						icon={<LuLogOut className={'fa-icon'} />}
+						icon={ICONS.logout}
 						onClick={LogOut.currentUserLogOut}
 						useOnClick={true}
 						toolTip={{

@@ -1,7 +1,7 @@
 import React from "react"
-import { PiWarning, PiWarningFill } from "react-icons/pi"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
 import { useLogBookCardState } from "../../../../stores/Utils-store"
+import { ICONS } from "../../../../assets/common/Icons-data"
 
 
 
@@ -25,9 +25,7 @@ const LogBookButton = ({ isAuthPage=false, delayTimeMS }: LogBookButtonProps) =>
             }}
         >
             {
-                isAuthPage ?
-                <PiWarning className='fa-icon' /> :
-                <PiWarningFill className='fa-icon' />
+                isAuthPage ? ICONS.logBook : ICONS.logBookFilled
             }
         </RoundButton>
      )

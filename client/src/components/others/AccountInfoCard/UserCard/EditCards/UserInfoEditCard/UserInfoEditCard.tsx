@@ -1,15 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ISignUp } from "../../../../../../../../common/types/Auth-types"
 import { SubmitHandler, useForm } from 'react-hook-form'
 import PhoneInput from "../../../../../common/Inputs/InputFields/PhoneInput/PhoneInput"
 import DropDownSearchInput from "../../../../../common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput"
 import UserNameInput from "../../../../../common/Inputs/InputFields/NameInput/NameInput"
 import { COMPANIES_LIST, JOBS_LIST, STORES_LIST } from "../../../../../../assets/AuthPage/AuthPage-data"
-import { HiOutlineHome } from "react-icons/hi"
-import { GrUserExpert, GrUserWorker } from "react-icons/gr"
-import { MdOutlineWorkOutline } from "react-icons/md"
-import { BsPassport } from "react-icons/bs"
-import { LiaBirthdayCakeSolid } from "react-icons/lia"
 import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
 import DateInput from "../../../../../common/Inputs/InputFields/DateInput/DateInput"
 import FormStatusButton, { FormStatusButOptions } from "../common/FormStatusButton/FormStatusButton"
@@ -18,10 +13,11 @@ import GenderSelectButton from "./GenderSelectButton/GenderSelectButton"
 import { GENDER_LIST } from "../../../../../../assets/common/Common-data"
 import { ISelectDropDownOptionListElem } from "../../../../../common/SelectDropDown/SelectDropDown"
 import { getDateInShortString } from "../../../../../../utils/getTime"
+import { ICONS } from "../../../../../../assets/common/Icons-data"
 
 
 
-type UserInfoEditForm = Omit<ISignUp, 'avatar'> & {
+type IUserInfoEditForm = Omit<ISignUp, 'avatar'> & {
 	company?: string;
 	birthday?: number;
 }
@@ -29,27 +25,26 @@ type UserInfoEditCardProps = {
 	userInfo: IUserRepository;
 }
 const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
-
 	// console.log('UserInfoEditCard form has been updated')
+
 	const [statusState, setStatusState] = useState<FormStatusButOptions>('ok')
 	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(GENDER_LIST.find(el => el.id === userInfo?.gender) || null)
 	const inputPhoneRef = useRef<HTMLInputElement>(null)
 	const inputBirthdayRef = useRef<HTMLInputElement>(null)
-	const nameInputIcon = <GrUserExpert className='input_field-icon' />
-	const defaultValues = {
-		phone: '',
+	const defaultValues: IUserInfoEditForm = {
 		store: '',
 		lastName: '',
 		firstName: '',
 		middleName: '',
-		company: '',
 		job: '',
-		birthday: null,
+		company: '',
+		phone: '',
 		gender: null,
+		birthday: null,
 	}
 	const preloadValues = {
-		company: 'Стройпродукт',
 		...userInfo,
+		company: 'Стройпродукт', //! Change
 		phone: userInfo?.phone.slice(4),
 		birthday: getDateInShortString(userInfo?.birthday),
 	}
@@ -61,41 +56,38 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		resetField,
 		watch,
 		setError,
-		getValues,
 		setValue,
 		formState: { errors, dirtyFields, isDirty },
-	} = useForm<UserInfoEditForm>({
+	} = useForm<IUserInfoEditForm>({
 		mode: 'onChange',
 		reValidateMode: "onChange",
-		defaultValues: defaultValues,
+		defaultValues,
 	})
-	// console.log(watch('phone'))
 
 	const commonProps = {
-		register: register,
-		errors: errors,
+		register,
+		errors,
 		reset: resetField,
 		withCopyBut: true,
-		cleanerState: true,
 		isEmptyIcon: true,
+		cleanerState: true,
 	}
 	const dropDownSearchInputProps = {
 		...commonProps,
-		setValue: setValue,
-		setError: setError,
-		watch: watch,
+		setValue,
+		setError,
+		watch,
 	}
 
 	const changeGender = (state: ISelectDropDownOptionListElem) => {
 		setGenderState(state)
-		inputBirthdayRef.current.focus()
 	}
 
 	const formHasBeenUpdated = () => {
 		setStatusState('ok')
 	}
 
-	const onSubmit: SubmitHandler<UserInfoEditForm> = async (data) => {
+	const onSubmit: SubmitHandler<IUserInfoEditForm> = async (data) => {
 		if (!isDirty && (!genderState?.id || genderState.id === preloadValues.gender)) {
 			return
 		}
@@ -103,7 +95,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		data.phone = '+375' + data.phone
 		let dirtyData = {}
 
-		for (let name in dirtyFields) {
+		for (const name in dirtyFields) {
 			if (data[name] === preloadValues[name]) {
 				return
 			}
@@ -121,14 +113,14 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		formHasBeenUpdated()
 	}
 
+	//* Values setting
 	useEffect(() => {
-		 for (let name in defaultValues) {
-			// @ts-ignore
-			setValue(name, preloadValues[name])
+		 for (const name in defaultValues) {
+			setValue(name as keyof IUserInfoEditForm, preloadValues[name])
 		}
 	}, [])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isDirty || (genderState?.id && genderState.id !== preloadValues.gender)) {
 			setStatusState('undo')
 		}
@@ -159,12 +151,12 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 					className={'user_info_edit_card_birth_and_gender-cont cont white-card'}
 				>
 					<DateInput
-						name="birthday"
-						inputRef={inputBirthdayRef}
-						icon={<LiaBirthdayCakeSolid className="input_field-icon"/>}
-						{...commonProps}
+						name='birthday'
+						inputDateRef={inputBirthdayRef}
+						icon={ICONS.birthday}
 						cleanerState={Boolean(watch('birthday'))}
 						isEmptyIcon={!preloadValues.birthday}
+						{ ...commonProps }
 					/>
 					<GenderSelectButton
 						selectedState={genderState}
@@ -180,16 +172,14 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 				>
 					<PhoneInput
 						name='phone'
-						inputRef={inputPhoneRef}
-						getValues={getValues}
-						setValue={setValue}
+						inputPhoneRef={inputPhoneRef}
 						{ ...commonProps }
 					/>
 					<DropDownSearchInput
 						LIST={STORES_LIST}
 						name='store'
 						placeholder='Точка'
-						icon={<HiOutlineHome className='input_field-icon'/>}
+						icon={ICONS.store}
 						{ ...dropDownSearchInputProps }
 					/>
 					<UserNameInput
@@ -197,21 +187,21 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						placeholder='Фамилия'
 						inputMaxLength={25}
 						inputType='name'
-						icon={nameInputIcon}
+						icon={ICONS.name}
 						{ ...commonProps }
 					/>
 					<UserNameInput
 						name='firstName'
 						placeholder='Имя'
 						inputType='name'
-						icon={nameInputIcon}
+						icon={ICONS.name}
 						{ ...commonProps }
 					/>
 					<UserNameInput
 						name='middleName'
 						placeholder='Отчество'
 						inputType='name'
-						icon={nameInputIcon}
+						icon={ICONS.name}
 						{ ...commonProps }
 					/>
 				</div>
@@ -225,14 +215,14 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 							LIST={COMPANIES_LIST}
 							name='company'
 							placeholder='Организация'
-							icon={<MdOutlineWorkOutline className='input_field-icon'/>}
+							icon={ICONS.company}
 							{ ...dropDownSearchInputProps }
 						/>
 						<DropDownSearchInput
 							LIST={JOBS_LIST}
 							name='job'
 							placeholder='Должность'
-							icon={<GrUserWorker className='input_field-icon'/>}
+							icon={ICONS.job}
 							{ ...dropDownSearchInputProps }
 						/>
 					</div>
@@ -246,7 +236,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 								className={'user_info_edit_card_passport-but cont'}
 								type={'button'}
 							>
-								<BsPassport className={'fa-icon'} />
+								{ICONS.passport}
 								<span>
 								    Паспортные<br/> данные
 								</span>

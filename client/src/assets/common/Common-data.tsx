@@ -145,6 +145,7 @@ export const LOCATIONS_LIST: IDeviceLocation[] = [
 	},
 ]
 
+
 export const GENDER_LIST: ISelectDropDownOptionListElem[] = [
 	{
 		id: 'male',

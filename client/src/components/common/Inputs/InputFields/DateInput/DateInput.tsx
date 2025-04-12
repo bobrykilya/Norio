@@ -1,41 +1,59 @@
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
 import { ISignFormInput } from "../../../../../types/Auth-types"
 import InputField from "../InputField/InputField"
 import { ICommonVar } from "../../../../../../../common/types/Global-types"
+import { useIMask } from 'react-imask'
+import { PHONE_CODES_LIST } from "../../../../../assets/AuthPage/AuthPage-data"
 
 
 
 type DateInputProps = ISignFormInput & {
-	inputRef: React.MutableRefObject<HTMLInputElement>;
+	inputDateRef: React.MutableRefObject<HTMLInputElement>;
 	icon: ICommonVar['icon'];
 }
-const DateInput = ({ name, register, errors={}, reset, disabled=false, inputRef, icon, withCopyBut, cleanerState=false, isEmptyIcon }: DateInputProps) => {
+const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDateRef, icon, withCopyBut, cleanerState=false, isEmptyIcon }: DateInputProps) => {
 
 	const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
-	// const opts = {
-	//
-	// }
-	// const {
-	// 	ref: ,
-	// } = useIMask(opts, /* optional {
-  //   onAccept,
-  //   onComplete,
-  //   ref,
-  //   defaultValue,
-  //   defaultUnmaskedValue,
-  //   defaultTypedValue,
-  // } */)
-
-
-	const handleChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-		e.target.value = e.target.value.replace(/[^0-9]/g, '')
-		inputRef.current.value = inputRef.current.value.replace(/(\d{2})(\d{2})(\d{4})/, '$1.$2.$3')
-		e.target.value ? changeInput() : clearInput()
+	const inputRef = inputDateRef || useRef(null)
+	const dateMaskOptions = {
+		mask: [{
+			mask: '00.00.0000',
+		}],
 	}
 
-	const changeInput = () => {
-		setIsCleanerOpened(true)
+	const { ref: formRef, onChange: onFormChange, ...restRegister } = register(name, {
+		minLength: {
+			value: 10,
+			message: `Введена не полная дата`
+		},
+		validate: {
+			isCorrectDay: (val: string) => {
+				const message = 'Неизвестный код оператора связи'
+				if (val.length >= 9) {
+					return (PHONE_CODES_LIST.includes(val.substring(1,3)) || message)
+				} else {
+					return true
+				}
+			},
+		},
+	})
+
+	const {
+		ref: maskedInputRef,
+		setUnmaskedValue,
+	} = useIMask(dateMaskOptions, {
+		ref: inputRef,
+		onAccept: (val, _, e) => {
+			onFormChange(e)
+			handleChangeDate(val)
+		}
+	})
+
+	const handleChangeDate = (maskedValue: string) => {
+		// maskedValue = maskedValue.replace(/[^0-9]/g, '')
+		// maskedValue = inputRef.current.value.replace(/(\d{2})(\d{2})(\d{4})/, '$1.$2.$3')
+		maskedValue ? setIsCleanerOpened(true) : clearInput()
 	}
 
 	const handleClickCleaner = async () => {
@@ -44,17 +62,15 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputRef,
 	}
 
 	const clearInput = () => {
+		setUnmaskedValue('')
 		reset(name)
 		setIsCleanerOpened(false)
 	}
 
-	const { ref, ... restRegister } = register(name, {
-		minLength: {
-			value: 8,
-			message: `Введена не полная дата`
-		},
-		onChange: handleChangePhone,
-	})
+	//* First value setting for IMask
+	useLayoutEffect(() => {
+		setUnmaskedValue(inputRef.current?.value)
+	}, [!inputRef.current && inputRef.current?.value])
 
 
 	return (
@@ -62,18 +78,18 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputRef,
 			contClassName={'date_input-cont'}
 			inputIcon={icon}
 			registerForm={{
-				refForm: ref,
+				formRef,
 				restRegister,
 				error: errors[name]
 			}}
-			inputRef={inputRef}
+			inputRef={maskedInputRef}
 			inputParams={{
 				inputMode: 'number',
-				maxLength: 8,
+				maxLength: 10,
 				label: 'Дата рождения',
 				placeholder: '04.09.2001',
-				disabled: disabled,
 				autoComplete: 'off',
+				disabled,
 			}}
 			cleanerParams={{
 				isCleanerOpened: isCleanerOpened,
@@ -83,7 +99,6 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputRef,
 				withCopyBut ? {
 					isCopy: true,
 					isExtraButVisible: isCleanerOpened,
-					// onClick: copyInputValue
 				} :
 				null
 			}

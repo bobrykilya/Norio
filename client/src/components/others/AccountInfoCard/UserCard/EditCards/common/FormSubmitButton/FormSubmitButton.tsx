@@ -1,6 +1,6 @@
 import React from 'react'
 import RoundButton from "../../../../../../common/Buttons/RoundButton/RoundButton"
-import { IoIosSave } from "react-icons/io"
+import { ICONS } from "../../../../../../../assets/common/Icons-data"
 
 
 
@@ -13,7 +13,7 @@ const FormSubmitButton = ({}: FormSubmitButProps) => {
 			className={'user_info_edit_card_submit-but'}
 			isSubmitBut={true}
 		>
-			<IoIosSave className={'fa-icon'} />
+			{ICONS.save}
 		</RoundButton>
 	)
 }

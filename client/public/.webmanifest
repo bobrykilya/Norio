@@ -2,7 +2,7 @@
     "name": "Norio",
     "short_name": "Norio",
     "description": "Web-app for employees of corporation",
-    "icons": [
+    "ICONS": [
         {
             "src": "../src/assets/logos/little_logo_44x44.png",
             "sizes": "44x44",

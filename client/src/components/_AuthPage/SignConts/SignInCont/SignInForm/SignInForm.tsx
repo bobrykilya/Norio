@@ -5,11 +5,10 @@ import UserNameInput from '../../../../common/Inputs/InputFields/NameInput/NameI
 import PasswordInput from '../../../../common/Inputs/InputFields/PasswordInput/PasswordInput'
 import CheckBox from '../../../../common/Inputs/CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
-import { BiLogInCircle } from "react-icons/bi"
-import { FaUser } from "react-icons/fa"
 import ToolTip from '../../../../others/ToolTip/ToolTip'
 import { ISignInReq } from "../../../../../../../common/types/Auth-types"
 import SignIn from "../../../../../features/auth/signIn"
+import { ICONS } from "../../../../../assets/common/Icons-data"
 
 
 
@@ -83,7 +82,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
                 <UserNameInput
                     name='username'
                     placeholder='Логин'
-                    icon={<FaUser className='input_field-icon'/>}
+                    icon={ICONS.user}
                     inputRefLogin={inputRefLogin}
                     { ...commonProps }
                 />
@@ -100,7 +99,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
                 </label>
             </div>
             <SubmitBut
-                icon={<BiLogInCircle className='fa-icon'/>}
+                icon={ICONS.enter}
                 onClick={handleSubmit(onSubmitNotSave)}
                 disabled={isFormDisabled}
                 useOnClick={notSaveUser}

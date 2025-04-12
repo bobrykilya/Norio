@@ -1,8 +1,7 @@
 import React from 'react'
 import RoundButton from "../../../../../../common/Buttons/RoundButton/RoundButton"
-import { BiBadgeCheck } from "react-icons/bi"
-import { IoArrowUndoSharp } from "react-icons/io5"
 import { Loader } from "../../../../../../common/Loader/Loader"
+import { ICONS } from "../../../../../../../assets/common/Icons-data"
 
 
 
@@ -35,12 +34,12 @@ const FormStatusButton = ({ state }: FormStatusButProps) => {
 				<div
 					className={`switch_status-elem cont ok-cont ${state === 'ok' ? 'active' : ''}`}
 				>
-					<BiBadgeCheck className={'fa-icon'} />
+					{ICONS.ok}
 				</div>
 				<div
 					className={`switch_status-elem cont undo-cont ${state === 'undo' ? 'active' : ''}`}
 				>
-					<IoArrowUndoSharp className={'fa-icon'} />
+					{ICONS.undo}
 				</div>
 			</div>
 		</RoundButton>

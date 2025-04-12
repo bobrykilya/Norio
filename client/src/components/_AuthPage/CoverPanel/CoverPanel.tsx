@@ -3,11 +3,10 @@ import React from 'react'
 import SignUpImg from '../../../assets/AuthPage/sign_up.png'
 // @ts-ignore
 import SignInImg from '../../../assets/AuthPage/sign_in.png'
-import { IoArrowBackCircleOutline } from "react-icons/io5"
 import ToolTip from '../../others/ToolTip/ToolTip'
 import { useCoverPanelState } from "../../../stores/Auth-store"
 import SignUp from "../../../features/auth/signUp"
-// import CoverBgImg from '../../../assets/cover_bg.jpg'
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -64,7 +63,7 @@ const CoverPanel = ({ disabled }: CoverPanelProps) => {
                     disabled={disabled}
                     className={'cont'}
                 >
-                    <IoArrowBackCircleOutline className='fa-icon'/>
+                    {ICONS.backCircled}
                 </button>
             </div>
             <div id='img-cont' className='cont'>

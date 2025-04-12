@@ -81,14 +81,14 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
         }
     }
 
-    const { ref, ... restRegister } = getRegister(inputType)
+    const { ref: formRef, ...restRegister } = getRegister(inputType)
 
     return (
         <InputField
             contClassName={'user_name_input-cont'}
             inputIcon={icon}
             registerForm={{
-                refForm: ref,
+                formRef,
                 restRegister,
                 error: errors[name]
             }}

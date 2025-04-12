@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6"
 import { getTemp } from "../WeatherCard"
 import { getTimeParams } from "../../../../utils/getTime"
 import { throttle } from "../../../../utils/debounce"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
+import { ICONS } from "../../../../assets/common/Icons-data"
 
 
 
@@ -78,7 +78,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 				disabled={scrollTest()}
 				size={'tiny'}
 			>
-				<FaAngleLeft className={'fa-icon'} />
+				{ICONS.arrowLeft}
 			</RoundButton>
 			<ul
 				className={'hourly_weather_list-cont cont'}
@@ -117,7 +117,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 				disabled={scrollTest('end')}
 				size={'tiny'}
 			>
-				<FaAngleRight className={'fa-icon'} />
+				{ICONS.arrowRight}
 			</RoundButton>
 		</div>
 	)

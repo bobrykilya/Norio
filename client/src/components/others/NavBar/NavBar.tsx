@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react'
 import { NAV_BAR_LIST } from '../../../assets/common/Common-data'
 import LogBookButton from "../JumpingCards/LogBookCard/LogBookButton"
-import { TbInfoSquareRoundedFilled } from "react-icons/tb"
 import SettingsButton from "../JumpingCards/SettingsCard/SettingsButton"
 import { TOOLTIP_DELAY_TIME } from "../../../../constants"
 // @ts-ignore
 import appIcon from '../../../assets/common/logos/app_icon.png'
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import ToolTip from "../ToolTip/ToolTip"
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -95,7 +95,7 @@ const NavBar = ({ location }: NavBarProps) => {
                         delayTimeMS: toolTipDelayTimeMS
                     }}
                 >
-                    <TbInfoSquareRoundedFilled className='fa-icon' />
+                    {ICONS.instructionsFilled}
                 </RoundButton>
                 <SettingsButton
                     delayTimeMS={toolTipDelayTimeMS}

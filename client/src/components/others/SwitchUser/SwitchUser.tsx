@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import SwitchUserElem from "./SwitchUserElem/SwitchUserElem"
-import { TbTrashXFilled } from "react-icons/tb"
 import ToolTip from "../ToolTip/ToolTip"
 import { MAX_SWITCH_USERS, SWITCH_USERS_LS } from "../../../../constants"
 import LogOut from "../../../features/auth/logOut"
@@ -9,6 +8,7 @@ import { useJwtInfoListState } from "../../../stores/Auth-store"
 import timeout from "../../../utils/timeout"
 import { sortByAlphabet } from "../../../utils/sort"
 import { IUserRepository } from "../../../../../api/src/types/DB-types"
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -65,7 +65,7 @@ const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 					size={'tiny'}
 					disabled={(!isAuthPage ? !usersList[1] : !usersList[0])}
 				>
-					<TbTrashXFilled className={'fa-icon'} />
+					{ICONS.trash}
 				</RoundButton>
 			</div>
 			{

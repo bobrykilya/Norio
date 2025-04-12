@@ -1,13 +1,12 @@
 import React, { MutableRefObject, useRef, useState } from 'react'
 import InputCleaner from '../../common/Inputs/InputFields/InputUtils/InputCleaner/InputCleaner'
 import InputError from '../../common/Inputs/InputFields/InputUtils/InputError/InputError'
-// import { PiUserThin } from "react-icons/pi"
-import { PiUser } from "react-icons/pi"
 import AvatarListCard from './AvatarListCard'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import { IReactHookForm } from "../../../types/Auth-types"
 import { useAvatarListCardState } from "../../../stores/Utils-store"
 import ToolTip from "../../others/ToolTip/ToolTip"
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -90,7 +89,7 @@ const AvatarButton = ({ LIST, currentAvatar, setAvatar, error, setError, disable
                 <div
                     className={`no_avatar-cont cont ${isNoAvatarOpened ? 'opened' : ''}`}
                 >
-                    <PiUser className='fa-icon' />
+                    {ICONS.emptyAvatar}
                 </div>
                 {
                     currentAvatar &&

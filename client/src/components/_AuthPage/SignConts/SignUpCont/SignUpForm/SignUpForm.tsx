@@ -1,17 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput'
-import { FaArrowRightLong } from "react-icons/fa6"
 import UserNameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
 import PasswordInput from '../../../../common/Inputs/InputFields/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
-import { LuCheckCircle } from "react-icons/lu"
-import { FaUser } from "react-icons/fa"
 import { useCoverPanelState } from "../../../../../stores/Auth-store"
 import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
 import { ICheckUserReq } from "../../../../../../../common/types/Auth-types"
 import { useModalState } from "../../../../../stores/Global-store"
 import SignUp from "../../../../../features/auth/signUp"
+import { ICONS } from "../../../../../assets/common/Icons-data"
 
 
 
@@ -23,7 +21,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
     // console.log('SignUp')
     
     const { setCoverPanelState } = useCoverPanelState()
-    const modalState = useModalState(s => s.modalState)
+    const modalsState = useModalState(s => s.allModalsState)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefLogin = useRef(null)
 
@@ -65,7 +63,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingCard is opened
     useCloseOnEsc({
-        conditionsList: [!isFormDisabled, !modalState],
+        conditionsList: [!isFormDisabled, !modalsState],
         callback: () => setCoverPanelState('sign_in')
     })
 
@@ -87,7 +85,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
                 <UserNameInput
                     name='username'
                     placeholder='Логин'
-                    icon={<FaUser className='input_field-icon'/>}
+                    icon={ICONS.user}
                     inputType='sign_up'
                     inputRefLogin={inputRefLogin}
                     { ...commonProps }
@@ -105,10 +103,10 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
                 />
             </div>
             <div className={`blur_icon-cont cont ${isFormBlur ? 'active' : ''}`}>
-                <LuCheckCircle className='fa-icon'/>
+                {ICONS.check}
             </div>
             <SubmitBut 
-                icon={<FaArrowRightLong className='fa-icon'/>}
+                icon={ICONS.next}
                 disabled={isFormDisabled}
                 blur={isFormBlur}
                 isLoading={isLoading}

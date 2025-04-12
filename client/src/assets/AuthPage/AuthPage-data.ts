@@ -2,6 +2,8 @@ import { DefaultCityOptions } from "../../../../common/types/Global-types"
 
 
 
+export const PHONE_CODES_LIST = ['29', '33', '44', '25']
+
 export type IDataListElement = {
     id: string;
     title: string;

@@ -1,16 +1,13 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 import SnackBar from '../../components/others/SnackBar/SnackBar'
-import { PiSealWarning, PiWarningCircleBold } from "react-icons/pi"
-import { TbLockSquareRounded } from "react-icons/tb"
-import { FiCheckCircle } from "react-icons/fi"
-import { LuBadgeInfo } from "react-icons/lu"
 import { getTime } from "../../utils/getTime"
 import blockDevice from "../blockDevice/blockDevice"
 import timeout from "../../utils/timeout"
 import { useBlockErrorState } from "../../stores/Device-store"
 import { ISnack, SnackBarTypeOptions } from "../../../../common/types/Global-types"
 import saveLogInLocalStorage from "./saveLogInLocalStorage"
+import { ICONS } from "../../assets/common/Icons-data"
 
 
 
@@ -31,11 +28,11 @@ const showAllSnacksDev = () => {
 
 const getTypeDecoding = (type: SnackBarTypeOptions) => {
     switch (type) {
-		case 'e' : return { snackType: type, title: 'Ошибка', icon: <PiWarningCircleBold className='error message-icon fa-icon' />, toastDuration: 4000 }
-		case 'i' : return { snackType: type, title: 'Инфо', icon: <LuBadgeInfo className='info message-icon fa-icon' />, toastDuration: 5000 }
-		case 'w' : return { snackType: type, title: 'Внимание', icon: <PiSealWarning className='warning message-icon fa-icon' />, toastDuration: Infinity }
-		case 'b' : return { snackType: type, title: 'Блок', icon: <TbLockSquareRounded className='block message-icon fa-icon' />, toastDuration: Infinity }
-        case 's' : return { snackType: type, title: 'Успех', icon: <FiCheckCircle className='success message-icon fa-icon' />, toastDuration: 2000 }
+		case 'e' : return { snackType: type, title: 'Ошибка', icon: ICONS.error, toastDuration: 4000 }
+		case 'i' : return { snackType: type, title: 'Инфо', icon: ICONS.info, toastDuration: 5000 }
+		case 'w' : return { snackType: type, title: 'Внимание', icon: ICONS.warning, toastDuration: Infinity }
+		case 'b' : return { snackType: type, title: 'Блок', icon: ICONS.block, toastDuration: Infinity }
+        case 's' : return { snackType: type, title: 'Успех', icon: ICONS.success, toastDuration: 2000 }
     }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import { TbSettings, TbSettingsFilled } from "react-icons/tb"
 import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
+import { ICONS } from "../../../../assets/common/Icons-data"
 
 
 
@@ -22,9 +22,7 @@ const SettingsButton = ({ isAuthPage=false, delayTimeMS }: SettingsButtonProps) 
 			}}
 		>
 			{
-				isAuthPage ?
-				<TbSettings className='fa-icon' /> :
-				<TbSettingsFilled className='fa-icon' />
+				isAuthPage ? ICONS.settings : ICONS.settingsFilled
 			}
 		</RoundButton>
 	)

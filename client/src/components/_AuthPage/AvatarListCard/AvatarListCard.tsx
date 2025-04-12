@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import JumpingCard from '../../common/JumpingCard/JumpingCard'
-import { IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import timeout from "../../../utils/timeout"
 import { sortByAlphabet } from "../../../utils/sort"
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import { useAuthState } from "../../../stores/Auth-store"
 import { nextElems, prevElems } from "../../../utils/focusElementSibling"
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -104,7 +104,7 @@ const AvatarListCard = ({ LIST, currentAvatar, isAvatarListCardOpened, closeAvat
                 }}
             >
                 <div className='scroll_but-cont cont'>
-                    <IoMdArrowRoundUp className='fa-icon' />
+                    {ICONS.arrowUp}
                 </div>
             </RoundButton>
             <RoundButton
@@ -117,7 +117,7 @@ const AvatarListCard = ({ LIST, currentAvatar, isAvatarListCardOpened, closeAvat
                 }}
             >
                 <div className='scroll_but-cont cont'>
-                    <IoMdArrowRoundDown className='fa-icon' />
+                    {ICONS.arrowDown}
                 </div>
             </RoundButton>
         </div>

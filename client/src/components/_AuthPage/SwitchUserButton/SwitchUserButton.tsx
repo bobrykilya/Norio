@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { PiUser } from "react-icons/pi"
 import { useJwtInfoListState } from "../../../stores/Auth-store"
 import ToolTip from "../../others/ToolTip/ToolTip"
 import { MAX_SWITCH_USERS, SWITCH_USERS_LS } from "../../../../constants"
 import DropDown from "../../common/DropDown/DropDown"
 import SwitchUser from "../../others/SwitchUser/SwitchUser"
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -78,7 +78,7 @@ const SwitchUserButton = ({ disabled }: SwitchUserButtonProps) => {
 								key={index}
 								className={'switch_user_img-cont cont'}
 							>
-								<PiUser className="fa-icon"/>
+								{ICONS.emptyAvatar}
 							</div>
 						)
 					}

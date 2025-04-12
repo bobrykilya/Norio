@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { showSnackMessage } from "../../../features/showSnackMessage/showSnackMessage"
 import CardLinkButton from "../CardLinkButton/CardLinkButton"
 import SelectButton from "../../common/Inputs/SelectButton/SelectButton"
-import { FaLocationDot } from "react-icons/fa6"
 import { LOCATIONS_LIST } from "../../../assets/common/Common-data"
 import { ILocationWeather, ILocationWeatherElem, IWeatherTempObj } from "../../../../../common/types/Device-types"
 import { useDeviceInfoState } from "../../../stores/Device-store"
@@ -18,6 +17,7 @@ import HourlyWeatherSlider from "./HourlyWeatherSlider/HourlyWeatherSlider"
 import DailyWeatherElement from "./DailyWeatherElement/DailyWeatherElement"
 import FutureWeather from "./FutureWeather/FutureWeather"
 import { Loader } from "../../common/Loader/Loader"
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -43,7 +43,7 @@ export const getTemp = (temp: ILocationWeatherElem['feels_like'] = 0) => {
 const CITIES_AND_MY_LOCATION_LIST: ISelectButtonOptionListElem[] = LOCATIONS_LIST.map(loc => loc.city).concat({
 	id: MY_LOC,
 	title: 'Мои координаты',
-	icon: <FaLocationDot className={'fa-icon'}/>,
+	icon: ICONS.location,
 	isFixed: true,
 })
 

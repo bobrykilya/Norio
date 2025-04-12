@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import toast, { useToasterStore } from 'react-hot-toast'
-import { IoCloseCircleOutline } from 'react-icons/io5'
 import { ICommonVar, SnackBarTypeOptions } from '../../../../../common/types/Global-types'
 import { TOAST_LIMIT } from "../../../../constants"
 import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
 import { useModalState } from "../../../stores/Global-store"
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -77,7 +77,7 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
                     <div
                         className='snackbar_close-icon before_hover-but cont'
                     >
-                        <IoCloseCircleOutline className='fa-icon' />
+                        {ICONS.closeCircled}
                     </div>
                 :
                     null

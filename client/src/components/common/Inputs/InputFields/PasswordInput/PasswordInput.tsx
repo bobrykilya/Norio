@@ -2,9 +2,8 @@ import React, { useRef, useState } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
 import { ISignFormInput, SignFormInputTypesOptions } from '../../../../../types/Auth-types'
 import InputField from "../InputField/InputField"
-import { FaKey } from "react-icons/fa"
 import ToolTip from "../../../../others/ToolTip/ToolTip"
-import { VscEye, VscEyeClosed } from "react-icons/vsc"
+import { ICONS } from "../../../../../assets/common/Icons-data"
 
 
 
@@ -107,9 +106,9 @@ const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, 
     return (
         <InputField
             contClassName={'password_input-cont'}
-            inputIcon={<FaKey className='input_field-icon'/>}
+            inputIcon={ICONS.password}
             registerForm={{
-                refForm: ref,
+                formRef: ref,
                 restRegister,
                 error: errors[name]
             }}
@@ -128,9 +127,7 @@ const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, 
                 handleClickCleaner: handleClickCleaner
             }}
             extraButParams={{
-                icon: !isLockOpened ?
-                    <VscEye className='fa-icon' /> :
-                    <VscEyeClosed className='fa-icon' />,
+                icon: !isLockOpened ? ICONS.eyeOpened : ICONS.eyeClosed,
                 isExtraButVisible: isCleanerOpened,
                 onClick: handleSwitchLockPosition,
                 toolTip: {

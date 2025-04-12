@@ -6,7 +6,7 @@ import { ICommonVar } from "../../../../../../../common/types/Global-types"
 import RoundButton from "../../../Buttons/RoundButton/RoundButton"
 import { ToolTipProps } from "../../../../others/ToolTip/ToolTip"
 import { copyText } from "../../../../../utils/copy"
-import { RxCopy } from "react-icons/rx"
+import { ICONS } from "../../../../../assets/common/Icons-data"
 
 
 
@@ -14,7 +14,7 @@ type InputFieldProps = {
 	contClassName: string;
 	inputIcon: ICommonVar['icon'];
 	registerForm: {
-		refForm: any;
+		formRef: any;
 		restRegister: any;
 		error?: {
 			message: string;
@@ -69,11 +69,11 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
             </span>
 			<input
 				{ ...registerForm.restRegister }
-				ref={(e) => {
-					registerForm.refForm(e)
-					inputRef.current = e
-				}}
 				{ ...inputParams }
+				ref={(e) => {
+					inputRef.current = e
+					registerForm.formRef(e)
+				}}
 			/>
 			{inputIcon}
 			{children}
@@ -97,7 +97,7 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 								text: 'Скопировать поле'
 							}}
 						>
-							<RxCopy className={'fa-icon'} />
+							{ICONS.copy}
 						</RoundButton> :
 						<RoundButton
 							className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible ? 'opened' : ''}`}

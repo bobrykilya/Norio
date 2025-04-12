@@ -1,7 +1,6 @@
 import React from 'react'
-import { BsArrowUpRight } from "react-icons/bs"
-import { IoClose } from "react-icons/io5"
 import RoundButton, { RoundButtonProps } from "../../common/Buttons/RoundButton/RoundButton"
+import { ICONS } from "../../../assets/common/Icons-data"
 
 
 
@@ -33,12 +32,12 @@ const CardLinkButton = ({ onClick, link, isCloseIcon, className, ...props }: Car
 					<div
 						className={'fa_icon-cont cont'}
 					>
-						<IoClose className={'fa-icon close-icon'}/>
+						{ICONS.close}
 					</div>
 					<div
 						className={'fa_icon-cont cont'}
 					>
-						<BsArrowUpRight strokeWidth={0.5} className={'fa-icon link-icon'}/>
+						{ICONS.link}
 					</div>
 				</div>
 			</div>

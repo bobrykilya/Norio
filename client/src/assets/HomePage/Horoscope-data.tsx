@@ -53,12 +53,10 @@ export const getHoroscopeType = (birthdayInSec: IUserRepository['birthday']): Ho
 
 
 
-type HoroscopeExtraInfo = {
-	ruName: string
-	icon: ICommonVar['icon'],
-}
-
-type IHoroscopeData = Record<HoroscopeTypeOptions, HoroscopeExtraInfo>
+type IHoroscopeData = Record<HoroscopeTypeOptions, {
+	ruName: string;
+	icon: ICommonVar['icon'];
+}>
 
 export const HOROSCOPE_DATA: IHoroscopeData = {
 	aquarius: {
