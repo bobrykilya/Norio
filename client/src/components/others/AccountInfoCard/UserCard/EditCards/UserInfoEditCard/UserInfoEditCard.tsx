@@ -16,23 +16,24 @@ import { getDateInSecondsFromRussianDate, getDateInShortString } from "../../../
 import { ICONS } from "../../../../../../assets/common/Icons-data"
 import { ICommonVar } from "../../../../../../../../common/types/Global-types"
 import { showSnackMessage } from "../../../../../../features/showSnackMessage/showSnackMessage"
+import { IUserInfoEditReq } from "../../../../../../../../common/types/User-types"
+import UserService from "../../../../../../services/User-service"
+import { useUserInfoState } from "../../../../../../stores/User-store"
 
 
 
-type IUserInfoEdit = Omit<ISignUp, 'avatar'> & {
-	company: string;
+export type IUserInfoEdit = Omit<ISignUp, 'avatar'> & {
+	company?: string;
 	birthday?: string;
 }
 type UserInfoEditCardProps = {
 	userInfo: IUserRepository;
 }
-type IDirtyData =  Partial<Omit<IUserInfoEdit, 'birthday'>> & {
-	birthday?: string | number;
-}
 const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 	// console.log('UserInfoEditCard form has been updated')
 
 	const [statusState, setStatusState] = useState<FormStatusButOptions>('ok')
+	const setUserInfoState = useUserInfoState(s => s.setUserInfoState)
 	const defaultGender = GENDER_LIST.find(el => el.id === userInfo?.gender) || null
 	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(defaultGender)
 	const inputPhoneRef = useRef<HTMLInputElement>(null)
@@ -49,7 +50,6 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 	}
 	const preloadValues: IUserInfoEdit = {
 		...userInfo,
-		company: 'Стройпродукт', //! Change
 		birthday: getDateInShortString(userInfo?.birthday),
 	}
 	// console.log(preloadValues.phone)
@@ -85,14 +85,22 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		watch,
 	}
 
-	const formHasBeenUpdated = () => {
-		showSnackMessage({
-			type: "s",
-			message: 'Изменения сохранены'
-		})
+	const formHasBeenUpdated = async (data: IUserInfoEditReq) => {
+		await UserService.editUserInfo(data)
+			.then(_ => {
+				setUserInfoState({
+					...userInfo,
+					...data as IUserRepository
+				})
+				showSnackMessage({
+					type: "s",
+					message: 'Изменения сохранены'
+				})
+				setStatusState('ok')
+			})
 	}
 	const handleUndoButClick = () => {
-		setGenderState(GENDER_LIST.find(el => el.id === userInfo?.gender))
+		setGenderState(defaultGender)
 		resetForm()
 		preloadFormValuesSetting()
 	}
@@ -107,8 +115,8 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 			dirtyData.birthday = getDateInSecondsFromRussianDate(data.birthday)
 		}
 
-		formHasBeenUpdated()
-		console.log('save: ', dirtyData)
+		// console.log('save: ', dirtyData)
+		await formHasBeenUpdated(dirtyData)
 	}
 
 	const getDirtyData = () => {
@@ -116,7 +124,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 			return {}
 		}
 
-		const dirtyData: IDirtyData = {}
+		const dirtyData: IUserInfoEditReq = {}
 
 		if (getValues('birthday') !== preloadValues.birthday) {
 			dirtyData.birthday = ''
@@ -152,15 +160,13 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 	//* Update form inputs and selects watching
 	useLayoutEffect(() => {
 		if (Object.keys(getDirtyData())[0]) {
-			if (statusState === 'undo') {
-				return
+			if (statusState !== 'undo') {
+				setStatusState('undo')
 			}
-			setStatusState('undo')
 		} else {
-			if (statusState === 'ok') {
-				return
+			if (statusState !== 'ok') {
+				setStatusState('ok')
 			}
-			setStatusState('ok')
 		}
 	}, [...Object.keys(defaultValues).map(key => watch(key as keyof IUserInfoEdit)), genderState?.id])
 

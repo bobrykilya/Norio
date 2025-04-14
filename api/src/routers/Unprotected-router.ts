@@ -9,4 +9,4 @@ const UnprotectedRouter = Router()
 UnprotectedRouter.post("/weather", DeviceController.getWeather as Application)
 UnprotectedRouter.post("/horoscope", UserController.getHoroscope as Application)
 
-export { UnprotectedRouter }
+export default UnprotectedRouter

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useUserInfoState } from "../../../stores/Auth-store"
 import { IUserRepository } from "../../../../../api/src/types/DB-types"
 import { useFetchHoroscope } from "../../../queries/Horoscope-queries"
 import { getHoroscopeType, HOROSCOPE_DATA } from "../../../assets/HomePage/Horoscope-data"
@@ -9,6 +8,7 @@ import CardLinkButton from "../CardLinkButton/CardLinkButton"
 import UnfoldingCard from "../../common/UnfoldingCard/UnfoldingCard"
 import WriteBirthdayButton from "./WriteBirthdayButton/WriteBirthdayButton"
 import { Loader } from "../../common/Loader/Loader"
+import { useUserInfoState } from "../../../stores/User-store"
 
 
 

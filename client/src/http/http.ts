@@ -1,24 +1,28 @@
 import ky from "ky"
 import { CHECK_IP_AND_COUNTRY } from "../../constants"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
-import { useJwtInfoListState, useUserInfoState } from "../stores/Auth-store"
+import { useJwtInfoListState } from "../stores/Auth-store"
+import { useUserInfoState } from "../stores/User-store"
 
 
 
+const getApiURL = () => {
+	return import.meta.env.VITE_API_URL
+}
 const $apiAuth = ky.create({
-	prefixUrl: `${import.meta.env.VITE_API_URL}/auth`,
+	prefixUrl: `${getApiURL()}/auth`,
 	cache: 'no-store', 
 	credentials: 'include',
 })
 
 const $apiUnprotected = ky.create({
-	prefixUrl: `${import.meta.env.VITE_API_URL}/unprotected`,
+	prefixUrl: `${getApiURL()}/unprotected`,
 	cache: 'no-store',
 	credentials: 'include',
 })
 
-const $apiSecureResource = ky.create({
-	prefixUrl: `${import.meta.env.VITE_API_URL}/resource`,
+const $apiProtected = ky.create({
+	prefixUrl: `${getApiURL()}/protected`,
 	hooks: {
 		beforeRequest: [
 		  (req) => {
@@ -78,7 +82,7 @@ const getApiInfo = async () => {
 
 export {
 	$apiAuth,
-	$apiSecureResource,
+	$apiProtected,
 	$apiUnprotected,
 	$apiIpInfo,
 	$apiIpInfoReserve,

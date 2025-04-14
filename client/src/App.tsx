@@ -8,8 +8,8 @@ import './App.sass'
 import CoverAppTitle from "./components/common/CoverAppTitle/CoverAppTitle"
 import { useBlockErrorState } from "./stores/Device-store"
 import LogBookCard from "./components/others/JumpingCards/LogBookCard/LogBookCard"
-import { useUserInfoState } from "./stores/Auth-store"
 import TopCard from "./components/others/JumpingCards/TopCard/TopCard"
+import { useUserInfoState } from "./stores/User-store"
 
 
 

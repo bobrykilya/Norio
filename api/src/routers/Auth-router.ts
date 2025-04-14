@@ -13,4 +13,4 @@ AuthRouter.post("/refresh", AuthController.refresh as Application)
 AuthRouter.post("/check-user", AuthController.checkUser as Application)
 AuthRouter.post("/block", DeviceController.blockDevice as Application)
 
-export { AuthRouter }
+export default AuthRouter

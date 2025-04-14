@@ -1,10 +1,10 @@
 import { useDeviceInfoState } from "../../stores/Device-store"
 import { ILoginServiceRes } from "../../../../common/types/Auth-types"
 import JWTInfoService from "../../services/JWTInfoService"
-import { useUserInfoState } from "../../stores/Auth-store"
 import { IUserNameInfo } from "../../types/Auth-types"
 import { IUserRepository } from "../../../../api/src/types/DB-types"
 import { CURRENT_USER_LS, DEVICE_LS, SWITCH_USERS_LS } from "../../../constants"
+import { useUserInfoState } from "../../stores/User-store"
 
 
 

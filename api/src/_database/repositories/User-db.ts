@@ -1,6 +1,7 @@
 import queryDB from '../../utils/queryDB'
 import { IUserRepository } from "../../types/DB-types"
 import { ICommonVar } from "../../../../common/types/Global-types.ts"
+import { IUserInfoEditReq } from "../../../../common/types/User-types.ts"
 
 
 
@@ -12,6 +13,7 @@ class UserRepository {
 		status,
 		phone,
 		store,
+		company,
 		job,
 		lastName,
 		firstName,
@@ -21,13 +23,14 @@ class UserRepository {
 		isStore,
 	}: IUserRepository) {
 
-		const response = await queryDB("INSERT INTO users (username, password, role, status, phone, store, job, last_name, first_name, middle_name, gender, avatar, is_store) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING user_id", [
+		const response = await queryDB("INSERT INTO users (username, password, role, status, phone, store, company, job, last_name, first_name, middle_name, gender, avatar, is_store) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING user_id", [
 			username, 
 			hashedPassword, 
 			role, 
 			status,
 			phone, 
-			store, 
+			store,
+			company,
 			job, 
 			lastName, 
 			firstName, 
@@ -40,7 +43,7 @@ class UserRepository {
 		return response.rows[0].user_id
 	}
 
-	static async getUserData(username: IUserRepository['username']) {
+	static async getUserMainData(username: IUserRepository['username']) {
 		const response = await queryDB("SELECT user_id, password FROM users WHERE username=$1", [username])
 
 		return response?.rows[0]
@@ -84,6 +87,31 @@ class UserRepository {
 
 	static async deleteUserById(userId: IUserRepository['userId']) {
 		await queryDB("DELETE FROM users WHERE user_id=$1", [userId])
+	}
+
+	static async updateUserInfo({ userId, newUserInfo: {
+		lastName,
+		firstName,
+		middleName,
+		gender,
+		job,
+		phone,
+		store,
+		company,
+		birthday
+	} }: { userId: IUserRepository['userId'], newUserInfo: IUserInfoEditReq }, ) {
+		await queryDB("UPDATE users SET phone=$1, store=$2, company=$3, job=$4, last_name=$5, first_name=$6, middle_name=$7, gender=$8, birthday=$9 WHERE user_id=$10", [
+			phone,
+			store,
+			company,
+			job,
+			lastName,
+			firstName,
+			middleName,
+			gender,
+			birthday,
+			userId
+		])
 	}
 }
 

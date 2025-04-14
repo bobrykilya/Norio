@@ -1,6 +1,6 @@
 import { showSnackMessage } from "../showSnackMessage/showSnackMessage"
 import { ILogOutReq } from "../../../../common/types/Auth-types"
-import { useJwtInfoListState, useUserInfoState } from "../../stores/Auth-store"
+import { useJwtInfoListState } from "../../stores/Auth-store"
 import AuthService from "../../services/Auth-service"
 import { queryClient } from "../../http/tanstackQuery-client"
 import { IUserNameInfo } from "../../types/Auth-types"
@@ -8,6 +8,7 @@ import AuthCommon from "./authCommon"
 import JWTInfoService from "../../services/JWTInfoService"
 import { CURRENT_USER_LS, LOGOUT_LS } from "../../../constants"
 import { getTime } from "../../utils/getTime"
+import { useUserInfoState } from "../../stores/User-store"
 
 
 

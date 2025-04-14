@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"
 import TokenService from "./Token-service"
-import { Conflict, Forbidden, Unauthorized } from "../utils/Errors"
+import { Conflict, Errors, Forbidden, Unauthorized } from "../utils/Errors"
 import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION } from "../../constants"
 import RefreshSessionsRepository from "../_database/repositories/RefreshSession-db"
 import UserRepository from "../_database/repositories/User-db"
@@ -23,7 +23,7 @@ class AuthService {
 		
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP, queryTime })
 
-		const userData = await UserRepository.getUserData(username)
+		const userData = await UserRepository.getUserMainData(username)
 		
 		if (!userData) {
 			throw new Conflict("Неверный логин или пароль")
@@ -87,7 +87,7 @@ class AuthService {
 
 		const salt = bcrypt.genSaltSync(10)
 
-		const userData = await UserRepository.getUserData(username)
+		const userData = await UserRepository.getUserMainData(username)
 		if (userData) {
 			throw new Conflict("Пользователь с таким логином уже существует")
 		}
@@ -124,10 +124,11 @@ class AuthService {
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP, queryTime })
 
-		//TODO: Change role, is_store
+		//TODO: Change role, is_store, company
 		const role = 1
 		const status = 'inactive'
 		const isStore = false
+		const company = 'Стройпродукт'
 
 		let userId: IUserRepository['userId']
 		let userInfo: IUserRepository
@@ -141,6 +142,7 @@ class AuthService {
 				status,
 				phone,
 				store,
+				company,
 				job,
 				lastName,
 				firstName,
@@ -154,7 +156,7 @@ class AuthService {
             userInfo.userId = userId
 			delete userInfo.hashedPassword
 		} catch {
-			throw new Conflict("Данный номер телефона уже занят другим пользователем")
+			throw Errors.phoneConflict()
 		}
 
 		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTime, deviceType, lsDeviceId, deviceIP })
@@ -253,7 +255,7 @@ class AuthService {
 			throw new Forbidden(err.detail)
 		}
 
-		const { user_id: userId } = await UserRepository.getUserData(payload.username)
+		const { user_id: userId } = await UserRepository.getUserMainData(payload.username)
 
 		const actualPayload = { userId, username: payload.username, deviceId }
 

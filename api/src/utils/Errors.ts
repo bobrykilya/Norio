@@ -25,9 +25,18 @@ class WebError {
 // 	}
 // }
 
+export class Errors {
+	static phoneConflict = () => {
+		return new Conflict("Данный номер телефона уже занят другим пользователем")
+	}
+}
+
 export class Conflict extends WebError {
-	constructor(message?: string) {
+	constraint: string
+
+	constructor(message?: string, constraintField?: string) {
 		super(409, 'Conflict', message)
+		this.constraint = constraintField
 	}
 }
 

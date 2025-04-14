@@ -3,7 +3,7 @@ import JumpingCard from "../../../common/JumpingCard/JumpingCard"
 import { useTopCardState } from "../../../../stores/Utils-store"
 import UserInfoEditCard from "../../AccountInfoCard/UserCard/EditCards/UserInfoEditCard/UserInfoEditCard"
 import UserEditCard from "../../AccountInfoCard/UserCard/EditCards/UserEditCard/UserEditCard"
-import { useUserInfoState } from "../../../../stores/Auth-store"
+import { useUserInfoState } from "../../../../stores/User-store"
 
 
 

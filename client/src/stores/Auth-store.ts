@@ -11,18 +11,9 @@ type IUseCoverPanelState = {
     coverPanelState: CoverPanelOptions;
     setCoverPanelState: (state: CoverPanelOptions) => void;
 }
-const useCoverPanelState = create<IUseCoverPanelState>(set => ({
+export const useCoverPanelState = create<IUseCoverPanelState>(set => ({
     coverPanelState: 'sign_in',
     setCoverPanelState: (state) => set({ coverPanelState: state })
-}))
-
-type IUseUserInfoState = {
-	userInfoState: IUserRepository | null;
-	setUserInfoState: (state: IUserRepository) => void;
-}
-const useUserInfoState = create<IUseUserInfoState>(set => ({
-	userInfoState: null,
-	setUserInfoState: (state) => set({ userInfoState: state })
 }))
 
 
@@ -35,7 +26,7 @@ type IUseAuthState = {
 	socketSessIdState: string;
 	setSocketSessIdState: (state: string) => void;
 }
-const useAuthState = create<IUseAuthState>(set => ({
+export const useAuthState = create<IUseAuthState>(set => ({
 	appReadyState: false,
 	setAppReadyState: (state) => set({ appReadyState: state }),
 
@@ -59,7 +50,7 @@ type IUseJwtInfoState = {
 	addJwtInfoState: (state: IJWTInfo) => void;
 	removeJwtInfoState: (username?: string) => void;
 }
-const useJwtInfoListState = create<IUseJwtInfoState>()(immer((set, get) => ({
+export const useJwtInfoListState = create<IUseJwtInfoState>()(immer((set, get) => ({
 	jwtInfoListState: [],
 	getJwtInfoState: (username) => get().jwtInfoListState.find(el => el.userInfo.username === username),
 	addJwtInfoState: (state) => {
@@ -86,11 +77,3 @@ const useJwtInfoListState = create<IUseJwtInfoState>()(immer((set, get) => ({
 		set({ jwtInfoListState: jwtInfoListState.filter(el=> el.userInfo.username !== username) })
 	},
 })))
-
-
-export {
-	useCoverPanelState,
-	useUserInfoState,
-	useAuthState,
-	useJwtInfoListState,
-}

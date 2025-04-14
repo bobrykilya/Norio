@@ -2,8 +2,8 @@ import { getLastTime } from '../../utils/getTime'
 import { ISnack } from '../../../../common/types/Global-types'
 import DeviceService from "../../services/Device-service"
 import { DEVICE_LS, LOCAL_LOG_STORAGE_TIME, LOG_LIST_LS, RECENTLY_TIME, SAME_LOGS_QUANTITY } from "../../../constants"
-import { useUserInfoState } from "../../stores/Auth-store"
 import { showSnackMessage } from "./showSnackMessage"
+import { useUserInfoState } from "../../stores/User-store"
 // import { useBlockError } from '../../stores/Global-store'
 
 

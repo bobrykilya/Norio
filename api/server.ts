@@ -3,17 +3,18 @@ import { createServer } from 'node:http'
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import Fingerprint from "express-fingerprint"
-import { AuthRouter } from "./src/routers/Auth-router.ts"
-import TokenService from "./src/services/Token-service"
+import AuthRouter from "./src/routers/Auth-router.ts"
 import { socketConnection } from './src/services/Socket-service'
 import dotenv from "dotenv"
 import detect from "detect-port"
 import killPort from "kill-port"
-import { UnprotectedRouter } from "./src/routers/Unprotected-router.ts"
+import UnprotectedRouter from "./src/routers/Unprotected-router.ts"
 import { createClient } from "redis"
 import { Conflict } from "./src/utils/Errors.ts"
 import AuthService from "./src/services/Auth-service.ts"
 import { AUTO_LOGOUT_INTERVAL } from "./constants.ts"
+import ProtectedRouter from "./src/routers/Protected-router.ts"
+import protectMiddleware from "./src/middlewares/protect-middleware.ts"
 
 
 
@@ -50,11 +51,12 @@ app.use(
 
 app.use("/auth", AuthRouter)
 app.use("/unprotected", UnprotectedRouter)
+app.use("/protected", protectMiddleware, ProtectedRouter)
 
 // @ts-ignore
-app.use("/resource/protected", TokenService.checkAccess, (_: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: string): any; new(): any } } }) => {
-	return res.status(200).json("Привет " + Date.now())
-})
+// app.use("/resource/protected", TokenService.checkAccess, (_: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: string): any; new(): any } } }) => {
+// 	return res.status(200).json("Привет " + Date.now())
+// })
 
 
 server.on('error', (err) => {

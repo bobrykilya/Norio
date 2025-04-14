@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import ToolTip from "../../ToolTip/ToolTip"
-import { useUserInfoState } from "../../../../stores/Auth-store"
 import UnfoldingCard from "../../../common/UnfoldingCard/UnfoldingCard"
 import SubmitBut from "../../../_AuthPage/SubmitBut/SubmitBut"
 import UserNameCopyButton from "./UserNameCopyButton/UserNameCopyButton"
@@ -10,6 +9,7 @@ import LogOut from "../../../../features/auth/logOut"
 import SwapImg from "../../../common/SwapImg/SwapImg"
 import { useTopCardState } from "../../../../stores/Utils-store"
 import { ICONS } from "../../../../assets/common/Icons-data"
+import { useUserInfoState } from "../../../../stores/User-store"
 
 
 

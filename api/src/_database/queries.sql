@@ -9,6 +9,7 @@ CREATE TABLE users(
     middle_name VARCHAR(20) NOT NULL,
     gender VARCHAR(6),
     birthday BIGINT,
+    company VARCHAR(23) NOT NULL,
     job VARCHAR(23) NOT NULL,
     store VARCHAR(12) NOT NULL,
     phone VARCHAR(14) UNIQUE NOT NULL,
