@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
 import { ISignFormInput } from '../../../../../types/Auth-types'
 import { copyText } from "../../../../../utils/copy"
@@ -12,14 +12,13 @@ import { PHONE_CODES_LIST } from "../../../../../assets/AuthPage/AuthPage-data"
 type PhoneInputProps = ISignFormInput & {
     inputPhoneRef?: React.MutableRefObject<HTMLInputElement>;
 }
-const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPhoneRef, withCopyBut, cleanerState, isEmptyIcon }: PhoneInputProps) => {
+const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPhoneRef, withCopyBut, withEmptyIcon }: PhoneInputProps) => {
 
     // console.log('PhoneInput has been updated')
-    const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState || false)
     const inputRef = inputPhoneRef || useRef(null)
     const phoneMaskOptions = {
         mask: [{
-            mask: '(00)-000-00-00',
+            mask: '(00) 000-00-00',
         }],
     }
 
@@ -31,7 +30,6 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
         },
         validate: {
             isCorrectCode: (val: string) => {
-                // console.log('isCorrectCode validate: ', val)
                 const message = 'Неизвестный код оператора связи'
                 if (val.length >= 9) {
                     return (PHONE_CODES_LIST.includes(val.substring(1,3)) || message)
@@ -44,18 +42,16 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
 
     const {
         ref: maskedInputRef,
-        setUnmaskedValue,
+        setValue: setMaskedValue,
+        value: maskedValue,
     } = useIMask(phoneMaskOptions, {
         ref: inputRef,
         onAccept: (val, _, e) => {
-            onFormChange(e)
-            handleChangePhone(val)
+            e && onFormChange(e)
+            !val && clearInput()
         }
     })
 
-    const handleChangePhone = (maskedValue: string) => {
-        maskedValue && maskedValue !== '(' ? setIsCleanerOpened(true) : clearInput()
-    }
 
     const copyInputValue = () => {
         copyText('+375 ' + inputRef.current?.value)
@@ -67,16 +63,16 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
     }
 
     const clearInput = () => {
-        setUnmaskedValue('')
+        setMaskedValue('')
         reset(name)
-        setIsCleanerOpened(false)
     }
 
 
-    //* First value setting for IMask
-    useLayoutEffect(() => {
-        setUnmaskedValue(inputRef.current?.value)
-    }, [!inputRef.current && inputRef.current?.value])
+    //* 'setValueForm' and 'maskedValue' sync
+    useEffect(() => {
+        // console.log('setValueForm and maskedValue sync')
+        setMaskedValue(inputRef.current?.value)
+    }, [inputRef.current, inputRef.current?.value !== maskedValue])
 
 
     return (
@@ -99,20 +95,20 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
                 disabled: disabled,
             }}
             cleanerParams={{
-                isCleanerOpened: isCleanerOpened,
+                isCleanerOpened: !!maskedValue,
                 handleClickCleaner: handleClickCleaner
             }}
             extraButParams={
                 withCopyBut ? {
                     isCopy: true,
-                    isExtraButVisible: isCleanerOpened,
+                    isExtraButVisible: !!maskedValue,
                     onClick: copyInputValue
                 } :
                 null
             }
             emptyIconParams={
-                isEmptyIcon && {
-                    isOpened: !isCleanerOpened
+                withEmptyIcon && {
+                    isOpened: !maskedValue
                 }
             }
         >

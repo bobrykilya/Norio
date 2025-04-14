@@ -24,8 +24,7 @@ export type ISignFormInput = IReactHookForm & {
     notSaveUser?: boolean;
     inputType?: SignFormInputTypesOptions;
 	withCopyBut?: boolean;
-	cleanerState?: boolean;
-	isEmptyIcon?: boolean;
+	withEmptyIcon?: boolean;
 }
 
 export type SignFormInputTypesOptions = 'sign_in' | 'sign_up' | 'name' | 'confirm';

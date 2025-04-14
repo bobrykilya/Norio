@@ -11,7 +11,7 @@ export const throttle = (callback: ICallback, delayInMS: number) => {
 	}
 }
 
-const lightThrottle = (callback: ICallback , time: number) => {
+export const lightThrottle = (callback: ICallback, time: number) => {
 	let allowed = true
 	return function (...args: any[]) {
 		if (!allowed) {
@@ -22,18 +22,18 @@ const lightThrottle = (callback: ICallback , time: number) => {
 		setTimeout(() => {
 			allowed = true
 		}, time)
-		// callback.apply(null, ...args)
-		callback(...args)
+		callback.apply(null, ...args)
+		// callback(...args)
 	}
 }
 
-const debounce = (callback: ICallback, delayInMS: number) => {
+export const debounce = (callback: ICallback, delayInMS: number) => {
 	let timeoutId = null
 	return function(...args: any[]) {
 		clearTimeout(timeoutId)
 
 		timeoutId = setTimeout(() => {
-			callback.apply(this, ...args)
+			callback.apply(null, ...args)
 		}, delayInMS)
 	}
 }

@@ -1,17 +1,17 @@
 import React, { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import DropDownSearchInput from '../../../../common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput'
-import UserNameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
+import NameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import PhoneInput from '../../../../common/Inputs/InputFields/PhoneInput/PhoneInput'
 import AvatarButton from '../../../AvatarListCard/AvatarButton'
-import { focusInput } from '../../../../../utils/focusInput'
 import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
 import useCloseOnEsc from "../../../../../hooks/useCloseOnEsc"
 import { ISignUp, ISignUpReq } from "../../../../../../../common/types/Auth-types"
 import { useModalState } from "../../../../../stores/Global-store"
 import SignUp from "../../../../../features/auth/signUp"
 import { ICONS } from "../../../../../assets/common/Icons-data"
+import { focusInput } from "../../../../../utils/focusInput"
 
 
 
@@ -42,12 +42,19 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef<HTMLInputElement>(null)
-
+    const defaultValues = {
+        phone: '(29) 569-79-88',
+        store: 'Офис',
+        job: 'Управляющий',
+        lastName: 'Бобрик',
+        firstName: 'Илья',
+        middleName: 'Юрьевич',
+    }
 
     const {
         register,
         handleSubmit,
-        resetField,
+        resetField: reset,
         watch,
         setError,
         setValue,
@@ -55,27 +62,20 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
     } = useForm<ISignUp>({
         mode: 'onChange',
         reValidateMode: "onChange",
-        defaultValues: {
-            phone: '',
-            store: 'Офис',
-            job: 'Управляющий',
-            lastName: 'Бобрик',
-            firstName: 'Илья', 
-            middleName: 'Юрьевич',
-        }
+        defaultValues,
     })
 
     const commonProps = {
-        register: register,
-        errors: errors,
-        reset: resetField,
+        register,
+        errors,
+        reset,
+        setValue,
         disabled: isFormDisabled,
     }
     const dropDownSearchInputProps = {
         ...commonProps,
-        setValue: setValue,
-        setError: setError,
-        watch: watch,
+        setError,
+        watch,
     }
 
     const checkAvatar: SubmitHandler<ISignUp> = (data) => {
@@ -89,7 +89,6 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
     })
     
     const onSubmit = async (data: ISignUp) => {
-        data.phone = '+375' + data.phone
         data.avatar = avatar
         data.gender = getDefaultGenderByMiddleName(data.middleName)
 
@@ -128,21 +127,21 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     icon={ICONS.job}
                     { ...dropDownSearchInputProps }
                 />
-                <UserNameInput
+                <NameInput
                     name='lastName'
                     placeholder='Фамилия'
                     icon={ICONS.name}
                     inputType='name'
                     { ...commonProps }
                 />
-                <UserNameInput
+                <NameInput
                     name='firstName'
                     placeholder='Имя'
                     icon={ICONS.name}
                     inputType='name'
                     { ...commonProps }
                 />
-                <UserNameInput
+                <NameInput
                     name='middleName'
                     placeholder='Отчество'
                     icon={ICONS.name}

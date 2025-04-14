@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput';
-import UserNameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
+import NameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
 import PasswordInput from '../../../../common/Inputs/InputFields/PasswordInput/PasswordInput'
 import CheckBox from '../../../../common/Inputs/CheckBox/CheckBox'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
@@ -24,8 +24,8 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     const {
         register,
         handleSubmit,
-        reset,
-        resetField,
+        reset: resetForm,
+        resetField: reset,
         watch,
         setValue,
     } = useForm({
@@ -38,9 +38,9 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     })
 
     const commonProps = {
-        register: register,
-        reset: resetField,
-        notSaveUser: notSaveUser,
+        register,
+        reset,
+        notSaveUser,
         disabled: isFormDisabled,
     }
 
@@ -51,8 +51,8 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     const onSubmitNotSave = async (data: ISignInReq) => {
         // console.log('Fast')
         data.fastSession = true
-        
-        reset()
+
+        resetForm()
 
         setIsLoading(true)
         await SignIn.handleSignIn(data)
@@ -79,7 +79,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} id='sign_in-form' className='form cont' >
             <div className='inputs-cont cont'>
-                <UserNameInput
+                <NameInput
                     name='username'
                     placeholder='Логин'
                     icon={ICONS.user}

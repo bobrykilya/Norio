@@ -3,7 +3,7 @@ import { ISignUp } from "../../../../../../../../common/types/Auth-types"
 import { SubmitHandler, useForm } from 'react-hook-form'
 import PhoneInput from "../../../../../common/Inputs/InputFields/PhoneInput/PhoneInput"
 import DropDownSearchInput from "../../../../../common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput"
-import UserNameInput from "../../../../../common/Inputs/InputFields/NameInput/NameInput"
+import NameInput from "../../../../../common/Inputs/InputFields/NameInput/NameInput"
 import { COMPANIES_LIST, JOBS_LIST, STORES_LIST } from "../../../../../../assets/AuthPage/AuthPage-data"
 import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
 import DateInput from "../../../../../common/Inputs/InputFields/DateInput/DateInput"
@@ -12,125 +12,163 @@ import FormSubmitButton from "../common/FormSubmitButton/FormSubmitButton"
 import GenderSelectButton from "./GenderSelectButton/GenderSelectButton"
 import { GENDER_LIST } from "../../../../../../assets/common/Common-data"
 import { ISelectDropDownOptionListElem } from "../../../../../common/SelectDropDown/SelectDropDown"
-import { getDateInShortString } from "../../../../../../utils/getTime"
+import { getDateInSecondsFromRussianDate, getDateInShortString } from "../../../../../../utils/getTime"
 import { ICONS } from "../../../../../../assets/common/Icons-data"
+import { ICommonVar } from "../../../../../../../../common/types/Global-types"
+import { showSnackMessage } from "../../../../../../features/showSnackMessage/showSnackMessage"
 
 
 
-type IUserInfoEditForm = Omit<ISignUp, 'avatar'> & {
-	company?: string;
-	birthday?: number;
+type IUserInfoEdit = Omit<ISignUp, 'avatar'> & {
+	company: string;
+	birthday?: string;
 }
 type UserInfoEditCardProps = {
 	userInfo: IUserRepository;
+}
+type IDirtyData =  Partial<Omit<IUserInfoEdit, 'birthday'>> & {
+	birthday?: string | number;
 }
 const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 	// console.log('UserInfoEditCard form has been updated')
 
 	const [statusState, setStatusState] = useState<FormStatusButOptions>('ok')
-	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(GENDER_LIST.find(el => el.id === userInfo?.gender) || null)
+	const defaultGender = GENDER_LIST.find(el => el.id === userInfo?.gender) || null
+	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(defaultGender)
 	const inputPhoneRef = useRef<HTMLInputElement>(null)
 	const inputBirthdayRef = useRef<HTMLInputElement>(null)
-	const defaultValues: IUserInfoEditForm = {
+	const defaultValues: IUserInfoEdit = {
+		birthday: '',
+		phone: '',
 		store: '',
 		lastName: '',
 		firstName: '',
 		middleName: '',
-		job: '',
 		company: '',
-		phone: '',
-		gender: null,
-		birthday: null,
+		job: '',
 	}
-	const preloadValues = {
+	const preloadValues: IUserInfoEdit = {
 		...userInfo,
 		company: 'Стройпродукт', //! Change
-		phone: userInfo?.phone.slice(4),
 		birthday: getDateInShortString(userInfo?.birthday),
 	}
+	// console.log(preloadValues.phone)
 
 
 	const {
 		register,
 		handleSubmit,
-		resetField,
+		resetField: reset,
+		reset: resetForm,
 		watch,
+		getValues,
 		setError,
 		setValue,
-		formState: { errors, dirtyFields, isDirty },
-	} = useForm<IUserInfoEditForm>({
+		formState: { errors, isDirty },
+	} = useForm<IUserInfoEdit>({
 		mode: 'onChange',
 		reValidateMode: "onChange",
-		defaultValues,
+		defaultValues
 	})
 
 	const commonProps = {
 		register,
 		errors,
-		reset: resetField,
+		reset,
+		setValue,
 		withCopyBut: true,
-		isEmptyIcon: true,
-		cleanerState: true,
+		withEmptyIcon: true,
 	}
 	const dropDownSearchInputProps = {
 		...commonProps,
-		setValue,
 		setError,
 		watch,
 	}
 
-	const changeGender = (state: ISelectDropDownOptionListElem) => {
-		setGenderState(state)
-	}
-
 	const formHasBeenUpdated = () => {
-		setStatusState('ok')
+		showSnackMessage({
+			type: "s",
+			message: 'Изменения сохранены'
+		})
+	}
+	const handleUndoButClick = () => {
+		setGenderState(GENDER_LIST.find(el => el.id === userInfo?.gender))
+		resetForm()
+		preloadFormValuesSetting()
 	}
 
-	const onSubmit: SubmitHandler<IUserInfoEditForm> = async (data) => {
-		if (!isDirty && (!genderState?.id || genderState.id === preloadValues.gender)) {
-			return
-		}
-
-		data.phone = '+375' + data.phone
-		let dirtyData = {}
-
-		for (const name in dirtyFields) {
-			if (data[name] === preloadValues[name]) {
-				return
-			}
-			dirtyData[name] = data[name]
-		}
-
-		if (genderState?.id && genderState.id !== preloadValues.gender) {
-			dirtyData['gender'] = genderState.id
-		}
+	const onSaveForm: SubmitHandler<IUserInfoEdit> = async (data) => {
+		const dirtyData = getDirtyData()
 		if (!Object.keys(dirtyData)[0]) {
 			return
 		}
 
-		console.log(dirtyData)
+		if (dirtyData.birthday) {
+			dirtyData.birthday = getDateInSecondsFromRussianDate(data.birthday)
+		}
+
 		formHasBeenUpdated()
+		console.log('save: ', dirtyData)
 	}
 
-	//* Values setting
-	useEffect(() => {
-		 for (const name in defaultValues) {
-			setValue(name as keyof IUserInfoEditForm, preloadValues[name])
+	const getDirtyData = () => {
+		if (!isDirty && genderState?.id === defaultGender?.id) {
+			return {}
 		}
+
+		const dirtyData: IDirtyData = {}
+
+		if (getValues('birthday') !== preloadValues.birthday) {
+			dirtyData.birthday = ''
+		}
+		if (genderState?.id !== defaultGender?.id) {
+			dirtyData.gender = genderState?.id as ICommonVar['gender']
+		}
+
+		Object.keys(preloadValues).forEach(key => {
+			const val = getValues(key as keyof IUserInfoEdit)
+			if (val === undefined || val === preloadValues[key]) {
+				return
+			}
+			dirtyData[key] = val
+		})
+
+
+		// console.log('dirtyData: ', dirtyData)
+		return dirtyData
+	}
+
+	const preloadFormValuesSetting = () => {
+		for (const name in defaultValues) {
+			setValue(name as keyof IUserInfoEdit, preloadValues[name])
+		}
+	}
+
+
+	useEffect(() => {
+		preloadFormValuesSetting()
 	}, [])
 
+	//* Update form inputs and selects watching
 	useLayoutEffect(() => {
-		if (isDirty || (genderState?.id && genderState.id !== preloadValues.gender)) {
+		if (Object.keys(getDirtyData())[0]) {
+			if (statusState === 'undo') {
+				return
+			}
 			setStatusState('undo')
+		} else {
+			if (statusState === 'ok') {
+				return
+			}
+			setStatusState('ok')
 		}
-	}, [isDirty, genderState?.id])
+	}, [...Object.keys(defaultValues).map(key => watch(key as keyof IUserInfoEdit)), genderState?.id])
 
 
 	return (
 		<form
 			className={'user_info_edit-form cont'}
-			onSubmit={handleSubmit(onSubmit)}
+			onSubmit={handleSubmit(onSaveForm)}
 		>
 			<div
 				className={'user_info_edit_card-header cont'}
@@ -140,6 +178,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 				>
 					<FormStatusButton
 						state={statusState}
+						handleUndoButClick={handleUndoButClick}
 					/>
 					<div
 						className={'user_info_edit_card-title cont white-card'}
@@ -154,13 +193,12 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						name='birthday'
 						inputDateRef={inputBirthdayRef}
 						icon={ICONS.birthday}
-						cleanerState={Boolean(watch('birthday'))}
-						isEmptyIcon={!preloadValues.birthday}
+						withEmptyIcon={true}
 						{ ...commonProps }
 					/>
 					<GenderSelectButton
 						selectedState={genderState}
-						onClick={changeGender}
+						onClick={setGenderState}
 					/>
 				</div>
 			</div>
@@ -182,7 +220,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						icon={ICONS.store}
 						{ ...dropDownSearchInputProps }
 					/>
-					<UserNameInput
+					<NameInput
 						name='lastName'
 						placeholder='Фамилия'
 						inputMaxLength={25}
@@ -190,14 +228,14 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						icon={ICONS.name}
 						{ ...commonProps }
 					/>
-					<UserNameInput
+					<NameInput
 						name='firstName'
 						placeholder='Имя'
 						inputType='name'
 						icon={ICONS.name}
 						{ ...commonProps }
 					/>
-					<UserNameInput
+					<NameInput
 						name='middleName'
 						placeholder='Отчество'
 						inputType='name'

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput'
-import UserNameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
+import NameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
 import PasswordInput from '../../../../common/Inputs/InputFields/PasswordInput/PasswordInput'
 import SubmitBut from '../../../SubmitBut/SubmitBut'
 import { useCoverPanelState } from "../../../../../stores/Auth-store"
@@ -28,8 +28,9 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
     const {
         register,
         handleSubmit,
-        resetField,
+        resetField: reset,
         watch,
+        setValue,
         setError,
         formState: { errors } 
     } = useForm({
@@ -43,9 +44,10 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
     })
 
     const commonProps = {
-        register: register,
-        errors: errors,
-        reset: resetField,
+        register,
+        errors,
+        reset,
+        setValue,
         disabled: isFormDisabled,
     }
 
@@ -82,7 +84,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} id='sign_up-form' className='form cont'>
             <div className={`inputs-cont cont ${ isFormBlur ? 'blur' : ''}`}>
-                <UserNameInput
+                <NameInput
                     name='username'
                     placeholder='Логин'
                     icon={ICONS.user}

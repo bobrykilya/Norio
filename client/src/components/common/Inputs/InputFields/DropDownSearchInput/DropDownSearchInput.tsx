@@ -16,13 +16,13 @@ type DropDownSearchInputProps = ISignFormInput & {
     placeholder: string;
     icon: ICommonVar['icon'];
 }
-const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={}, reset, setValue, setError, watch, disabled=false, withCopyBut, cleanerState, isEmptyIcon }: DropDownSearchInputProps) => {
+const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={}, reset, setValue, setError, watch, disabled=false, withCopyBut, withEmptyIcon }: DropDownSearchInputProps) => {
 
-    const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState || false)
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
 
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
+    const isCleanerOpened = Boolean(inputRef.current?.value)
     
     
     const filterAndSortList = ({ search, list }) => {
@@ -40,18 +40,18 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
     
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         // console.log(e.target.value)
-        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/, '')
-        e.target.value = capitalize(e.target.value)
+        const normalValue = capitalize(e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, ''))
+        setValue && setValue(name, normalValue)
 
-        if (/[^а-яА-ЯёЁ ]/.test(e.target.value)) {
+        if (/[^а-яА-ЯёЁ ]/.test(normalValue)) {
             toggleDropDown(false)
-        } else if (isValueInList(e.target.value)) {
+        } else if (isValueInList(normalValue)) {
             toggleDropDown(false)
         } else {
-            !isDropDownOpened && e.target.value ? toggleDropDown(true) : null
+            !isDropDownOpened && normalValue ? toggleDropDown(true) : null
         }
 
-        e.target.value ? changeInput() : clearInput()
+        !normalValue && clearInput()
     }
 
     const toggleDropDown = (pos: boolean) => {
@@ -64,16 +64,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
         }
     }
 
-    const changeInput = () => {
-        if (!isCleanerOpened) {
-            setIsCleanerOpened(true)
-        }
-    }
-
     const setInputValue = (value: string)=> {
         setValue(name, value)
         toggleDropDown(false)
-        setIsCleanerOpened(true)
         setError(name, null)
     }
 
@@ -87,9 +80,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
     }
 
     const clearInput = async () => {
-        // console.log('clear')
         reset(name)
-        setIsCleanerOpened(false)
         await focusInput(inputRef)
         setError(name, null)
     }
@@ -234,7 +225,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
                 disabled,
             }}
             cleanerParams={{
-                isCleanerOpened: isCleanerOpened,
+                isCleanerOpened,
                 handleClickCleaner: clearInput
             }}
             extraButParams={
@@ -245,7 +236,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
                 null
             }
             emptyIconParams={
-                isEmptyIcon && {
+                withEmptyIcon && {
                     isOpened: !isCleanerOpened
                 }
             }

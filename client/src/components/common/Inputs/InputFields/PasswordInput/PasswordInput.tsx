@@ -10,21 +10,17 @@ import { ICONS } from "../../../../../assets/common/Icons-data"
 const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, watch=false, notSaveUser=false, disabled=false }: ISignFormInput) => {
 
     const [isLockOpened, setIsLockOpened] = useState(false)
-    const [isCleanerOpened, setIsCleanerOpened] = useState(false)
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
 
     const inputRef = useRef(null)
+    const isCleanerOpened = Boolean(inputRef.current?.value)
     
     const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         
         //* Ban of entering "space"
         e.target.value = e.target.value.trim()
 
-        e.target.value ? changeInput() : clearInput()
-    }
-
-    const changeInput = () => {
-        setIsCleanerOpened(true)
+        !e.target.value && clearInput()
     }
 
     const handleClickCleaner = async () => {
@@ -34,7 +30,6 @@ const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, 
 
     const clearInput = () => {
         reset(name)
-        setIsCleanerOpened(false)
         setIsCapsLockEnabled(false)
     }
     
@@ -123,7 +118,7 @@ const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, 
                 disabled,
             }}
             cleanerParams={{
-                isCleanerOpened: isCleanerOpened,
+                isCleanerOpened,
                 handleClickCleaner: handleClickCleaner
             }}
             extraButParams={{

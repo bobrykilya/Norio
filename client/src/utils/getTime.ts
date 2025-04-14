@@ -112,10 +112,17 @@ export const getEndTime = (startTimeInSec: number, duration: number, durationTyp
     }
 }
 
-export const getDateInShortString = (time: number) => {
-    if (!time) {
-        return undefined
+export const getDateInShortString = (timeInSec: number) => {
+    if (!timeInSec) {
+        return ''
     }
-    const date = new Date(time * 1000)
+    const date = new Date(timeInSec * 1000)
     return date.toLocaleString().split(',')[0]
+}
+
+export const getDateInSecondsFromRussianDate = (dateString: string) => {
+    if (!dateString) {
+        return null
+    }
+    return new Date(dateString.replace(/(\d{2})\.(\d{2})\.(\d{4})/g, '$2-$1-$3')).getTime() / 1000
 }

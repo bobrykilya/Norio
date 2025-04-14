@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { focusInput } from '../../../../../utils/focusInput'
 import { capitalize } from '../../../../../utils/capitalize'
 import { ISignFormInput, SignFormInputTypesOptions } from '../../../../../types/Auth-types'
@@ -13,20 +13,16 @@ type NameInputProps = ISignFormInput & {
     inputMaxLength?: number;
     inputRefLogin?: React.MutableRefObject<HTMLInputElement> | null;
 }
-const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, errors={}, reset, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null, withCopyBut, cleanerState=false, isEmptyIcon }: NameInputProps) => {
+const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, errors={}, reset, setValue, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null, withCopyBut, withEmptyIcon }: NameInputProps) => {
 
-    const [isCleanerOpened, setIsCleanerOpened] = useState(cleanerState)
     const inputRef = inputRefLogin || useRef(null)
+    const isCleanerOpened = Boolean(inputRef.current?.value)
 
     
     const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, '')
-        e.target.value = capitalize(e.target.value)
-        e.target.value ? changeInput() : clearInput()
-    }
-    
-    const changeInput = () => {
-        setIsCleanerOpened(true)
+        const normalValue = capitalize(e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, ''))
+        setValue && setValue(name, normalValue)
+        !normalValue && clearInput()
     }
 
     const handleClickCleaner = async () => {
@@ -36,7 +32,6 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
 
     const clearInput = () => {
         reset(name)
-        setIsCleanerOpened(false)
     }
 
     const getRegister = (type: SignFormInputTypesOptions) => {
@@ -102,7 +97,7 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
                 autoFocus: inputType !== 'name',
             }}
             cleanerParams={{
-                isCleanerOpened: isCleanerOpened,
+                isCleanerOpened,
                 handleClickCleaner: handleClickCleaner
             }}
             extraButParams={
@@ -113,7 +108,7 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
                 null
             }
             emptyIconParams={
-                isEmptyIcon && {
+                withEmptyIcon && {
                     isOpened: !isCleanerOpened
                 }
             }

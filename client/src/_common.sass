@@ -125,6 +125,18 @@ img, .fa-icon
         &::after
             background: $color-gradient-active
 
+.round_blue-but
+    border: 2px solid $color-backgr
+    background-color: $color-blue-main
+    will-change: transform
+    &:hover
+        transform: scale(1.05)
+    &:focus
+        background-color: $color-confirm-but-act
+    &:active
+        .fa-icon
+            filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.7))
+
 .cover
     position: fixed
     left: 0

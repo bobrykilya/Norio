@@ -9,16 +9,17 @@ export type FormStatusButOptions =  'ok' | 'undo' | 'loading'
 
 type FormStatusButProps = {
 	state: FormStatusButOptions;
+	handleUndoButClick: (state: FormStatusButOptions) => void;
 }
-const FormStatusButton = ({ state }: FormStatusButProps) => {
+const FormStatusButton = ({ state, handleUndoButClick }: FormStatusButProps) => {
 
 
 
 
 	return (
 		<RoundButton
-			className={`user_info_edit_card_status-but ${state || ''}`}
-			onClick={() => {}}
+			className={`user_info_edit_card_status-but ${state || ''} round_blue-but`}
+			onClick={handleUndoButClick}
 		>
 			<div
 			    className={'switch_form_status-cont cont'}
