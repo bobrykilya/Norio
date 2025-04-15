@@ -19,7 +19,7 @@ const LogBookButton = ({ isAuthPage=false, delayTimeMS }: LogBookButtonProps) =>
             onClick={() => setLogBookCardState(true)}
             className={'log_book-but before_hover-but'}
             toolTip={{
-                text: 'Открыть панель ошибок',
+                message: 'Открыть панель ошибок',
                 position: isAuthPage ? 'bottom_left' : 'right',
                 delayTimeMS
             }}

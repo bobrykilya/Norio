@@ -3,7 +3,7 @@ import React from 'react'
 
 
 type UserEditCardProps = {}
-const UserEditCard = ({}: UserEditCardProps) => {
+const AccountInfoEditCard = ({}: UserEditCardProps) => {
 
 
 	return (
@@ -15,4 +15,4 @@ const UserEditCard = ({}: UserEditCardProps) => {
 	)
 }
 
-export default UserEditCard
+export default AccountInfoEditCard

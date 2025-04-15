@@ -22,7 +22,7 @@ import { useUserInfoState } from "../../../../../../stores/User-store"
 
 
 
-export type IUserInfoEdit = Omit<ISignUp, 'avatar'> & {
+export type IUserInfoEditForm = Omit<ISignUp, 'avatar'> & {
 	company?: string;
 	birthday?: string;
 }
@@ -38,7 +38,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(defaultGender)
 	const inputPhoneRef = useRef<HTMLInputElement>(null)
 	const inputBirthdayRef = useRef<HTMLInputElement>(null)
-	const defaultValues: IUserInfoEdit = {
+	const defaultValues: IUserInfoEditForm = {
 		birthday: '',
 		phone: '',
 		store: '',
@@ -48,11 +48,10 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		company: '',
 		job: '',
 	}
-	const preloadValues: IUserInfoEdit = {
+	const preloadValues: IUserInfoEditForm = {
 		...userInfo,
 		birthday: getDateInShortString(userInfo?.birthday),
 	}
-	// console.log(preloadValues.phone)
 
 
 	const {
@@ -65,7 +64,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		setError,
 		setValue,
 		formState: { errors, isDirty },
-	} = useForm<IUserInfoEdit>({
+	} = useForm<IUserInfoEditForm>({
 		mode: 'onChange',
 		reValidateMode: "onChange",
 		defaultValues
@@ -75,29 +74,28 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		register,
 		errors,
 		reset,
-		setValue,
+		watch,
 		withCopyBut: true,
 		withEmptyIcon: true,
 	}
 	const dropDownSearchInputProps = {
 		...commonProps,
+		setValue,
 		setError,
-		watch,
 	}
 
 	const formHasBeenUpdated = async (data: IUserInfoEditReq) => {
-		await UserService.editUserInfo(data)
-			.then(_ => {
-				setUserInfoState({
-					...userInfo,
-					...data as IUserRepository
-				})
-				showSnackMessage({
-					type: "s",
-					message: 'Изменения сохранены'
-				})
-				setStatusState('ok')
+		if (await UserService.editUserInfo(data)) {
+			setUserInfoState({
+				...userInfo,
+				...data as IUserRepository
 			})
+			showSnackMessage({
+				type: "s",
+				message: 'Изменения сохранены'
+			})
+			setStatusState('ok')
+		}
 	}
 	const handleUndoButClick = () => {
 		setGenderState(defaultGender)
@@ -105,13 +103,13 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		preloadFormValuesSetting()
 	}
 
-	const onSaveForm: SubmitHandler<IUserInfoEdit> = async (data) => {
+	const onSaveForm: SubmitHandler<IUserInfoEditForm> = async (data) => {
 		const dirtyData = getDirtyData()
 		if (!Object.keys(dirtyData)[0]) {
 			return
 		}
 
-		if (dirtyData.birthday) {
+		if (dirtyData.birthday || dirtyData.birthday === '') {
 			dirtyData.birthday = getDateInSecondsFromRussianDate(data.birthday)
 		}
 
@@ -126,15 +124,12 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 
 		const dirtyData: IUserInfoEditReq = {}
 
-		if (getValues('birthday') !== preloadValues.birthday) {
-			dirtyData.birthday = ''
-		}
 		if (genderState?.id !== defaultGender?.id) {
 			dirtyData.gender = genderState?.id as ICommonVar['gender']
 		}
 
 		Object.keys(preloadValues).forEach(key => {
-			const val = getValues(key as keyof IUserInfoEdit)
+			const val = getValues(key as keyof IUserInfoEditForm)
 			if (val === undefined || val === preloadValues[key]) {
 				return
 			}
@@ -148,7 +143,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 
 	const preloadFormValuesSetting = () => {
 		for (const name in defaultValues) {
-			setValue(name as keyof IUserInfoEdit, preloadValues[name])
+			setValue(name as keyof IUserInfoEditForm, preloadValues[name])
 		}
 	}
 
@@ -168,7 +163,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 				setStatusState('ok')
 			}
 		}
-	}, [...Object.keys(defaultValues).map(key => watch(key as keyof IUserInfoEdit)), genderState?.id])
+	}, [...Object.keys(defaultValues).map(key => watch(key as keyof IUserInfoEditForm)), genderState?.id])
 
 
 	return (
@@ -200,6 +195,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						inputDateRef={inputBirthdayRef}
 						icon={ICONS.birthday}
 						withEmptyIcon={true}
+						autoFocus={!preloadValues.birthday}
 						{ ...commonProps }
 					/>
 					<GenderSelectButton
@@ -224,6 +220,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						name='store'
 						placeholder='Точка'
 						icon={ICONS.store}
+						autoComplete={'home'}
 						{ ...dropDownSearchInputProps }
 					/>
 					<NameInput
@@ -232,6 +229,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						inputMaxLength={25}
 						inputType='name'
 						icon={ICONS.name}
+						autoComplete={'family-name'}
 						{ ...commonProps }
 					/>
 					<NameInput
@@ -239,6 +237,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						placeholder='Имя'
 						inputType='name'
 						icon={ICONS.name}
+						autoComplete={'given-name'}
 						{ ...commonProps }
 					/>
 					<NameInput
@@ -246,6 +245,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						placeholder='Отчество'
 						inputType='name'
 						icon={ICONS.name}
+						autoComplete={'additional-name'}
 						{ ...commonProps }
 					/>
 				</div>
@@ -260,6 +260,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 							name='company'
 							placeholder='Организация'
 							icon={ICONS.company}
+							autoComplete={'organization'}
 							{ ...dropDownSearchInputProps }
 						/>
 						<DropDownSearchInput
@@ -267,6 +268,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 							name='job'
 							placeholder='Должность'
 							icon={ICONS.job}
+							autoComplete={'organization-title'}
 							{ ...dropDownSearchInputProps }
 						/>
 					</div>

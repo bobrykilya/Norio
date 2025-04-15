@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import DropDownSearchInput from '../../../../common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput'
 import NameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
@@ -37,12 +37,20 @@ type SignUpInfoFormProps = {
 const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled, isAvatarButDisabled }: SignUpInfoFormProps) => {
     // console.log('SignUpInfoForm')
 
-    const modalState = useModalState(s => s.allModalsState)
+    const { getCommonModalState } = useModalState()
     const [avatar, setAvatar] = useState<string>('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef<HTMLInputElement>(null)
     const defaultValues = {
+        phone: '',
+        store: '',
+        job: '',
+        lastName: '',
+        firstName: '',
+        middleName: '',
+    }
+    const preloadValues = {
         phone: '(29) 569-79-88',
         store: 'Офис',
         job: 'Управляющий',
@@ -69,13 +77,13 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
         register,
         errors,
         reset,
-        setValue,
+        watch,
         disabled: isFormDisabled,
     }
     const dropDownSearchInputProps = {
         ...commonProps,
+        setValue,
         setError,
-        watch,
     }
 
     const checkAvatar: SubmitHandler<ISignUp> = (data) => {
@@ -84,7 +92,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingCard is opened
     useCloseOnEsc({
-        conditionsList: [!isFormDisabled, !modalState],
+        conditionsList: [!isFormDisabled, !getCommonModalState()],
         callback: () => SignUp.handleReturnToSignUp()
     })
     
@@ -99,6 +107,23 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
             })
             .finally(() => setIsLoading(false))
     }
+
+    //! Remove
+    const preloadFormValuesSetting = () => {
+        for (const name in defaultValues) {
+            setValue(name as keyof {
+                phone: string;
+                store: string;
+                job: string;
+                lastName: string;
+                firstName: string;
+                middleName: string;
+            }, preloadValues[name])
+        }
+    }
+    useEffect(() => {
+        preloadFormValuesSetting()
+    }, [])
 
 
     return ( 
@@ -118,6 +143,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     name='store'
                     placeholder='Точка'
                     icon={ICONS.store}
+                    autoComplete={'home'}
                     { ...dropDownSearchInputProps }
                 />
                 <DropDownSearchInput 
@@ -125,6 +151,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     name='job'
                     placeholder='Должность'
                     icon={ICONS.job}
+                    autoComplete={'organization-title'}
                     { ...dropDownSearchInputProps }
                 />
                 <NameInput
@@ -132,6 +159,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     placeholder='Фамилия'
                     icon={ICONS.name}
                     inputType='name'
+                    autoComplete={'family-name'}
                     { ...commonProps }
                 />
                 <NameInput
@@ -139,6 +167,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     placeholder='Имя'
                     icon={ICONS.name}
                     inputType='name'
+                    autoComplete={'given-name'}
                     { ...commonProps }
                 />
                 <NameInput
@@ -146,6 +175,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     placeholder='Отчество'
                     icon={ICONS.name}
                     inputType='name'
+                    autoComplete={'additional-name'}
                     { ...commonProps }
                 />
             </div>
@@ -165,7 +195,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
                     isLoading={isLoading}
                     tabNotBlur={true}
                     toolTip={{
-                        text: 'Завершить регистрацию и выполнить вход'
+                        message: 'Завершить регистрацию и выполнить вход'
                     }}
                 />
             </div>

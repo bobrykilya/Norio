@@ -87,11 +87,11 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
             inputRef={maskedInputRef}
             inputParams={{
                 type: 'tel',
-                inputMode: 'numeric',
+                inputMode: 'tel',
                 maxLength: 14,
                 label: 'Мобильный номер',
                 placeholder: '(29) 555-35-35',
-                autoComplete: 'off',
+                autoComplete: 'tel-national',
                 disabled: disabled,
             }}
             cleanerParams={{

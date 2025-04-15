@@ -1,7 +1,7 @@
 import AuthDeviceRepository from '../_database/repositories/AuthDevice-db'
 import _logAttentionRepository from '../_database/repositories/_logAttention-db'
 import getBrowserAndOs from '../utils/getBrowserAndOs'
-import { BlockDevice } from '../utils/Errors'
+import { Errors } from '../utils/Errors'
 import getCodeDescription from '../utils/interCodes'
 import BlockRepository from '../_database/repositories/Block-db'
 import { getEndTime } from "../utils/getTime"
@@ -132,7 +132,7 @@ class DeviceService {
         }
 
         //* Block notify for Client
-        throw new BlockDevice({
+        throw Errors.blockDevice({
             interCode: inter_code,
             description: getCodeDescription(inter_code).message,
             unlockTime: Number(unlock_time),
@@ -155,7 +155,7 @@ class DeviceService {
             fingerprintHash: fingerprint.hash
         })
             .then(async ({ unlock_time }) => {
-                throw new BlockDevice({
+                throw Errors.blockDevice({
                     interCode,
                     description: getCodeDescription(interCode).message,
                     unlockTime: Number(unlock_time),

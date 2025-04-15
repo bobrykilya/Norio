@@ -138,7 +138,7 @@ const WeatherCard = () => {
 						onClick={saveSelectedValue}
 						needToSort={true}
 						toolTip={{
-							text: 'Выбрать город для прогноза погоды',
+							message: 'Выбрать город для прогноза погоды',
 							position: 'bottom',
 						}}
 						isTabDisabled={true}
@@ -146,7 +146,7 @@ const WeatherCard = () => {
 					<CardLinkButton
 						onClick={toggleWeatherCard}
 						toolTip={{
-							text: `${isFullWeatherCard ? 'Закрыть' : 'Открыть'} карточку погоды`,
+							message: `${isFullWeatherCard ? 'Закрыть' : 'Открыть'} карточку погоды`,
 							position: 'bottom',
 						}}
 						disabled={!weather}
@@ -173,7 +173,7 @@ const WeatherCard = () => {
 								currentWeather={weather?.current}
 							/>
 							<ToolTip
-								text={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weather?.timeInSec).timeString}`}
+								message={`Данные о погоде обновлены в ${getTimeParams(['timeString'], weather?.timeInSec).timeString}`}
 								position={'left'}
 								delayTimeMS={2000}
 								isAlwaysToolTip={true}

@@ -1,8 +1,8 @@
 import DeviceService from '../services/Device-service'
-import ErrorsUtils, { NotFound } from "../utils/Errors"
 import { ICommonVar } from "../../../common/types/Global-types"
 import { IDeviceLocation } from "../../../common/types/Device-types.ts"
 import WeatherService from "../services/Weather-service.ts"
+import { catchError } from "../utils/Errors.ts"
 
 
 
@@ -29,7 +29,7 @@ class DeviceController {
 
             return res.status(200)
         } catch (err) {
-            return ErrorsUtils.catchError({ interCode: 900, req, res, err, fingerprint, queryTime: logTime })
+            return catchError({ req, res, err, queryTime: logTime })
         }
     }
 
@@ -39,7 +39,7 @@ class DeviceController {
 
 			return res.status(200).json(data)
 		} catch (err) {
-			throw new NotFound(err.message)
+			return catchError({ req, res, err })
 		}
 	}
 }

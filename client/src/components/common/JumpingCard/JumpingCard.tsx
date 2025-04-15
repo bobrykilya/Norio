@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useModalState } from "../../../stores/Global-store"
 import useCloseOnEsc, { IUseCloseOnEsc } from "../../../hooks/useCloseOnEsc"
+import CoverAppTitle from "../CoverAppTitle/CoverAppTitle"
 
 
 
@@ -81,7 +82,9 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
             <div
                 className={'jumping_card-cover'}
                 onClick={handleClickOutside}
-            />
+            >
+                <CoverAppTitle dim={true} />
+            </div>
         </div>
      )
 }

@@ -51,7 +51,7 @@ const getCodeDescription = (interCode: ICommonVar['interCode']) => {
 		case 206 : return {
 			interCode,
 			name: 'Log-out (Forget user)',
-			description: 'Забыть пользователя',
+			description: 'Выход (забыть пользователя)',
 			notifForAdmin: false,
 			notifForUser: false,
 		}
@@ -76,6 +76,13 @@ const getCodeDescription = (interCode: ICommonVar['interCode']) => {
             notifForAdmin: false,
             notifForUser: true,
         }
+		case 211: return {
+			interCode,
+			name: 'Updating user\'s info',
+			description: 'Обновление личных данных пользователя',
+			notifForAdmin: false,
+			notifForUser: false,
+		}
         case 701 : return {
             interCode,
             name: 'Refresh',

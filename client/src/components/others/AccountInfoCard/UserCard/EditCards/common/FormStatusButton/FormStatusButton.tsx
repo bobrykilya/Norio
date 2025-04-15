@@ -14,12 +14,13 @@ type FormStatusButProps = {
 const FormStatusButton = ({ state, handleUndoButClick }: FormStatusButProps) => {
 
 
-
-
 	return (
 		<RoundButton
 			className={`user_info_edit_card_status-but ${state || ''} round_blue-but`}
 			onClick={handleUndoButClick}
+			toolTip={{
+				message: 'Откатить все поля обратно'
+			}}
 		>
 			<div
 			    className={'switch_form_status-cont cont'}

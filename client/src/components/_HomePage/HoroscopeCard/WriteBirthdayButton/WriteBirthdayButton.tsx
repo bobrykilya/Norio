@@ -1,20 +1,23 @@
 import React from 'react'
+import { useTopCardState } from "../../../../stores/Utils-store"
 
 
 
-type WriteBirthdayButtonProps = {
+const WriteBirthdayButton = () => {
 
-}
-const WriteBirthdayButton = ({  }: WriteBirthdayButtonProps) => {
-
+	const setTopCardState = useTopCardState(s => s.setTopCardState)
+	const handleClick = () => {
+		setTopCardState('userInfo')
+	}
 
 	return (
 		<button
 			type={'button'}
 			className={'write_birthday-but'}
-			onClick={() => {}}
+			onClick={handleClick}
+			tabIndex={-1}
 		>
-			Указать дату рождения<br/> для гороскопа
+			<p>Указать дату рождения<br/> для гороскопа</p>
 		</button>
 	)
 }

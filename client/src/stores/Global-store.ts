@@ -9,7 +9,7 @@ type IUseModalState = {
 	setDropDownState: (state: boolean) => void;
 	setBlurModalState: (state: boolean) => void;
 	setSnackBarState: (state: boolean) => void;
-	allModalsState: () => boolean;
+	getCommonModalState: () => boolean;
 }
 const useModalState = create<IUseModalState>((set, get) => ({
 	dropDownState: false,
@@ -18,7 +18,7 @@ const useModalState = create<IUseModalState>((set, get) => ({
 	setDropDownState: (state) => set({ dropDownState: state }),
 	setBlurModalState: (state) => set({ blurModalState: state }),
 	setSnackBarState: (state) => set({ snackBarState: state }),
-	allModalsState: () => ![get().dropDownState, get().blurModalState, get().snackBarState].includes(false),
+	getCommonModalState: () => [get().dropDownState, get().blurModalState, get().snackBarState].includes(true),
 }))
 
 

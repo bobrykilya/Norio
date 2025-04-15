@@ -21,6 +21,10 @@ import { getTimeParams, zeroHandler } from "../../utils/getTime"
 export const getHoroscopeType = (birthdayInSec: IUserRepository['birthday']): HoroscopeTypeOptions => {
 
 	// console.log('getHoroscopeType')
+	if (!birthdayInSec) {
+		return null
+	}
+
 	const { month, day } = getTimeParams(['month', 'day'], birthdayInSec)
 	const date = Number(`${month}.${zeroHandler(day)}`)
 

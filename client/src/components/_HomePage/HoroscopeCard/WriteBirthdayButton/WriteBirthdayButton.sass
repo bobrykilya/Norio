@@ -4,12 +4,20 @@
 
 .write_birthday-but
     border: 1px solid rgba($color-backgr, 0.2)
+    border-radius: $rad-main-border
     position: absolute
     left: 50%
     transform: translateX(-50%)
-    color: $color-backgr-clear
     background-color: $color-card-backgr
     padding: 1rem
-    border-radius: $rad-main-border
-    font-size: $size-main-text
     width: 80%
+    &:hover
+        background-color: $color-behind-icon
+    &:active
+        border: 1px solid rgba($color-backgr, 0.5)
+        p
+            transform: scale(0.95)
+    p
+        color: $color-backgr-clear
+        font-size: $size-main-text
+        transition: all 0.15s ease

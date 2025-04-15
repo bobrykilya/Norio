@@ -13,15 +13,15 @@ type NameInputProps = ISignFormInput & {
     inputMaxLength?: number;
     inputRefLogin?: React.MutableRefObject<HTMLInputElement> | null;
 }
-const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, errors={}, reset, setValue, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null, withCopyBut, withEmptyIcon }: NameInputProps) => {
+const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, errors={}, reset, watch, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null, withCopyBut, withEmptyIcon, autoComplete }: NameInputProps) => {
 
     const inputRef = inputRefLogin || useRef(null)
-    const isCleanerOpened = Boolean(inputRef.current?.value)
+    const isCleanerOpened = Boolean(watch && watch(name))
+    // console.log(inputRef.current?.value)
 
     
     const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
         const normalValue = capitalize(e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, ''))
-        setValue && setValue(name, normalValue)
         !normalValue && clearInput()
     }
 
@@ -77,7 +77,7 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
     }
 
     const { ref: formRef, ...restRegister } = getRegister(inputType)
-
+    
     return (
         <InputField
             contClassName={'user_name_input-cont'}
@@ -91,9 +91,9 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
             inputParams={{
                 type: 'text',
                 maxLength: inputMaxLength,
-                placeholder: placeholder,
-                autoComplete: (inputType === 'name' || notSaveUser) ? 'off' : 'username',
-                disabled: disabled,
+                placeholder,
+                autoComplete: autoComplete ? autoComplete : notSaveUser ? 'off' : 'username',
+                disabled,
                 autoFocus: inputType !== 'name',
             }}
             cleanerParams={{

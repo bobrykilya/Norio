@@ -51,7 +51,7 @@ const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 					{
 						!isAuthPage &&
 						<ToolTip
-							text={`Текущий аккаунт будет сохранён в фоне для быстрого возврата`}
+							message={`Текущий аккаунт будет сохранён в фоне для быстрого возврата`}
 							position={'left'}
 						/>
 					}
@@ -60,7 +60,7 @@ const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 					className={'before_hover-but'}
 					onClick={handleForgetAllUsers}
 					toolTip={{
-						text: 'Забыть все фоновые аккаунты'
+						message: 'Забыть все фоновые аккаунты'
 					}}
 					size={'tiny'}
 					disabled={(!isAuthPage ? !usersList[1] : !usersList[0])}

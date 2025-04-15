@@ -43,7 +43,7 @@ const UserCard = ({  }: UserCardProps) => {
 						className={'left clear-but'}
 						onClick={() => setTopCardState('userInfo')}
 						toolTip={{
-							text: 'Личные данные пользователя'
+							message: 'Личные данные пользователя'
 						}}
 					>
 						{ICONS.userEdit}
@@ -61,15 +61,15 @@ const UserCard = ({  }: UserCardProps) => {
 							/>
 						</div>
 						<ToolTip
-							text={`${isFullUserCard ? 'Закрыть' : 'Открыть'} карточку пользователя`}
+							message={`${isFullUserCard ? 'Закрыть' : 'Открыть'} карточку пользователя`}
 							position={`${isFullUserCard ? 'bottom' : 'bottom_left'}`}
 						/>
 					</button>
 					<RoundButton
 						className={'right clear-but'}
-						onClick={() => setTopCardState('user')}
+						onClick={() => setTopCardState('accountInfo')}
 						toolTip={{
-							text: 'Данные аккаунта'
+							message: 'Данные аккаунта'
 						}}
 					>
 						{ICONS.accountEdit}
@@ -90,7 +90,7 @@ const UserCard = ({  }: UserCardProps) => {
 						onClick={LogOut.currentUserLogOut}
 						useOnClick={true}
 						toolTip={{
-							text: 'Выйти из аккаунта пользователя',
+							message: 'Выйти из аккаунта пользователя',
 							position: 'bottom'
 						}}
 					/>

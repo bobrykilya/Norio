@@ -22,9 +22,10 @@ class UserService {
 		try {
 			// console.log(data)
 			await $apiProtected.post("edit-user-info", { json: data })?.json()
+			return true
 		} catch (err) {
 			showSnackMessage(err)
-			throw new Error('EditUserInfo error')
+			return false
 		}
 	}
 }

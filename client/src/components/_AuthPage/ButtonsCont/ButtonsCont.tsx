@@ -30,7 +30,7 @@ const ButtonsCont = ({ disabled }: ButtonsContProps) => {
                     disabled={disabled}
                 >
                     {ICONS.desktop}
-                    <ToolTip text='Создать ярлык на рабочем столе' />
+                    <ToolTip message='Создать ярлык на рабочем столе' />
                 </button>
                 <button
                     className='info-but'
@@ -38,7 +38,7 @@ const ButtonsCont = ({ disabled }: ButtonsContProps) => {
                     disabled={disabled}
                 >
                     {ICONS.instructions}
-                    <ToolTip text='Описание приложения и инструкция' />
+                    <ToolTip message='Описание приложения и инструкция' />
                 </button>
         </div>
     )

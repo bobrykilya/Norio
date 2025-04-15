@@ -49,7 +49,7 @@ const NavBar = ({ location }: NavBarProps) => {
             >
                 <img className="app_icon-img" src={appIcon} alt="*" />
                 <ToolTip
-                    text={'Улыбнись, заяц)'}
+                    message={'Улыбнись, заяц)'}
                     position={'bottom_right'}
                     isAlwaysToolTip={true}
                     delayTimeMS={5000}
@@ -67,7 +67,7 @@ const NavBar = ({ location }: NavBarProps) => {
                                 onClick={() => {}}
                                 className={`clear-but ${el.id === curr_path ? 'selected' : ''}`}
                                 toolTip={{
-                                    text: el.title,
+                                    message: el.title,
                                     position: 'right',
                                     isAlwaysToolTip: true,
                                     delayTimeMS: toolTipDelayTimeMS
@@ -90,7 +90,7 @@ const NavBar = ({ location }: NavBarProps) => {
                     onClick={() => {}}
                     className={'info-but before_hover-but'}
                     toolTip={{
-                        text: 'Описание приложения и инструкция',
+                        message: 'Описание приложения и инструкция',
                         position: 'right',
                         delayTimeMS: toolTipDelayTimeMS
                     }}

@@ -1,5 +1,4 @@
 import AuthService from "../services/Auth-service"
-import ErrorsUtils from "../utils/Errors"
 import { COOKIE_SETTINGS } from "../../constants"
 import { getTime } from "../utils/getTime"
 import { ISignInController, ISignUpController } from "../types/Auth-types"
@@ -11,6 +10,7 @@ import {
 	IRefreshReq,
 } from "../../../common/types/Auth-types"
 import { ICommonVar } from "../../../common/types/Global-types"
+import { catchError } from "../utils/Errors.ts"
 
 
 
@@ -63,7 +63,7 @@ class AuthController {
 					return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 				})
 		} catch (err) {
-			return ErrorsUtils.catchError({ interCode: !fastSession ? 201 : 202, req, res, err, username, fingerprint, queryTime })
+			return catchError({ req, res, err, queryTime, interCode: !fastSession ? 201 : 202 })
 		}
 	}
 
@@ -80,7 +80,7 @@ class AuthController {
 
 			return res.status(200).json({ username: userName, hashedPassword, avatarsList })
 		} catch (err) {
-			return ErrorsUtils.catchError({ interCode: 711, req, res, err, username, fingerprint, queryTime })
+			return catchError({ req, res, err, queryTime, interCode: 711 })
 		}
 	}
 
@@ -135,7 +135,7 @@ class AuthController {
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
-			return ErrorsUtils.catchError({ interCode: 205,req, res, err, username, fingerprint, queryTime })
+			return catchError({ req, res, err, queryTime, interCode: 205 })
 		}
 	}
 
@@ -145,7 +145,6 @@ class AuthController {
 		// console.log('logOut')
 		const { interCode, username }: ILogOutReq = req.body
 		const refreshToken: string = req.cookies[getUserCookieName(username)]
-		const { fingerprint } = req
         const queryTime = getTime()
 
 
@@ -157,7 +156,7 @@ class AuthController {
 		} catch (err) {
 			// console.log('Logout refresh', err)
 			res.clearCookie(getUserCookieName(username))
-			return ErrorsUtils.catchError({ interCode: 203, req, res, err, fingerprint, queryTime })
+			return catchError({ req, res, err, queryTime, interCode: 203 })
 		}
 	}
 
@@ -169,7 +168,6 @@ class AuthController {
 		const { fingerprint } = req
         const queryTime = getTime()
 		const currentRefreshToken = req.cookies[getUserCookieName(username)]
-		// console.log(currentRefreshToken)
 
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId, isFast } =
@@ -186,7 +184,7 @@ class AuthController {
 		} catch (err) {
 			console.log('Error refresh', err)
 			res.clearCookie(getUserCookieName(username))
-			return ErrorsUtils.catchError({ interCode: 701, req, res, err, fingerprint, queryTime })
+			return catchError({ req, res, err, queryTime, interCode: 701 })
 		}
 	}
 }

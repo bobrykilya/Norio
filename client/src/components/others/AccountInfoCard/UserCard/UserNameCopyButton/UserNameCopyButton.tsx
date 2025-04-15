@@ -76,7 +76,7 @@ const UserNameCopyButton = ({ userInfoState }: UserNameCopyButtonProps) => {
 					{userInfoState.job}
 				</span>
 				<ToolTip
-					text={`Скопировать пользователя`}
+					message={`Скопировать пользователя`}
 					position={'left'}
 				/>
 			</div>

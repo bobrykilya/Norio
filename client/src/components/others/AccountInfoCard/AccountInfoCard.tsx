@@ -14,7 +14,7 @@ const AccountInfoCard = () => {
             <FastRoundButton
                 onClick={() => {}}
                 toolTip={{
-                    text: 'Уведомления',
+                    message: 'Уведомления',
                     position: 'bottom',
                 }}
                 size={'big'}
@@ -25,7 +25,7 @@ const AccountInfoCard = () => {
             <FastRoundButton
                 onClick={() => {}}
                 toolTip={{
-                    text: 'Реквизиты',
+                    message: 'Реквизиты',
                     position: 'bottom',
                 }}
                 size={'big'}

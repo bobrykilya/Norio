@@ -98,7 +98,7 @@ const AvatarButton = ({ LIST, currentAvatar, setAvatar, error, setError, disable
                         alt='Avatar error 2'
                     />
                 }
-                <ToolTip text='Выбрать аватар пользователя' />
+                <ToolTip message='Выбрать аватар пользователя' />
             </button>
             <InputError
                 error={error}

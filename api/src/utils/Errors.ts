@@ -6,6 +6,37 @@ import { IBlockMessage } from "../types/Device-types"
 
 
 
+export const Errors = {
+	phoneEngaged: () => {
+		return new Conflict("Указанный номер телефона уже занят")
+	},
+	avatarEngaged: () => {
+		return new Conflict("Выбранный аватар уже занят")
+	},
+	loginOrPasswordInvalid: () => {
+		return new Conflict("Неверный логин или пароль")
+	},
+	usernameEngaged: () => {
+		return new Conflict("Пользователь с таким логином уже существует")
+	},
+	dbConflict: (message: string, constraint?: string) => {
+		return new Conflict(message, constraint)
+	},
+	unauthorized: () => {
+		return new Unauthorized()
+	},
+	forbidden: (errInfo: string) => {
+		return new Forbidden(errInfo)
+	},
+	redisNoConnection: () => {
+		return new Conflict(`Redis connection error on port: ${process.env.REDIS_PORT}`)
+	},
+	blockDevice: (message: IBlockMessage) => {
+		return new BlockDevice(message)
+	},
+
+}
+
 class WebError {
 	status: number
 	title: string
@@ -15,34 +46,16 @@ class WebError {
 		this.status = status
 		this.title = title
 		this.message = message
-		// console.log(this.status)
 	}
 }
 
-// export class Unprocessable extends WebError {
-// 	constructor(message?: string) {
-// 		super(422, 'Unprocessable', message)
-// 	}
-// }
-
-export class Errors {
-	static phoneConflict = () => {
-		return new Conflict("Данный номер телефона уже занят другим пользователем")
-	}
-}
 
 export class Conflict extends WebError {
 	constraint: string
 
-	constructor(message?: string, constraintField?: string) {
+	constructor(message?: string, constraint?: string) {
 		super(409, 'Conflict', message)
-		this.constraint = constraintField
-	}
-}
-
-export class NotFound extends WebError {
-	constructor(message?: string) {
-		super(404, 'NotFound', message)
+		this.constraint = constraint
 	}
 }
 
@@ -58,30 +71,32 @@ export class Unauthorized extends WebError {
 	}
 }
 
-// export class BadRequest extends WebError {
-// 	constructor(message?: string) {
-// 		super(400, 'BadRequest', message)
-// 	}
-// }
-
 export class BlockDevice extends WebError {
 	constructor(message: IBlockMessage) {
 		super(900, 'BlockDevice', message)
 	}
 }
 
+// export class NotFound extends WebError {
+// 	constructor(message?: string) {
+// 		super(404, 'NotFound', message)
+// 	}
+// }
 
-type IErrorUtils = {
-	req: ICommonVar['req'];
+// export class BadRequest extends WebError {
+// 	constructor(message?: string) {
+// 		super(400, 'BadRequest', message)
+// 	}
+// }
+
+type ICatchError = {
+	req: any;
 	res: ICommonVar['res'];
 	err: ICommonVar['err'];
-	queryTime: ICommonVar['queryTime'];
-	interCode: ICommonVar['interCode'];
-	fingerprint: ICommonVar['fingerprint'];
-	username?: ICommonVar['username'];
+	queryTime?: ICommonVar['queryTime'];
+	interCode?: ICommonVar['interCode'];
 }
-class ErrorUtils {
-	static async catchError({ req, res, err, queryTime, interCode, fingerprint, username }: IErrorUtils) {
+export const catchError = async ({ req, res, err, queryTime, interCode }: ICatchError) => {
 		// console.log(err)
 		if (err instanceof WebError) {
 			const status = err.status
@@ -89,7 +104,7 @@ class ErrorUtils {
 			const error: ISnack = {
 				type: status === 900 ? 'b' : 'e',
 				message: status === 900 ? '' : err.message as string,
-				snackTime: getTime(),
+				snackTime: queryTime || getTime(),
 				detail: {
 					action: req.route.stack[0]?.name,
 					req: {
@@ -97,6 +112,7 @@ class ErrorUtils {
 					},
 					res: {
 						status,
+						interCode,
 						title: err.title,
 					}
 				}
@@ -112,12 +128,11 @@ class ErrorUtils {
 
 			//* Block handling (err.message is Object)
 			if (status === 900) {
-				// @ts-ignore
-				const { interCode, description, unlockTime } = err.message
+				const { interCode, description, unlockTime } = err.message as IBlockMessage
 
 				if (!(unlockTime === 0)) {
 					error.message = `${description}.<br><span class='info'> Устройство будет разблокировано в <span class='bold'>${getTimeInShortString(unlockTime)}</span></span>`
-				}else {
+				} else {
 					error.message = 'Устройство заблокировано. Обратитесь к администратору'
 				}
 
@@ -132,20 +147,10 @@ class ErrorUtils {
 			if (!(err instanceof Unauthorized)) {
 				console.log(error)
 			}
-
-			// const queryTimeString = queryTime.toLocaleString()
-			// const userData = username ? await UserRepository.getUserData(username) : null
-			// const deviceId = fingerprint ? await AuthDeviceRepository.getDeviceId(fingerprint.hash) : null
-			// const errorId = await _logErrorRepository.createLogError({ interCode, err, userId: userData?.id, deviceId, queryTimeString })
-			// console.log(errorId)
-			// throw new BadRequest(`Что-то пошло не так! Обратитесь к админу. Ошибка: ${errorId} , Время: ${queryTimeString}`)
-			// console.log(err)
 			
 			return res.status(err.status).json(error)
-		} else 
+		} else {
 			console.log(err)
 			res.status(500).json('Непредвиденная ошибка. Обратитесь к администратору')
-	}
+		}
 }
-
-export default ErrorUtils

@@ -14,17 +14,20 @@ import { useUserInfoState } from "../../../stores/User-store"
 
 const checkHoroscopeInLS = (birthday: IUserRepository['birthday']) => {
 	const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_LS))
-	let horoscopeType = currentUser?.horoscopeType
+	let horoscope = currentUser?.horoscope
 
-	if (currentUser && !horoscopeType) {
-		horoscopeType = getHoroscopeType(birthday)
+	if (currentUser && !horoscope || horoscope.birthday !== birthday) {
+		horoscope = {
+			horoscopeType: getHoroscopeType(birthday),
+			birthday
+		}
 		localStorage.setItem(CURRENT_USER_LS, JSON.stringify({
 			...currentUser,
-			horoscopeType
+			horoscope
 		}))
 	}
 
-	return horoscopeType
+	return horoscope.horoscopeType
 }
 
 const getFirstPhrase = (text: string, quantityOfPhrases: number) => {
@@ -106,7 +109,7 @@ const HoroscopeCard = () => {
 						<CardLinkButton
 							onClick={toggleHoroscopeCard}
 							toolTip={{
-								text: `${isFullHoroscopeCard ? 'Закрыть' : 'Открыть'} карточку гороскопа`,
+								message: `${isFullHoroscopeCard ? 'Закрыть' : 'Открыть'} карточку гороскопа`,
 								position: 'top_left',
 							}}
 							disabled={!horoscopeData?.messages}

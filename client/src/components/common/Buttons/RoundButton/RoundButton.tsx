@@ -25,7 +25,7 @@ const RoundButton = forwardRef<HTMLButtonElement, RoundButtonProps>(({ onClick, 
 			ref={ref}
 		>
 			{children}
-			{toolTip && <ToolTip {...toolTip} />}
+			{toolTip && <ToolTip { ...toolTip } />}
 		</button>
 	)
 })

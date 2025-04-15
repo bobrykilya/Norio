@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { focusInput } from '../../../../../utils/focusInput';
 import NameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
@@ -20,6 +20,14 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     const [notSaveUser, setNotSaveUser] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefLogin = useRef(null)
+    const defaultValues = {
+        username: '',
+        password: ''
+    }
+    const preloadValues = {
+        username: 'Admin',
+        password: 'Qwe123'
+    }
 
     const {
         register,
@@ -31,16 +39,14 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     } = useForm({
         mode: 'onBlur',
         reValidateMode: 'onBlur',
-        defaultValues: {
-            username: 'Admin',
-            password: 'Qwe123',
-        }
+        defaultValues
     })
 
     const commonProps = {
         register,
         reset,
         notSaveUser,
+        watch,
         disabled: isFormDisabled,
     }
 
@@ -76,6 +82,20 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
         // alert(JSON.stringify(data))
     }
 
+
+    //! Remove
+    const preloadFormValuesSetting = () => {
+        for (const name in defaultValues) {
+            setValue(name as keyof {
+                username: string;
+                password: string;
+            }, preloadValues[name])
+        }
+    }
+    useEffect(() => {
+        preloadFormValuesSetting()
+    }, [])
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} id='sign_in-form' className='form cont' >
             <div className='inputs-cont cont'>
@@ -89,13 +109,12 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
                 <PasswordInput
                     name='password'
                     inputType='sign_in'
-                    watch={watch}
                     { ...commonProps }
                 />
                 <label id='checkbox-cont' className='cont'>
                     <CheckBox onChange={handleChangeCheckBox} checked={notSaveUser} disabled={isFormDisabled} />
                     <span>Быстрая сессия</span>
-                    <ToolTip text='Длительность сессии ограничена. Пароль не сохраняется автоматически' />
+                    <ToolTip message='Длительность сессии ограничена. Пароль не сохраняется автоматически' />
                 </label>
             </div>
             <SubmitBut
@@ -105,7 +124,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
                 useOnClick={notSaveUser}
                 isLoading={isLoading}
                 toolTip={{
-                    text: 'Выполнить вход'
+                    message: 'Выполнить вход'
                 }}
             />
         </form>

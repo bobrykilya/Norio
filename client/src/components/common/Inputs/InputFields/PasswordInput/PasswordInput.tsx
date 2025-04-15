@@ -13,7 +13,7 @@ const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, 
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
 
     const inputRef = useRef(null)
-    const isCleanerOpened = Boolean(inputRef.current?.value)
+    const isCleanerOpened = Boolean(watch && watch(name))
     
     const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         
@@ -126,7 +126,7 @@ const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, 
                 isExtraButVisible: isCleanerOpened,
                 onClick: handleSwitchLockPosition,
                 toolTip: {
-                    text: !isLockOpened ? 'Показать пароль' : 'Скрыть пароль'
+                    message: !isLockOpened ? 'Показать пароль' : 'Скрыть пароль'
                 }
             }}
         >
@@ -134,7 +134,7 @@ const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, 
                 className={`caps_lock-cont ${isCapsLockEnabled ? 'opened' : ''}`}
             >
                 <span>CAPS</span>
-                <ToolTip text='Включён Caps-Lock' />
+                <ToolTip message='Включён Caps-Lock' />
             </div>
         </InputField>
     )

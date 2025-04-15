@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs"
 import TokenService from "./Token-service"
-import { Conflict, Errors, Forbidden, Unauthorized } from "../utils/Errors"
-import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION } from "../../constants"
+import { Errors } from "../utils/Errors"
+import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION, MAX_SESSION_FOR_USER } from "../../constants"
 import RefreshSessionsRepository from "../_database/repositories/RefreshSession-db"
 import UserRepository from "../_database/repositories/User-db"
 import AuthDeviceRepository from '../_database/repositories/AuthDevice-db'
@@ -26,7 +26,7 @@ class AuthService {
 		const userData = await UserRepository.getUserMainData(username)
 		
 		if (!userData) {
-			throw new Conflict("Неверный логин или пароль")
+			throw Errors.loginOrPasswordInvalid()
 		}
 
 		const userId = userData.user_id
@@ -34,12 +34,12 @@ class AuthService {
 		
 		const isPasswordValid = bcrypt.compareSync(password, userData.password)
 		if (!isPasswordValid) {
-			throw new Conflict("Неверный логин или пароль")
+			throw Errors.loginOrPasswordInvalid()
 		}
 
 		
 		//* Control of max sessions for every user
-		if (await RefreshSessionsRepository.getRefreshSessionsQuantity(userId) >= 7) {
+		if (await RefreshSessionsRepository.getRefreshSessionsQuantity(userId) >= MAX_SESSION_FOR_USER) {
 			    await RefreshSessionsRepository.deleteOldestRefreshSessionByUserId(userId)
 			}
 		//*
@@ -89,7 +89,7 @@ class AuthService {
 
 		const userData = await UserRepository.getUserMainData(username)
 		if (userData) {
-			throw new Conflict("Пользователь с таким логином уже существует")
+			throw Errors.usernameEngaged()
 		}
 
 		const hashedPassword = bcrypt.hashSync(password, salt)
@@ -155,8 +155,12 @@ class AuthService {
 			
             userInfo.userId = userId
 			delete userInfo.hashedPassword
-		} catch {
-			throw Errors.phoneConflict()
+		} catch (err) {
+			if (err.constraint === 'users_avatar_key') {
+				throw Errors.avatarEngaged()
+			} else if (err.constraint === 'users_phone_key') {
+				throw Errors.phoneEngaged()
+			}
 		}
 
 		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTime, deviceType, lsDeviceId, deviceIP })
@@ -210,21 +214,21 @@ class AuthService {
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, queryTime })
 		
 		if (!currentRefreshToken) {
-			throw new Unauthorized()
+			throw Errors.unauthorized()
 		}
 		
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(currentRefreshToken)
 		// console.log(refreshSession)
 		
 		if (!refreshSession) {
-			throw new Unauthorized()
+			throw Errors.unauthorized()
 		}
 
 
 		//* Checking for fast session end
 		if (Number(refreshSession.log_out_time) && (Number(refreshSession.log_out_time) < queryTime)) {
 			await AuthService.fastSessionsExpireChecking(refreshSession)
-			throw new Unauthorized()
+			throw Errors.unauthorized()
 		}
 
 		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash) || 
@@ -252,7 +256,7 @@ class AuthService {
 		try {
 			payload = await TokenService.verifyRefreshToken(currentRefreshToken)
 		} catch (err) {
-			throw new Forbidden(err.detail)
+			throw Errors.forbidden(err.detail)
 		}
 
 		const { user_id: userId } = await UserRepository.getUserMainData(payload.username)

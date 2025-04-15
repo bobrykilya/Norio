@@ -21,9 +21,19 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
     // console.log('SignUp')
     
     const { setCoverPanelState } = useCoverPanelState()
-    const modalsState = useModalState(s => s.allModalsState)
+    const { getCommonModalState } = useModalState()
     const [isLoading, setIsLoading] = useState(false)
     const inputRefLogin = useRef(null)
+    const defaultValues = {
+        username: '',
+        password: '',
+        confirmPassword: ''
+    }
+    const preloadValues = {
+        username: 'Userl',
+        password: '1234User',
+        confirmPassword: '1234User'
+    }
 
     const {
         register,
@@ -36,18 +46,14 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
     } = useForm({
         mode: 'onChange',
         reValidateMode: "onChange",
-        defaultValues: {
-            username: 'User',
-            password: '1234User',
-            confirmPassword: '1234User'
-        }
+        defaultValues
     })
 
     const commonProps = {
         register,
         errors,
         reset,
-        setValue,
+        watch,
         disabled: isFormDisabled,
     }
 
@@ -65,7 +71,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
 
     //* For forms Esc blur while any DropDown, SnackBar or JumpingCard is opened
     useCloseOnEsc({
-        conditionsList: [!isFormDisabled, !modalsState],
+        conditionsList: [!isFormDisabled, !getCommonModalState()],
         callback: () => setCoverPanelState('sign_in')
     })
 
@@ -79,6 +85,20 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
             })
             .finally(() => setIsLoading(false))
     }
+
+    //! Remove
+    const preloadFormValuesSetting = () => {
+        for (const name in defaultValues) {
+            setValue(name as keyof {
+                username: string;
+                password: string;
+                confirmPassword: string;
+            }, preloadValues[name])
+        }
+    }
+    useEffect(() => {
+        preloadFormValuesSetting()
+    }, [])
 
 
     return (
@@ -100,7 +120,6 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
                 <PasswordInput
                     name='confirmPassword'
                     inputType='confirm'
-                    watch={watch}
                     { ...commonProps }
                 />
             </div>
@@ -113,7 +132,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
                 blur={isFormBlur}
                 isLoading={isLoading}
                 toolTip={{
-                    text: 'Продолжить регистрацию'
+                    message: 'Продолжить регистрацию'
                 }}
             />
         </form>

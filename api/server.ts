@@ -10,7 +10,7 @@ import detect from "detect-port"
 import killPort from "kill-port"
 import UnprotectedRouter from "./src/routers/Unprotected-router.ts"
 import { createClient } from "redis"
-import { Conflict } from "./src/utils/Errors.ts"
+import { Errors } from "./src/utils/Errors.ts"
 import AuthService from "./src/services/Auth-service.ts"
 import { AUTO_LOGOUT_INTERVAL } from "./constants.ts"
 import ProtectedRouter from "./src/routers/Protected-router.ts"
@@ -30,7 +30,7 @@ export const redis = await createClient({
 })
 	.on('error', () => {
 		// console.log('Redis Client Error', err)
-		throw new Conflict(`Redis connection error on port: ${process.env.REDIS_PORT}`)
+		throw Errors.redisNoConnection()
 	})
 	.connect()
 

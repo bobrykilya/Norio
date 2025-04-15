@@ -10,6 +10,7 @@ import AuthCommon from "../features/auth/authCommon"
 import FastSession from "../features/auth/fastSession"
 import { CURRENT_USER_LS, DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_LS } from "../../constants"
 import { Loader } from "../components/common/Loader/Loader"
+import CoverAppTitle from "../components/common/CoverAppTitle/CoverAppTitle"
 
 
 
@@ -152,11 +153,14 @@ const AuthProvider = ({ children }) => {
 			{appReadyState ? (
 				children
 			) :
-				<Loader
-					type={'circles'}
-					contClassName={'main_bg-gradient'}
-					width="100"
-				/>
+				<>
+					<Loader
+						type={'circles'}
+						contClassName={'main_bg-gradient'}
+						width="100"
+					/>
+					<CoverAppTitle dim={true} />
+				</>
 			}
 		</AuthContext.Provider>
 	)

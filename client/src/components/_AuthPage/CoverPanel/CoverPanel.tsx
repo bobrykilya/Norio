@@ -35,7 +35,7 @@ const CoverPanel = ({ disabled }: CoverPanelProps) => {
                             <label htmlFor="open_sign_up-but">
                                 Регистрация
                             </label>
-                            <ToolTip text={'Перейти к форме регистрации пользователя'} />
+                            <ToolTip message={'Перейти к форме регистрации пользователя'} />
                         </button>
                     </section>
                     <section id='sign_in_info-cont' className='cont'>
@@ -51,7 +51,7 @@ const CoverPanel = ({ disabled }: CoverPanelProps) => {
                             <label htmlFor="open_sign_in-but">
                                 Авторизация
                             </label>
-                            <ToolTip text={'Перейти к форме авторизации пользователя'} />
+                            <ToolTip message={'Перейти к форме авторизации пользователя'} />
                         </button>
                     </section>
                 </div>

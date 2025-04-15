@@ -16,7 +16,7 @@ const SettingsButton = ({ isAuthPage=false, delayTimeMS }: SettingsButtonProps) 
 			onClick={() => {}}
 			className={'settings-but before_hover-but'}
 			toolTip={{
-				text: 'Открыть панель ошибок',
+				message: 'Открыть панель ошибок',
 				position: isAuthPage ? 'bottom_left' : 'right',
 				delayTimeMS
 			}}

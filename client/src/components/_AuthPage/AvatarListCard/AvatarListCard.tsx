@@ -99,7 +99,7 @@ const AvatarListCard = ({ LIST, currentAvatar, isAvatarListCardOpened, closeAvat
                 className={'up before_hover-but'}
                 disabled={!isArrowButsActive}
                 toolTip={{
-                    text: 'Пролистать список вверх',
+                    message: 'Пролистать список вверх',
                     position: 'right'
                 }}
             >
@@ -112,7 +112,7 @@ const AvatarListCard = ({ LIST, currentAvatar, isAvatarListCardOpened, closeAvat
                 className={'down before_hover-but'}
                 disabled={!isArrowButsActive}
                 toolTip={{
-                    text: 'Пролистать список вниз',
+                    message: 'Пролистать список вниз',
                     position: 'right'
                 }}
             >

@@ -84,7 +84,7 @@ const SwitchUserButton = ({ disabled }: SwitchUserButtonProps) => {
 					}
 				</div>
 				<ToolTip
-					text={'Выбрать раннее авторизованного пользователя'}
+					message={'Выбрать раннее авторизованного пользователя'}
 					position={'bottom'}
 					isBlock={isSwitchUserOpened}
 				/>

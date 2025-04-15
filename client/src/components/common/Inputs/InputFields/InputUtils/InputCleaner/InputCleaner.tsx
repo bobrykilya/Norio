@@ -15,7 +15,7 @@ const InputCleaner = ({ opened, onClick }: InputCleanerProps) => {
             onClick={onClick}
             className={`inputs_cleaner-but before_hover-but ${opened ? 'opened' : ''}`}
             toolTip={{
-                text: 'Очистить поле'
+                message: 'Очистить поле'
             }}
             size={'tiny'}
         >

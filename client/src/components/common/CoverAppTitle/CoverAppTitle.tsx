@@ -4,13 +4,14 @@ import React from "react"
 
 
 type CoverAppTitleProps = {
-	block: boolean;
+	block?: boolean;
+	dim?: boolean;
 }
-const CoverAppTitle = ({ block }: CoverAppTitleProps) => {
+const CoverAppTitle = ({ block, dim }: CoverAppTitleProps) => {
 
 
 	return (
-		<div className={`coverAppTitle cont ${block && 'block'}`}>
+		<div className={`coverAppTitle cont ${block && 'block'} ${dim && 'dim'}`}>
 			{APP_TITLE}
 		</div>
 	)

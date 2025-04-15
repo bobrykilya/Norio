@@ -1,6 +1,6 @@
 import { HoroscopeTypeOptions } from "./Global-types"
 import {
-	IUserInfoEdit,
+	IUserInfoEditForm,
 } from "../../client/src/components/others/AccountInfoCard/UserCard/EditCards/UserInfoEditCard/UserInfoEditCard"
 
 
@@ -12,6 +12,6 @@ export type IHoroscopeDataRes = {
 	messages: string[];
 }
 
-export type IUserInfoEditReq =  Partial<Omit<IUserInfoEdit, 'birthday'>> & {
+export type IUserInfoEditReq =  Partial<Omit<IUserInfoEditForm, 'birthday'>> & {
 	birthday?: string | number;
 }

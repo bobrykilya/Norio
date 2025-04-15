@@ -12,7 +12,7 @@ type DateInputProps = ISignFormInput & {
 	inputDateRef: React.MutableRefObject<HTMLInputElement>;
 	icon: ICommonVar['icon'];
 }
-const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDateRef, icon, withCopyBut, withEmptyIcon }: DateInputProps) => {
+const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDateRef, icon, withCopyBut, withEmptyIcon, autoFocus }: DateInputProps) => {
 
 	const inputRef = inputDateRef || useRef(null)
 	const dateMaskOptions = {
@@ -88,11 +88,12 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDate
 			}}
 			inputRef={maskedInputRef}
 			inputParams={{
-				inputMode: 'number',
+				inputMode: 'numeric',
 				maxLength: 10,
 				label: 'Дата рождения',
 				placeholder: '04.09.2001',
-				autoComplete: 'off',
+				autoComplete: 'bday',
+				autoFocus: autoFocus,
 				disabled,
 			}}
 			cleanerParams={{

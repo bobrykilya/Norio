@@ -1,3 +1,9 @@
+
+$main-blur: 4px
+$block-blur: 6px
+$main-opacity: 0.015
+$block-opacity: 0.05
+$dim-opacity: 0.01
 .coverAppTitle
     position: absolute
     font-family: "Righteous", serif
@@ -7,17 +13,20 @@
     letter-spacing: -17vh
     color: white
     pointer-events: none
-    filter: blur(4px)
-    -webkit-filter: blur(4px)
-    opacity: 0.015
+    filter: blur($main-blur)
+    -webkit-filter: blur($main-blur)
+    opacity: $main-opacity
     transition-duration: 3s
     animation: fadeInAppTitle 1s ease
     &.block
         animation: fadeInBlurAppTitle 1s ease-out
         display: flex
-        filter: blur(6px)
-        opacity: 0.05
+        filter: blur($block-blur)
+        -webkit-filter: blur($block-blur)
+        opacity: $block-opacity
         transform: scale(1.05)
+    &.dim
+        opacity: $dim-opacity
 
 
 @keyframes fadeInAppTitle
@@ -28,21 +37,20 @@
         font-size: 92vh
         letter-spacing: -22vh
     100%
-        filter: blur(4px)
-        -webkit-filter: blur(4px)
-        opacity: 0.015
-        //transform: scale(1)
+        filter: blur($main-blur)
+        -webkit-filter: blur($main-blur)
+        opacity: $main-opacity
         font-size: 100vh
         letter-spacing: -17vh
 
 @keyframes fadeInBlurAppTitle
     0%
-        filter: blur(4px)
-        -webkit-filter: blur(4px)
-        opacity: 0.015
+        filter: blur($main-blur)
+        -webkit-filter: blur($main-blur)
+        opacity: $main-opacity
         transform: scale(1)
     100%
-        filter: blur(6px)
-        -webkit-filter: blur(6px)
-        opacity: 0.05
+        filter: blur($block-blur)
+        -webkit-filter: blur($block-blur)
+        opacity: $block-opacity
         transform: scale(1.05)

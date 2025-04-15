@@ -6,13 +6,13 @@ import { TOOLTIP_DELAY_TIME } from "../../../../constants"
 export type AvailableToolTipPositions = 'top' | 'bottom' | 'left' | 'right' | 'top_left' | 'top_right'| 'bottom_left' | 'bottom_right';
 
 export type ToolTipProps = {
-    text: string;
+    message: string;
     position?: AvailableToolTipPositions;
     delayTimeMS?: number;
     isBlock?: boolean;
     isAlwaysToolTip?: boolean;
 }
-const ToolTip = ({ text, position='top', delayTimeMS, isBlock, isAlwaysToolTip=false }: ToolTipProps) => {
+const ToolTip = ({ message, position='top', delayTimeMS, isBlock, isAlwaysToolTip=false }: ToolTipProps) => {
     const [isToolTipVisible, setIsToolTipVisible] = useState(false)
     const timer = useRef<number | null>(null)
 
@@ -44,7 +44,7 @@ const ToolTip = ({ text, position='top', delayTimeMS, isBlock, isAlwaysToolTip=f
             onMouseEnter={handleEnterMouse}
             onMouseLeave={handleLeaveMouse}
         >
-            <div className={`tool_tip ${isToolTipVisible ? 'active' : ''} ${position}`} >{text}</div>
+            <div className={`tool_tip ${isToolTipVisible ? 'active' : ''} ${position}`} >{message}</div>
         </div>
      )
 }

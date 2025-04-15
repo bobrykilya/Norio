@@ -16,13 +16,13 @@ type DropDownSearchInputProps = ISignFormInput & {
     placeholder: string;
     icon: ICommonVar['icon'];
 }
-const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={}, reset, setValue, setError, watch, disabled=false, withCopyBut, withEmptyIcon }: DropDownSearchInputProps) => {
+const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={}, reset, setValue, setError, watch, disabled=false, withCopyBut, withEmptyIcon, autoComplete }: DropDownSearchInputProps) => {
 
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
 
     const dropDownRef = useRef(null)
     const inputRef = useRef(null)
-    const isCleanerOpened = Boolean(inputRef.current?.value)
+    const isCleanerOpened = Boolean(watch && watch(name))
     
     
     const filterAndSortList = ({ search, list }) => {
@@ -40,8 +40,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
     
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         // console.log(e.target.value)
-        const normalValue = capitalize(e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ]/, ''))
-        setValue && setValue(name, normalValue)
+        const normalValue = capitalize(e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/, ''))
 
         if (/[^а-яА-ЯёЁ ]/.test(normalValue)) {
             toggleDropDown(false)
@@ -132,9 +131,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
                     break
                 case 'Escape':
                     await timeout(100)
-                        .then(() => {
-                            toggleDropDown(false)
-                        })
+                    toggleDropDown(false)
             }
         }
 
@@ -218,7 +215,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
             inputParams={{
                 maxLength: 23,
                 placeholder,
-                autoComplete: 'none',
+                autoComplete: autoComplete || 'off',
                 onKeyDown: handleKeyDownOnInput,
                 onFocus: handleFocusInput,
                 onBlur: handleBlurInput,

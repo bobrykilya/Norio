@@ -4,14 +4,17 @@ import { ICONS } from "../../../../../../../assets/common/Icons-data"
 
 
 
-type FormSubmitButProps = {}
-const FormSubmitButton = ({}: FormSubmitButProps) => {
+const FormSubmitButton = () => {
 
 
 	return (
 		<RoundButton
 			className={'user_info_edit_card_submit-but round_blue-but'}
 			isSubmitBut={true}
+			toolTip={{
+				message: 'Сохранить все поля',
+				position: 'bottom'
+			}}
 		>
 			{ICONS.save}
 		</RoundButton>

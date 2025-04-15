@@ -94,7 +94,7 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 							onClick={extraButParams.onClick || copyInputValue}
 							size={'tiny'}
 							toolTip={{
-								text: 'Скопировать поле'
+								message: 'Скопировать поле'
 							}}
 						>
 							{ICONS.copy}

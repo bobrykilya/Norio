@@ -111,7 +111,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 				{
 					!isAuthPage ?
 					<ToolTip
-						text={
+						message={
 							!isNewUser ?
 							`Сменить аккаунт на ${user?.username}` :
 							'Сменить аккаунт на нового пользователя'
@@ -119,7 +119,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 						position={'left'}
 					/> :
 					<ToolTip
-						text={`Войти в аккаунт ${user?.username}`}
+						message={`Войти в аккаунт ${user?.username}`}
 						position={'right'}
 					/>
 				}
@@ -129,7 +129,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 				<RoundButton
 					onClick={handleRemoveUser}
 					toolTip={{
-						text: `Забыть аккаунт ${user?.username}`,
+						message: `Забыть аккаунт ${user?.username}`,
 					}}
 					size={'tiny'}
 				>
