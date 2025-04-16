@@ -20,6 +20,7 @@ export type IReactHookForm = {
 
 export type ISignFormInput = IReactHookForm & {
     name: string;
+	placeholder: string;
     disabled?: boolean;
     notSaveUser?: boolean;
     inputType?: SignFormInputTypesOptions;

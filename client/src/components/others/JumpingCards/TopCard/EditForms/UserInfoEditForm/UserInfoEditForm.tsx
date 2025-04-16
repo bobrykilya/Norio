@@ -19,6 +19,7 @@ import { showSnackMessage } from "../../../../../../features/showSnackMessage/sh
 import { IUserInfoEditReq } from "../../../../../../../../common/types/User-types"
 import UserService from "../../../../../../services/User-service"
 import { useUserInfoState } from "../../../../../../stores/User-store"
+import PassportButton from "./PassportButton/PassportButton"
 
 
 
@@ -26,13 +27,14 @@ export type IUserInfoEditForm = Omit<ISignUp, 'avatar'> & {
 	company?: string;
 	birthday?: string;
 }
-type UserInfoEditCardProps = {
+type UserInfoEditFormProps = {
 	userInfo: IUserRepository;
 }
-const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
-	// console.log('UserInfoEditCard form has been updated')
+const UserInfoEditForm = ({ userInfo }: UserInfoEditFormProps) => {
+	// console.log('UserInfoEditForm form has been updated')
 
 	const [statusState, setStatusState] = useState<FormStatusButOptions>('ok')
+	const [isPassportInfoOpened, setIsPassportInfoOpened] = useState(false)
 	const setUserInfoState = useUserInfoState(s => s.setUserInfoState)
 	const defaultGender = GENDER_LIST.find(el => el.id === userInfo?.gender) || null
 	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(defaultGender)
@@ -63,7 +65,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 		getValues,
 		setError,
 		setValue,
-		formState: { errors, isDirty },
+		formState: { errors, isDirty, touchedFields },
 	} = useForm<IUserInfoEditForm>({
 		mode: 'onChange',
 		reValidateMode: "onChange",
@@ -118,7 +120,7 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 	}
 
 	const getDirtyData = () => {
-		if (!isDirty && genderState?.id === defaultGender?.id) {
+		if (!isDirty && genderState?.id === defaultGender?.id && !Object.keys(touchedFields)[0]) {
 			return {}
 		}
 
@@ -172,23 +174,23 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 			onSubmit={handleSubmit(onSaveForm)}
 		>
 			<div
-				className={'user_info_edit_card-header cont'}
+				className={'user_info_edit_form-header cont'}
 			>
 				<div
-					className={'user_info_edit_card_status_and_title-cont cont'}
+					className={'user_info_edit_form_status_and_title-cont cont'}
 				>
 					<FormStatusButton
 						state={statusState}
 						handleUndoButClick={handleUndoButClick}
 					/>
 					<div
-						className={'user_info_edit_card-title cont white-card'}
+						className={'user_info_edit_form-title cont white-card'}
 					>
 						Личные данные
 					</div>
 				</div>
 				<div
-					className={'user_info_edit_card_birth_and_gender-cont cont white-card'}
+					className={'user_info_edit_form_birth_and_gender-cont cont white-card'}
 				>
 					<DateInput
 						name='birthday'
@@ -205,10 +207,10 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 				</div>
 			</div>
 			<div
-				className={'user_info_edit_card-footer cont'}
+				className={'user_info_edit_form-footer cont'}
 			>
 				<div
-					className={'user_info_edit_card_main_form-card cont white-card'}
+					className={'user_info_edit_form_main_form-card cont white-card'}
 				>
 					<PhoneInput
 						name='phone'
@@ -250,10 +252,10 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 					/>
 				</div>
 				<div
-					className={'user_info_edit_card_footer_right-column cont'}
+					className={'user_info_edit_form_footer_right-column cont'}
 				>
 					<div
-						className={'user_info_edit_card_company-card cont white-card'}
+						className={'user_info_edit_form_company-card cont white-card'}
 					>
 						<DropDownSearchInput
 							LIST={COMPANIES_LIST}
@@ -273,20 +275,14 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 						/>
 					</div>
 					<div
-						className={'user_info_edit_card_footer_right_column-footer cont'}
+						className={'user_info_edit_form_footer_right_column-footer cont'}
 					>
 						<div
-							className={'user_info_edit_card_passport-card cont white-card'}
+							className={'user_info_edit_form_passport-card cont white-card'}
 						>
-							<button
-								className={'user_info_edit_card_passport-but cont'}
-								type={'button'}
-							>
-								{ICONS.passport}
-								<span>
-								    Паспортные<br/> данные
-								</span>
-							</button>
+							<PassportButton
+								state={isPassportInfoOpened}
+							/>
 						</div>
 						<FormSubmitButton />
 					</div>
@@ -296,4 +292,4 @@ const UserInfoEditCard = ({ userInfo }: UserInfoEditCardProps) => {
 	)
 }
 
-export default UserInfoEditCard
+export default UserInfoEditForm

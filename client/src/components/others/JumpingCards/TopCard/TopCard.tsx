@@ -1,9 +1,9 @@
 import React from 'react'
 import JumpingCard from "../../../common/JumpingCard/JumpingCard"
 import { useTopCardState } from "../../../../stores/Utils-store"
-import UserInfoEditCard from "../../AccountInfoCard/UserCard/EditCards/UserInfoEditCard/UserInfoEditCard"
-import AccountInfoEditCard from "../../AccountInfoCard/UserCard/EditCards/AccountInfoEditCard/AccountInfoEditCard"
 import { useUserInfoState } from "../../../../stores/User-store"
+import UserInfoEditForm from "./EditForms/UserInfoEditForm/UserInfoEditForm"
+import AccountInfoEditForm from "./EditForms/AccountInfoEditForm/AccountInfoEditForm"
 
 
 
@@ -31,13 +31,19 @@ const TopCard = ({  }: TopCardProps) => {
 		>
 			{
 				topCardState === 'userInfo' &&
-				<UserInfoEditCard
+				<UserInfoEditForm
 					userInfo={userInfoState}
 				/>
 			}
 			{
-				topCardState === 'user' &&
-				<AccountInfoEditCard
+				topCardState === 'accountInfo' &&
+				<AccountInfoEditForm
+
+				/>
+			}
+			{
+				topCardState === 'organization' &&
+				<AccountInfoEditForm
 
 				/>
 			}

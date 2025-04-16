@@ -1,7 +1,7 @@
 import { HoroscopeTypeOptions } from "./Global-types"
 import {
 	IUserInfoEditForm,
-} from "../../client/src/components/others/AccountInfoCard/UserCard/EditCards/UserInfoEditCard/UserInfoEditCard"
+} from "../../client/src/components/others/JumpingCards/TopCard/EditForms/UserInfoEditForm/UserInfoEditForm"
 
 
 

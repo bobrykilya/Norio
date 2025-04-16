@@ -7,7 +7,7 @@ import { ICONS } from "../../../../../assets/common/Icons-data"
 
 
 
-const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, watch=false, notSaveUser=false, disabled=false }: ISignFormInput) => {
+const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, watch=false, notSaveUser=false, disabled=false }: Omit<ISignFormInput, 'placeholder'>) => {
 
     const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)

@@ -41,6 +41,22 @@
             ~ .input_field-icon
                 color: $color-blue-main
                 transform: scale(1.2)
+    .input_field-placeholder
+        pointer-events: none
+        position: absolute
+        left: 2rem
+        color: $color-place-holder
+        transition-property: transform, opacity
+        transition-duration: 0.25s
+        transition-timing-function: ease-out
+        &.phone
+            left: 3.8rem
+        &.hide
+            transition-property: transform, opacity
+            transition-duration: 0.13s
+            transition-timing-function: ease
+            transform: translateX(1rem)
+            opacity: 0
     .input_field-icon
         //border: 2px solid black
         margin-top: -0.1rem

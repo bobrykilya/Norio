@@ -1,4 +1,4 @@
-import React from "react"
+import React, { StrictMode } from "react"
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import GlobalProvider from './context/Global-context'
@@ -11,14 +11,16 @@ import { queryClient } from "./http/tanstackQuery-client"
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-    <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-            <AuthProvider>
-                <BrowserRouter>
-                    <App />
-                    {/*<ReactQueryDevtools initialIsOpen={false} />*/}
-                </BrowserRouter>
-            </AuthProvider>
-        </GlobalProvider>
-    </QueryClientProvider>
+    <StrictMode>
+        <QueryClientProvider client={queryClient}>
+            <GlobalProvider>
+                <AuthProvider>
+                    <BrowserRouter>
+                        <App />
+                        {/*<ReactQueryDevtools initialIsOpen={false} />*/}
+                    </BrowserRouter>
+                </AuthProvider>
+            </GlobalProvider>
+        </QueryClientProvider>
+    </StrictMode>
 )

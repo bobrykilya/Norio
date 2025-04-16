@@ -25,7 +25,7 @@ const AccountInfoCard = () => {
             <FastRoundButton
                 onClick={() => {}}
                 toolTip={{
-                    message: 'Реквизиты',
+                    message: 'Реквизиты организации',
                     position: 'bottom',
                 }}
                 size={'big'}

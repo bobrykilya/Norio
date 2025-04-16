@@ -1,0 +1,78 @@
+@import '../../../../../../variables'
+
+
+
+.user_info_edit-form
+    //border: 1px solid yellow
+    margin-top: 15vh
+    overflow: visible
+    width: auto
+    //flex-shrink: 1
+    .input_field-cont
+        //border: 2px solid brown
+        margin-top: 0.3rem
+        margin-right: 1.2rem
+    .user_info_edit_form-header
+        //border: 3px solid orange
+        width: 100%
+        flex-direction: row
+        justify-content: flex-end
+        align-items: flex-start
+        overflow: visible
+        //flex-shrink: 1
+        //margin-bottom: $margin-white-card
+        .user_info_edit_form_status_and_title-cont
+            //border: 5px solid green
+            width: auto
+            flex-direction: row
+            overflow: visible
+            //.user_info_edit_form_status-but
+            .user_info_edit_form-title
+                width: auto
+                color: $color-blue-main
+                font-size: $size-h3
+                font-weight: bolder
+                margin-left: $margin-white-card
+                white-space: nowrap
+        .user_info_edit_form_birth_and_gender-cont
+            width: auto
+            flex-direction: row
+            overflow: visible
+            margin-left: $margin-white-card
+            .input_field-cont
+                margin-top: 0
+            .gender_select_but_card-cont
+                margin-left: $margin-white-card * 2
+    .user_info_edit_form-footer
+        //border: 5px solid green
+        flex-direction: row
+        justify-content: flex-start
+        align-items: flex-end
+        overflow: visible
+        margin-top: - calc($margin-white-card * 0.8)
+        .user_info_edit_form_main_form-card
+            width: auto
+            .input_field-cont
+                &:first-child
+                    margin-top: 0
+        .user_info_edit_form_footer_right-column
+            //border: 2px solid red
+            width: auto
+            overflow: visible
+            margin-left: $margin-white-card
+            .user_info_edit_form_company-card
+                width: auto
+                .input_field-cont
+                    &:first-child
+                        margin-top: 0
+            .user_info_edit_form_footer_right_column-footer
+                //border: 2px solid blue
+                height: auto
+                flex-direction: row
+                justify-content: flex-start
+                overflow: visible
+                margin-top: $margin-white-card
+                .user_info_edit_form_passport-card
+                    width: auto
+                    height: auto
+                    padding: calc($padding-white-card * 0.65) calc($padding-white-card * 0.8)

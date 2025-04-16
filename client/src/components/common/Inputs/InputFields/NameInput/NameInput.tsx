@@ -8,7 +8,6 @@ import InputField from "../InputField/InputField"
 
 
 type NameInputProps = ISignFormInput & {
-    placeholder: string;
     icon: ICommonVar['icon'];
     inputMaxLength?: number;
     inputRefLogin?: React.MutableRefObject<HTMLInputElement> | null;

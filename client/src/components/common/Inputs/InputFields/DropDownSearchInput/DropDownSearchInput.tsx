@@ -13,7 +13,6 @@ import DropDown from "../../../DropDown/DropDown"
 
 type DropDownSearchInputProps = ISignFormInput & {
     LIST: IDataListElement[];
-    placeholder: string;
     icon: ICommonVar['icon'];
 }
 const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={}, reset, setValue, setError, watch, disabled=false, withCopyBut, withEmptyIcon, autoComplete }: DropDownSearchInputProps) => {
@@ -214,7 +213,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
             inputRef={inputRef}
             inputParams={{
                 maxLength: 23,
-                placeholder,
+                placeholder: placeholder,
                 autoComplete: autoComplete || 'off',
                 onKeyDown: handleKeyDownOnInput,
                 onFocus: handleFocusInput,

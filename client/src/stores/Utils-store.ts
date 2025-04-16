@@ -22,7 +22,7 @@ const useAvatarListCardState = create<IUseAvatarListCardState>(set => ({
 }))
 
 
-type topCardStateOptions = 'accountInfo' | 'userInfo' | null
+type topCardStateOptions = 'accountInfo' | 'userInfo' | 'organization' | null
 type IUseTopCardState = {
 	topCardState: topCardStateOptions;
 	setTopCardState: (status: topCardStateOptions) => void;

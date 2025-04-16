@@ -8,7 +8,7 @@ import { getTimeParams } from "../../../../../utils/getTime"
 
 
 
-type DateInputProps = ISignFormInput & {
+type DateInputProps = Omit<ISignFormInput, 'placeholder'> & {
 	inputDateRef: React.MutableRefObject<HTMLInputElement>;
 	icon: ICommonVar['icon'];
 }

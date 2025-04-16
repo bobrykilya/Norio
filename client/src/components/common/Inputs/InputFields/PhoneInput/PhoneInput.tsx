@@ -9,7 +9,7 @@ import { PHONE_CODES_LIST } from "../../../../../assets/AuthPage/AuthPage-data"
 
 
 
-type PhoneInputProps = ISignFormInput & {
+type PhoneInputProps = Omit<ISignFormInput, 'placeholder'> & {
     inputPhoneRef?: React.MutableRefObject<HTMLInputElement>;
 }
 const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPhoneRef, withCopyBut, withEmptyIcon }: PhoneInputProps) => {
@@ -90,6 +90,7 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
                 inputMode: 'tel',
                 maxLength: 14,
                 label: 'Мобильный номер',
+                isPhone: true,
                 placeholder: '(29) 555-35-35',
                 autoComplete: 'tel-national',
                 disabled: disabled,

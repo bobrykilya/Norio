@@ -24,6 +24,7 @@ type InputFieldProps = {
 	inputParams: {
 		placeholder: string;
 		label?: string;
+		isPhone?: boolean;
 		type?: string;
 		maxLength?: number;
 		autoComplete?: string;
@@ -58,6 +59,8 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 		copyText(inputRef.current.value)
 	}
 
+	const { placeholder, isPhone, label, ...restInputParams } = inputParams
+
 
 	return (
 		<div className={`${contClassName || ''} input_field-cont cont ${extraButParams?.isCopy ? 'with_copy' : ''} ${registerForm.error?.message ? 'error' : ''}`}>
@@ -65,16 +68,21 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 				className='input_field-label'
 				onClick={() => focusInput(inputRef)}
 			>
-                {inputParams.label || inputParams.placeholder}
+                {label || placeholder}
             </span>
 			<input
 				{ ...registerForm.restRegister }
-				{ ...inputParams }
+				{ ...restInputParams }
 				ref={(e) => {
 					inputRef.current = e
 					registerForm.formRef(e)
 				}}
 			/>
+			<span
+			    className={`input_field-placeholder ${isPhone && 'phone'} ${cleanerParams.isCleanerOpened && 'hide'}`}
+			>
+			    {placeholder}
+			</span>
 			{inputIcon}
 			{children}
 			<InputError error={registerForm.error} onClick={() => focusInput(inputRef)} />
