@@ -38,16 +38,17 @@
         &:hover, &:focus
             border-color: $color-main-text-act
         &:focus
-            ~ .input_field-icon
-                color: $color-blue-main
-                transform: scale(1.2)
+            ~ .input_field_icon-cont
+                .input_field-icon
+                    color: $color-blue-main
+                    transform: scale(1.2)
     .input_field-placeholder
         pointer-events: none
         position: absolute
         left: 2rem
         color: $color-place-holder
         transition-property: transform, opacity
-        transition-duration: 0.25s
+        transition-duration: 0.2s
         transition-timing-function: ease-out
         &.phone
             left: 3.8rem
@@ -57,18 +58,36 @@
             transition-timing-function: ease
             transform: translateX(1rem)
             opacity: 0
-    .input_field-icon
-        //border: 2px solid black
-        margin-top: -0.1rem
-        pointer-events: none
-        z-index: 2
+    .input_field_icon-cont
+        //border: 2px solid grey
         position: absolute
         left: 0.5rem
-        font-size: 0.65rem
-        overflow: visible
-        //will-change: transform
-        transition: all 0.15s ease
-        color: $color-main-text
+        pointer-events: none
+        z-index: 2
+        transition: all 0.2s ease
+        transform: scale(0)
+        opacity: 0
+        .input_field-icon
+            font-size: 0.7rem
+            transition: all 0.15s ease
+            color: $color-main-text
+        &.opened
+            transform: scale(1)
+            opacity: 1
+    .undo_field-but
+        position: absolute
+        left: 0
+        bottom: 50%
+        transform: translateY(50%) scale(0)
+        pointer-events: auto
+        opacity: 1
+        .fa-icon
+            font-size: 0.7rem
+            color: rgba($color-blue-main, 0.8)
+        &.opened
+            transform: translateY(60%) scale(1)
+            pointer-events: auto
+            opacity: 1
     .input_field_empty-icon
         position: absolute
         right: -0.1rem
@@ -109,5 +128,6 @@
             pointer-events: none
         input
             border-bottom: 1px solid $color-error
-            ~ .input_field-icon
-                color: $color-error
+            ~ .input_field_icon-cont
+                .input_field-icon
+                    color: $color-error

@@ -1,35 +1,35 @@
 // import UserRepository from '../src/_database/repositories/User'
 // import AuthDeviceRepository from '../src/_database/repositories/AuthDevice'
 import { getTime, getTimeInShortString } from "./getTime"
-import { ICommonVar, ISnack } from "../../../common/types/Global-types"
+import { ICommonVar, IConflictDetail, ISnack } from "../../../common/types/Global-types"
 import { IBlockMessage } from "../types/Device-types"
 
 
 
 export const Errors = {
 	phoneEngaged: () => {
-		return new Conflict("Указанный номер телефона уже занят")
+		return new Conflict("Указанный номер телефона уже занят", 'phoneEngaged')
 	},
 	avatarEngaged: () => {
-		return new Conflict("Выбранный аватар уже занят")
-	},
-	loginOrPasswordInvalid: () => {
-		return new Conflict("Неверный логин или пароль")
+		return new Conflict("Выбранный аватар уже занят", 'avatarEngaged')
 	},
 	usernameEngaged: () => {
-		return new Conflict("Пользователь с таким логином уже существует")
-	},
-	dbConflict: (message: string, constraint?: string) => {
-		return new Conflict(message, constraint)
-	},
-	unauthorized: () => {
-		return new Unauthorized()
-	},
-	forbidden: (errInfo: string) => {
-		return new Forbidden(errInfo)
+		return new Conflict("Пользователь с таким логином уже существует", 'usernameEngaged')
 	},
 	redisNoConnection: () => {
-		return new Conflict(`Redis connection error on port: ${process.env.REDIS_PORT}`)
+		return new Conflict(`Redis connection error on port: ${process.env.REDIS_PORT}`, 'redisNoConnection')
+	},
+	loginOrPasswordInvalid: () => {
+		return new Conflict("Неверный логин или пароль", 'loginOrPasswordInvalid')
+	},
+	dbConflict: ({ message, detail }: { message: string, detail?: IConflictDetail }) => {
+		return new Conflict(message, 'dbConflict', detail)
+	},
+	unauthorized: (message?: string) => {
+		return new Unauthorized(message)
+	},
+	forbidden: (message: string) => {
+		return new Forbidden(message)
 	},
 	blockDevice: (message: IBlockMessage) => {
 		return new BlockDevice(message)
@@ -51,11 +51,11 @@ class WebError {
 
 
 export class Conflict extends WebError {
-	constraint: string
+	detail: IConflictDetail
 
-	constructor(message?: string, constraint?: string) {
-		super(409, 'Conflict', message)
-		this.constraint = constraint
+	constructor(message?: string, title?: string, detail?: IConflictDetail) {
+		super(409, title || 'Conflict', message)
+		this.detail = detail
 	}
 }
 
@@ -111,6 +111,7 @@ export const catchError = async ({ req, res, err, queryTime, interCode }: ICatch
 
 					},
 					res: {
+						...err.detail,
 						status,
 						interCode,
 						title: err.title,

@@ -15,7 +15,7 @@ type DropDownSearchInputProps = ISignFormInput & {
     LIST: IDataListElement[];
     icon: ICommonVar['icon'];
 }
-const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={}, reset, setValue, setError, watch, disabled=false, withCopyBut, withEmptyIcon, autoComplete }: DropDownSearchInputProps) => {
+const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={}, reset, setValue, setError, watch, disabled=false, withCopyBut, withEmptyIcon, autoComplete, undoFieldButParams }: DropDownSearchInputProps) => {
 
     const [isDropDownOpened, setIsDropDownOpened] = useState(false)
 
@@ -224,13 +224,19 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
                 isCleanerOpened,
                 handleClickCleaner: clearInput
             }}
-            extraButParams={
-                withCopyBut ? {
+            extraButParams={{
+                ...(withCopyBut && {
                     isCopy: true,
-                    isExtraButVisible: isCleanerOpened
-                } :
-                null
-            }
+                    isExtraButVisible: isCleanerOpened,
+                }),
+                ...(undoFieldButParams && {
+                    undoFieldButParams: {
+                        name,
+                        onClick: undoFieldButParams.onClick,
+                        isOpened: watch ? undoFieldButParams.preloadValues[name] !== watch(name) : false,
+                    }
+                })
+            }}
             emptyIconParams={
                 withEmptyIcon && {
                     isOpened: !isCleanerOpened

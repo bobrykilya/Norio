@@ -28,6 +28,10 @@ export type ISignFormInput = IReactHookForm & {
 	withEmptyIcon?: boolean;
 	autoComplete?: string;
 	autoFocus?: boolean;
+	undoFieldButParams?: {
+		onClick: (name: string) => void;
+		preloadValues: any;
+	};
 }
 
 export type SignFormInputTypesOptions = 'sign_in' | 'sign_up' | 'name' | 'confirm';

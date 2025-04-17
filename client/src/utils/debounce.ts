@@ -11,9 +11,9 @@ export const throttle = (callback: ICallback, delayInMS: number) => {
 	}
 }
 
-export const lightThrottle = (callback: ICallback, time: number) => {
+export const asyncThrottle = <T>(callback: ICallback, time: number) => {
 	let allowed = true
-	return function (...args: any[]) {
+	return async function (...args: any[]): Promise<T> {
 		if (!allowed) {
 			return
 		}
@@ -22,8 +22,7 @@ export const lightThrottle = (callback: ICallback, time: number) => {
 		setTimeout(() => {
 			allowed = true
 		}, time)
-		callback.apply(null, ...args)
-		// callback(...args)
+		await callback.apply(null, ...args)
 	}
 }
 

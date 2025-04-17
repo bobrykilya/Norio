@@ -111,15 +111,7 @@ class AuthService {
         }
     }
 
-    // static fetchProtected() {
-    //     try {
-    //         return $apiSecureResource.get("protected").json()
-    //     } catch (err) {
-    //         showSnackMessage(err)
-    //         throw new Error('FetchProtected error')
-    //     }
-        
-    // }
+    // static throttledRefresh = asyncThrottle<ILoginServiceRes>(this.refresh, 1000)
 }
 
 

@@ -12,7 +12,7 @@ type NameInputProps = ISignFormInput & {
     inputMaxLength?: number;
     inputRefLogin?: React.MutableRefObject<HTMLInputElement> | null;
 }
-const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, errors={}, reset, watch, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null, withCopyBut, withEmptyIcon, autoComplete }: NameInputProps) => {
+const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, errors={}, reset, watch, notSaveUser=false, inputMaxLength=20, disabled=false, inputRefLogin=null, withCopyBut, withEmptyIcon, autoComplete, undoFieldButParams }: NameInputProps) => {
 
     const inputRef = inputRefLogin || useRef(null)
     const isCleanerOpened = Boolean(watch && watch(name))
@@ -76,7 +76,8 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
     }
 
     const { ref: formRef, ...restRegister } = getRegister(inputType)
-    
+
+
     return (
         <InputField
             contClassName={'user_name_input-cont'}
@@ -99,13 +100,19 @@ const NameInput = ({ name, placeholder, icon, inputType='sign_in', register, err
                 isCleanerOpened,
                 handleClickCleaner: handleClickCleaner
             }}
-            extraButParams={
-                withCopyBut ? {
+            extraButParams={{
+                ...(withCopyBut && {
                     isCopy: true,
-                    isExtraButVisible: isCleanerOpened
-                } :
-                null
-            }
+                    isExtraButVisible: isCleanerOpened,
+                }),
+                ...(undoFieldButParams && {
+                    undoFieldButParams: {
+                        name,
+                        onClick: undoFieldButParams.onClick,
+                        isOpened: watch ? undoFieldButParams.preloadValues[name] !== watch(name) : false
+                    }
+                })
+            }}
             emptyIconParams={
                 withEmptyIcon && {
                     isOpened: !isCleanerOpened

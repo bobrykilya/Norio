@@ -156,11 +156,13 @@ class AuthService {
             userInfo.userId = userId
 			delete userInfo.hashedPassword
 		} catch (err) {
-			if (err.constraint === 'users_avatar_key') {
+			// console.log(err)
+			if (err.detail.constraint === 'users_avatar_key') {
 				throw Errors.avatarEngaged()
-			} else if (err.constraint === 'users_phone_key') {
+			} else if (err.detail.constraint === 'users_phone_key') {
 				throw Errors.phoneEngaged()
 			}
+			throw Errors.dbConflict(err)
 		}
 
 		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTime, deviceType, lsDeviceId, deviceIP })
@@ -212,34 +214,33 @@ class AuthService {
 	}) {
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, queryTime })
-		
+
 		if (!currentRefreshToken) {
-			throw Errors.unauthorized()
+			throw Errors.unauthorized('No current token on client')
 		}
-		
+
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(currentRefreshToken)
-		// console.log(refreshSession)
-		
+
 		if (!refreshSession) {
-			throw Errors.unauthorized()
+			throw Errors.unauthorized('Token has been expired')
 		}
 
 
 		//* Checking for fast session end
 		if (Number(refreshSession.log_out_time) && (Number(refreshSession.log_out_time) < queryTime)) {
 			await AuthService.fastSessionsExpireChecking(refreshSession)
-			throw Errors.unauthorized()
+			throw Errors.unauthorized('Max quantity of sessions')
 		}
 
-		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash) || 
+		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash) ||
 		    await DeviceService.deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId: refreshSession.user_id, queryTime })
-		
+
 		if (Number(refreshSession.device_id) !== Number(deviceId)) {
 
 			const interCode = deviceId ? 801 : 802
 			if (!deviceId) {
 				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTime, deviceType: 'Unknown' })
-				
+
 				await _logAttentionRepository.createLogAttention({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime })
 				await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
 				await DeviceService.blockDevice({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime, fingerprint })
@@ -273,6 +274,7 @@ class AuthService {
 			logOutTime: Number(refreshSession.log_out_time),
 			refreshToken,
 		})
+
 
 		const userInfo = await UserRepository.getHandledUserInfo(userId)
 

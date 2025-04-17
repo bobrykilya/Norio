@@ -114,9 +114,15 @@ export type ICommonVar = {
 	res: ExpressRes;
 	err: {
 		message?: string | IBlockMessage;
+		detail?: IConflictDetail;
 		status: ICommonVar['status'];
 		title: string;
 	}
+}
+
+export type IConflictDetail = {
+	constraint: string;
+	extraMessage: string;
 }
 
 export type ISnack = {
@@ -135,6 +141,8 @@ export type ISnack = {
 			unlockTime?: number;
 			interCode?: number;
 			description?: string;
+			constraint?: string;
+			extraMessage?: string;
 		}
 	}
 }

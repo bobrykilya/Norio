@@ -17,9 +17,10 @@ class UserService {
 		try {
 			await UserRepository.updateUserInfo({ userId: user.userId, newUserInfo })
 		} catch (err) {
-			if (err.constraint === 'users_phone_key') {
+			if (err.detail.constraint === 'users_phone_key') {
 				throw Errors.phoneEngaged()
 			}
+			throw Errors.dbConflict(err)
 		}
 	}
 }

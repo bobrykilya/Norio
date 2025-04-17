@@ -13,6 +13,7 @@ import { ICONS } from "../../../../../assets/common/Icons-data"
 type InputFieldProps = {
 	contClassName: string;
 	inputIcon: ICommonVar['icon'];
+	inputRef: React.MutableRefObject<HTMLInputElement>;
 	registerForm: {
 		formRef: any;
 		restRegister: any;
@@ -20,7 +21,6 @@ type InputFieldProps = {
 			message: string;
 		};
 	};
-	inputRef: React.MutableRefObject<HTMLInputElement>;
 	inputParams: {
 		placeholder: string;
 		label?: string;
@@ -34,7 +34,6 @@ type InputFieldProps = {
 		onFocus?: () => void;
 		disabled?: boolean;
 		inputMode?: string;
-		value?: string;
 	};
 	cleanerParams: {
 		isCleanerOpened: boolean;
@@ -46,6 +45,11 @@ type InputFieldProps = {
 		icon?: ICommonVar['icon'];
 		onClick?: () => void;
 		toolTip?: ToolTipProps;
+		undoFieldButParams?: {
+			name: string;
+			onClick: (name: string) => void;
+			isOpened: boolean;
+		};
 	};
 	emptyIconParams?: {
 		isOpened: boolean;
@@ -59,7 +63,13 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 		copyText(inputRef.current.value)
 	}
 
+	const handleClickUndoFieldBut = async () => {
+		undoFieldButParams.onClick(undoFieldButParams.name)
+		await focusInput(inputRef)
+	}
+
 	const { placeholder, isPhone, label, ...restInputParams } = inputParams
+	const undoFieldButParams = extraButParams?.undoFieldButParams
 
 
 	return (
@@ -83,22 +93,48 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 			>
 			    {placeholder}
 			</span>
-			{inputIcon}
+			{
+				!undoFieldButParams ?
+					<div
+						className={`input_field_icon-cont opened`}
+					>
+						{inputIcon}
+					</div> :
+					(
+						<>
+							<div
+							    className={`input_field_icon-cont ${!undoFieldButParams.isOpened && 'opened'}`}
+							>
+								{inputIcon}
+							</div>
+							<RoundButton
+								className={`undo_field-but small_clear-but ${undoFieldButParams.isOpened && 'opened'}`}
+								onClick={handleClickUndoFieldBut}
+								size={'tiny'}
+								toolTip={{
+									message: 'Откатить поле обратно'
+								}}
+								bigZIndex={true}
+							>
+								{ICONS.undo}
+							</RoundButton>
+						</>
+					)
+			}
 			{children}
 			<InputError error={registerForm.error} onClick={() => focusInput(inputRef)} />
 			<InputCleaner opened={cleanerParams.isCleanerOpened} onClick={cleanerParams.handleClickCleaner} />
 			{
 				emptyIconParams &&
 				<div
-				    className={`input_field_empty-icon ${emptyIconParams.isOpened ? 'opened' : ''}`}
+				    className={`input_field_empty-icon ${emptyIconParams.isOpened && 'opened'}`}
 				/>
 			}
 			{
 				extraButParams &&
-				(
 					extraButParams.isCopy ?
 						<RoundButton
-							className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible ? 'opened' : ''}`}
+							className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible && 'opened'}`}
 							onClick={extraButParams.onClick || copyInputValue}
 							size={'tiny'}
 							toolTip={{
@@ -108,13 +144,12 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 							{ICONS.copy}
 						</RoundButton> :
 						<RoundButton
-							className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible ? 'opened' : ''}`}
+							className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible && 'opened'}`}
 							size={'tiny'}
 							{...extraButParams}
 						>
 							{extraButParams.icon}
 						</RoundButton>
-				)
 			}
 		</div>
 	)

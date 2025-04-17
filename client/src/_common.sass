@@ -6,8 +6,6 @@ input
     transition: all 0.2s ease
     color: $color-input
     z-index: 1
-    //&::placeholder
-    //    color: $color-place-holder
 
 button
     flex-shrink: 0
@@ -82,6 +80,29 @@ img, .fa-icon
             color: rgba($color-backgr, 0.3) !important
     &:active
         background-color: $color-behind-icon
+
+.small_clear-but
+    &::before
+        content: ''
+        position: absolute
+        width: 80%
+        height: 80%
+        border-radius: 50%
+        background-color: $color-behind-icon
+    .fa-icon
+        color: $color-backgr-clear
+    &:hover
+        &::before
+            background-color: rgba($color-behind-icon, 0.3)
+        .fa-icon
+            transform: scale(1.05)
+    &:disabled
+        .fa-icon
+            color: rgba($color-backgr, 0.3) !important
+    &:active
+        &::before
+            background-color: $color-behind-icon
+
 
 .before_lines-hover
     $trans-hover-duration: 0.25s

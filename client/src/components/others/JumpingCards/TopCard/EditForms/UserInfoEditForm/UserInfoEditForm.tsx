@@ -79,6 +79,10 @@ const UserInfoEditForm = ({ userInfo }: UserInfoEditFormProps) => {
 		watch,
 		withCopyBut: true,
 		withEmptyIcon: true,
+		undoFieldButParams: {
+			onClick: handleClickUndoFieldBut,
+			preloadValues
+		}
 	}
 	const dropDownSearchInputProps = {
 		...commonProps,
@@ -99,18 +103,24 @@ const UserInfoEditForm = ({ userInfo }: UserInfoEditFormProps) => {
 			setStatusState('ok')
 		}
 	}
-	const handleUndoButClick = () => {
+	const handleClickUndoBut = () => {
 		setGenderState(defaultGender)
 		resetForm()
 		preloadFormValuesSetting()
 	}
+	function handleClickUndoFieldBut(name: string) {
+		const typedName = name as keyof IUserInfoEditForm
+		reset(typedName)
+		setValue(typedName, preloadValues[typedName])
+	}
 
-	const onSaveForm: SubmitHandler<IUserInfoEditForm> = async (data) => {
+	const handleSaveForm: SubmitHandler<IUserInfoEditForm> = async (data) => {
 		const dirtyData = getDirtyData()
 		if (!Object.keys(dirtyData)[0]) {
 			return
 		}
 
+		//* 'birthday' converting from string to number
 		if (dirtyData.birthday || dirtyData.birthday === '') {
 			dirtyData.birthday = getDateInSecondsFromRussianDate(data.birthday)
 		}
@@ -171,7 +181,7 @@ const UserInfoEditForm = ({ userInfo }: UserInfoEditFormProps) => {
 	return (
 		<form
 			className={'user_info_edit-form cont'}
-			onSubmit={handleSubmit(onSaveForm)}
+			onSubmit={handleSubmit(handleSaveForm)}
 		>
 			<div
 				className={'user_info_edit_form-header cont'}
@@ -181,7 +191,7 @@ const UserInfoEditForm = ({ userInfo }: UserInfoEditFormProps) => {
 				>
 					<FormStatusButton
 						state={statusState}
-						handleUndoButClick={handleUndoButClick}
+						handleClickUndoBut={handleClickUndoBut}
 					/>
 					<div
 						className={'user_info_edit_form-title cont white-card'}

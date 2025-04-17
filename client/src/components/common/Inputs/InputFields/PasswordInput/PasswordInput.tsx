@@ -7,7 +7,7 @@ import { ICONS } from "../../../../../assets/common/Icons-data"
 
 
 
-const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, watch=false, notSaveUser=false, disabled=false }: Omit<ISignFormInput, 'placeholder'>) => {
+const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, watch=false, notSaveUser=false, disabled=false, undoFieldButParams }: Omit<ISignFormInput, 'placeholder'>) => {
 
     const [isLockOpened, setIsLockOpened] = useState(false)
     const [isCapsLockEnabled, setIsCapsLockEnabled] = useState(false)
@@ -127,7 +127,14 @@ const PasswordInput = ({ name, inputType='sign_in', register, errors={}, reset, 
                 onClick: handleSwitchLockPosition,
                 toolTip: {
                     message: !isLockOpened ? 'Показать пароль' : 'Скрыть пароль'
-                }
+                },
+                ...(undoFieldButParams && {
+                    undoFieldButParams: {
+                        name,
+                        onClick: undoFieldButParams.onClick,
+                        isOpened: watch ? undoFieldButParams.preloadValues[name] !== watch(name) : false
+                    }
+                })
             }}
         >
             <div

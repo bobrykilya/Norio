@@ -9,15 +9,15 @@ export type FormStatusButOptions =  'ok' | 'undo' | 'loading'
 
 type FormStatusButProps = {
 	state: FormStatusButOptions;
-	handleUndoButClick: (state: FormStatusButOptions) => void;
+	handleClickUndoBut: (state: FormStatusButOptions) => void;
 }
-const FormStatusButton = ({ state, handleUndoButClick }: FormStatusButProps) => {
+const FormStatusButton = ({ state, handleClickUndoBut }: FormStatusButProps) => {
 
 
 	return (
 		<RoundButton
 			className={`user_info_edit_form_status-but ${state || ''} round_blue-but`}
-			onClick={handleUndoButClick}
+			onClick={handleClickUndoBut}
 			toolTip={{
 				message: 'Откатить все поля обратно'
 			}}

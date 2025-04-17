@@ -16,7 +16,8 @@ type SignInFormProps = {
     isFormDisabled: boolean;
 }
 const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
-    // console.log('SignIn')
+    // console.log('SignIn has been updated')
+    
     const [notSaveUser, setNotSaveUser] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefLogin = useRef(null)
@@ -55,7 +56,6 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
     }
 
     const onSubmitNotSave = async (data: ISignInReq) => {
-        // console.log('Fast')
         data.fastSession = true
 
         resetForm()
@@ -68,7 +68,6 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
                 focusInput(inputRefLogin)
             })
             .finally(() => setIsLoading(false))
-        // alert(JSON.stringify(data))
     }
 
     const onSubmit = async (data: ISignInReq) => {
@@ -79,7 +78,6 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
                 focusInput(inputRefLogin)
             })
             .finally(() => setIsLoading(false))
-        // alert(JSON.stringify(data))
     }
 
 

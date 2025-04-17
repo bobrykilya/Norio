@@ -12,7 +12,7 @@ import { PHONE_CODES_LIST } from "../../../../../assets/AuthPage/AuthPage-data"
 type PhoneInputProps = Omit<ISignFormInput, 'placeholder'> & {
     inputPhoneRef?: React.MutableRefObject<HTMLInputElement>;
 }
-const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPhoneRef, withCopyBut, withEmptyIcon }: PhoneInputProps) => {
+const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPhoneRef, withCopyBut, withEmptyIcon, undoFieldButParams }: PhoneInputProps) => {
 
     // console.log('PhoneInput has been updated')
     const inputRef = inputPhoneRef || useRef(null)
@@ -44,6 +44,7 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
         ref: maskedInputRef,
         setValue: setMaskedValue,
         value: maskedValue,
+        unmaskedValue
     } = useIMask(phoneMaskOptions, {
         ref: inputRef,
         onAccept: (val, _, e) => {
@@ -74,6 +75,8 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
         setMaskedValue(inputRef.current?.value)
     }, [inputRef.current, inputRef.current?.value !== maskedValue])
 
+    // console.log(undoFieldButParams.preloadValues[name], maskedValue)
+    // console.log(undoFieldButParams.preloadValues[name] === maskedValue)
 
     return (
         <InputField
@@ -99,14 +102,20 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
                 isCleanerOpened: !!maskedValue,
                 handleClickCleaner: handleClickCleaner
             }}
-            extraButParams={
-                withCopyBut ? {
+            extraButParams={{
+                ...(withCopyBut && {
                     isCopy: true,
                     isExtraButVisible: !!maskedValue,
-                    onClick: copyInputValue
-                } :
-                null
-            }
+                    onClick: copyInputValue,
+                }),
+                ...(undoFieldButParams && {
+                    undoFieldButParams: {
+                        name,
+                        onClick: undoFieldButParams.onClick,
+                        isOpened: unmaskedValue ? undoFieldButParams.preloadValues[name] !== unmaskedValue : false,
+                    },
+                }),
+            }}
             emptyIconParams={
                 withEmptyIcon && {
                     isOpened: !maskedValue

@@ -12,18 +12,19 @@ export type RoundButtonProps = {
 	isSubmitBut?: boolean;
 	children?: any;
 	tabIndex?: number;
+	bigZIndex?: boolean;
 }
-const RoundButton = forwardRef<HTMLButtonElement, RoundButtonProps>(({ onClick, className, disabled, toolTip, size='norm', isSubmitBut, children, tabIndex }, ref) => {
+const RoundButton = forwardRef<HTMLButtonElement, RoundButtonProps>(({ className, toolTip, size, isSubmitBut, children, tabIndex, bigZIndex, disabled, onClick }, ref) => {
 
 
 	return (
 		<button
-			className={`${className || ''} round-but ${size} cont`}
-			onClick={onClick}
+			className={`${className || ''} round-but ${size || 'norm'} ${bigZIndex && 'bigZIndex'} cont`}
 			type={!isSubmitBut ? 'button' : 'submit'}
 			tabIndex={tabIndex ? tabIndex : !isSubmitBut ? -1 : 0}
-			disabled={disabled}
 			ref={ref}
+			disabled={disabled}
+			onClick={onClick}
 		>
 			{children}
 			{toolTip && <ToolTip { ...toolTip } />}

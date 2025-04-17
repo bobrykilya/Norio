@@ -182,7 +182,6 @@ class AuthController {
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, isFast })
 		} catch (err) {
-			console.log('Error refresh', err)
 			res.clearCookie(getUserCookieName(username))
 			return catchError({ req, res, err, queryTime, interCode: 701 })
 		}
