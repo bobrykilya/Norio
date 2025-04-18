@@ -50,7 +50,7 @@ const HoroscopeCard = () => {
 	const horoscopeExtraInfo = HOROSCOPE_DATA[horoscopeType]
 
 	const { data: horoscopeData } = useFetchHoroscope(horoscopeType, {
-		enabled: !!userInfoState && !!userInfoState.birthday
+		enabled: !!userInfoState && !!userInfoState.birthday,
 	})
 	// console.log(horoscopeData)
 

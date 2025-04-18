@@ -1,19 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import JumpingCard from "../../../common/JumpingCard/JumpingCard"
 import { useTopCardState } from "../../../../stores/Utils-store"
-import { useUserInfoState } from "../../../../stores/User-store"
 import UserInfoEditForm from "./EditForms/UserInfoEditForm/UserInfoEditForm"
 import AccountInfoEditForm from "./EditForms/AccountInfoEditForm/AccountInfoEditForm"
+import { FormStatusButOptions } from "./EditForms/common/FormStatusButton/FormStatusButton"
 
 
 
-type TopCardProps = {
-
+export type TopCardFormsProps = {
+	statusState: FormStatusButOptions;
+	setStatusState: (state: FormStatusButOptions) => void;
 }
-const TopCard = ({  }: TopCardProps) => {
+
+const TopCard = () => {
 
 	const { topCardState, setTopCardState } = useTopCardState()
-	const userInfoState = useUserInfoState(s => s.userInfoState)
+	const [statusState, setStatusState] = useState<FormStatusButOptions>('ok')
 
 	const closeTopCard = () => {
 		setTopCardState(null)
@@ -25,28 +27,30 @@ const TopCard = ({  }: TopCardProps) => {
 			className={'top_card-cover'}
 			position={'top'}
 			closeHooksParams={{
-				conditionsList: [Boolean(topCardState)],
+				conditionsList: [Boolean(topCardState), statusState === 'ok'],
 				callback: closeTopCard
 			}}
 		>
 			{
 				topCardState === 'userInfo' &&
 				<UserInfoEditForm
-					userInfo={userInfoState}
+					statusState={statusState}
+					setStatusState={setStatusState}
 				/>
 			}
 			{
 				topCardState === 'accountInfo' &&
 				<AccountInfoEditForm
-
+					statusState={statusState}
+					setStatusState={setStatusState}
 				/>
 			}
-			{
-				topCardState === 'organization' &&
-				<AccountInfoEditForm
-
-				/>
-			}
+			{/*{*/}
+			{/*	topCardState === 'organization' &&*/}
+			{/*	<AccountInfoEditForm*/}
+			{/*		*/}
+			{/*	/>*/}
+			{/*}*/}
 		</JumpingCard>
 	)
 }

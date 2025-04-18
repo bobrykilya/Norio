@@ -44,7 +44,6 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
         ref: maskedInputRef,
         setValue: setMaskedValue,
         value: maskedValue,
-        unmaskedValue
     } = useIMask(phoneMaskOptions, {
         ref: inputRef,
         onAccept: (val, _, e) => {
@@ -75,8 +74,6 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
         setMaskedValue(inputRef.current?.value)
     }, [inputRef.current, inputRef.current?.value !== maskedValue])
 
-    // console.log(undoFieldButParams.preloadValues[name], maskedValue)
-    // console.log(undoFieldButParams.preloadValues[name] === maskedValue)
 
     return (
         <InputField
@@ -111,10 +108,13 @@ const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPho
                 ...(undoFieldButParams && {
                     undoFieldButParams: {
                         name,
-                        onClick: undoFieldButParams.onClick,
-                        isOpened: unmaskedValue ? undoFieldButParams.preloadValues[name] !== unmaskedValue : false,
-                    },
-                }),
+                        onClick: () => {
+                            inputRef.current.focus()
+                            undoFieldButParams.onClick(name)
+                        },
+                        isOpened: maskedValue || maskedValue === '' ? undoFieldButParams.preloadValues[name] !== maskedValue : false,
+                    }
+                })
             }}
             emptyIconParams={
                 withEmptyIcon && {

@@ -12,7 +12,7 @@ type DateInputProps = Omit<ISignFormInput, 'placeholder'> & {
 	inputDateRef: React.MutableRefObject<HTMLInputElement>;
 	icon: ICommonVar['icon'];
 }
-const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDateRef, icon, withCopyBut, withEmptyIcon, autoFocus }: DateInputProps) => {
+const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDateRef, icon, withCopyBut, withEmptyIcon, autoFocus, undoFieldButParams }: DateInputProps) => {
 
 	const inputRef = inputDateRef || useRef(null)
 	const dateMaskOptions = {
@@ -100,13 +100,22 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDate
 				isCleanerOpened: !!maskedValue,
 				handleClickCleaner: handleClickCleaner
 			}}
-			extraButParams={
-				withCopyBut ? {
+			extraButParams={{
+				...(withCopyBut && {
 					isCopy: true,
 					isExtraButVisible: !!maskedValue,
-				} :
-				null
-			}
+				}),
+				...(undoFieldButParams && {
+					undoFieldButParams: {
+						name,
+						onClick: () => {
+							inputRef.current.focus()
+							undoFieldButParams.onClick(name)
+						},
+						isOpened: maskedValue || maskedValue === '' ? undoFieldButParams.preloadValues[name] !== maskedValue : false,
+					}
+				})
+			}}
 			emptyIconParams={
 				withEmptyIcon && {
 					isOpened: !maskedValue

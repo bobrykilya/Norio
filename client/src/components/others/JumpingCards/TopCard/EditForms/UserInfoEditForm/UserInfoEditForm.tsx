@@ -7,7 +7,7 @@ import NameInput from "../../../../../common/Inputs/InputFields/NameInput/NameIn
 import { COMPANIES_LIST, JOBS_LIST, STORES_LIST } from "../../../../../../assets/AuthPage/AuthPage-data"
 import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
 import DateInput from "../../../../../common/Inputs/InputFields/DateInput/DateInput"
-import FormStatusButton, { FormStatusButOptions } from "../common/FormStatusButton/FormStatusButton"
+import FormStatusButton from "../common/FormStatusButton/FormStatusButton"
 import FormSubmitButton from "../common/FormSubmitButton/FormSubmitButton"
 import GenderSelectButton from "./GenderSelectButton/GenderSelectButton"
 import { GENDER_LIST } from "../../../../../../assets/common/Common-data"
@@ -20,6 +20,7 @@ import { IUserInfoEditReq } from "../../../../../../../../common/types/User-type
 import UserService from "../../../../../../services/User-service"
 import { useUserInfoState } from "../../../../../../stores/User-store"
 import PassportButton from "./PassportButton/PassportButton"
+import { TopCardFormsProps } from "../../TopCard"
 
 
 
@@ -27,15 +28,12 @@ export type IUserInfoEditForm = Omit<ISignUp, 'avatar'> & {
 	company?: string;
 	birthday?: string;
 }
-type UserInfoEditFormProps = {
-	userInfo: IUserRepository;
-}
-const UserInfoEditForm = ({ userInfo }: UserInfoEditFormProps) => {
+
+const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) => {
 	// console.log('UserInfoEditForm form has been updated')
 
-	const [statusState, setStatusState] = useState<FormStatusButOptions>('ok')
-	const [isPassportInfoOpened, setIsPassportInfoOpened] = useState(false)
-	const setUserInfoState = useUserInfoState(s => s.setUserInfoState)
+	// const [isPassportInfoOpened, setIsPassportInfoOpened] = useState(false)
+	const { userInfoState: userInfo, setUserInfoState } = useUserInfoState()
 	const defaultGender = GENDER_LIST.find(el => el.id === userInfo?.gender) || null
 	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(defaultGender)
 	const inputPhoneRef = useRef<HTMLInputElement>(null)
@@ -126,6 +124,7 @@ const UserInfoEditForm = ({ userInfo }: UserInfoEditFormProps) => {
 		}
 
 		// console.log('save: ', dirtyData)
+		setStatusState('loading')
 		await formHasBeenUpdated(dirtyData)
 	}
 
@@ -291,7 +290,7 @@ const UserInfoEditForm = ({ userInfo }: UserInfoEditFormProps) => {
 							className={'user_info_edit_form_passport-card cont white-card'}
 						>
 							<PassportButton
-								state={isPassportInfoOpened}
+								// state={isPassportInfoOpened}
 							/>
 						</div>
 						<FormSubmitButton />

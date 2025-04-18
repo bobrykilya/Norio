@@ -5,7 +5,7 @@ import ToolTip from "../../../../../ToolTip/ToolTip"
 
 
 type PassportButtonProps = {
-	state: boolean;
+	state?: boolean;
 }
 const PassportButton = ({ state }: PassportButtonProps) => {
 
