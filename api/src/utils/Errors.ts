@@ -22,6 +22,9 @@ export const Errors = {
 	loginOrPasswordInvalid: () => {
 		return new Conflict("Неверный логин или пароль", 'loginOrPasswordInvalid')
 	},
+	passwordInvalid: () => {
+		return new Conflict("Неверный старый пароль", 'passwordInvalid')
+	},
 	dbConflict: ({ message, detail }: { message: string, detail?: IConflictDetail }) => {
 		return new Conflict(message, 'dbConflict', detail)
 	},

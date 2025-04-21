@@ -1,4 +1,4 @@
-//@import '../../../../variables'
+@import '../../../../variables'
 
 
 
@@ -9,3 +9,26 @@
         height: auto
         background: none
         box-shadow: none
+
+.edit-form
+    //border: 2px solid red
+    margin-top: 15vh
+    overflow: visible
+    width: auto
+    .input_field-cont
+        //border: 2px solid brown
+        margin-top: 0.3rem
+        margin-right: 1.2rem
+        &:first-child
+            margin-top: 0
+    .edit_form_status_and_title-cont
+        //border: 5px solid green
+        width: auto
+        flex-direction: row
+        overflow: visible
+        .edit_form-title
+            color: $color-blue-main
+            font-size: $size-h3
+            font-weight: bolder
+            margin-left: $margin-white-card
+            white-space: nowrap

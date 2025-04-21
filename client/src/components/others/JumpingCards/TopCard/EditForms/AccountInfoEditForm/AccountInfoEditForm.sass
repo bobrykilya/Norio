@@ -3,4 +3,32 @@
 
 
 .account_info_edit-form
-    border: 1px solid yellow
+    //border: 1px solid yellow
+    overflow: visible
+    .account_info_edit_form-header
+        //border: 1px solid red
+        overflow: visible
+        flex-direction: row
+        //align-items: flex-start
+        .account_info_edit_form_title_and_username-cont
+            //border: 1px solid green
+            justify-content: flex-end
+            margin-right: $margin-white-card
+            .edit_form_status_and_title-cont
+                //border: 1px solid orange
+                justify-content: flex-end
+                margin-bottom: $margin-white-card
+        //.account_info_edit_form_password-card
+    .account_info_edit_form-footer
+        overflow: visible
+        flex-direction: row
+        justify-content: flex-start
+        margin-top: $margin-white-card
+        .avatar_but-cont
+            $size-avatar_but: 5.5rem
+            width: $size-avatar_but
+            height: $size-avatar_but
+        .account_info_edit_form_email-card
+            margin-left: $margin-white-card
+            .input_field-cont
+                width: $width-field-input + 6rem

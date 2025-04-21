@@ -48,6 +48,7 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
         reset,
         notSaveUser,
         watch,
+        setValue,
         disabled: isFormDisabled,
     }
 
@@ -99,9 +100,11 @@ const SignInForm = ({ isFormDisabled }: SignInFormProps) => {
             <div className='inputs-cont cont'>
                 <NameInput
                     name='username'
+                    inputType={'sign_in'}
                     placeholder='Логин'
                     icon={ICONS.user}
                     inputRefLogin={inputRefLogin}
+                    autoFocus={true}
                     { ...commonProps }
                 />
                 <PasswordInput

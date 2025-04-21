@@ -1,12 +1,12 @@
 import React from "react"
 import { GrUserExpert, GrUserWorker } from "react-icons/gr"
 import { HiOutlineHome } from "react-icons/hi"
-import { MdInstallDesktop, MdOutlineWaterDrop, MdOutlineWorkOutline } from "react-icons/md"
+import { MdEmail, MdInstallDesktop, MdOutlineWaterDrop, MdOutlineWorkOutline } from "react-icons/md"
 import { BsArrowUpRight, BsCloudRain, BsPassport } from "react-icons/bs"
 import { LiaBirthdayCakeSolid } from "react-icons/lia"
 import { FiCheckCircle, FiPhoneCall, FiWind } from "react-icons/fi"
 import { BiBadgeCheck, BiLogInCircle, BiSolidCopy } from "react-icons/bi"
-import { FaKey, FaUser } from "react-icons/fa"
+import { FaKey, FaLock, FaUser } from "react-icons/fa"
 import {
 	FaAngleLeft,
 	FaAngleRight,
@@ -50,6 +50,8 @@ export const ICONS = {
 	phone: <FiPhoneCall className='input_field-icon' />,
 	user: <FaUser className='input_field-icon' />,
 	password: <FaKey className='input_field-icon'/>,
+	prevPassword: <FaLock className='input_field-icon'/>,
+	email: <MdEmail className='input_field-icon'/>,
 	passport: <BsPassport className='fa-icon' />,
 	enter: <BiLogInCircle className='fa-icon' />,
 	check: <LuCheckCircle className='fa-icon' />,

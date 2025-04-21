@@ -28,8 +28,8 @@ type IUseTopCardState = {
 	setTopCardState: (status: topCardStateOptions) => void;
 }
 const useTopCardState = create<IUseTopCardState>(set => ({
-	topCardState: null,
-	// topCardState: 'userInfo',
+	// topCardState: null,
+	topCardState: 'accountInfo',
 	setTopCardState: (state) => set({ topCardState: state }),
 }))
 

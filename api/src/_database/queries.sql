@@ -14,7 +14,8 @@ CREATE TABLE users(
     store VARCHAR(12) NOT NULL,
     phone VARCHAR(14) UNIQUE NOT NULL,
     avatar VARCHAR(16) UNIQUE NOT NULL,
-    is_store BOOLEAN NOT NULL
+    is_store BOOLEAN NOT NULL,
+    email VARCHAR(50)
 )
 
 CREATE TABLE auth_devices(

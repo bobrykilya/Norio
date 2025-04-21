@@ -93,7 +93,7 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDate
 				label: 'Дата рождения',
 				placeholder: '04.09.2001',
 				autoComplete: 'bday',
-				autoFocus: autoFocus,
+				autoFocus,
 				disabled,
 			}}
 			cleanerParams={{

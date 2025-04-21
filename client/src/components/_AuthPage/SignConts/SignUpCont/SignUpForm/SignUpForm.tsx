@@ -10,6 +10,7 @@ import { ICheckUserReq } from "../../../../../../../common/types/Auth-types"
 import { useModalState } from "../../../../../stores/Global-store"
 import SignUp from "../../../../../features/auth/signUp"
 import { ICONS } from "../../../../../assets/common/Icons-data"
+import { useMatchConfirmPassword } from "../../../../../hooks/useMatchConfirmPassword"
 
 
 
@@ -45,7 +46,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
         formState: { errors } 
     } = useForm({
         mode: 'onChange',
-        reValidateMode: "onChange",
+        reValidateMode: 'onChange',
         defaultValues
     })
 
@@ -54,26 +55,9 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
         errors,
         reset,
         watch,
+        setValue,
         disabled: isFormDisabled,
     }
-
-    //* confirmPassword's error react validation
-    useEffect(() => {
-        // console.log(watch('password'), watch('confirmPassword'))
-        const pass = watch('password')
-        const confirm = watch('confirmPassword')
-        if (pass && confirm) {
-            pass !== confirm ? 
-            setError('confirmPassword', {message: 'Пароли не совпадают'}) : 
-            setError('confirmPassword', null)
-        }
-    }, [watch('password'), watch('confirmPassword')])
-
-    //* For forms Esc blur while any DropDown, SnackBar or JumpingCard is opened
-    useCloseOnEsc({
-        conditionsList: [!isFormDisabled, !getCommonModalState()],
-        callback: () => setCoverPanelState('sign_in')
-    })
 
     const onSubmit = async (data: ICheckUserReq & { confirmPassword: string }) => {
         delete data.confirmPassword
@@ -85,6 +69,22 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
             })
             .finally(() => setIsLoading(false))
     }
+
+
+    //* confirmPassword's error react validation
+    useMatchConfirmPassword({
+        passVal: 'password',
+        confirmVal: 'confirmPassword',
+        watch,
+        setError
+    })
+
+
+    //* For forms Esc blur while any DropDown, SnackBar or JumpingCard is opened
+    useCloseOnEsc({
+        conditionsList: [!isFormDisabled, !getCommonModalState()],
+        callback: () => setCoverPanelState('sign_in')
+    })
 
     //! Remove
     const preloadFormValuesSetting = () => {
@@ -110,16 +110,20 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
                     icon={ICONS.user}
                     inputType='sign_up'
                     inputRefLogin={inputRefLogin}
+                    autoFocus={true}
                     { ...commonProps }
                 />
                 <PasswordInput
-                    name='password'
-                    inputType='sign_up'
+                    name={'password'}
+                    inputType={'sign_up'}
+                    autoComplete={'new-password'}
                     { ...commonProps }
                 />
                 <PasswordInput
-                    name='confirmPassword'
-                    inputType='confirm'
+                    name={'confirmPassword'}
+                    inputType={'confirm'}
+                    autoComplete={'new-password'}
+                    matchWithName={'password'}
                     { ...commonProps }
                 />
             </div>

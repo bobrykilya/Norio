@@ -1,7 +1,6 @@
 import React, { MutableRefObject, useRef, useState } from 'react'
 import InputCleaner from '../../common/Inputs/InputFields/InputUtils/InputCleaner/InputCleaner'
 import InputError from '../../common/Inputs/InputFields/InputUtils/InputError/InputError'
-import AvatarListCard from './AvatarListCard'
 import { IDataListElement } from '../../../assets/AuthPage/AuthPage-data'
 import { IReactHookForm } from "../../../types/Auth-types"
 import { useAvatarListCardState } from "../../../stores/Utils-store"
@@ -14,8 +13,8 @@ type AvatarButtonProps = Omit<IReactHookForm, 'errors'> & {
     LIST: IDataListElement[];
     currentAvatar: string | null;
     setAvatar: (avatar: string) => void;
-    disabled: boolean;
-    isTabDisabled: boolean;
+    disabled?: boolean;
+    isTabDisabled?: boolean;
     error?: {
         message: string
     }
@@ -66,19 +65,19 @@ const AvatarButton = ({ LIST, currentAvatar, setAvatar, error, setError, disable
     }
 
     return (
-        <div className='avatar-cont cont'>
-            {!disabled &&
-                <AvatarListCard
-                    LIST={LIST}
-                    currentAvatar={currentAvatar}
-                    isAvatarListCardOpened={avatarListCardState}
-                    closeAvatarListCard={closeAvatarList}
-                    handleClickElem={handleClickElem}
-                    isArrowButsActive={isArrowButsActive}
-                    disabled={disabled}
-                    createPathToAvatars={createPathToAvatars}
-                />
-            }
+        <div className='avatar_but-cont cont'>
+            {/*{!disabled &&*/}
+            {/*    <AvatarListCard*/}
+            {/*        LIST={LIST}*/}
+            {/*        currentAvatar={currentAvatar}*/}
+            {/*        isAvatarListCardOpened={avatarListCardState}*/}
+            {/*        closeAvatarListCard={closeAvatarList}*/}
+            {/*        handleClickElem={handleClickElem}*/}
+            {/*        isArrowButsActive={isArrowButsActive}*/}
+            {/*        disabled={disabled}*/}
+            {/*        createPathToAvatars={createPathToAvatars}*/}
+            {/*    />*/}
+            {/*}*/}
             <button
                 className={`avatar-but ${error?.message ? 'error' : ''}`}
                 type='button'

@@ -1,7 +1,10 @@
-import { HoroscopeTypeOptions } from "./Global-types"
+import { HoroscopeTypeOptions, ICommonVar } from "./Global-types"
 import {
 	IUserInfoEditForm,
 } from "../../client/src/components/others/JumpingCards/TopCard/EditForms/UserInfoEditForm/UserInfoEditForm"
+import {
+	IAccountInfoEditForm,
+} from "../../client/src/components/others/JumpingCards/TopCard/EditForms/AccountInfoEditForm/AccountInfoEditForm"
 
 
 
@@ -13,5 +16,10 @@ export type IHoroscopeDataRes = {
 }
 
 export type IUserInfoEditReq =  Partial<Omit<IUserInfoEditForm, 'birthday'>> & {
-	birthday?: string | number;
+	birthday?: string | ICommonVar['birthday'];
+}
+
+export type IAccountInfoEditReq =  Partial<IAccountInfoEditForm> & {
+	avatar?: ICommonVar['avatar'];
+	hashedPassword?: ICommonVar['hashedPassword'];
 }

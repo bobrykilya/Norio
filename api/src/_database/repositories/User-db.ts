@@ -1,7 +1,7 @@
 import queryDB from '../../utils/queryDB'
 import { IUserRepository } from "../../types/DB-types"
 import { ICommonVar } from "../../../../common/types/Global-types.ts"
-import { IUserInfoEditReq } from "../../../../common/types/User-types.ts"
+import { IAccountInfoEditReq, IUserInfoEditReq } from "../../../../common/types/User-types.ts"
 
 
 
@@ -43,13 +43,13 @@ class UserRepository {
 		return response.rows[0].user_id
 	}
 
-	static async getUserMainData(username: IUserRepository['username']) {
+	static async getUserMainDataByUsername(username: IUserRepository['username']) {
 		const response = await queryDB("SELECT user_id, password FROM users WHERE username=$1", [username])
 
 		return response?.rows[0]
 	}
 
-	static async getHandledUserInfo(userId: IUserRepository['userId']) {
+	static async getHandledUserInfo(userId: IUserRepository['userId'], withPassword?: boolean) {
 		const response = await queryDB("SELECT * FROM users WHERE user_id=$1", [userId])
 
 		if (response?.rows[0]) {
@@ -61,6 +61,9 @@ class UserRepository {
 				firstName: first_name,
 				middleName: middle_name,
 				isStore: is_store,
+			}
+			if (withPassword) {
+				handledUserInfo.hashedPassword = password
 			}
 
 			return handledUserInfo
@@ -110,6 +113,21 @@ class UserRepository {
 			middleName,
 			gender,
 			birthday,
+			userId
+		])
+	}
+
+	static async updateAccountInfo({ userId, newAccountInfo: {
+		userName,
+		hashedPassword,
+		avatar,
+		email
+	} }: { userId: IUserRepository['userId'], newAccountInfo: IAccountInfoEditReq }, ) {
+		await queryDB("UPDATE users SET username=$1, password=$2, avatar=$3, email=$4 WHERE user_id=$5", [
+			userName,
+			hashedPassword,
+			avatar,
+			email,
 			userId
 		])
 	}

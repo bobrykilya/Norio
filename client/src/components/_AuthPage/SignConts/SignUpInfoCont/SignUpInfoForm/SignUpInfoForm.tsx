@@ -12,11 +12,11 @@ import { useModalState } from "../../../../../stores/Global-store"
 import SignUp from "../../../../../features/auth/signUp"
 import { ICONS } from "../../../../../assets/common/Icons-data"
 import { focusInput } from "../../../../../utils/focusInput"
+import { ICommonVar } from "../../../../../../../common/types/Global-types"
 
 
 
 const getDefaultGenderByMiddleName = (middleName: string) => {
-
     switch (middleName.slice(-2)) {
         case 'ич':
         case 'лы': return 'male'
@@ -38,7 +38,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
     // console.log('SignUpInfoForm')
 
     const { getCommonModalState } = useModalState()
-    const [avatar, setAvatar] = useState<string>('hedgehog')
+    const [avatar, setAvatar] = useState<ICommonVar['avatar']>('hedgehog')
     const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef<HTMLInputElement>(null)

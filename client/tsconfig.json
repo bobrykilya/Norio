@@ -8,6 +8,6 @@
 		"lib": [ "es2017", "dom",  ],
 		"jsx": "react",
 	},
-	"include": ["./src/**/*", "../common/**/*.ts", "../common/**/*.tsx"],
+	"include": ["./src/**/*", "../common/**/*"],
 	"exclude": ["node_modules", "./**/*.spec.ts"]
 }

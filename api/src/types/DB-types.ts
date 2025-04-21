@@ -20,6 +20,7 @@ export type IUserRepository = {
 	company?: ICommonVar['company'];
 	birthday?: ICommonVar['birthday'];
 	gender?: ICommonVar['gender'];
+	email?: ICommonVar['email'];
 }
 
 export type IAuthDeviceRepository = {

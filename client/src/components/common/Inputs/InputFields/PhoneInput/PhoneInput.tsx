@@ -12,7 +12,7 @@ import { PHONE_CODES_LIST } from "../../../../../assets/AuthPage/AuthPage-data"
 type PhoneInputProps = Omit<ISignFormInput, 'placeholder'> & {
     inputPhoneRef?: React.MutableRefObject<HTMLInputElement>;
 }
-const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPhoneRef, withCopyBut, withEmptyIcon, undoFieldButParams }: PhoneInputProps) => {
+const PhoneInput = ({ name, register, errors={}, reset, disabled=false, inputPhoneRef, withCopyBut, withEmptyIcon, undoFieldButParams }: Omit<PhoneInputProps, 'icon'>) => {
 
     // console.log('PhoneInput has been updated')
     const inputRef = inputPhoneRef || useRef(null)

@@ -37,6 +37,7 @@ export type ICommonVar = {
 	birthday: number;
 	gender: 'male' | 'female';
 	fastSession: boolean;
+	email: string;
 	id: number;
 	userId: ICommonVar['id'];
 	deviceId: ICommonVar['id'];

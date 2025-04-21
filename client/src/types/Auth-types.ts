@@ -21,9 +21,9 @@ export type IReactHookForm = {
 export type ISignFormInput = IReactHookForm & {
     name: string;
 	placeholder: string;
+	icon: ICommonVar['icon'];
     disabled?: boolean;
     notSaveUser?: boolean;
-    inputType?: SignFormInputTypesOptions;
 	withCopyBut?: boolean;
 	withEmptyIcon?: boolean;
 	autoComplete?: string;
@@ -34,7 +34,8 @@ export type ISignFormInput = IReactHookForm & {
 	};
 }
 
-export type SignFormInputTypesOptions = 'sign_in' | 'sign_up' | 'name' | 'confirm';
+export type NameInputTypesOptions = 'sign_in' | 'sign_up' | 'name' | 'email';
+export type PasswordInputTypesOptions = 'sign_in' | 'sign_up' | 'confirm';
 
 export type IUserNameInfo = {
 	lastName: ICommonVar['lastName'];

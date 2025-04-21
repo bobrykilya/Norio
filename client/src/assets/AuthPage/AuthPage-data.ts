@@ -27,11 +27,6 @@ export const STORES_LIST: IDataListElement[] = [
         cityId: 'polatsk'
     },
     {
-        id: 'belmash',
-        title: 'БелМаш',
-        cityId: 'maladzyechna'
-    },
-    {
         id: 'turly',
         title: 'Тюрли',
         cityId: 'turly'

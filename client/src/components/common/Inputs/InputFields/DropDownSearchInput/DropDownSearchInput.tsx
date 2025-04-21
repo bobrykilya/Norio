@@ -1,11 +1,10 @@
 import React, { useRef, useState } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
-import { capitalize } from '../../../../../utils/capitalize'
+import { capitalizeFirstLetter } from '../../../../../utils/capitalize'
 import { IDataListElement } from "../../../../../assets/AuthPage/AuthPage-data"
 import { ISignFormInput } from "../../../../../types/Auth-types"
 import timeout from "../../../../../utils/timeout"
 import { sortByValPosInString } from "../../../../../utils/sort"
-import { ICommonVar } from "../../../../../../../common/types/Global-types"
 import InputField from "../InputField/InputField"
 import DropDown from "../../../DropDown/DropDown"
 
@@ -13,7 +12,6 @@ import DropDown from "../../../DropDown/DropDown"
 
 type DropDownSearchInputProps = ISignFormInput & {
     LIST: IDataListElement[];
-    icon: ICommonVar['icon'];
 }
 const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={}, reset, setValue, setError, watch, disabled=false, withCopyBut, withEmptyIcon, autoComplete, undoFieldButParams }: DropDownSearchInputProps) => {
 
@@ -38,17 +36,10 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
     // console.log(error)
     
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // console.log(e.target.value)
-        const normalValue = capitalize(e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/, ''))
+        const normalValue = capitalizeFirstLetter(e.target.value.replace(/[^а-яА-ЯёЁ ]/g, ''))
+        setValue(name, normalValue)
 
-        if (/[^а-яА-ЯёЁ ]/.test(normalValue)) {
-            toggleDropDown(false)
-        } else if (isValueInList(normalValue)) {
-            toggleDropDown(false)
-        } else {
-            !isDropDownOpened && normalValue ? toggleDropDown(true) : null
-        }
-
+        !isDropDownOpened && normalValue && toggleDropDown(true)
         !normalValue && clearInput()
     }
 
@@ -192,8 +183,6 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
     const { ref, ... restRegister } = register(name, {
         required: true,
         validate: {
-            isNotLatin: (val: string) => !/[a-zA-Z]/.test(val) ||
-                `Поле '${placeholder}' должно содержать лишь кириллицу`,
             isInList: () => isValueInList(inputRef.current?.value) ||
                 `Введена неизвестная ${placeholder.toLowerCase()}`
         },

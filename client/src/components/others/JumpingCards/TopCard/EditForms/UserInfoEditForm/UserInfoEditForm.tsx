@@ -69,38 +69,26 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 		reValidateMode: "onChange",
 		defaultValues
 	})
+	// console.log(watch('lastName'))
 
 	const commonProps = {
 		register,
 		errors,
 		reset,
 		watch,
+		setValue,
 		withCopyBut: true,
 		withEmptyIcon: true,
 		undoFieldButParams: {
 			onClick: handleClickUndoFieldBut,
 			preloadValues
-		}
+		},
 	}
 	const dropDownSearchInputProps = {
 		...commonProps,
-		setValue,
 		setError,
 	}
 
-	const formHasBeenUpdated = async (data: IUserInfoEditReq) => {
-		if (await UserService.editUserInfo(data)) {
-			setUserInfoState({
-				...userInfo,
-				...data as IUserRepository
-			})
-			showSnackMessage({
-				type: "s",
-				message: 'Изменения сохранены'
-			})
-			setStatusState('ok')
-		}
-	}
 	const handleClickUndoBut = () => {
 		setGenderState(defaultGender)
 		resetForm()
@@ -112,8 +100,25 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 		setValue(typedName, preloadValues[typedName])
 	}
 
+	const updateFormData = async (data: IUserInfoEditReq) => {
+		setStatusState('loading')
+		if (await UserService.editUserInfo(data)) {
+			setUserInfoState({
+				...userInfo,
+				...data as IUserRepository
+			})
+			showSnackMessage({
+				type: "s",
+				message: 'Изменения сохранены'
+			})
+			setStatusState('ok')
+		} else {
+			setStatusState('undo')
+		}
+	}
+
 	const handleSaveForm: SubmitHandler<IUserInfoEditForm> = async (data) => {
-		const dirtyData = getDirtyData()
+		const dirtyData = getDirtyData() as IUserInfoEditReq
 		if (!Object.keys(dirtyData)[0]) {
 			return
 		}
@@ -125,31 +130,36 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 
 		// console.log('save: ', dirtyData)
 		setStatusState('loading')
-		await formHasBeenUpdated(dirtyData)
+		await updateFormData(dirtyData)
 	}
 
-	const getDirtyData = () => {
+	const getDirtyData = (booleanRes?: boolean) => {
 		if (!isDirty && genderState?.id === defaultGender?.id && !Object.keys(touchedFields)[0]) {
-			return {}
+			return booleanRes ? false : {}
 		}
 
 		const dirtyData: IUserInfoEditReq = {}
 
 		if (genderState?.id !== defaultGender?.id) {
+			if (booleanRes) {
+				return true
+			}
 			dirtyData.gender = genderState?.id as ICommonVar['gender']
 		}
 
-		Object.keys(preloadValues).forEach(key => {
+		for (const key of Object.keys(defaultValues)) {
 			const val = getValues(key as keyof IUserInfoEditForm)
-			if (val === undefined || val === preloadValues[key]) {
-				return
+			if (val !== undefined && val !== preloadValues[key]) {
+				if (booleanRes) {
+					return true
+				}
+				dirtyData[key] = val
 			}
-			dirtyData[key] = val
-		})
+		}
 
 
 		// console.log('dirtyData: ', dirtyData)
-		return dirtyData
+		return booleanRes ? false : dirtyData
 	}
 
 	const preloadFormValuesSetting = () => {
@@ -161,11 +171,11 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 
 	useEffect(() => {
 		preloadFormValuesSetting()
-	}, [])
+	}, [])	
 
 	//* Update form inputs and selects watching
 	useLayoutEffect(() => {
-		if (Object.keys(getDirtyData())[0]) {
+		if (getDirtyData(true)) {
 			if (statusState !== 'undo') {
 				setStatusState('undo')
 			}
@@ -179,27 +189,27 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 
 	return (
 		<form
-			className={'user_info_edit-form cont'}
+			className={'user_info_edit-form edit-form cont'}
 			onSubmit={handleSubmit(handleSaveForm)}
 		>
 			<div
 				className={'user_info_edit_form-header cont'}
 			>
 				<div
-					className={'user_info_edit_form_status_and_title-cont cont'}
+					className={'edit_form_status_and_title-cont cont'}
 				>
 					<FormStatusButton
 						state={statusState}
 						handleClickUndoBut={handleClickUndoBut}
 					/>
 					<div
-						className={'user_info_edit_form-title cont white-card'}
+						className={'edit_form-title white-card'}
 					>
 						Личные данные
 					</div>
 				</div>
 				<div
-					className={'user_info_edit_form_birth_and_gender-cont cont white-card'}
+					className={'user_info_edit_form_birth_and_gender-cont white-card'}
 				>
 					<DateInput
 						name='birthday'
@@ -219,7 +229,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 				className={'user_info_edit_form-footer cont'}
 			>
 				<div
-					className={'user_info_edit_form_main_form-card cont white-card'}
+					className={'user_info_edit_form_main_form-card white-card'}
 				>
 					<PhoneInput
 						name='phone'
@@ -264,7 +274,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 					className={'user_info_edit_form_footer_right-column cont'}
 				>
 					<div
-						className={'user_info_edit_form_company-card cont white-card'}
+						className={'user_info_edit_form_company-card white-card'}
 					>
 						<DropDownSearchInput
 							LIST={COMPANIES_LIST}
@@ -287,7 +297,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 						className={'user_info_edit_form_footer_right_column-footer cont'}
 					>
 						<div
-							className={'user_info_edit_form_passport-card cont white-card'}
+							className={'user_info_edit_form_passport-card white-card'}
 						>
 							<PassportButton
 								// state={isPassportInfoOpened}
