@@ -22,31 +22,11 @@ class TokenService {
 		})
 	}
 
-	// static async checkAccess(req: ICommonVar['req'], _: any, next: (arg0?: Unauthorized | Forbidden) => void) {
-	// 	const authHeader = req.headers.authorization
-	//
-	// 	const token = authHeader?.split(" ")?.[1]
-	//
-	// 	if (!token) {
-	// 		return next(new Unauthorized())
-	// 	}
-	//
-	// 	try {
-	// 		req.user = await TokenService.verifyAccessToken(token)
-	// 		// console.log(req.user)
-	// 	} catch (err) {
-	// 		// console.log(err)
-	// 		return next(new Forbidden(err))
-	// 	}
-	//
-	// 	next()
-	// }
-
-	static async verifyAccessToken(accessToken: ICommonVar['accessToken']) {
-		return jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
+	static async verifyAccessToken(accessToken: ICommonVar['accessToken']): Promise<ICommonVar['payload']> {
+		return jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as ICommonVar['payload']
 	}
 
-	static async verifyRefreshToken(refreshToken: ICommonVar['refreshToken']) {
+	static async verifyRefreshToken(refreshToken: ICommonVar['refreshToken']): Promise<ICommonVar['payload']> {
 		return jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET) as ICommonVar['payload']
 	}
 }

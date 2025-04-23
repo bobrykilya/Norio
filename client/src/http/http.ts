@@ -23,6 +23,8 @@ const $apiUnprotected = ky.create({
 
 const $apiProtected = ky.create({
 	prefixUrl: `${getApiURL()}/protected`,
+	cache: 'no-store',
+	credentials: 'include',
 	hooks: {
 		beforeRequest: [
 		  (req) => {

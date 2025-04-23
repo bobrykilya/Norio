@@ -2,6 +2,7 @@ import queryDB from '../../utils/queryDB'
 import { getTime } from "../../utils/getTime"
 import { IRefreshSessionRepository } from "../../types/DB-types"
 import { COOKIE_SETTINGS } from "../../../constants.ts"
+import { ICommonVar } from "../../../../common/types/Global-types.ts"
 
 
 
@@ -30,6 +31,10 @@ class RefreshSessionRepository {
 	static async deleteRefreshSessionById(sessionId: IRefreshSessionRepository['sessionId']) {
 		await queryDB("DELETE FROM refresh_sessions WHERE sess_id=$1", [sessionId])
 	}
+
+	static async deleteRefreshSessionsByUserIdAndDeviceId({ userId, deviceId }: { userId: ICommonVar['id']; deviceId: ICommonVar['id'] }) {
+		await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1 AND device_id=$2", [userId, deviceId])
+	}
 	
 	// static async deleteAllRefreshSessionsByUserId(userId: IRefreshSessionRepository['userId']) {
 	// 	await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1", [userId])
@@ -42,7 +47,7 @@ class RefreshSessionRepository {
 	}
 
 	static async deleteOldestRefreshSessionByUserId(userId: IRefreshSessionRepository['userId']) {
-		 await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1 AND ctid IN (SELECT ctid FROM refresh_sessions ORDER BY log_in_time LIMIT 1)", [userId])
+		 await queryDB("DELETE FROM refresh_sessions WHERE user_id=$1 AND log_in_time=(SELECT MIN(log_in_time) FROM refresh_sessions WHERE user_id=$1)", [userId])
 	}
 
 	static async isRefreshSessionDouble(deviceId: IRefreshSessionRepository['deviceId']) {

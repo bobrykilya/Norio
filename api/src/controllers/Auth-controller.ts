@@ -29,7 +29,7 @@ const checkPrevRefreshToken = async ({ prevRefreshToken, res, username, queryTim
 	res.clearCookie(getUserCookieName(username))
 }
 
-const getUserCookieName = (username: string) => {
+export const getUserCookieName = (username: string) => {
 	return `token-${username}`
 }
 
@@ -37,7 +37,7 @@ const getUserCookieName = (username: string) => {
 class AuthController {
 
 	static async signIn(req: ICommonVar['req'], res: ICommonVar['res']) {
-		// console.log(req.body)
+
 		const { username, password, fastSession, deviceType, lsDeviceId, deviceIP }: ISignInController = req.body
 		const prevRefreshToken: ICommonVar['refreshToken'] = req.cookies[getUserCookieName(username)]
 		const { fingerprint } = req

@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { TopCardFormsProps } from "../../TopCard"
+import { fastSessionTestForDataEditing, TopCardFormsProps } from "../../TopCard"
 import { useUserInfoState } from "../../../../../../stores/User-store"
 import { SubmitHandler, useForm } from 'react-hook-form'
 import FormStatusButton from "../common/FormStatusButton/FormStatusButton"
@@ -12,9 +12,9 @@ import NameInput from "../../../../../common/Inputs/InputFields/NameInput/NameIn
 import { AVATARS_LIST } from "../../../../../../assets/AuthPage/AuthPage-data"
 import AvatarButton from "../../../../../_AuthPage/AvatarListCard/AvatarButton"
 import { showSnackMessage } from "../../../../../../features/showSnackMessage/showSnackMessage"
-import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
 import { useMatchConfirmPassword } from "../../../../../../hooks/useMatchConfirmPassword"
 import UserService from "../../../../../../services/User-service"
+import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
 
 
 
@@ -101,16 +101,20 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 	}
 
 	const updateFormData = async (data: IAccountInfoEditReq) => {
-		delete data.prevPassword
-		delete data.confirmNewPassword
-		console.log(data)
+		// console.log(data)
 
 		setStatusState('loading')
 		if (await UserService.editAccountInfo(data)) {
-			setUserInfoState({
-				...userInfo,
-				...data as IUserRepository
-			})
+
+			//* userInfoState updating if username hasn't been updated
+			// (otherwise userState will be update with AuthCommon.loginUser)
+			if (!data.username) {
+				setUserInfoState({
+					...userInfo,
+					...data as IUserRepository
+				})
+			}
+
 			showSnackMessage({
 				type: "s",
 				message: 'Изменения сохранены'
@@ -126,7 +130,9 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		}
 	}
 
-	const handleSaveForm: SubmitHandler<IAccountInfoEditForm> = async (data) => {
+	const handleSaveForm: SubmitHandler<IAccountInfoEditForm> = async () => {
+		fastSessionTestForDataEditing(userInfo.username)
+
 		const dirtyData = getDirtyData() as IAccountInfoEditReq
 		if (!Object.keys(dirtyData)[0] || (Object.keys(dirtyData).length === 1 && dirtyData.prevPassword)) {
 			return
@@ -137,6 +143,11 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 
 		if (dirtyData.prevPassword) {
 			if (await UserService.checkPassword(dirtyData.prevPassword)) {
+				dirtyData.password = dirtyData.newPassword
+				delete dirtyData.prevPassword
+				delete dirtyData.newPassword
+				delete dirtyData.confirmNewPassword
+
 				await updateFormData(dirtyData)
 			}
 		} else {

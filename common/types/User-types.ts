@@ -21,5 +21,5 @@ export type IUserInfoEditReq =  Partial<Omit<IUserInfoEditForm, 'birthday'>> & {
 
 export type IAccountInfoEditReq =  Partial<IAccountInfoEditForm> & {
 	avatar?: ICommonVar['avatar'];
-	hashedPassword?: ICommonVar['hashedPassword'];
+	password?: ICommonVar['password'];
 }

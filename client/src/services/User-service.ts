@@ -2,6 +2,10 @@ import { HoroscopeTypeOptions, ICommonVar } from "../../../common/types/Global-t
 import { $apiProtected, $apiUnprotected } from "../http/http"
 import { IAccountInfoEditReq, IHoroscopeDataRes, IUserInfoEditReq } from "../../../common/types/User-types"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
+import AuthCommon from "../features/auth/authCommon"
+import { ILoginServiceRes } from "../../../common/types/Auth-types"
+import { useUserInfoState } from "../stores/User-store"
+import LogOut from "../features/auth/logOut"
 
 
 
@@ -20,7 +24,7 @@ class UserService {
 
 	static async editUserInfo(data: IUserInfoEditReq) {
 		try {
-			await $apiProtected.post("edit-user-info", { json: data })?.json()
+			await $apiProtected.patch("edit-user-info", { json: data })?.json()
 			return true
 		} catch (err) {
 			showSnackMessage(err)
@@ -29,8 +33,20 @@ class UserService {
 	}
 
 	static async editAccountInfo(data: IAccountInfoEditReq) {
+		const currentUserName = data.username ? useUserInfoState.getState().userInfoState?.username : null
+
 		try {
-			await $apiProtected.post("edit-account-info", { json: data })?.json()
+			const newSessionData = await $apiProtected.patch("edit-account-info", { json: data })?.json<ILoginServiceRes>()
+
+			if (newSessionData) {
+				LogOut.logOut({
+					interCode: 209,
+					username: currentUserName
+				})
+				const { accessToken, accessTokenExpiration, userInfo, deviceId } = newSessionData
+				AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, isFast: false })
+			}
+
 			return true
 		} catch (err) {
 			showSnackMessage(err)

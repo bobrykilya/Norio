@@ -4,7 +4,7 @@ import LogBookButton from "../JumpingCards/LogBookCard/LogBookButton"
 import SettingsButton from "../JumpingCards/SettingsCard/SettingsButton"
 import { TOOLTIP_DELAY_TIME } from "../../../../constants"
 // @ts-ignore
-import appIcon from '../../../assets/common/logos/app_icon.png'
+import appLogo from '../../../assets/common/logos/app_logo.png'
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import ToolTip from "../ToolTip/ToolTip"
 import { ICONS } from "../../../assets/common/Icons-data"
@@ -47,7 +47,7 @@ const NavBar = ({ location }: NavBarProps) => {
                 tabIndex={-1}
                 // title='Улыбнись, заяц)'
             >
-                <img className="app_icon-img" src={appIcon} alt="*" />
+                <img className="app_icon-img" src={appLogo} alt="*" />
                 <ToolTip
                     message={'Улыбнись, заяц)'}
                     position={'bottom_right'}

@@ -39,9 +39,10 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(cors({
 	credentials: true, 
-	origin: process.env.CLIENT_URL
+	origin: process.env.CLIENT_URL,
+	methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+	allowedHeaders: ["Content-Type", "Authorization"],
 }))
-
 app.use(
 	Fingerprint({
 		// @ts-ignore
@@ -53,11 +54,10 @@ app.use("/auth", AuthRouter)
 app.use("/unprotected", UnprotectedRouter)
 app.use("/protected", protectMiddleware, ProtectedRouter)
 
-// @ts-ignore
-// app.use("/resource/protected", TokenService.checkAccess, (_: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: string): any; new(): any } } }) => {
-// 	return res.status(200).json("Привет " + Date.now())
-// })
-
+//* Handler for 404 Error
+app.use((_, res) => {
+	res.status(404).json({ message: "Route not found" })
+})
 
 server.on('error', (err) => {
 	if (err) {

@@ -38,6 +38,7 @@ import {
 import { HiDocumentText } from "react-icons/hi2"
 import { IoIosSave, IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
 import { RxCopy } from "react-icons/rx"
+import { TiFlash } from "react-icons/ti"
 
 
 
@@ -96,5 +97,5 @@ export const ICONS = {
 	wind: <FiWind className='fa-icon' />,
 	rain: <BsCloudRain className='fa-icon' />,
 	snow: <IoSnowOutline className='fa-icon' />,
-
+	flash: <TiFlash className='fa-icon' />,
 }

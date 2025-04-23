@@ -14,14 +14,13 @@ import { useUserInfoState } from "../../../../stores/User-store"
 
 
 type UserCardProps = {
-
+	fastSessionState?: boolean;
 }
-const UserCard = ({  }: UserCardProps) => {
+const UserCard = ({ fastSessionState }: UserCardProps) => {
 
 	const [isFullUserCard, setIsFullUserCard] = useState(false)
 	const { userInfoState } = useUserInfoState()
 	const { setTopCardState } = useTopCardState()
-
 
 	const toggleUserCard = () => {
 		setIsFullUserCard(prev => !prev)
@@ -78,6 +77,14 @@ const UserCard = ({  }: UserCardProps) => {
 				<div
 				    className={'unfolding_card-only_full cont'}
 				>
+					{
+						fastSessionState &&
+						<span
+						    className={'fast_session-info'}
+						>
+						    -- Быстрая сессия --
+						</span>
+					}
 					<UserNameCopyButton
 						userInfoState={userInfoState}
 					/>

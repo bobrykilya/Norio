@@ -4,6 +4,9 @@ import HoroscopeService from "../services/Horoscope-service.ts"
 import { IAccountInfoEditReq, IUserInfoEditReq } from "../../../common/types/User-types.ts"
 import UserService from "../services/User-service.ts"
 import AuthService from "../services/Auth-service.ts"
+import { getTime } from "../utils/getTime.ts"
+import { COOKIE_SETTINGS } from "../../constants.ts"
+import { getUserCookieName } from "./Auth-controller.ts"
 
 
 
@@ -20,6 +23,7 @@ class UserController {
 	}
 
 	static async editUserInfo(req: { body: IUserInfoEditReq, user: ICommonVar['payload'] }, res: ICommonVar['res']) {
+		
 		try {
 			await UserService.editUserInfo(req.body, req.user)
 
@@ -31,10 +35,17 @@ class UserController {
 
 	static async editAccountInfo(req: { body: IAccountInfoEditReq, user: ICommonVar['payload'] }, res: ICommonVar['res']) {
 		const { body, user } = req
+		const queryTime = getTime()
 
-		
+
 		try {
-			await UserService.editAccountInfo(body, user)
+			const newSessionData = await UserService.editAccountInfo(body, user, queryTime)
+			if (newSessionData) {
+				const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId } = newSessionData
+				res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+
+				return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
+			}
 
 			return res.status(200).json()
 		} catch (err) {

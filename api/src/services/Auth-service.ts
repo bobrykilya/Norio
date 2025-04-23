@@ -17,6 +17,14 @@ import { ICommonVar } from "../../../common/types/Global-types"
 
 
 
+type ICreateSession = {
+	userId: ICommonVar['userId'];
+	username: ICommonVar['username'];
+	deviceId: ICommonVar['deviceId'];
+	queryTime: ICommonVar['queryTime'];
+	fastSession?: ICommonVar['fastSession'];
+}
+
 type ICheckPasswordByUsername = {
 	username: ICommonVar['username'];
 	password: ICommonVar['password'];
@@ -33,14 +41,9 @@ class AuthService {
 			password,
 			error: Errors.loginOrPasswordInvalid()
 		})
-		if (!userData) {
-			throw Errors.loginOrPasswordInvalid()
-		}
 
-		const userId = userData.user_id
+		const userId = userData.userId
 		const interCode = !fastSession ? 201 : 202
-
-
 		
 		//* Control of max sessions for every user
 		if (await RefreshSessionsRepository.getRefreshSessionsQuantity(userId) >= MAX_SESSION_FOR_USER) {
@@ -53,34 +56,7 @@ class AuthService {
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTime })
 
 
-		const payload = {
-			userId,
-			username,
-			deviceId,
-		}
-
-		const accessToken = await TokenService.generateAccessToken(payload)
-		const refreshToken = await TokenService.generateRefreshToken(payload)
-
-		const logOutTime = fastSession ? getEndTime({ startTimeInSec: queryTime, duration: FAST_SESSION_DURATION }) : null
-
-		await RefreshSessionsRepository.createRefreshSession({
-			userId,
-			deviceId,
-			logInTime: queryTime,
-			logOutTime,
-			refreshToken,
-		})
-
-		const userInfo = await UserRepository.getHandledUserInfo(userId)
-
-		return {
-			accessToken,
-			refreshToken,
-			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
-			userInfo,
-			deviceId,
-		}
+		return await this.createSession({ userId, username, deviceId, queryTime, fastSession })
 	}
 
 
@@ -175,29 +151,8 @@ class AuthService {
 		await _logAttentionRepository.createLogAttention({ interCode, userId, deviceId, logTime: queryTime })
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTime })
 
-		const payload = { 
-			userId,
-			username,
-			deviceId,
-		}
 
-		const accessToken = await TokenService.generateAccessToken(payload)
-		const refreshToken = await TokenService.generateRefreshToken(payload)
-
-		await RefreshSessionsRepository.createRefreshSession({
-			userId,
-			deviceId,
-			logInTime: queryTime,
-			refreshToken,
-		})
-
-		return {
-			accessToken,
-			refreshToken,
-			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
-			userInfo,
-			deviceId,
-		}
+		return await this.createSession({ userId, username, deviceId, queryTime })
 	}
 
 
@@ -265,7 +220,11 @@ class AuthService {
 			throw Errors.forbidden(err.detail)
 		}
 
-		const { user_id: userId } = await UserRepository.getUserMainDataByUsername(payload.username)
+		const userMainData = await UserRepository.getUserMainDataByUsername(payload.username)
+		if (!userMainData) {
+			throw Errors.usernameNotFound(payload.username)
+		}
+		const { userId } = userMainData
 
 		const actualPayload = { userId, username: payload.username, deviceId }
 
@@ -294,10 +253,45 @@ class AuthService {
 		}
 	}
 
-	static async checkPasswordByUsername({ username, password, error }: ICheckPasswordByUsername) {
-		const userData = await UserRepository.getUserMainDataByUsername(username)
+	static async createSession({ userId, username, deviceId, queryTime, fastSession }: ICreateSession) {
+		const payload = {
+			userId,
+			username,
+			deviceId,
+		}
 
-		const isPasswordValid = bcrypt.compareSync(password, userData.password)
+		const accessToken = await TokenService.generateAccessToken(payload)
+		const refreshToken = await TokenService.generateRefreshToken(payload)
+
+		const logOutTime = fastSession ? getEndTime({ startTimeInSec: queryTime, duration: FAST_SESSION_DURATION }) : null
+
+		await RefreshSessionsRepository.createRefreshSession({
+			userId,
+			deviceId,
+			logInTime: queryTime,
+			logOutTime,
+			refreshToken,
+		})
+
+		const userInfo = await UserRepository.getHandledUserInfo(userId)
+
+		return {
+			accessToken,
+			refreshToken,
+			accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
+			userInfo,
+			deviceId,
+		}
+	}
+
+	static async checkPasswordByUsername({ username, password, error }: ICheckPasswordByUsername) {
+
+		const userData = await UserRepository.getUserMainDataByUsername(username)
+		if (!userData) {
+			throw error
+		}
+
+		const isPasswordValid = bcrypt.compareSync(password, userData?.hashedPassword)
 		if (!isPasswordValid) {
 			throw error
 		}

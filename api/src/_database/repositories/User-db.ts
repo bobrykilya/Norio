@@ -46,7 +46,14 @@ class UserRepository {
 	static async getUserMainDataByUsername(username: IUserRepository['username']) {
 		const response = await queryDB("SELECT user_id, password FROM users WHERE username=$1", [username])
 
-		return response?.rows[0]
+		if (response?.rows[0]) {
+			const { user_id, password } = response?.rows[0]
+			return {
+				userId: user_id,
+				hashedPassword: password
+			}
+		}
+		return null
 	}
 
 	static async getHandledUserInfo(userId: IUserRepository['userId'], withPassword?: boolean) {
@@ -67,9 +74,8 @@ class UserRepository {
 			}
 
 			return handledUserInfo
-		} else {
-			return null
 		}
+		return null
 	}
 	
 	static async getUserName(userId: IUserRepository['userId']) {

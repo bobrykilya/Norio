@@ -1,6 +1,9 @@
 import ky from "ky"
+import dotenv from "dotenv"
 
 
+
+dotenv.config()
 
 const $apiWeather = ky.extend({
 	prefixUrl: `https://api.openweathermap.org/data/3.0`,

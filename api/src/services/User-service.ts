@@ -1,22 +1,24 @@
 import { IAccountInfoEditReq, IUserInfoEditReq } from "../../../common/types/User-types.ts"
 import { ICommonVar } from "../../../common/types/Global-types.ts"
-import UserRepository from "../_database/repositories/User-db.ts"
-import UserDb from "../_database/repositories/User-db.ts"
 import { Errors } from "../utils/Errors.ts"
+import CommonRepository from "../_database/repositories/Common-db.ts"
 import bcrypt from "bcryptjs"
+import RefreshSessionRepository from "../_database/repositories/RefreshSession-db.ts"
+import AuthService from "./Auth-service.ts"
 
 
 
 class UserService {
 	static async editUserInfo(data: IUserInfoEditReq, user: ICommonVar['payload']) {
 		//! Add log funcs
-		const newUserInfo: IUserInfoEditReq = {
-			...await UserDb.getHandledUserInfo(user.userId) as IUserInfoEditReq,
-			...data
-		}
 
 		try {
-			await UserRepository.updateUserInfo({ userId: user.userId, newUserInfo })
+			await CommonRepository.updateFieldsById<IUserInfoEditReq>({
+				data: data,
+				id: user.userId,
+				tableName: 'users',
+				idFieldName: 'user_id',
+			})
 		} catch (err) {
 			if (err.detail.constraint === 'users_phone_key') {
 				throw Errors.phoneEngaged()
@@ -25,23 +27,26 @@ class UserService {
 		}
 	}
 
-	static async editAccountInfo(data: IAccountInfoEditReq, user: ICommonVar['payload']) {
+	static async editAccountInfo(data: IAccountInfoEditReq, user: ICommonVar['payload'], queryTime: ICommonVar['queryTime']) {
 		//! Add log funcs
-		const { newPassword, ...restData } = data
-		if (newPassword) {
+		const { userId, deviceId } = user
+		const { password, ...restData } = data
+		const newData: IAccountInfoEditReq = {
+			...restData
+		}
+
+		if (password) {
 			const salt = bcrypt.genSaltSync(10)
-			restData.hashedPassword = bcrypt.hashSync(newPassword, salt)
+			newData.password = bcrypt.hashSync(password, salt)
 		}
-
-		const newAccountInfo: IAccountInfoEditReq = {
-			...await UserDb.getHandledUserInfo(user.userId, true) as IAccountInfoEditReq,
-			...restData,
-		}
-
-		console.log(newAccountInfo)
 
 		try {
-			await UserRepository.updateAccountInfo({ userId: user.userId, newAccountInfo })
+			await CommonRepository.updateFieldsById<IAccountInfoEditReq>({
+				data: newData,
+				id: userId,
+				tableName: 'users',
+				idFieldName: 'user_id',
+			})
 		} catch (err) {
 			if (err.detail.constraint === 'users_username_key') {
 				throw Errors.usernameEngaged()
@@ -49,6 +54,20 @@ class UserService {
 				throw Errors.avatarEngaged()
 			}
 			throw Errors.dbConflict(err)
+		}
+
+		//* If username has been changed - prev name's sessions removing (for this device) and creating a new one
+		if (newData.username) {
+			await RefreshSessionRepository.deleteRefreshSessionsByUserIdAndDeviceId({
+				userId,
+				deviceId
+			})
+			return await AuthService.createSession({
+				userId,
+				username: newData.username,
+				deviceId,
+				queryTime
+			})
 		}
 	}
 	

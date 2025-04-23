@@ -20,7 +20,7 @@ import { IUserInfoEditReq } from "../../../../../../../../common/types/User-type
 import UserService from "../../../../../../services/User-service"
 import { useUserInfoState } from "../../../../../../stores/User-store"
 import PassportButton from "./PassportButton/PassportButton"
-import { TopCardFormsProps } from "../../TopCard"
+import { fastSessionTestForDataEditing, TopCardFormsProps } from "../../TopCard"
 
 
 
@@ -118,6 +118,8 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 	}
 
 	const handleSaveForm: SubmitHandler<IUserInfoEditForm> = async (data) => {
+		fastSessionTestForDataEditing(userInfo.username)
+		
 		const dirtyData = getDirtyData() as IUserInfoEditReq
 		if (!Object.keys(dirtyData)[0]) {
 			return

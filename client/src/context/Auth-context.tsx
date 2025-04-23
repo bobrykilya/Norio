@@ -45,13 +45,12 @@ const AuthProvider = ({ children }) => {
 				const username = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username || null
 				const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
 
+
 				const refreshSwitchUsersTokens = async () => {
 					if (switchUsersList) {
-						return Promise.all(switchUsersList.map(async (userName: string) => {
-
-							if (userName === username) {
-								return
-							}
+						return Promise.all(switchUsersList
+							.filter((userName: string) => userName !== username)
+							.map(async (userName: string) => {
 
 							try {
 								const { accessToken, accessTokenExpiration, userInfo, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username: userName })

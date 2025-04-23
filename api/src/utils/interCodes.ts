@@ -69,6 +69,13 @@ const getCodeDescription = (interCode: ICommonVar['interCode']) => {
 			notifForAdmin: false,
 			notifForUser: false,
 		}
+		case 209 : return {
+			interCode,
+			name: 'Log-out due to edit username',
+			description: 'Фоновый выход из аккаунта (смена логина)',
+			notifForAdmin: false,
+			notifForUser: false,
+		}
         case 210 : return {
             interCode,
             name: 'Activation user',

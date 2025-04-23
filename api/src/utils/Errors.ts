@@ -16,6 +16,9 @@ export const Errors = {
 	usernameEngaged: () => {
 		return new Conflict("Пользователь с таким логином уже существует", 'usernameEngaged')
 	},
+	usernameNotFound: (username: ICommonVar['username']) => {
+		return new Conflict(`Пользователь с логином ${username} не найден`, 'usernameNotFound')
+	},
 	redisNoConnection: () => {
 		return new Conflict(`Redis connection error on port: ${process.env.REDIS_PORT}`, 'redisNoConnection')
 	},
