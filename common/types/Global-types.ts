@@ -80,7 +80,7 @@ export type ICommonVar = {
 	//* ---------- Errors
 	status: number;
 	req: ExpressReq & {
-		user: string | IJWTPayload;
+		user: IJWTPayload;
 		route: {
 			stack?: {
 				name: string;

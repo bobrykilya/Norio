@@ -17,8 +17,6 @@ const $apiAuth = ky.create({
 
 const $apiUnprotected = ky.create({
 	prefixUrl: `${getApiURL()}/unprotected`,
-	cache: 'no-store',
-	credentials: 'include',
 })
 
 const $apiProtected = ky.create({
@@ -57,7 +55,7 @@ type IApiIpInfoReserveResponse = {
 	countryCode: string;
 }
 
-const getApiInfo = async () => {
+const getIPInfo = async () => {
 	try {
 		if (!CHECK_IP_AND_COUNTRY) return undefined
 
@@ -88,6 +86,6 @@ export {
 	$apiUnprotected,
 	$apiIpInfo,
 	$apiIpInfoReserve,
-	getApiInfo
+	getIPInfo
 }
 

@@ -13,9 +13,14 @@ class UserService {
 	static async getHoroscopeData(horoscopeType: HoroscopeTypeOptions, { signal }: { signal: AbortSignal }) {
 		try {
 			// console.log(horoscopeType)
-			return await $apiUnprotected.post("horoscope", { json: { horoscopeType }, signal })?.json<IHoroscopeDataRes>()
+			return await $apiUnprotected.get("horoscope", {
+				searchParams: {
+					horoscopeType
+				},
+				signal,
+			})?.json<IHoroscopeDataRes>()
 		} catch (err) {
-			if (!signal.aborted) {
+			if (err.name !== 'AbortError') {
 				console.log(err)
 			}
 			throw new Error('GetHoroscopeData error')

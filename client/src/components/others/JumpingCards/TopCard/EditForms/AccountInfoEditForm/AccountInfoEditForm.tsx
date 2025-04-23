@@ -18,6 +18,22 @@ import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
 
 
 
+const updateBrowsersPasswordCredential = async (data: IAccountInfoEditReq, userInfo: IUserRepository) => {
+
+	if ("PasswordCredential" in window) {
+		let credential = new PasswordCredential({
+			id: data.username || userInfo.username,
+			password: data.password || '-',
+			name: `${userInfo.lastName} ${userInfo.firstName}`
+		})
+
+		try {
+			await navigator.credentials.store(credential)
+		} catch (err) {
+		}
+	}
+}
+
 export type IAccountInfoEditForm = {
 	username: ICommonVar['username'],
 	email?: ICommonVar['email'],
@@ -106,18 +122,21 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		setStatusState('loading')
 		if (await UserService.editAccountInfo(data)) {
 
-			//* userInfoState updating if username hasn't been updated
-			// (otherwise userState will be update with AuthCommon.loginUser)
-			if (!data.username) {
+			if (data.username || data.password) {
+				//* Username or Password saving for browser
+				await updateBrowsersPasswordCredential(data, userInfo)
+			} else if (!data.username) {
+				//* userInfoState updating if username hasn't been updated
+				// (otherwise userState will be update with AuthCommon.loginUser)
 				setUserInfoState({
 					...userInfo,
 					...data as IUserRepository
 				})
 			}
-
+			
 			showSnackMessage({
 				type: "s",
-				message: 'Изменения сохранены'
+				message: 'Изменения сохранены',
 			})
 			setStatusState('ok')
 			resetPasswords()
@@ -266,7 +285,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 						name={'prevPassword'}
 						placeholder={'Старый пароль'}
 						inputType='sign_in'
-						autoComplete={'off'}
+						autoComplete={'password'}
 						icon={ICONS.prevPassword}
 						required={false}
 						inputRefPassword={inputRefPrevPassword}

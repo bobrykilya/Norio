@@ -11,9 +11,9 @@ import { getUserCookieName } from "./Auth-controller.ts"
 
 
 class UserController {
-	static async getHoroscope(req: { body: { horoscopeType: HoroscopeTypeOptions }, fingerprint: ICommonVar['fingerprint'] }, res: ICommonVar['res']) {
+	static async getHoroscope(req: ICommonVar['req'], res: ICommonVar['res']) {
 		try {
-			const { horoscopeType } = req.body
+			const { horoscopeType } = req.query as { horoscopeType: HoroscopeTypeOptions }
 			const data = await HoroscopeService.getHoroscopeData(horoscopeType)
 
 			return res.status(200).json(data)
@@ -22,10 +22,10 @@ class UserController {
 		}
 	}
 
-	static async editUserInfo(req: { body: IUserInfoEditReq, user: ICommonVar['payload'] }, res: ICommonVar['res']) {
+	static async editUserInfo(req: ICommonVar['req'], res: ICommonVar['res']) {
 		
 		try {
-			await UserService.editUserInfo(req.body, req.user)
+			await UserService.editUserInfo(req.body as IUserInfoEditReq, req.user)
 
 			return res.status(200).json()
 		} catch (err) {
@@ -33,13 +33,13 @@ class UserController {
 		}
 	}
 
-	static async editAccountInfo(req: { body: IAccountInfoEditReq, user: ICommonVar['payload'] }, res: ICommonVar['res']) {
+	static async editAccountInfo(req: ICommonVar['req'], res: ICommonVar['res']) {
 		const { body, user } = req
 		const queryTime = getTime()
 
 
 		try {
-			const newSessionData = await UserService.editAccountInfo(body, user, queryTime)
+			const newSessionData = await UserService.editAccountInfo(body as IAccountInfoEditReq, user, queryTime)
 			if (newSessionData) {
 				const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId } = newSessionData
 				res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
@@ -53,8 +53,8 @@ class UserController {
 		}
 	}
 
-	static async protectedCheckUser(req: { body: { currentPassword: ICommonVar['password'] }, fingerprint: ICommonVar['fingerprint'], user: ICommonVar['payload'] }, res: ICommonVar['res']) {
-		const { currentPassword } = req.body
+	static async protectedCheckUser(req: ICommonVar['req'], res: ICommonVar['res']) {
+		const { currentPassword } = req.body as { currentPassword: ICommonVar['password'] }
 		const { user } = req
 
 

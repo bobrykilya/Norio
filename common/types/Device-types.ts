@@ -13,6 +13,12 @@ export type IDeviceLocation = {
 	};
 	coords?: ILocationCoords;
 }
+export type IDeviceLocationReq = {
+	id?: IDeviceLocation['city']['id'];
+	title?: IDeviceLocation['city']['title'];
+	lat: ILocationCoords['lat'];
+	lon: ILocationCoords['lon'];
+}
 
 export type IWeatherTempObj = {
 	morn: number;

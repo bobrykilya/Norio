@@ -1,5 +1,5 @@
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
-import { $apiAuth, getApiInfo } from "../http/http"
+import { $apiAuth, getIPInfo } from "../http/http"
 import { DEVICE_LS, PERMITTED_COUNTRIES } from "../../constants"
 import {
     ICheckUserReq,
@@ -37,7 +37,7 @@ const getAndSaveDeviceType = (lsDeviceInfo: IDeviceInfo) => {
 }
 
 const checkCountryCodeAndGetIP = async () => {
-    const res = await getApiInfo()
+    const res = await getIPInfo()
     // console.log(res)
 
     if (!res) return undefined

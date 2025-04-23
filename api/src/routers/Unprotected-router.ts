@@ -6,7 +6,7 @@ import UserController from "../controllers/User-controller.ts"
 
 const UnprotectedRouter = Router()
 
-UnprotectedRouter.post("/weather", DeviceController.getWeather as Application)
-UnprotectedRouter.post("/horoscope", UserController.getHoroscope as Application)
+UnprotectedRouter.get("/weather", DeviceController.getWeather as Application)
+UnprotectedRouter.get("/horoscope", UserController.getHoroscope as unknown as Application)
 
 export default UnprotectedRouter

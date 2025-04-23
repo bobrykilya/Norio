@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { IUserRepository } from "../../../../../api/src/types/DB-types"
 import { useFetchHoroscope } from "../../../queries/Horoscope-queries"
 import { getHoroscopeType, HOROSCOPE_DATA } from "../../../assets/HomePage/Horoscope-data"
@@ -46,13 +46,16 @@ const HoroscopeCard = () => {
 	}
 
 	const userInfoState = useUserInfoState(s => s.userInfoState)
-	const horoscopeType = checkHoroscopeInLS(userInfoState.birthday)
+	const horoscopeType = useMemo(() => checkHoroscopeInLS(userInfoState.birthday), [userInfoState.birthday])
 	const horoscopeExtraInfo = HOROSCOPE_DATA[horoscopeType]
 
 	const { data: horoscopeData } = useFetchHoroscope(horoscopeType, {
 		enabled: !!userInfoState && !!userInfoState.birthday,
 	})
 	// console.log(horoscopeData)
+
+	const firstPhrase = useMemo(() => getFirstPhrase(horoscopeData?.messages[0], 57)
+		, [horoscopeData?.messages[0]])
 
 
 	return (
@@ -87,9 +90,9 @@ const HoroscopeCard = () => {
 										    className={'horoscope-message cont'}
 										>
 											<p
-												className={'horoscope_info-short'}
+												className={'horoscope_info-short cont'}
 											>
-												{getFirstPhrase(horoscopeData?.messages[0], 57)}...
+												{firstPhrase}...
 											</p>
 											<p
 												className={'horoscope_info-full'}

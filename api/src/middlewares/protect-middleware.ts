@@ -1,10 +1,11 @@
 import { Forbidden, Unauthorized } from "../utils/Errors.ts"
 import TokenService from "../services/Token-service.ts"
 import { ICommonVar } from "../../../common/types/Global-types.ts"
+import { NextFunction, Response } from 'express'
 
 
 
-const protectMiddleware = async (req: ICommonVar['req'], _: any, next: (arg0?: Unauthorized | Forbidden) => void) => {
+const protectMiddleware = async (req: ICommonVar['req'], _: Response, next: NextFunction) => {
 
 	const errorMessage = 'Недостаточно прав на действие'
 	try {

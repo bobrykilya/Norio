@@ -1,5 +1,5 @@
 import {
-	IDeviceLocation,
+	IDeviceLocationReq,
 	ILocationAddress,
 	ILocationCoords,
 	ILocationWeather,
@@ -34,31 +34,28 @@ const getWeatherObjectByKeys = <T> (object: T, keysList: string[]) => {
 	return newObject as T
 }
 
-const getCashKeyForWeather = (location: IDeviceLocation) => {
-	return `weather-${location.coords?.lat},${location.coords?.lon}`
+const getCashKeyForWeather = (location: IDeviceLocationReq) => {
+	return `weather-${location.lat},${location.lon}`
 }
 
 class WeatherService {
 
-	static async getWeatherByCoords(location: IDeviceLocation) {
+	static async getWeatherByCoords(location: IDeviceLocationReq) {
 		// console.log(location)
+		const { lat, lon, title, id } = location
 		let locationWeather: ILocationWeather
 
 		locationWeather = await redisGet(getCashKeyForWeather(location))
 		if (!locationWeather) {
 			const REQUIRED_KEYS_LIST = ['dt', 'rain', 'snow', 'wind_gust', 'temp', 'feels_like', 'humidity', 'icon', 'description']
-			const weatherData = await $apiWeather.get('onecall', {
-				searchParams: {
-					lat: location.coords.lat,
-					lon: location.coords.lon,
-				},
-			}).json<ILocationWeather>()
+			const weatherData = await $apiWeather.get('onecall', { searchParams: {	lat, lon } })
+				.json<ILocationWeather>()
 			// console.log(weatherData)
 
 			const currentTime = getTime()
 			locationWeather = {
-				cityId: location.city.id,
-				cityTitle: location.city.title || (await this.getLocationCityTitleByCoords(location.coords)).toLowerCase(),
+				cityId: id,
+				cityTitle: title || (await this.getLocationCityTitleByCoords({ lat, lon })).toLowerCase(),
 				timeInSec: currentTime,
 				deadTimeInSec: currentTime + (WEATHER_UPDATE_TIME_IN_MIN * 60) + 10,
 				current: getWeatherObjectByKeys<ILocationWeatherElem>(weatherData.current, REQUIRED_KEYS_LIST),
@@ -72,14 +69,14 @@ class WeatherService {
 		return locationWeather
 	}
 
-	static async getLocationCityTitleByCoords(coords: ILocationCoords) {
+	static async getLocationCityTitleByCoords({ lat, lon }: ILocationCoords) {
 		let locationAddress: ILocationAddress['address']
 		const REQUIRED_KEYS_LIST = ['city', 'town', 'village']
 
 		const locationData = await $apiLocation.get('reverse', {
 			searchParams: {
-				lat: coords.lat,
-				lon: coords.lon,
+				lat,
+				lon,
 			}
 		}).json<ILocationAddress>()
 		// console.log(locationData)

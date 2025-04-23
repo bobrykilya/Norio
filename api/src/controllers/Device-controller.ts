@@ -1,8 +1,8 @@
 import DeviceService from '../services/Device-service'
 import { ICommonVar } from "../../../common/types/Global-types"
-import { IDeviceLocation } from "../../../common/types/Device-types.ts"
 import WeatherService from "../services/Weather-service.ts"
 import { catchError } from "../utils/Errors.ts"
+import { IDeviceLocationReq } from "../../../common/types/Device-types.ts"
 
 
 
@@ -33,9 +33,9 @@ class DeviceController {
         }
     }
 
-	static async getWeather(req: { body: IDeviceLocation }, res: ICommonVar['res']) {
+	static async getWeather(req: ICommonVar['req'], res: ICommonVar['res']) {
 		try {
-			const data = await WeatherService.getWeatherByCoords(req.body)
+			const data = await WeatherService.getWeatherByCoords(req.query as unknown as IDeviceLocationReq)
 
 			return res.status(200).json(data)
 		} catch (err) {

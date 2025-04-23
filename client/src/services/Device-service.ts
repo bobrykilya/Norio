@@ -1,4 +1,4 @@
-import { $apiAuth, $apiUnprotected, getApiInfo } from '../http/http'
+import { $apiAuth, $apiUnprotected, getIPInfo } from '../http/http'
 import { IBlockDeviceService } from '../types/Device-types'
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import { IDeviceLocation, ILocationWeather } from "../../../common/types/Device-types"
@@ -7,7 +7,7 @@ import { WEATHER_ACCURACY } from "../../constants"
 
 
 const getUserIPAddress = async () => {
-    const res = await getApiInfo()
+    const res = await getIPInfo()
 
     if (!res) return undefined
 
@@ -52,9 +52,17 @@ class DeviceService {
         try {
             if (!location) return
 
-            return await $apiUnprotected.post("weather", { json: location, signal })?.json<ILocationWeather>()
+            return await $apiUnprotected.get("weather", {
+                searchParams: {
+                    id: location.city.id,
+                    title: location.city.title,
+                    lat: location.coords.lat,
+                    lon: location.coords.lon
+                },
+                signal,
+            })?.json<ILocationWeather>()
         } catch (err) {
-            if (!signal.aborted) {
+            if (err.name !== 'AbortError') {
                 console.log(err)
             }
             throw new Error('getLocationWeather error')

@@ -961,6 +961,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/webappsec-credential-management@npm:^0.6.9":
+  version: 0.6.9
+  resolution: "@types/webappsec-credential-management@npm:0.6.9"
+  checksum: 70ebb3f103bd7a35f5880f6ad5cf3e6a40bd698ef935f8e7fb188eaa2ad20916b7c3c7c8f5e4de70f4e07305cdf1d86beaa3601be7b3684df3909ad12373125a
+  languageName: node
+  linkType: hard
+
 "@vitejs/plugin-react@npm:^4.3.1":
   version: 4.3.1
   resolution: "@vitejs/plugin-react@npm:4.3.1"
@@ -1576,6 +1583,7 @@ __metadata:
     "@types/node": "npm:^22.5.4"
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
+    "@types/webappsec-credential-management": "npm:^0.6.9"
     "@vitejs/plugin-react": "npm:^4.3.1"
     framer-motion: "npm:^11.2.4"
     immer: "npm:^10.1.1"
