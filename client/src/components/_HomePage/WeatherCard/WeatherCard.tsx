@@ -190,11 +190,11 @@ const WeatherCard = () => {
 								className={'daily_weather_list-cont cont'}
 							>
 								{
-									weather?.daily.map((el, num) =>
+									weather?.daily.map((el, index) =>
 										<DailyWeatherElement
 											key={el.dt}
 											weather={el}
-											label={num === 0 && 'Сегодня'}
+											label={index === 0 && 'Сегодня'}
 										/>,
 									)
 								}

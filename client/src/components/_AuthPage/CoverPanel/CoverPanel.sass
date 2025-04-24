@@ -8,18 +8,12 @@
     overflow: visible
     pointer-events: none
     #cover-cont
-        //border: 2px solid orange
+        //border: 3px solid orange
         z-index: 3
         width: 50%
-        // width: 55%
-        // height: 104%
-        // transform: translateX(50%)
-        // border-radius: $rad-up-cover-panel 0 0 $rad-down-cover-panel
-        // transition: all $trans-dur $trans-wave-bounce-style
         transition: all $trans-dur $trans-style
-        background: linear-gradient(80deg,$color-cover-light, 40% , $color-cover-dark)
+        background: linear-gradient(80deg, $color-cover-light, 40% , $color-cover-dark)
         pointer-events: auto
-        // overflow: visible
         &::after //* Smooth gradient toggle
             background: linear-gradient(-80deg, $color-cover-light, 40% , $color-cover-dark)
             content: ''
@@ -31,19 +25,16 @@
             z-index: -1
             transition: opacity $trans-dur + 0.5s
         #cover-content
-            // border: 2px solid orange
+            //border: 2px solid orange
             overflow: visible
             flex-direction: row
             will-change: transform
             transition: all $trans-dur + 0.1s $trans-style
             section
                 // border: 2px solid red
-                // padding: 1.5rem
                 padding: 2rem
                 transition: all $trans-dur + 0.25s $trans-style
                 h1
-                    // border: 2px solid red
-                    // text-align: center
                     width: 100%
                     color: $color-backgr
                 p
@@ -51,7 +42,6 @@
                     margin: 18% 0
                     display: block
                     padding: 0 0.5rem
-                    // text-align: center
                     font-size: $size-main-text
                     line-height: $size-main-text + 0.2rem
                     color: #d9d8d8e4

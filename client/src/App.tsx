@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Navigate, Route, Routes, useLocation } from "react-router-dom"
 import { Toaster } from 'react-hot-toast'
 import { AnimatePresence } from 'framer-motion'
@@ -10,6 +10,8 @@ import { useBlockErrorState } from "./stores/Device-store"
 import LogBookCard from "./components/others/JumpingCards/LogBookCard/LogBookCard"
 import TopCard from "./components/others/JumpingCards/TopCard/TopCard"
 import { useUserInfoState } from "./stores/User-store"
+import { APP_TITLE } from "../constants"
+import { capitalize } from "./utils/capitalize"
 
 
 
@@ -19,6 +21,10 @@ const App = () => {
     const blockErrorState = useBlockErrorState(s => s.blockErrorState)
 
     const location = useLocation()
+
+    useEffect(() => {
+        document.title = capitalize(APP_TITLE)
+    }, [])
 
     
     return (

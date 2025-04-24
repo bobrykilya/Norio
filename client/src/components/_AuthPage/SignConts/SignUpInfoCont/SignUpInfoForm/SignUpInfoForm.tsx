@@ -39,7 +39,7 @@ const SignUpInfoForm = ({ STORES_LIST , JOBS_LIST, AVATARS_LIST, isFormDisabled,
 
     const { getCommonModalState } = useModalState()
     const [avatar, setAvatar] = useState<ICommonVar['avatar']>('hedgehog')
-    const [errorAvatar, setErrorAvatar] = useState<{message: string} | null>(null)
+    const [errorAvatar, setErrorAvatar] = useState<{ message: string } | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const inputRefPhone = useRef<HTMLInputElement>(null)
     const defaultValues = {

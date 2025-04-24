@@ -58,7 +58,6 @@ class LogOut {
 	static handleSwitchUser = (newUserId?: ICommonVar['id']) => {
 		const currentUserId = useUserInfoState.getState().userInfoState?.userId
 		// console.log({ currentUserId, currJwtInfo: useJwtInfoListState.getState().getJwtInfoState(currentUserId), newUserId })
-		// console.log(useJwtInfoListState.getState().getJwtInfoState(currentUserId))
 		if (!currentUserId) {
 			return
 		}

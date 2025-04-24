@@ -2,7 +2,6 @@ import { create } from "zustand"
 import { CoverPanelOptions } from "../types/Auth-types"
 import { IUserRepository } from "../../../api/src/types/DB-types"
 import { ICommonVar } from "../../../common/types/Global-types"
-import { immer } from "zustand/middleware/immer"
 // import { persist } from "zustand/middleware"
 
 
@@ -49,15 +48,16 @@ type IUseJwtInfoState = {
 	getJwtInfoState: (userId: ICommonVar['id']) => IJWTInfo;
 	addJwtInfoState: (state: IJWTInfo) => void;
 	removeJwtInfoState: (userId?: ICommonVar['id']) => void;
+	updateJWTUserInfoState: (userId: ICommonVar['id'], data: Partial<IUserRepository>) => void;
 }
-export const useJwtInfoListState = create<IUseJwtInfoState>()(immer((set, get) => ({
+export const useJwtInfoListState = create<IUseJwtInfoState>((set, get) => ({
 	jwtInfoListState: [],
 	addJwtInfoState: (state) => {
 		const jwtInfoListState = get().jwtInfoListState
-		const duplicatePos = jwtInfoListState.findIndex(el => el.userInfo.userId === state.userInfo.userId)
+		const duplicateIndex = jwtInfoListState.findIndex(el => el.userInfo.userId === state.userInfo.userId)
 
-		if (duplicatePos !== -1) {
-			jwtInfoListState.splice(duplicatePos, 1)
+		if (duplicateIndex !== -1) {
+			jwtInfoListState.splice(duplicateIndex, 1)
 		}
 
 		jwtInfoListState.push(state)
@@ -74,6 +74,27 @@ export const useJwtInfoListState = create<IUseJwtInfoState>()(immer((set, get) =
 
 		const jwtInfoListState = get().jwtInfoListState
 
-		set({ jwtInfoListState: jwtInfoListState.filter(el=> el.userInfo.userId !== userId) })
+		set({
+			jwtInfoListState: jwtInfoListState.filter(el=> el.userInfo.userId !== userId)
+		})
 	},
-})))
+	updateJWTUserInfoState: (userId, data) => {
+		const jwtInfoListState = get().jwtInfoListState
+
+		set({
+			jwtInfoListState: jwtInfoListState.map(el => {
+				if (el.userInfo.userId !== userId) {
+					return el
+				}
+				
+				return {
+					...el,
+					userInfo: {
+						...el.userInfo,
+						...data
+					}
+				}
+			})
+		})
+	}
+}))

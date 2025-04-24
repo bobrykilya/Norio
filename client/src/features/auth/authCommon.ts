@@ -8,6 +8,7 @@ import { useUserInfoState } from "../../stores/User-store"
 import { HoroscopeTypeOptions, ICommonVar } from "../../../../common/types/Global-types"
 import { getLSObject, removeLS, setLSObject } from "../../utils/localStorage"
 import { IDeviceInfo } from "../../types/Device-types"
+import { useJwtInfoListState } from "../../stores/Auth-store"
 
 
 
@@ -22,9 +23,6 @@ const testAndUpdateLSDeviceId = (deviceId: number, lsDeviceId?: number) => {
 }
 
 export type ICurrentUserLS= {
-	username: ICommonVar['username'],
-	firstName: ICommonVar['firstName'],
-	lastName: ICommonVar['lastName'],
 	userId: ICommonVar['id'],
 	horoscope?: {
 		horoscopeType: HoroscopeTypeOptions,
@@ -43,12 +41,14 @@ class AuthCommon {
 		AuthCommon.addSwitchUserInLS(userInfo.userId)
 	}
 
-	static saveUserInfoOnBrowser = (userInfo: IUserRepository ) => {
+	static updateUser = ({ userId, data }: { userId: ICommonVar['id'], data: Partial<IUserRepository> }) => {
+		useJwtInfoListState.getState().updateJWTUserInfoState(userId, data)
+		useUserInfoState.getState().updateUserInfoState(data)
+	}
+
+	static saveUserInfoOnBrowser = (userInfo: IUserRepository) => {
 		useUserInfoState.setState({ userInfoState: userInfo })
 		setLSObject(CURRENT_USER_LS, {
-			username: userInfo.username,
-			firstName: userInfo.firstName,
-			lastName: userInfo.lastName,
 			userId: userInfo.userId,
 		})
 	}
@@ -56,8 +56,6 @@ class AuthCommon {
 	static getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
 		return lastName ? `${lastName} ${firstName} "${username}"` : username
 	}
-
-
 	
 	static addSwitchUserInLS = (userId: ICommonVar['id']) => {
 		const prevSwitchUsersIdList = getLSObject<ISwitchUsersIdLS>(SWITCH_USERS_ID_LS) || []

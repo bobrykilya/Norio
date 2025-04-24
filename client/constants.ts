@@ -1,10 +1,10 @@
 export const LOGOUT_LS = 'lastLogout'
-export const CURRENT_USER_LS = 'currentUser'
-export const DEVICE_LS = 'deviceInfo'
-export const LOG_LIST_LS = 'localLogList'
-export const SWITCH_USERS_ID_LS = 'switchUsersId'
 export const FAST_LS = 'fastSession'
 export const BLOCK_DEVICE = 'blockDevice'
+export const DEVICE_LS = 'deviceInfo'
+export const LOG_LIST_LS = 'localLogList'
+export const CURRENT_USER_LS = 'currentUser'
+export const SWITCH_USERS_ID_LS = 'switchUsersId'
 
 
 export const APP_TITLE = 'NORIO'

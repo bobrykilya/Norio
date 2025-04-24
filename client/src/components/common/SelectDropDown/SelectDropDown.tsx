@@ -122,7 +122,7 @@ const SelectDropDown = ({ OPTIONS_LIST, handleClickOption, dropDownTitle, select
 				</div>
 			}
 			{
-				HANDLED_LIST.map((el) => {
+				HANDLED_LIST.map(el => {
 					return <button
 						key={el.id}
 						tabIndex={-1}

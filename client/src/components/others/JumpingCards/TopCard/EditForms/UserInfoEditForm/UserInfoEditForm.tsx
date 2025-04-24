@@ -21,6 +21,7 @@ import UserService from "../../../../../../services/User-service"
 import { useUserInfoState } from "../../../../../../stores/User-store"
 import PassportButton from "./PassportButton/PassportButton"
 import { fastSessionTestForDataEditing, TopCardFormsProps } from "../../TopCard"
+import AuthCommon from "../../../../../../features/auth/authCommon"
 
 
 
@@ -33,7 +34,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 	// console.log('UserInfoEditForm form has been updated')
 
 	// const [isPassportInfoOpened, setIsPassportInfoOpened] = useState(false)
-	const { userInfoState: userInfo, setUserInfoState } = useUserInfoState()
+	const { userInfoState: userInfo } = useUserInfoState()
 	const defaultGender = GENDER_LIST.find(el => el.id === userInfo?.gender) || null
 	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(defaultGender)
 	const inputPhoneRef = useRef<HTMLInputElement>(null)
@@ -103,10 +104,11 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 	const updateFormData = async (data: IUserInfoEditReq) => {
 		setStatusState('loading')
 		if (await UserService.editUserInfo(data)) {
-			setUserInfoState({
-				...userInfo,
-				...data as IUserRepository
+			AuthCommon.updateUser({
+				userId: userInfo.userId,
+				data: data as Partial<IUserRepository>
 			})
+
 			showSnackMessage({
 				type: "s",
 				message: 'Изменения сохранены'

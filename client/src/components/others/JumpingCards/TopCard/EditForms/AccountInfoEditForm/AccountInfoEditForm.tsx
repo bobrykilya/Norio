@@ -15,6 +15,7 @@ import { showSnackMessage } from "../../../../../../features/showSnackMessage/sh
 import { useMatchConfirmPassword } from "../../../../../../hooks/useMatchConfirmPassword"
 import UserService from "../../../../../../services/User-service"
 import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
+import AuthCommon from "../../../../../../features/auth/authCommon"
 
 
 
@@ -44,9 +45,10 @@ export type IAccountInfoEditForm = {
 
 const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) => {
 
-	const { userInfoState: userInfo, setUserInfoState } = useUserInfoState()
+	const { userInfoState: userInfo } = useUserInfoState()
 	const defaultAvatar = userInfo?.avatar
 	const [avatar, setAvatar] = useState<ICommonVar['avatar']>(defaultAvatar)
+	const [errorAvatar, setErrorAvatar] = useState<{ message: string } | null>(null)
 	const inputRefPrevPassword = useRef<HTMLInputElement>(null)
 	const defaultValues: IAccountInfoEditForm = {
 		username: '',
@@ -128,10 +130,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 			} else if (!data.username) {
 				//* userInfoState updating if username hasn't been updated
 				// (otherwise userState will be update with AuthCommon.loginUser)
-				setUserInfoState({
-					...userInfo,
-					...data as IUserRepository
-				})
+				AuthCommon.updateUser({ userId: userInfo.userId, data })
 			}
 			
 			showSnackMessage({
@@ -317,6 +316,8 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 					LIST={AVATARS_LIST}
 					currentAvatar={avatar}
 					setAvatar={setAvatar}
+					error={errorAvatar}
+					setError={setErrorAvatar}
 				/>
 				<div
 					className={'account_info_edit_form_email-card white-card'}

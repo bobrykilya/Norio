@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { focusInput } from "../../../../../utils/focusInput"
-import { capitalizeFirstLetter } from '../../../../../utils/capitalize'
+import { capitalizeOnlyFirst } from '../../../../../utils/capitalize'
 import { IDataListElement } from "../../../../../assets/AuthPage/AuthPage-data"
 import { ISignFormInput } from "../../../../../types/Auth-types"
 import timeout from "../../../../../utils/timeout"
@@ -36,7 +36,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
     // console.log(error)
     
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const normalValue = capitalizeFirstLetter(e.target.value.replace(/[^а-яА-ЯёЁ ]/g, ''))
+        const normalValue = capitalizeOnlyFirst(e.target.value.replace(/[^а-яА-ЯёЁ ]/g, ''))
         setValue(name, normalValue)
 
         !isDropDownOpened && normalValue && toggleDropDown(true)
@@ -251,7 +251,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
                                 tabIndex={-1}
                                 onKeyDown={handleKeyDownOnElem}
                                 disabled={disabled}
-                                className={i===0 ? `active` : ''}
+                                className={i === 0 ? `active` : ''}
                             >
                                 {el.title}
                             </button>

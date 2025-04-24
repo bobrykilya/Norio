@@ -43,10 +43,6 @@ class UserService {
 			const newSessionData = await $apiProtected.patch("edit-account-info", { json: data })?.json<ILoginServiceRes>()
 
 			if (newSessionData) {
-				// LogOut.logOut({
-				// 	interCode: 209,
-				// 	userId: currentUserId
-				// })
 				const { accessToken, accessTokenExpiration, userInfo, deviceId } = newSessionData
 				AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, isFast: false })
 			}
