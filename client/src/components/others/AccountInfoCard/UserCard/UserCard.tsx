@@ -89,7 +89,7 @@ const UserCard = ({ fastSessionState }: UserCardProps) => {
 						userInfoState={userInfoState}
 					/>
 					<SwitchUser
-						currentUser={userInfoState.username}
+						currentUserId={userInfoState.userId}
 						disabled={!isFullUserCard}
 					/>
 				    <SubmitBut

@@ -46,16 +46,15 @@ type IJWTInfo = {
 }
 type IUseJwtInfoState = {
 	jwtInfoListState: IJWTInfo[];
-	getJwtInfoState: (username: string) => IJWTInfo;
+	getJwtInfoState: (userId: ICommonVar['id']) => IJWTInfo;
 	addJwtInfoState: (state: IJWTInfo) => void;
-	removeJwtInfoState: (username?: string) => void;
+	removeJwtInfoState: (userId?: ICommonVar['id']) => void;
 }
 export const useJwtInfoListState = create<IUseJwtInfoState>()(immer((set, get) => ({
 	jwtInfoListState: [],
-	getJwtInfoState: (username) => get().jwtInfoListState.find(el => el.userInfo.username === username),
 	addJwtInfoState: (state) => {
 		const jwtInfoListState = get().jwtInfoListState
-		const duplicatePos = jwtInfoListState.findIndex(el => el.userInfo.username === state.userInfo.username)
+		const duplicatePos = jwtInfoListState.findIndex(el => el.userInfo.userId === state.userInfo.userId)
 
 		if (duplicatePos !== -1) {
 			jwtInfoListState.splice(duplicatePos, 1)
@@ -65,15 +64,16 @@ export const useJwtInfoListState = create<IUseJwtInfoState>()(immer((set, get) =
 
 		set({ jwtInfoListState })
 	},
-	removeJwtInfoState: (username) => {
+	getJwtInfoState: (userId) => get().jwtInfoListState.find(el => el.userInfo.userId === userId),
+	removeJwtInfoState: (userId) => {
 
-		if (!username) {
+		if (!userId) {
 			set({ jwtInfoListState: [] })
 			return
 		}
 
 		const jwtInfoListState = get().jwtInfoListState
 
-		set({ jwtInfoListState: jwtInfoListState.filter(el=> el.userInfo.username !== username) })
+		set({ jwtInfoListState: jwtInfoListState.filter(el=> el.userInfo.userId !== userId) })
 	},
 })))

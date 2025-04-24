@@ -4,6 +4,8 @@ import DeviceService from "../../services/Device-service"
 import { DEVICE_LS, LOCAL_LOG_STORAGE_TIME, LOG_LIST_LS, RECENTLY_TIME, SAME_LOGS_QUANTITY } from "../../../constants"
 import { showSnackMessage } from "./showSnackMessage"
 import { useUserInfoState } from "../../stores/User-store"
+import { getLSObject, setLSObject } from "../../utils/localStorage"
+import { IDeviceInfo } from "../../types/Device-types"
 // import { useBlockError } from '../../stores/Global-store'
 
 
@@ -42,15 +44,17 @@ const checkLogQuantityForRecently = (list: ISnack[], type: ISnack['type']) => {
 
 const saveLogInLocalStorage = (snack: ISnack) => {
 	
-    let logList: ISnack[] = JSON.parse(localStorage.getItem(LOG_LIST_LS) || '[]')
-	if (logList[0]) logList = logList.filter(filterLogListByTime) || []
+    let logList = getLSObject<ISnack[]>(LOG_LIST_LS) || []
+	if (logList[0]) {
+		logList = logList.filter(filterLogListByTime)
+	}
 
 
 	// console.log(snack)
 	logList.push(snack)
 	
 	// console.log(logList)
-	localStorage.setItem(LOG_LIST_LS, JSON.stringify(logList))
+	setLSObject(LOG_LIST_LS, logList)
 	
 	//* Error counting for short time blocking
 	if (logList.length < SAME_LOGS_QUANTITY || snack.type === 'b') return
@@ -59,7 +63,7 @@ const saveLogInLocalStorage = (snack: ISnack) => {
 		DeviceService.blockDeviceInDB({
 			logTime: snack.snackTime,
 			userId: useUserInfoState.getState().userInfoState?.userId || null,
-			deviceId: JSON.parse(localStorage.getItem(DEVICE_LS))?.id,
+			deviceId: getLSObject<IDeviceInfo>(DEVICE_LS)?.id,
 			interCode: 807,
 		})
 	}

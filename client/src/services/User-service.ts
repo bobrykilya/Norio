@@ -5,7 +5,6 @@ import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import AuthCommon from "../features/auth/authCommon"
 import { ILoginServiceRes } from "../../../common/types/Auth-types"
 import { useUserInfoState } from "../stores/User-store"
-import LogOut from "../features/auth/logOut"
 
 
 
@@ -21,7 +20,7 @@ class UserService {
 			})?.json<IHoroscopeDataRes>()
 		} catch (err) {
 			if (err.name !== 'AbortError') {
-				console.log(err)
+				console.error(err)
 			}
 			throw new Error('GetHoroscopeData error')
 		}
@@ -38,16 +37,16 @@ class UserService {
 	}
 
 	static async editAccountInfo(data: IAccountInfoEditReq) {
-		const currentUserName = data.username ? useUserInfoState.getState().userInfoState?.username : null
+		const currentUserId = data.username ? useUserInfoState.getState().userInfoState?.userId : null
 
 		try {
 			const newSessionData = await $apiProtected.patch("edit-account-info", { json: data })?.json<ILoginServiceRes>()
 
 			if (newSessionData) {
-				LogOut.logOut({
-					interCode: 209,
-					username: currentUserName
-				})
+				// LogOut.logOut({
+				// 	interCode: 209,
+				// 	userId: currentUserId
+				// })
 				const { accessToken, accessTokenExpiration, userInfo, deviceId } = newSessionData
 				AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, isFast: false })
 			}

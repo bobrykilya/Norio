@@ -26,8 +26,8 @@ const $apiProtected = ky.create({
 	hooks: {
 		beforeRequest: [
 		  (req) => {
-			const currentUserName = useUserInfoState.getState().userInfoState.username
-			const accessToken = useJwtInfoListState.getState().getJwtInfoState(currentUserName)?.token
+			const currentUserId = useUserInfoState.getState().userInfoState.userId
+			const accessToken = useJwtInfoListState.getState().getJwtInfoState(currentUserId)?.token
 			if (accessToken) {
 				req.headers.set("Authorization", `Bearer ${accessToken}`)
 			}

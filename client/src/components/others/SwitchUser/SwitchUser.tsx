@@ -2,35 +2,38 @@ import React, { useState } from 'react'
 import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
 import SwitchUserElem from "./SwitchUserElem/SwitchUserElem"
 import ToolTip from "../ToolTip/ToolTip"
-import { MAX_SWITCH_USERS, SWITCH_USERS_LS } from "../../../../constants"
+import { MAX_SWITCH_USERS, SWITCH_USERS_ID_LS } from "../../../../constants"
 import LogOut from "../../../features/auth/logOut"
 import { useJwtInfoListState } from "../../../stores/Auth-store"
 import timeout from "../../../utils/timeout"
 import { sortByAlphabet } from "../../../utils/sort"
 import { IUserRepository } from "../../../../../api/src/types/DB-types"
 import { ICONS } from "../../../assets/common/Icons-data"
+import { ICommonVar } from "../../../../../common/types/Global-types"
+import { getLSObject } from "../../../utils/localStorage"
+import { ISwitchUsersIdLS } from "../../../features/auth/authCommon"
 
 
 
 type SwitchUserProps = {
-	currentUser?: string;
+	currentUserId?: ICommonVar['id'];
 	isAuthPage?: boolean;
 	disabled?: boolean;
 }
-const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
+const SwitchUser = ({ currentUserId, isAuthPage, disabled }: SwitchUserProps) => {
 
 	if (MAX_SWITCH_USERS < 2) {
 		return
 	}
 
-	const SAVED_USERS_LIST: IUserRepository[] = sortByAlphabet(useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo), 'lastName')
-	const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS)) || []
+	const SAVED_USERS_INFO_LIST: IUserRepository[] = sortByAlphabet(useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo), 'lastName')
+	const switchUsersIdList = getLSObject<ISwitchUsersIdLS>(SWITCH_USERS_ID_LS) || []
 
-	const [usersList, setUsersList] = useState(switchUsersList)
-	// console.log({ SAVED_USERS_LIST, usersList })
+	const [usersIdList, setUsersIdList] = useState(switchUsersIdList)
+	// console.log({ SAVED_USERS_LIST: SAVED_USERS_INFO_LIST, usersList: usersIdList })
 
 	const handleForgetAllUsers = async () => {
-		setUsersList([])
+		setUsersIdList([])
 
 		await timeout(300)
 		LogOut.handleRemoveAllSwitchUsers()
@@ -63,18 +66,18 @@ const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 						message: 'Забыть все фоновые аккаунты'
 					}}
 					size={'tiny'}
-					disabled={(!isAuthPage ? !usersList[1] : !usersList[0])}
+					disabled={(!isAuthPage ? !usersIdList[1] : !usersIdList[0])}
 				>
 					{ICONS.trash}
 				</RoundButton>
 			</div>
 			{
-				switchUsersList.map((username) => {
-					if ((currentUser && username === currentUser) ) {
+				switchUsersIdList.map((userId) => {
+					if ((currentUserId && userId === currentUserId) ) {
 						return
 					}
 
-					const user = SAVED_USERS_LIST.find(userInfo => userInfo.username === username)
+					const user = SAVED_USERS_INFO_LIST.find(userInfo => userInfo.userId === userId)
 
 					if (!user) {
 						return
@@ -82,18 +85,18 @@ const SwitchUser = ({ currentUser, isAuthPage, disabled }: SwitchUserProps) => {
 
 
 					return <SwitchUserElem
-								key={username}
-								user={user}
-								isVisible={usersList.includes(username)}
+								key={userId}
+								userInfo={user}
+								isVisible={usersIdList.includes(userId)}
 								isAuthPage={isAuthPage}
-								setUsersList={setUsersList}
+								setUsersIdList={setUsersIdList}
 							/>
 					}
 				)
 			}
 			<SwitchUserElem
 				isNewUser={true}
-				isVisible={!isAuthPage && !usersList[MAX_SWITCH_USERS - 1]}
+				isVisible={!isAuthPage && !usersIdList[MAX_SWITCH_USERS - 1]}
 			/>
 		</div>
 	)

@@ -150,7 +150,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 	}
 
 	const handleSaveForm: SubmitHandler<IAccountInfoEditForm> = async () => {
-		fastSessionTestForDataEditing(userInfo.username)
+		fastSessionTestForDataEditing(userInfo.userId)
 
 		const dirtyData = getDirtyData() as IAccountInfoEditReq
 		if (!Object.keys(dirtyData)[0] || (Object.keys(dirtyData).length === 1 && dirtyData.prevPassword)) {

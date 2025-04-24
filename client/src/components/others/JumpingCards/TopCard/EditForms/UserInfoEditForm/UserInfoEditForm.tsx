@@ -118,7 +118,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 	}
 
 	const handleSaveForm: SubmitHandler<IUserInfoEditForm> = async (data) => {
-		fastSessionTestForDataEditing(userInfo.username)
+		fastSessionTestForDataEditing(userInfo.userId)
 		
 		const dirtyData = getDirtyData() as IUserInfoEditReq
 		if (!Object.keys(dirtyData)[0]) {

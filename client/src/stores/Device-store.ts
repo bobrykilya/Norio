@@ -4,6 +4,7 @@ import { DeviceTypeOptions } from "../../../common/types/Global-types"
 import { IDeviceLocation } from "../../../common/types/Device-types"
 import { immer } from "zustand/middleware/immer"
 import { DEVICE_LS } from "../../constants"
+import { getLSObject, setLSObject } from "../utils/localStorage"
 
 
 
@@ -26,35 +27,35 @@ type IUseDeviceInfoState = {
 	setDeviceLocationTitleState: (title: IDeviceLocation['city']['title']) => void;
 }
 const useDeviceInfoState = create<IUseDeviceInfoState>()(immer((set, get) => ({
-	deviceInfoState: JSON.parse(localStorage.getItem(DEVICE_LS)),
+	deviceInfoState: getLSObject<IDeviceInfo>(DEVICE_LS),
 	setDeviceInfoState: (state) => set({ deviceInfoState: state }),
 	setDeviceIdState: (id: number) => {
 		const deviceInfoState = get().deviceInfoState || {}
 		deviceInfoState.id = id
 
 		set({ deviceInfoState })
-		localStorage.setItem(DEVICE_LS, JSON.stringify(deviceInfoState))
+		setLSObject(DEVICE_LS, deviceInfoState)
 	},
 	setDeviceTypeState: (type) => {
 		const deviceInfoState = get().deviceInfoState || {}
 		deviceInfoState.type = type
 
 		set({ deviceInfoState })
-		localStorage.setItem(DEVICE_LS, JSON.stringify(deviceInfoState))
+		setLSObject(DEVICE_LS, deviceInfoState)
 	},
 	setDeviceLocationState: (location) => {
 		const deviceInfoState = get().deviceInfoState
 		deviceInfoState.location = location
 
 		set({ deviceInfoState })
-		localStorage.setItem(DEVICE_LS, JSON.stringify(deviceInfoState))
+		setLSObject(DEVICE_LS, deviceInfoState)
 	},
 	setDeviceLocationTitleState: (title) => {
 		const deviceInfoState = get().deviceInfoState
 		deviceInfoState.location.city.title = title
 
 		set({ deviceInfoState })
-		localStorage.setItem(DEVICE_LS, JSON.stringify(deviceInfoState))
+		setLSObject(DEVICE_LS, deviceInfoState)
 	},
 })))
 

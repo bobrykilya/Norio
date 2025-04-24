@@ -9,11 +9,13 @@ import UnfoldingCard from "../../common/UnfoldingCard/UnfoldingCard"
 import WriteBirthdayButton from "./WriteBirthdayButton/WriteBirthdayButton"
 import { Loader } from "../../common/Loader/Loader"
 import { useUserInfoState } from "../../../stores/User-store"
+import { getLSObject, setLSObject } from "../../../utils/localStorage"
+import { ICurrentUserLS } from "../../../features/auth/authCommon"
 
 
 
 const checkHoroscopeInLS = (birthday: IUserRepository['birthday']) => {
-	const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_LS))
+	const currentUser = getLSObject<ICurrentUserLS>(CURRENT_USER_LS)
 	let horoscope = currentUser?.horoscope
 
 	if (currentUser && !horoscope || horoscope.birthday !== birthday) {
@@ -21,10 +23,10 @@ const checkHoroscopeInLS = (birthday: IUserRepository['birthday']) => {
 			horoscopeType: getHoroscopeType(birthday),
 			birthday
 		}
-		localStorage.setItem(CURRENT_USER_LS, JSON.stringify({
+		setLSObject(CURRENT_USER_LS, {
 			...currentUser,
 			horoscope
-		}))
+		})
 	}
 
 	return horoscope.horoscopeType

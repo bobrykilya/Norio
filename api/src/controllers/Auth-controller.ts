@@ -17,20 +17,20 @@ import { catchError } from "../utils/Errors.ts"
 type ICheckPrevRefreshToken = {
 	prevRefreshToken: ICommonVar['refreshToken'];
 	res: ICommonVar['res'];
-	username: ICommonVar['username'];
+	userId: ICommonVar['id'];
 	queryTime: number;
 }
-const checkPrevRefreshToken = async ({ prevRefreshToken, res, username, queryTime }: ICheckPrevRefreshToken) => {
+const checkPrevRefreshToken = async ({ prevRefreshToken, res, userId, queryTime }: ICheckPrevRefreshToken) => {
 	if (!prevRefreshToken) {
 		return
 	}
 
 	await AuthService.logOut({ refreshToken: prevRefreshToken, queryTime, interCode: 207 })
-	res.clearCookie(getUserCookieName(username))
+	res.clearCookie(getUserCookieName(userId))
 }
 
-export const getUserCookieName = (username: string) => {
-	return `token-${username}`
+export const getUserCookieName = (userId: ICommonVar['id']) => {
+	return `token-${userId}`
 }
 
 
@@ -39,7 +39,6 @@ class AuthController {
 	static async signIn(req: ICommonVar['req'], res: ICommonVar['res']) {
 
 		const { username, password, fastSession, deviceType, lsDeviceId, deviceIP }: ISignInController = req.body
-		const prevRefreshToken: ICommonVar['refreshToken'] = req.cookies[getUserCookieName(username)]
 		const { fingerprint } = req
 		const queryTime = getTime()
 
@@ -56,9 +55,10 @@ class AuthController {
 				deviceIP,
 			})
 
-			checkPrevRefreshToken({ prevRefreshToken, res, username, queryTime })
+			const prevRefreshToken: ICommonVar['refreshToken'] = req.cookies[getUserCookieName(userInfo.userId)]
+			checkPrevRefreshToken({ prevRefreshToken, res, userId: userInfo.userId, queryTime })
 				.finally(() => {
-					res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+					res.cookie(getUserCookieName(userInfo.userId), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
 					return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 				})
@@ -131,7 +131,7 @@ class AuthController {
 				queryTime,
 			})
 			
-			res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+			res.cookie(getUserCookieName(userInfo.userId), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
@@ -143,19 +143,19 @@ class AuthController {
 
 	static async logOut(req: ICommonVar['req'], res: ICommonVar['res']) {
 		// console.log('logOut')
-		const { interCode, username }: ILogOutReq = req.body
-		const refreshToken: string = req.cookies[getUserCookieName(username)]
+		const { interCode, userId }: ILogOutReq = req.body
+		const refreshToken: string = req.cookies[getUserCookieName(userId)]
         const queryTime = getTime()
 
 
 		try {
 			await AuthService.logOut({ refreshToken, queryTime, interCode })
-			res.clearCookie(getUserCookieName(username))
+			res.clearCookie(getUserCookieName(userId))
 
 			return res.sendStatus(200)
 		} catch (err) {
 			// console.log('Logout refresh', err)
-			res.clearCookie(getUserCookieName(username))
+			res.clearCookie(getUserCookieName(userId))
 			return catchError({ req, res, err, queryTime, interCode: 203 })
 		}
 	}
@@ -164,10 +164,10 @@ class AuthController {
 
 	
 	static async refresh(req: ICommonVar['req'], res: ICommonVar['res']) {
-		const { lsDeviceId, username }: IRefreshReq = req.body
+		const { lsDeviceId, userId }: IRefreshReq = req.body
 		const { fingerprint } = req
         const queryTime = getTime()
-		const currentRefreshToken = req.cookies[getUserCookieName(username)]
+		const currentRefreshToken = req.cookies[getUserCookieName(userId)]
 
 		try {
 			const { accessToken, refreshToken, accessTokenExpiration, logOutTime, userInfo, deviceId, isFast } =
@@ -178,11 +178,11 @@ class AuthController {
 					lsDeviceId,
 				})
 
-			res.cookie(getUserCookieName(username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+			res.cookie(getUserCookieName(userId), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 			
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, isFast })
 		} catch (err) {
-			res.clearCookie(getUserCookieName(username))
+			res.clearCookie(getUserCookieName(userId))
 			return catchError({ req, res, err, queryTime, interCode: 701 })
 		}
 	}

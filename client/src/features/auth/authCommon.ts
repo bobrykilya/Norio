@@ -3,13 +3,16 @@ import { ILoginServiceRes } from "../../../../common/types/Auth-types"
 import JWTInfoService from "../../services/JWTInfoService"
 import { IUserNameInfo } from "../../types/Auth-types"
 import { IUserRepository } from "../../../../api/src/types/DB-types"
-import { CURRENT_USER_LS, DEVICE_LS, SWITCH_USERS_LS } from "../../../constants"
+import { CURRENT_USER_LS, DEVICE_LS, SWITCH_USERS_ID_LS } from "../../../constants"
 import { useUserInfoState } from "../../stores/User-store"
+import { HoroscopeTypeOptions, ICommonVar } from "../../../../common/types/Global-types"
+import { getLSObject, removeLS, setLSObject } from "../../utils/localStorage"
+import { IDeviceInfo } from "../../types/Device-types"
 
 
 
 const testAndUpdateLSDeviceId = (deviceId: number, lsDeviceId?: number) => {
-	const lsDeviceId_2 = lsDeviceId || JSON.parse(localStorage.getItem(DEVICE_LS))?.id
+	const lsDeviceId_2 = lsDeviceId || getLSObject<IDeviceInfo>(DEVICE_LS)?.id
 
 	if (lsDeviceId_2 && (lsDeviceId_2 === deviceId)) {
 		return
@@ -18,6 +21,17 @@ const testAndUpdateLSDeviceId = (deviceId: number, lsDeviceId?: number) => {
 	useDeviceInfoState.getState().setDeviceIdState(deviceId)
 }
 
+export type ICurrentUserLS= {
+	username: ICommonVar['username'],
+	firstName: ICommonVar['firstName'],
+	lastName: ICommonVar['lastName'],
+	userId: ICommonVar['id'],
+	horoscope?: {
+		horoscopeType: HoroscopeTypeOptions,
+		birthday: number,
+	}
+}
+export type ISwitchUsersIdLS = ICommonVar['id'][]
 
 class AuthCommon {
 
@@ -26,16 +40,17 @@ class AuthCommon {
 
 		testAndUpdateLSDeviceId(deviceId, lsDeviceId)
 		this.saveUserInfoOnBrowser(userInfo)
-		AuthCommon.addSwitchUserInLS(userInfo.username)
+		AuthCommon.addSwitchUserInLS(userInfo.userId)
 	}
 
 	static saveUserInfoOnBrowser = (userInfo: IUserRepository ) => {
 		useUserInfoState.setState({ userInfoState: userInfo })
-		localStorage.setItem(CURRENT_USER_LS, JSON.stringify({
+		setLSObject(CURRENT_USER_LS, {
 			username: userInfo.username,
 			firstName: userInfo.firstName,
 			lastName: userInfo.lastName,
-		}))
+			userId: userInfo.userId,
+		})
 	}
 
 	static getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
@@ -44,28 +59,28 @@ class AuthCommon {
 
 
 	
-	static addSwitchUserInLS = (username: string) => {
-		const prevSwitchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS) || null) || []
+	static addSwitchUserInLS = (userId: ICommonVar['id']) => {
+		const prevSwitchUsersIdList = getLSObject<ISwitchUsersIdLS>(SWITCH_USERS_ID_LS) || []
 
-		if (prevSwitchUsersList.includes(username)) {
+		if (prevSwitchUsersIdList.includes(userId)) {
 			return
 		}
-		localStorage.setItem(SWITCH_USERS_LS, JSON.stringify([...prevSwitchUsersList, username]))
+		setLSObject(SWITCH_USERS_ID_LS, [...prevSwitchUsersIdList, userId])
 	}
 
-	static removeSwitchUserFromLS = (username?: string) => {
-		if (username) {
-			const prevSwitchUsers: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS) || null) || []
+	static removeSwitchUserFromLS = (userId?: ICommonVar['id']) => {
+		if (userId) {
+			const prevSwitchUsers = getLSObject<ISwitchUsersIdLS>(SWITCH_USERS_ID_LS) || []
 
 			if (!prevSwitchUsers) {
 				return
 			}
 
-			const filteredSwitchUsers = prevSwitchUsers.filter(userName => userName !== username)
+			const filteredSwitchUsers = prevSwitchUsers.filter(id => id !== userId)
 
-			localStorage.setItem(SWITCH_USERS_LS, JSON.stringify(filteredSwitchUsers))
+			setLSObject(SWITCH_USERS_ID_LS, filteredSwitchUsers)
 		} else {
-			localStorage.removeItem(SWITCH_USERS_LS)
+			removeLS(SWITCH_USERS_ID_LS)
 		}
 	}
 }

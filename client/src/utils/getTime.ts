@@ -84,9 +84,7 @@ export const getLastTime = (timestampInSec: number, type: TypeOptions): number =
             case 'millisecond': return timeDiff * 1000
         }
     } catch (err) {
-        console.log('GetLastTime error')
-        console.error(err)
-        throw new Error('GetLastTime error')
+        throw new Error('GetLastTime error: ' + err)
     }
 }
 

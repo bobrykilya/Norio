@@ -30,13 +30,13 @@ export type ISignUpReq = ISignUp & {
 }
 
 export type ILogOutReq = {
-	username: ICommonVar['username'];
+	userId: ICommonVar['id'];
 	interCode?: ICommonVar['interCode'];
 }
 
 export type IRefreshReq = {
 	lsDeviceId?: ICommonVar['lsDeviceId'];
-	username?: ICommonVar['username'];
+	userId?: ICommonVar['id'];
 }
 
 export type IPreprocessing = {

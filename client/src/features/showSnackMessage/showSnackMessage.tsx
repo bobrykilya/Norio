@@ -8,6 +8,8 @@ import { useBlockErrorState } from "../../stores/Device-store"
 import { ISnack, SnackBarTypeOptions } from "../../../../common/types/Global-types"
 import saveLogInLocalStorage from "./saveLogInLocalStorage"
 import { ICONS } from "../../assets/common/Icons-data"
+import { removeLS } from "../../utils/localStorage"
+import { BLOCK_DEVICE } from "../../../constants"
 
 
 
@@ -70,7 +72,7 @@ export const showSnackMessage = (snack: ISnack) => {
 	if (useBlockErrorState.getState().blockErrorState) return
 	
 	if (snack?.detail?.res?.status === 401) {
-		localStorage.removeItem('blockDevice')
+		removeLS(BLOCK_DEVICE)
 	}
 
 	//* Refresh errs ban
@@ -115,7 +117,7 @@ export const showSnackMessage = (snack: ISnack) => {
 
 	showSnack(snackWithTime)
 
-	if (localStorage.getItem('blockDevice') || ['Failed to fetch', 'Device-service error'].includes(snack.message)) return
+	if (localStorage.getItem(BLOCK_DEVICE) || ['Failed to fetch', 'Device-service error'].includes(snack.message)) return
 	// if (!['s'].includes(snackWithTime.type))
 		saveLogInLocalStorage(snackWithTime)
 }

@@ -15,7 +15,7 @@ const AccountInfoCard = () => {
     const [fastSessionState, setFastSessionState] = useState(false)
 
     useEffect(() => {
-        setFastSessionState(getJwtInfoState(userInfoState.username).isFast)
+        setFastSessionState(getJwtInfoState(userInfoState.userId).isFast)
     }, [])
 
     return ( 

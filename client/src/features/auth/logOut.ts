@@ -4,11 +4,13 @@ import { useJwtInfoListState } from "../../stores/Auth-store"
 import AuthService from "../../services/Auth-service"
 import { queryClient } from "../../http/tanstackQuery-client"
 import { IUserNameInfo } from "../../types/Auth-types"
-import AuthCommon from "./authCommon"
+import AuthCommon, { ICurrentUserLS } from "./authCommon"
 import JWTInfoService from "../../services/JWTInfoService"
 import { CURRENT_USER_LS, LOGOUT_LS } from "../../../constants"
 import { getTime } from "../../utils/getTime"
 import { useUserInfoState } from "../../stores/User-store"
+import { ICommonVar } from "../../../../common/types/Global-types"
+import { getLSObject, removeLS } from "../../utils/localStorage"
 
 
 
@@ -17,7 +19,7 @@ class LogOut {
 	static userHasLogOut = () => {
 		// console.log('userHasLogOut')
 		useUserInfoState.setState({ userInfoState: null })
-		queryClient.removeQueries() //! Delete?
+		queryClient.removeQueries() //! Delete? Change to "not weather"
 	}
 
 	static autoFastSessionLogOut = (userNameInfo: IUserNameInfo) => {
@@ -28,71 +30,72 @@ class LogOut {
 		this.currentUserLogOut({ interCode: 204 })
 	}
 
-	static logOut = ({ interCode, username }: ILogOutReq) => {
+	static logOut = ({ interCode, userId }: ILogOutReq) => {
 		// console.log('logout')
-		AuthCommon.removeSwitchUserFromLS(username)
-		JWTInfoService.deleteJWTInfo(username)
-		AuthService.logOut({ interCode, username })
+		AuthCommon.removeSwitchUserFromLS(userId)
+		JWTInfoService.deleteJWTInfo(userId)
+		AuthService.logOut({ interCode, userId })
 	}
 
 
 
-	static currentUserLogOut = ({ interCode, username }: Partial<ILogOutReq> = {}) => {
-		const userName = username || useUserInfoState.getState().userInfoState?.username
+	static currentUserLogOut = ({ interCode, userId }: Partial<ILogOutReq> = {}) => {
+		const currentUserId = userId || useUserInfoState.getState().userInfoState?.userId
 
-		if (!userName) {
+		if (!currentUserId) {
 			return
 		}
 		
-		localStorage.removeItem(CURRENT_USER_LS)
+		removeLS(CURRENT_USER_LS)
 		localStorage.setItem(LOGOUT_LS, String(getTime()))
-		this.logOut({ interCode, username: userName })
+		this.logOut({ interCode, userId: currentUserId })
 
 		this.userHasLogOut()
 	}
 
 
 
-	static handleSwitchUser = (newUserName?: string) => {
-		const currentUserName = useUserInfoState.getState().userInfoState?.username
-		// console.log(useJwtInfoListState.getState().getJwtInfoState(currentUserName))
-		if (!currentUserName) {
+	static handleSwitchUser = (newUserId?: ICommonVar['id']) => {
+		const currentUserId = useUserInfoState.getState().userInfoState?.userId
+		// console.log({ currentUserId, currJwtInfo: useJwtInfoListState.getState().getJwtInfoState(currentUserId), newUserId })
+		// console.log(useJwtInfoListState.getState().getJwtInfoState(currentUserId))
+		if (!currentUserId) {
 			return
 		}
 
-		if (useJwtInfoListState.getState().getJwtInfoState(currentUserName).isFast) {
-			this.currentUserLogOut({ interCode: 204, username: currentUserName })
+		if (useJwtInfoListState.getState().getJwtInfoState(currentUserId).isFast) {
+			this.currentUserLogOut({ interCode: 204, userId: currentUserId })
 		} else {
 			this.userHasLogOut()
 		}
 
 
-		if (!newUserName) {
+		if (!newUserId) {
 			return
 		}
-		AuthCommon.saveUserInfoOnBrowser(useJwtInfoListState.getState().getJwtInfoState(newUserName).userInfo)
+		AuthCommon.saveUserInfoOnBrowser(useJwtInfoListState.getState().getJwtInfoState(newUserId).userInfo)
 	}
 
-	static handleRemoveSwitchUser = (username: string) => {
-		const currentUserName = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
+	static handleRemoveSwitchUser = (userId: ICommonVar['id']) => {
+		const currentUserId = getLSObject<ICurrentUserLS>(CURRENT_USER_LS)?.userId
 
-		if (currentUserName && currentUserName === username) {
-			this.currentUserLogOut({ interCode: 206, username: currentUserName })
+		if (currentUserId && currentUserId === userId) {
+			this.currentUserLogOut({ interCode: 206, userId: currentUserId })
 			return
 		}
 		
-		this.logOut({ interCode: 206, username })
+		this.logOut({ interCode: 206, userId })
 	}
 
 	static handleRemoveAllSwitchUsers = () => {
-		const currentUserName = useUserInfoState.getState().userInfoState?.username
+		const currentUserId = useUserInfoState.getState().userInfoState?.userId
 		const SWITCH_USERS_LIST = useJwtInfoListState.getState().jwtInfoListState
 
 		SWITCH_USERS_LIST.forEach(JWTInfo => {
-			if (currentUserName && JWTInfo.userInfo.username === currentUserName) {
+			if (currentUserId && JWTInfo.userInfo.userId === currentUserId) {
 				return
 			}
-			this.handleRemoveSwitchUser(JWTInfo.userInfo.username)
+			this.handleRemoveSwitchUser(JWTInfo.userInfo.userId)
 		})
 	}
 }

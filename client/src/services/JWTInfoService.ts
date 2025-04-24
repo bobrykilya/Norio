@@ -2,6 +2,9 @@ import { IUserRepository } from "../../../api/src/types/DB-types"
 import AuthService from "./Auth-service"
 import { useJwtInfoListState } from "../stores/Auth-store"
 import { DEVICE_LS } from "../../constants"
+import { ICommonVar } from "../../../common/types/Global-types"
+import { getLSObject } from "../utils/localStorage"
+import { IDeviceInfo } from "../types/Device-types"
 
 
 
@@ -17,18 +20,18 @@ let refreshTimeoutsObject = {}
 
 class JWTInfoService {
 
-    static refreshJWTInfo = (username: string, expiration: number) => {
+    static refreshJWTInfo = (userId: ICommonVar['id'], expiration: number) => {
         const timeoutTrigger = expiration - 10000
 
         const refresh = async () => {
-            const lsDeviceId = JSON.parse(localStorage.getItem(DEVICE_LS))?.id
+            const lsDeviceId = getLSObject<IDeviceInfo>(DEVICE_LS)?.id
             if (!lsDeviceId) return
 
-            const { userInfo, accessToken, accessTokenExpiration } = await AuthService.refresh({ lsDeviceId, username })
+            const { userInfo, accessToken, accessTokenExpiration } = await AuthService.refresh({ lsDeviceId, userId })
             this.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
         }
 
-        refreshTimeoutsObject[username] = setTimeout(refresh, timeoutTrigger)
+        refreshTimeoutsObject[userId] = setTimeout(refresh, timeoutTrigger)
     }
 
     static setJWTInfo = ({ userInfo, accessToken, accessTokenExpiration, isFast }: ISetJWTInfo) => {
@@ -38,15 +41,15 @@ class JWTInfoService {
             token: accessToken,
             isFast
         })
-        this.refreshJWTInfo(userInfo.username, accessTokenExpiration)
+        this.refreshJWTInfo(userInfo.userId, accessTokenExpiration)
     }
 
-    static deleteJWTInfo = (username?: string) => {
+    static deleteJWTInfo = (userId?: ICommonVar['id']) => {
 
-        if (username) {
-            removeJwtInfoState(username)
-            if (refreshTimeoutsObject[username]) {
-                clearTimeout(refreshTimeoutsObject[username])
+        if (userId) {
+            removeJwtInfoState(userId)
+            if (refreshTimeoutsObject[userId]) {
+                clearTimeout(refreshTimeoutsObject[userId])
             }
         } else {
             removeJwtInfoState()

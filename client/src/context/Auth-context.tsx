@@ -6,11 +6,13 @@ import LogOut from "../features/auth/logOut"
 import logOut from "../features/auth/logOut"
 import { useAuthState } from "../stores/Auth-store"
 import JWTInfoService from "../services/JWTInfoService"
-import AuthCommon from "../features/auth/authCommon"
+import AuthCommon, { ICurrentUserLS, ISwitchUsersIdLS } from "../features/auth/authCommon"
 import FastSession from "../features/auth/fastSession"
-import { CURRENT_USER_LS, DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_LS } from "../../constants"
+import { CURRENT_USER_LS, DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_ID_LS } from "../../constants"
 import { Loader } from "../components/common/Loader/Loader"
 import CoverAppTitle from "../components/common/CoverAppTitle/CoverAppTitle"
+import { getLSObject, removeLS } from "../utils/localStorage"
+import { IDeviceInfo } from "../types/Device-types"
 
 
 
@@ -41,43 +43,44 @@ const AuthProvider = ({ children }) => {
 		const refresh = async () => {
 			try {
 				// console.log('refresh')
-				const lsDeviceId = JSON.parse(localStorage.getItem(DEVICE_LS))?.id || null
-				const username = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username || null
-				const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
-
+				const lsDeviceId = getLSObject<IDeviceInfo>(DEVICE_LS)?.id || null
+				const currentUserId = getLSObject<ICurrentUserLS>(CURRENT_USER_LS)?.userId || null
+				const switchUsersIdList = getLSObject<ISwitchUsersIdLS>(SWITCH_USERS_ID_LS)
+				// console.log({ switchUsersIdList, currentUserId })
 
 				const refreshSwitchUsersTokens = async () => {
-					if (switchUsersList) {
-						return Promise.all(switchUsersList
-							.filter((userName: string) => userName !== username)
-							.map(async (userName: string) => {
+					if (switchUsersIdList) {
+						return Promise.all(switchUsersIdList
+							.filter((userId) => userId !== currentUserId)
+							.map(async (userId) => {
 
-							try {
-								const { accessToken, accessTokenExpiration, userInfo, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username: userName })
+								try {
+									const { accessToken, accessTokenExpiration, userInfo, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, userId })
 
-								if (isFast) {
-									logOut.logOut({ interCode: 204, username: userName })
-									return
+									if (isFast) {
+										logOut.logOut({ interCode: 204, userId })
+										return
+									}
+
+									JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
+								} catch (err) {
+									console.error('Error refresh for switch user: ', userId)
+									logOut.logOut({ interCode: 206, userId })
 								}
-
-								JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
-							} catch (err) {
-								console.log('Error refresh for switch user: ', userName)
-								logOut.logOut({ interCode: 206, username: userName })
 							}
-						}))
+						))
 					}
 				}
 
 				await refreshSwitchUsersTokens()
 					.then( async () => {
 						try {
-							const { accessToken, accessTokenExpiration, userInfo, deviceId, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, username })
+							const { accessToken, accessTokenExpiration, userInfo, deviceId, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, userId: currentUserId })
 							AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId, isFast })
 						} catch (err) {
 							LogOut.userHasLogOut()
-							localStorage.removeItem(CURRENT_USER_LS)
-							AuthCommon.removeSwitchUserFromLS(username)
+							removeLS(CURRENT_USER_LS)
+							AuthCommon.removeSwitchUserFromLS(currentUserId)
 						}
 					})
 			} finally {

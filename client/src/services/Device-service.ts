@@ -38,9 +38,7 @@ class DeviceService {
         try {
             await $apiAuth.post("block", { json: data }).json()
 
-            // return res
         } catch (err) {
-            // showSnackMessage(err)
             if (err.response?.status !== 900) {
                 showSnackMessage({type: 'w', message: 'Device-service error'})
                 throw new Error(`Device-service error: ${err}`)
@@ -63,7 +61,7 @@ class DeviceService {
             })?.json<ILocationWeather>()
         } catch (err) {
             if (err.name !== 'AbortError') {
-                console.log(err)
+                console.error(err)
             }
             throw new Error('getLocationWeather error')
         }

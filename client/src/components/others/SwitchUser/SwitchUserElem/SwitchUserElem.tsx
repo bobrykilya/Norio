@@ -5,20 +5,22 @@ import logOut from "../../../../features/auth/logOut"
 import { IUserRepository } from "../../../../../../api/src/types/DB-types"
 import timeout from "../../../../utils/timeout"
 import { useJwtInfoListState } from "../../../../stores/Auth-store"
-import AuthCommon from "../../../../features/auth/authCommon"
-import { SWITCH_USERS_LS } from "../../../../../constants"
+import AuthCommon, { ISwitchUsersIdLS } from "../../../../features/auth/authCommon"
+import { SWITCH_USERS_ID_LS } from "../../../../../constants"
 import { ICONS } from "../../../../assets/common/Icons-data"
+import { ICommonVar } from "../../../../../../common/types/Global-types"
+import { getLSObject } from "../../../../utils/localStorage"
 
 
 
 type SwitchUserElemProps = {
 	isVisible: boolean;
-	setUsersList?: React.Dispatch<React.SetStateAction<string[]>>;
-	user?: IUserRepository;
+	setUsersIdList?: React.Dispatch<React.SetStateAction<ICommonVar['id'][]>>;
+	userInfo?: IUserRepository;
 	isNewUser?: boolean;
 	isAuthPage?: boolean;
 }
-const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }: SwitchUserElemProps) => {
+const SwitchUserElem = ({ isVisible, setUsersIdList, userInfo, isNewUser, isAuthPage }: SwitchUserElemProps) => {
 
 	const [isRendered, setIsRendered] = useState(false)
 
@@ -30,26 +32,26 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 			await timeout(300)
 		}
 
-		logOut.handleSwitchUser(user?.username)
+		logOut.handleSwitchUser(userInfo?.userId)
 	}
 
 	const handleAuthUser = () => {
-		const switchUsersList: string[] = JSON.parse(localStorage.getItem(SWITCH_USERS_LS))
+		const switchUsersIdList = getLSObject<ISwitchUsersIdLS>(SWITCH_USERS_ID_LS)
 
-		if (switchUsersList[0] && !switchUsersList.includes(user.username)) {
-			setUsersList(prev => prev.filter(username => username !== user.username))
+		if (switchUsersIdList[0] && !switchUsersIdList.includes(userInfo.userId)) {
+			setUsersIdList(prev => prev.filter(userId => userId !== userInfo.userId))
 			return
 		}
-		AuthCommon.saveUserInfoOnBrowser(useJwtInfoListState.getState().getJwtInfoState(user.username).userInfo)
+		AuthCommon.saveUserInfoOnBrowser(useJwtInfoListState.getState().getJwtInfoState(userInfo.userId).userInfo)
 	}
 
 
 	const handleRemoveUser = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.stopPropagation()
-		setUsersList(prev => prev.filter(username => username !== user.username))
+		setUsersIdList(prev => prev.filter(userId => userId !== userInfo.userId))
 
 		await timeout(300)
-		logOut.handleRemoveSwitchUser(user.username)
+		logOut.handleRemoveSwitchUser(userInfo.userId)
 	}
 
 
@@ -80,7 +82,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 					{
 						!isNewUser ?
 						<img
-							src={`/avatars/${user?.avatar}.jpg`}
+							src={`/avatars/${userInfo?.avatar}.jpg`}
 							alt="IMG Error 6"
 						/> :
 						ICONS.add
@@ -94,7 +96,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 					>
 						{
 							!isNewUser ?
-							`${user?.lastName} ${user?.firstName}` :
+							`${userInfo?.lastName} ${userInfo?.firstName}` :
 							'Новый аккаунт'
 						}
 					</span>
@@ -103,7 +105,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 					>
 						{
 							!isNewUser ?
-							user?.job :
+							userInfo?.job :
 							'Выполнить вход'
 						}
 					</span>
@@ -113,13 +115,13 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 					<ToolTip
 						message={
 							!isNewUser ?
-							`Сменить аккаунт на ${user?.username}` :
+							`Сменить аккаунт на ${userInfo?.username}` :
 							'Сменить аккаунт на нового пользователя'
 						}
 						position={'left'}
 					/> :
 					<ToolTip
-						message={`Войти в аккаунт ${user?.username}`}
+						message={`Войти в аккаунт ${userInfo?.username}`}
 						position={'right'}
 					/>
 				}
@@ -129,7 +131,7 @@ const SwitchUserElem = ({ isVisible, setUsersList, user, isNewUser, isAuthPage }
 				<RoundButton
 					onClick={handleRemoveUser}
 					toolTip={{
-						message: `Забыть аккаунт ${user?.username}`,
+						message: `Забыть аккаунт ${userInfo?.username}`,
 					}}
 					size={'tiny'}
 				>

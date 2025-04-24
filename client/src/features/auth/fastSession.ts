@@ -2,15 +2,17 @@ import { useJwtInfoListState } from "../../stores/Auth-store"
 import { getEndTime, getTime } from "../../utils/getTime"
 import logOut from "./logOut"
 import { CURRENT_USER_LS, FAST_LS } from "../../../constants"
+import { getLSObject, removeLS } from "../../utils/localStorage"
+import { ICurrentUserLS } from "./authCommon"
 
 
 
 class FastSession {
 
 	static handleFastSessionRefresh = () => {
-		const currentUsername = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
+		const currentUserId = getLSObject<ICurrentUserLS>(CURRENT_USER_LS)?.userId
 		
-		if (!currentUsername || !useJwtInfoListState.getState().getJwtInfoState(currentUsername)?.isFast) {
+		if (!currentUserId || !useJwtInfoListState.getState().getJwtInfoState(currentUserId)?.isFast) {
 			return
 		}
 
@@ -20,16 +22,16 @@ class FastSession {
 	static checkFastSessionLogOut = (time: string) => {
 
 		if (Number(time) < getTime()) {
-			const currentUsername = JSON.parse(localStorage.getItem(CURRENT_USER_LS))?.username
+			const currentUserId = getLSObject<ICurrentUserLS>(CURRENT_USER_LS)?.userId
 
 			try {
-				logOut.currentUserLogOut({ interCode: 204, username: currentUsername })
+				logOut.currentUserLogOut({ interCode: 204, userId: currentUserId })
 			} catch (err) {
-				console.log('Error fastSession logout after closing', err)
+				console.error('Error fastSession logout after closing', err)
 				logOut.userHasLogOut()
 			}
 		}
-		localStorage.removeItem(FAST_LS)
+		removeLS(FAST_LS)
 	}
 }
 

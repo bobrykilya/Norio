@@ -15,9 +15,9 @@ export type TopCardFormsProps = {
 	setStatusState: (state: FormStatusButOptions) => void;
 }
 
-export const fastSessionTestForDataEditing = (username: ICommonVar['username']) => {
+export const fastSessionTestForDataEditing = (userId: ICommonVar['id']) => {
 	const { getJwtInfoState } = useJwtInfoListState.getState()
-	if (getJwtInfoState(username).isFast) {
+	if (getJwtInfoState(userId).isFast) {
 		showSnackMessage({
 			type: "e",
 			message: 'Вы не можете редактировать информацию аккаунта и пользователя во время быстрой сессии'

@@ -42,7 +42,7 @@ class UserController {
 			const newSessionData = await UserService.editAccountInfo(body as IAccountInfoEditReq, user, queryTime)
 			if (newSessionData) {
 				const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId } = newSessionData
-				res.cookie(getUserCookieName(userInfo.username), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
+				res.cookie(getUserCookieName(userInfo.userId), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
 
 				return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 			}
