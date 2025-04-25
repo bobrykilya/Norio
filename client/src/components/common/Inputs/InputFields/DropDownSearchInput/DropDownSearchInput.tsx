@@ -35,9 +35,9 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
     const LIST_FILTERED = watch(name) ? filterAndSortList({ search: inputRef.current?.value, list: LIST }) : LIST
     // console.log(error)
     
-    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOnInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const normalValue = capitalizeOnlyFirst(e.target.value.replace(/[^а-яА-ЯёЁ ]/g, ''))
-        setValue(name, normalValue)
+        setValue(name, normalValue, { shouldValidate: true })
 
         !isDropDownOpened && normalValue && toggleDropDown(true)
         !normalValue && clearInput()
@@ -186,7 +186,6 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
             isInList: () => isValueInList(inputRef.current?.value) ||
                 `Введена неизвестная ${placeholder.toLowerCase()}`
         },
-        onChange: handleChangeInput,
     })
 
 
@@ -208,6 +207,7 @@ const DropDownSearchInput = ({ LIST, name, placeholder, icon, register, errors={
                 onFocus: handleFocusInput,
                 onBlur: handleBlurInput,
                 disabled,
+                onInput: handleOnInput,
             }}
             cleanerParams={{
                 isCleanerOpened,

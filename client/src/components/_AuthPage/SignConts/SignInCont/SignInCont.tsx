@@ -13,9 +13,6 @@ const SignInCont = ({ actForm, isFormDisabled }: SignContProps) => {
             id='sign_in-cont'
             className={`sign-cont cont ${actForm === 'sign_in' ? 'active' : ''}`}
         >
-            <div className='enter_text-cont cont'>
-                <h1>Авторизация</h1>
-            </div>
             <SwitchUserButton
                 disabled={isFormDisabled || actForm !== 'sign_in'}
             />

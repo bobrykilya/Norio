@@ -17,19 +17,21 @@ $width-full-horoscope-card: 28rem
         top: auto
         bottom: 0
         justify-content: space-between
+        $icon-width: 2.5rem
         //transition-property: all
         //transition-duration: $dur-unfolding-card * 2
         //transition-timing-function: ease-out
         .horoscope_icon-cont
             //border: solid 1px green
-            width: auto
+            width: $icon-width
             .fa-icon
-                font-size: 2.5rem
+                font-size: $icon-width
                 color: $color-backgr
                 stroke-width: 1.1
         .horoscope_info-frame
             //border: solid 1px red
-            margin: 0 0.5rem
+            $frame-x-margin: 0.5rem
+            margin: 0 $frame-x-margin
             flex-shrink: 1
             .horoscope_info
                 //border: solid 1px brown
@@ -55,7 +57,7 @@ $width-full-horoscope-card: 28rem
                         //text-indent: 20px
                         font-size: $size-main-text + 0.07rem
                         line-height: $size-main-text + 0.2rem
-                        width: $width-full-horoscope-card - 8.5rem
+                        width: calc($width-full-horoscope-card - $padding-card*4 - $icon-width - $size-small-round-but - $frame-x-margin*2 - 3px)
                         transition-property: max-height, opacity
                         transition-duration: $dur-unfolding-card * 1.75, $dur-unfolding-card * 1.25
                         transition-timing-function: ease-out

@@ -51,9 +51,9 @@ const NameInput = ({
                     .toLowerCase()
         }
     }
-    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOnInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const normalizedValue = getNormalizeValue(e.target.value)
-        setValue(name, normalizedValue)
+        setValue(name, normalizedValue, { shouldValidate: true })
         !normalizedValue && clearInput()
     }
 
@@ -71,9 +71,6 @@ const NameInput = ({
             case 'sign_in':  //*** SignIn
                 return register(name, {
                     required: true,
-                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                        handleChangeInput(e)
-                    }
                 })
             case 'sign_up':  //*** SignUp
                 return register(name, {
@@ -86,9 +83,6 @@ const NameInput = ({
                         isOneLanguage: (val: string) => (!/[а-яА-ЯёЁ]/.test(val) || !/[a-zA-Z]/.test(val)) ||
                             'Логин должен быть лишь на одном языке',
                     },
-                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                        handleChangeInput(e)
-                    },
                 })
             case 'name':
                 return register(name, {
@@ -97,9 +91,6 @@ const NameInput = ({
                         value: 2,
                         message: `Длина поля '${placeholder}' должна быть от 2 букв`
                     },
-                    onChange: (e:  React.ChangeEvent<HTMLInputElement>) => {
-                        handleChangeInput(e)
-                    }
                 })
             case 'email':
                 return register(name, {
@@ -111,9 +102,6 @@ const NameInput = ({
                         isValidEmail: (val: string) => (val === '' || /[a-zA-Z\d._-]+@[a-zA-Z._-]+\.[a-zA-Z\d_-]+/.test(val)) ||
                             'Неверный формат email',
                     },
-                    onChange: (e:  React.ChangeEvent<HTMLInputElement>) => {
-                        handleChangeInput(e)
-                    }
                 })
         }
     }
@@ -139,6 +127,7 @@ const NameInput = ({
                 autoComplete: autoComplete ? autoComplete : notSaveUser ? 'off' : 'username',
                 disabled,
                 autoFocus,
+                onInput: handleOnInput,
             }}
             cleanerParams={{
                 isCleanerOpened,

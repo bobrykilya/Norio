@@ -48,7 +48,7 @@ const PasswordInput = ({
 				return value.replace(/[^а-яА-ЯёЁa-zA-Z0-9.@_ ]/g, '')
 		}
 	}
-	const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleOnInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 		const normalizedValue = getNormalizeValue(e.target.value)
 		e.target.value = normalizedValue
@@ -84,9 +84,6 @@ const PasswordInput = ({
 			case 'sign_in':
 				return register(name, {
 					required: required !== undefined ? required : true,
-					onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-						handleChangePassword(e)
-					},
 				})
 			case 'sign_up':
 				return register(name, {
@@ -105,9 +102,6 @@ const PasswordInput = ({
 						isUpper: (val: string) => /(?=.*[A-ZА-ЯЁ])/.test(val) ||
 							'Пароль должен содержать заглавную букву',
 					},
-					onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-						handleChangePassword(e)
-					},
 				})
 			case 'confirm':
 				return register(name, {
@@ -118,9 +112,6 @@ const PasswordInput = ({
 								return 'Пароли не совпадают'
 							}
 						},
-					},
-					onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-						handleChangePassword(e)
 					},
 				})
 		}
@@ -149,6 +140,7 @@ const PasswordInput = ({
 					setIsCapsLockEnabled(false)
 				},
 				disabled,
+				onInput: handleOnInput,
 			}}
 			cleanerParams={{
 				isCleanerOpened,
