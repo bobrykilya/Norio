@@ -30,14 +30,19 @@ class UserService {
 	static async editAccountInfo(data: IAccountInfoEditReq, user: ICommonVar['payload'], queryTime: ICommonVar['queryTime']) {
 		//! Add log funcs
 		const { userId, deviceId } = user
-		const { password, ...restData } = data
+		const { newPassword, prevPassword, ...restData } = data
 		const newData: IAccountInfoEditReq = {
 			...restData
 		}
 
-		if (password) {
+		if (newPassword) {
+			await AuthService.checkPasswordByUsername({
+				username: user.username,
+				password: prevPassword,
+				error: Errors.passwordInvalid()
+			})
 			const salt = bcrypt.genSaltSync(10)
-			newData.password = bcrypt.hashSync(password, salt)
+			newData.password = bcrypt.hashSync(newPassword, salt)
 		}
 
 		try {

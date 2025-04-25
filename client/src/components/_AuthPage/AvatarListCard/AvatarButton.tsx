@@ -6,7 +6,6 @@ import { IReactHookForm } from "../../../types/Auth-types"
 import { useAvatarListCardState } from "../../../stores/Utils-store"
 import ToolTip from "../../others/ToolTip/ToolTip"
 import { ICONS } from "../../../assets/common/Icons-data"
-import AvatarListCard from "./AvatarListCard"
 
 
 
@@ -68,18 +67,18 @@ const AvatarButton = ({ LIST, currentAvatar, setAvatar, error, setError, disable
 
     return (
         <div className='avatar_but-cont cont'>
-            {!disabled &&
-                <AvatarListCard
-                    LIST={LIST}
-                    currentAvatar={currentAvatar}
-                    isAvatarListCardOpened={avatarListCardState}
-                    closeAvatarListCard={closeAvatarList}
-                    handleClickElem={handleClickElem}
-                    isArrowButsActive={isArrowButsActive}
-                    disabled={disabled}
-                    createPathToAvatars={createPathToAvatars}
-                />
-            }
+            {/*{!disabled &&*/}
+            {/*    <AvatarListCard*/}
+            {/*        LIST={LIST}*/}
+            {/*        currentAvatar={currentAvatar}*/}
+            {/*        isAvatarListCardOpened={avatarListCardState}*/}
+            {/*        closeAvatarListCard={closeAvatarList}*/}
+            {/*        handleClickElem={handleClickElem}*/}
+            {/*        isArrowButsActive={isArrowButsActive}*/}
+            {/*        disabled={disabled}*/}
+            {/*        createPathToAvatars={createPathToAvatars}*/}
+            {/*    />*/}
+            {/*}*/}
             <button
                 className={`avatar-but ${error?.message ? 'error' : ''}`}
                 type='button'

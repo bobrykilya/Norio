@@ -41,7 +41,7 @@ const JumpingCard = ({ children, className, position, other_children, isPrerende
         callback: handleCloseJumpingCard
     })
 
-
+    
     //* BlurModalState - For forms Esc blur while JumpingCard is opened
     useEffect(() => {
         if (isCardOpened) {

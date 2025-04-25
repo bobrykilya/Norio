@@ -1,10 +1,9 @@
-import { HoroscopeTypeOptions, ICommonVar } from "../../../common/types/Global-types"
+import { HoroscopeTypeOptions } from "../../../common/types/Global-types"
 import { $apiProtected, $apiUnprotected } from "../http/http"
 import { IAccountInfoEditReq, IHoroscopeDataRes, IUserInfoEditReq } from "../../../common/types/User-types"
 import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
 import AuthCommon from "../features/auth/authCommon"
 import { ILoginServiceRes } from "../../../common/types/Auth-types"
-import { useUserInfoState } from "../stores/User-store"
 
 
 
@@ -37,7 +36,6 @@ class UserService {
 	}
 
 	static async editAccountInfo(data: IAccountInfoEditReq) {
-		const currentUserId = data.username ? useUserInfoState.getState().userInfoState?.userId : null
 
 		try {
 			const newSessionData = await $apiProtected.patch("edit-account-info", { json: data })?.json<ILoginServiceRes>()
@@ -47,16 +45,6 @@ class UserService {
 				AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, isFast: false })
 			}
 
-			return true
-		} catch (err) {
-			showSnackMessage(err)
-			return false
-		}
-	}
-
-	static async checkPassword(currentPassword: ICommonVar['password']) {
-		try {
-			await $apiProtected.post("protected-check-user", { json: { currentPassword } })?.json()
 			return true
 		} catch (err) {
 			showSnackMessage(err)

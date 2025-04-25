@@ -1,9 +1,8 @@
 import { HoroscopeTypeOptions, ICommonVar } from "../../../common/types/Global-types.ts"
-import { catchError, Errors } from "../utils/Errors.ts"
+import { catchError } from "../utils/Errors.ts"
 import HoroscopeService from "../services/Horoscope-service.ts"
 import { IAccountInfoEditReq, IUserInfoEditReq } from "../../../common/types/User-types.ts"
 import UserService from "../services/User-service.ts"
-import AuthService from "../services/Auth-service.ts"
 import { getTime } from "../utils/getTime.ts"
 import { COOKIE_SETTINGS } from "../../constants.ts"
 import { getUserCookieName } from "./Auth-controller.ts"
@@ -50,24 +49,6 @@ class UserController {
 			return res.status(200).json()
 		} catch (err) {
 			return catchError({ req, res, err, interCode: 211 })
-		}
-	}
-
-	static async protectedCheckUser(req: ICommonVar['req'], res: ICommonVar['res']) {
-		const { currentPassword } = req.body as { currentPassword: ICommonVar['password'] }
-		const { user } = req
-
-
-		try {
-			await AuthService.checkPasswordByUsername({
-				username: user.username,
-				password: currentPassword,
-				error: Errors.passwordInvalid()
-			})
-
-			return res.status(200).json()
-		} catch (err) {
-			return catchError({ req, res, err })
 		}
 	}
 }

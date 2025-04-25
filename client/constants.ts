@@ -8,6 +8,7 @@ export const SWITCH_USERS_ID_LS = 'switchUsersId'
 
 
 export const APP_TITLE = 'NORIO'
+export const APP_LANG = 'ru'
 export const MY_LOC = 'myLocation'
 
 //* Snack (err, warning, success) settings

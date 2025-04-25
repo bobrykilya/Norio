@@ -1,5 +1,6 @@
 import ky from "ky"
 import dotenv from "dotenv"
+import { APP_LANG } from "../../../client/constants.ts"
 
 
 
@@ -11,7 +12,7 @@ const $apiWeather = ky.extend({
 		appid: process.env.API_WEATHER_KEY,
 		exclude: 'minutely,alerts',
 		units: 'metric',
-		lang: 'ru',
+		lang: APP_LANG,
 	},
 })
 
@@ -20,8 +21,11 @@ const $apiLocation = ky.extend({
 	searchParams: {
 		key: process.env.API_LOCATION_KEY,
 		format: 'json',
-		language: 'en',
+		language: APP_LANG,
 	},
+	headers: {
+		'Accept-Language': APP_LANG
+	}
 })
 
 const $apiHoroscope = 'https://horo.mail.ru/prediction'

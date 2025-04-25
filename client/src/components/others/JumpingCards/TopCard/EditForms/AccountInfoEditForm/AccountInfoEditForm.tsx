@@ -67,6 +67,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 	const {
 		register,
 		handleSubmit,
+		reset: resetForm,
 		resetField: reset,
 		watch,
 		getValues,
@@ -103,8 +104,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		reset('confirmNewPassword')
 	}
 	const resetEditFields = () => {
-		reset('username')
-		reset('email')
+		resetForm()
 	}
 
 	const handleClickUndoBut = () => {
@@ -124,7 +124,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		setStatusState('loading')
 		if (await UserService.editAccountInfo(data)) {
 
-			if (data.username || data.password) {
+			if (data.username || data.newPassword) {
 				//* Username or Password saving for browser
 				await updateBrowsersPasswordCredential(data, userInfo)
 			} else if (!data.username) {
@@ -140,11 +140,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 			setStatusState('ok')
 			resetPasswords()
 		} else {
-			if (Object.keys(data).length === 1 && data.newPassword) {
-				setStatusState('ok')
-			} else {
-				setStatusState('undo')
-			}
+			setStatusState('undo')
 		}
 	}
 
@@ -157,20 +153,19 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		} else if (dirtyData.newPassword && !dirtyData.prevPassword) {
 			inputRefPrevPassword.current.focus()
 			return
-		}
-
-		if (dirtyData.prevPassword) {
-			if (await UserService.checkPassword(dirtyData.prevPassword)) {
-				dirtyData.password = dirtyData.newPassword
-				delete dirtyData.prevPassword
-				delete dirtyData.newPassword
-				delete dirtyData.confirmNewPassword
-
-				await updateFormData(dirtyData)
+		} else if (dirtyData.newPassword) {
+			if (dirtyData.newPassword === dirtyData.prevPassword) {
+				showSnackMessage({
+					type: "e",
+					message: 'Новый пароль не должен совпадать с предыдущим',
+				})
+				return
 			}
-		} else {
-			await updateFormData(dirtyData)
+			delete dirtyData.confirmNewPassword
 		}
+
+
+		await updateFormData(dirtyData)
 	}
 
 	const getDirtyData = (booleanRes?: boolean) => {
@@ -191,9 +186,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 			const val = getValues(key as keyof IAccountInfoEditForm)
 			if (val !== undefined && val !== preloadValues[key]) {
 				if (booleanRes) {
-					if (!key.includes('Password')) {
-						return true
-					}
+					return true
 				}
 				dirtyData[key] = val
 			}
@@ -206,9 +199,6 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 
 	const preloadFormValuesSetting = () => {
 		for (const name in preloadValues) {
-			if (name.includes('Password')) {
-				continue
-			}
 			setValue(name as keyof IAccountInfoEditForm, preloadValues[name])
 		}
 	}
