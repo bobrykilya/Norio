@@ -1,12 +1,12 @@
 import React from 'react'
-import { focusInput } from "../../../../../utils/focusInput"
-import InputError from "../InputUtils/InputError/InputError"
-import InputCleaner from "../InputUtils/InputCleaner/InputCleaner"
-import { ICommonVar } from "../../../../../../../common/types/Global-types"
-import RoundButton from "../../../Buttons/RoundButton/RoundButton"
-import { ToolTipProps } from "../../../../others/ToolTip/ToolTip"
-import { copyText } from "../../../../../utils/copy"
-import { ICONS } from "../../../../../assets/common/Icons-data"
+import { focusInput } from '../../../../../utils/focusInput'
+import InputError from '../InputUtils/InputError/InputError'
+import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
+import { ICommonVar } from '../../../../../../../common/types/Global-types'
+import RoundButton from '../../../Buttons/RoundButton/RoundButton'
+import { ToolTipProps } from '../../../../others/ToolTip/ToolTip'
+import { copyText } from '../../../../../utils/copy'
+import { ICONS } from '../../../../../assets/common/Icons-data'
 
 
 
@@ -57,7 +57,17 @@ type InputFieldProps = {
 	};
 	children?: any;
 }
-const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputParams, cleanerParams, extraButParams, emptyIconParams, children }: InputFieldProps) => {
+const InputField = ({
+						contClassName,
+						inputIcon,
+						registerForm,
+						inputRef,
+						inputParams,
+						cleanerParams,
+						extraButParams,
+						emptyIconParams,
+						children,
+					}: InputFieldProps) => {
 
 	// console.log(registerForm.restRegister)
 	const copyInputValue = () => {
@@ -74,7 +84,9 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 
 
 	return (
-		<div className={`${contClassName || ''} input_field-cont cont ${extraButParams?.isCopy ? 'with_copy' : ''} ${registerForm.error?.message ? 'error' : ''}`}>
+		<div
+			className={`${contClassName || ''} input_field-cont cont ${extraButParams?.isCopy ? 'with_copy' : ''} ${registerForm.error?.message ? 'error' : ''}`}
+		>
             <span
 				className='input_field-label'
 				onClick={() => focusInput(inputRef)}
@@ -82,15 +94,15 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
                 {label || placeholder}
             </span>
 			<input
-				{ ...registerForm.restRegister }
-				{ ...restInputParams }
+				{...registerForm.restRegister}
+				{...restInputParams}
 				ref={(e) => {
 					inputRef.current = e
 					registerForm.formRef(e)
 				}}
 			/>
 			<span
-			    className={`input_field-placeholder ${isPhone && 'phone'} ${cleanerParams.isCleanerOpened && 'hide'}`}
+				className={`input_field-placeholder ${isPhone && 'phone'} ${cleanerParams.isCleanerOpened && 'hide'}`}
 			>
 			    {placeholder}
 			</span>
@@ -104,7 +116,7 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 					(
 						<>
 							<div
-							    className={`input_field_icon-cont ${!undoFieldButParams.isOpened && 'opened'}`}
+								className={`input_field_icon-cont ${!undoFieldButParams.isOpened && 'opened'}`}
 							>
 								{inputIcon}
 							</div>
@@ -113,7 +125,7 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 								onClick={handleClickUndoFieldBut}
 								size={'tiny'}
 								toolTip={{
-									message: 'Откатить поле обратно'
+									message: 'Откатить поле обратно',
 								}}
 								bigZIndex={true}
 							>
@@ -128,29 +140,29 @@ const InputField = ({ contClassName, inputIcon, registerForm, inputRef, inputPar
 			{
 				emptyIconParams &&
 				<div
-				    className={`input_field_empty-icon ${emptyIconParams.isOpened && 'opened'}`}
+					className={`input_field_empty-icon ${emptyIconParams.isOpened && 'opened'}`}
 				/>
 			}
 			{
 				extraButParams &&
-					extraButParams.isCopy ?
-						<RoundButton
-							className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible && 'opened'}`}
-							onClick={extraButParams.onClick || copyInputValue}
-							size={'tiny'}
-							toolTip={{
-								message: 'Скопировать поле'
-							}}
-						>
-							{ICONS.copy}
-						</RoundButton> :
-						<RoundButton
-							className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible && 'opened'}`}
-							size={'tiny'}
-							{...extraButParams}
-						>
-							{extraButParams.icon}
-						</RoundButton>
+				extraButParams.isCopy ?
+					<RoundButton
+						className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible && 'opened'}`}
+						onClick={extraButParams.onClick || copyInputValue}
+						size={'tiny'}
+						toolTip={{
+							message: 'Скопировать поле',
+						}}
+					>
+						{ICONS.copy}
+					</RoundButton> :
+					<RoundButton
+						className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible && 'opened'}`}
+						size={'tiny'}
+						{...extraButParams}
+					>
+						{extraButParams.icon}
+					</RoundButton>
 			}
 		</div>
 	)

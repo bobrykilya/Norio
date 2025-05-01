@@ -1,0 +1,80 @@
+@import '../../../../../_AuthPage/AuthPage_variables'
+
+
+.select_avatar_but-cont
+    //border: 2px solid red
+    width: auto
+    overflow: visible
+    .select_avatar-but
+        border: 2px solid rgba($color-main-text, 0.5)
+        border-radius: 50%
+        z-index: 3
+        padding: 0.1rem
+        &:hover, &:focus
+            //transform: translateY($height-but-act-jump)
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25)
+            border-radius: 40%
+            img
+                border-radius: 40%
+        &:active
+            .no_avatar-cont
+                .fa-icon
+                    transform: scale(0.85)
+            img
+                transform: scale(0.95)
+        .no_avatar-cont
+            //border: 1px solid red
+            position: absolute
+            z-index: 1
+            width: 99%
+            height: 99%
+            display: flex
+            justify-content: center
+            align-items: center
+            border-radius: 50%
+            background-color: $color-backgr
+            will-change: transform
+            transition: all 0.3s ease
+            opacity: 0
+            transform: scale(0)
+            .fa-icon
+                //margin-top: -1px
+                transition: all 0.15s ease
+                color: rgba(107, 107, 107, 0.8)
+                font-size: 1.4rem
+            &.opened
+                opacity: 1
+                transform: scale(1)
+        img
+            // border: 2px solid black
+            width: 100%
+            height: 100%
+            object-fit: cover
+            transition: all 0.15s ease
+            border-radius: 50%
+            will-change: transform
+        &.white
+            border: 4px solid $color-backgr
+            padding: 0.25rem
+            &:focus
+                border-color: #9dc4e1
+        &.error
+            border: 1.5px solid $color-error
+            .no_avatar-cont
+                .fa-icon
+                    color: $color-error
+            &:hover, &:focus
+                border: 1px solid $color-error-hover
+                .no_avatar-cont
+                    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2)
+                    .fa-icon
+                        color: $color-error-hover
+    .input_error-cont
+        top: $size-main-text - 1.5rem
+        cursor: pointer
+    .inputs_cleaner-but
+        //border: 2px solid black
+        left: -1.7rem
+        transform: scale(0.8) + translateX(0.5rem)
+        &.opened
+            transform: scale(1) + translateX(0)

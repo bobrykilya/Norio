@@ -1,18 +1,30 @@
 import React, { useLayoutEffect, useRef } from 'react'
-import { focusInput } from "../../../../../utils/focusInput"
-import { ISignFormInput } from "../../../../../types/Auth-types"
-import InputField from "../InputField/InputField"
-import { ICommonVar } from "../../../../../../../common/types/Global-types"
+import { focusInput } from '../../../../../utils/focusInput'
+import { ISignFormInput } from '../../../../../types/Auth-types'
+import InputField from '../InputField/InputField'
+import { ICommonVar } from '../../../../../../../common/types/Global-types'
 import { useIMask } from 'react-imask'
-import { getTimeParams } from "../../../../../utils/getTime"
+import { getTimeParams } from '../../../../../utils/getTime'
 
 
 
 type DateInputProps = Omit<ISignFormInput, 'placeholder'> & {
-	inputDateRef: React.MutableRefObject<HTMLInputElement>;
+	inputDateRef?: React.MutableRefObject<HTMLInputElement>;
 	icon: ICommonVar['icon'];
 }
-const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDateRef, icon, withCopyBut, withEmptyIcon, autoFocus, undoFieldButParams }: DateInputProps) => {
+const DateInput = ({
+					   name,
+					   register,
+					   errors = {},
+					   reset,
+					   disabled = false,
+					   inputDateRef,
+					   icon,
+					   withCopyBut,
+					   withEmptyIcon,
+					   autoFocus,
+					   undoFieldButParams,
+				   }: DateInputProps) => {
 
 	const inputRef = inputDateRef || useRef(null)
 	const dateMaskOptions = {
@@ -24,27 +36,27 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDate
 	const { ref: formRef, onChange: onFormChange, ...restRegister } = register(name, {
 		minLength: {
 			value: 10,
-			message: `Введена неполная дата`
+			message: `Введена неполная дата`,
 		},
 		validate: {
 			isCorrectDay: (val: string) => {
 				if (!val) return true
 				const message = 'Некорректный день'
 				const day = parseInt(val.split('.')[0])
-				return  (day <= 31 && day > 0)  || message
+				return (day <= 31 && day > 0) || message
 			},
 			isCorrectMonth: (val: string) => {
 				if (!val) return true
 				const message = 'Некорректный месяц'
 				const month = parseInt(val.split('.')[1])
-				return  (month <= 12 && month > 0)  || message
+				return (month <= 12 && month > 0) || message
 			},
 			isCorrectYear: (val: string) => {
 				if (!val) return true
 				const message = 'Некорректный год'
 				const year = parseInt(val.split('.')[2])
 				const { year: yearNow } = getTimeParams(['year'])
-				return  (year < yearNow - 7 && year > yearNow - 100)  || message
+				return (year < yearNow - 7 && year > yearNow - 100) || message
 			},
 		},
 	})
@@ -58,7 +70,7 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDate
 		onAccept: (val, _, e) => {
 			e && onFormChange(e)
 			!val && clearInput()
-		}
+		},
 	})
 
 	const handleClickCleaner = async () => {
@@ -84,7 +96,7 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDate
 			registerForm={{
 				formRef,
 				restRegister,
-				error: errors[name]
+				error: errors[name],
 			}}
 			inputRef={maskedInputRef}
 			inputParams={{
@@ -98,7 +110,7 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDate
 			}}
 			cleanerParams={{
 				isCleanerOpened: !!maskedValue,
-				handleClickCleaner: handleClickCleaner
+				handleClickCleaner: handleClickCleaner,
 			}}
 			extraButParams={{
 				...(withCopyBut && {
@@ -113,12 +125,12 @@ const DateInput = ({ name, register, errors={}, reset, disabled=false, inputDate
 							undoFieldButParams.onClick(name)
 						},
 						isOpened: maskedValue || maskedValue === '' ? undoFieldButParams.preloadValues[name] !== maskedValue : false,
-					}
-				})
+					},
+				}),
 			}}
 			emptyIconParams={
 				withEmptyIcon && {
-					isOpened: !maskedValue
+					isOpened: !maskedValue,
 				}
 			}
 		/>

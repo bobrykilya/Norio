@@ -1,12 +1,12 @@
-import React from "react"
-import { GrUserExpert, GrUserWorker } from "react-icons/gr"
-import { HiOutlineHome } from "react-icons/hi"
-import { MdEmail, MdInstallDesktop, MdOutlineWaterDrop, MdOutlineWorkOutline } from "react-icons/md"
-import { BsArrowUpRight, BsCloudRain, BsPassport } from "react-icons/bs"
-import { LiaBirthdayCakeSolid } from "react-icons/lia"
-import { FiCheckCircle, FiPhoneCall, FiWind } from "react-icons/fi"
-import { BiBadgeCheck, BiLogInCircle, BiSolidCopy } from "react-icons/bi"
-import { FaKey, FaLock, FaUser } from "react-icons/fa"
+import React from 'react'
+import { GrUserExpert, GrUserWorker } from 'react-icons/gr'
+import { HiOutlineHome } from 'react-icons/hi'
+import { MdEmail, MdInstallDesktop, MdOutlineWaterDrop, MdOutlineWorkOutline } from 'react-icons/md'
+import { BsArrowUpRight, BsCloudRain, BsPassport } from 'react-icons/bs'
+import { LiaBirthdayCakeSolid } from 'react-icons/lia'
+import { FiCheckCircle, FiPhoneCall, FiWind } from 'react-icons/fi'
+import { BiBadgeCheck, BiLogInCircle, BiSolidCopy } from 'react-icons/bi'
+import { FaKey, FaLock, FaUser } from 'react-icons/fa'
 import {
 	FaAngleLeft,
 	FaAngleRight,
@@ -15,9 +15,9 @@ import {
 	FaLocationDot,
 	FaUserGear,
 	FaUserPen,
-} from "react-icons/fa6"
-import { LuBadgeInfo, LuCheckCircle, LuLogOut } from "react-icons/lu"
-import { VscEye, VscEyeClosed } from "react-icons/vsc"
+} from 'react-icons/fa6'
+import { LuBadgeInfo, LuCheckCircle, LuLogOut } from 'react-icons/lu'
+import { VscEye, VscEyeClosed } from 'react-icons/vsc'
 import {
 	IoAdd,
 	IoArrowBackCircleOutline,
@@ -26,19 +26,19 @@ import {
 	IoCloseCircleOutline,
 	IoNotificationsSharp,
 	IoSnowOutline,
-} from "react-icons/io5"
-import { PiSealWarning, PiUser, PiWarning, PiWarningCircleBold, PiWarningFill } from "react-icons/pi"
+} from 'react-icons/io5'
+import { PiSealWarning, PiUser, PiWarning, PiWarningCircleBold, PiWarningFill } from 'react-icons/pi'
 import {
 	TbInfoSquareRoundedFilled,
 	TbLockSquareRounded,
 	TbSettings,
 	TbSettingsFilled,
 	TbTrashXFilled,
-} from "react-icons/tb"
-import { HiDocumentText } from "react-icons/hi2"
-import { IoIosSave, IoMdArrowRoundDown, IoMdArrowRoundUp } from "react-icons/io"
-import { RxCopy } from "react-icons/rx"
-import { TiFlash } from "react-icons/ti"
+} from 'react-icons/tb'
+import { HiDocumentText } from 'react-icons/hi2'
+import { IoIosSave, IoMdArrowRoundDown, IoMdArrowRoundUp } from 'react-icons/io'
+import { RxCopy } from 'react-icons/rx'
+import { TiFlash } from 'react-icons/ti'
 
 
 
@@ -46,13 +46,13 @@ export const ICONS = {
 	name: <GrUserExpert className='input_field-icon' />,
 	job: <GrUserWorker className='input_field-icon' />,
 	company: <MdOutlineWorkOutline className='input_field-icon' />,
-	birthday: <LiaBirthdayCakeSolid className="input_field-icon" />,
+	birthday: <LiaBirthdayCakeSolid className='input_field-icon' />,
 	store: <HiOutlineHome className='input_field-icon' />,
 	phone: <FiPhoneCall className='input_field-icon' />,
 	user: <FaUser className='input_field-icon' />,
-	password: <FaKey className='input_field-icon'/>,
-	prevPassword: <FaLock className='input_field-icon'/>,
-	email: <MdEmail className='input_field-icon'/>,
+	password: <FaKey className='input_field-icon' />,
+	prevPassword: <FaLock className='input_field-icon' />,
+	email: <MdEmail className='input_field-icon' />,
 	passport: <BsPassport className='fa-icon' />,
 	enter: <BiLogInCircle className='fa-icon' />,
 	check: <LuCheckCircle className='fa-icon' />,
@@ -71,7 +71,7 @@ export const ICONS = {
 	logBookFilled: <PiWarningFill className='fa-icon' />,
 	settings: <TbSettings className='fa-icon' />,
 	settingsFilled: <TbSettingsFilled className='fa-icon' />,
-	instructions: <FaInfo className='fa-icon'/>,
+	instructions: <FaInfo className='fa-icon' />,
 	instructionsFilled: <TbInfoSquareRoundedFilled className='fa-icon' />,
 	close: <IoClose className='fa-icon close-icon' />,
 	link: <BsArrowUpRight strokeWidth={0.5} className='fa-icon link-icon' />,
@@ -89,7 +89,7 @@ export const ICONS = {
 	trash: <TbTrashXFilled className='fa-icon' />,
 	add: <IoAdd className='fa-icon' />,
 	backCircled: <IoArrowBackCircleOutline className='fa-icon' />,
-	desktop: <MdInstallDesktop className='fa-icon'/>,
+	desktop: <MdInstallDesktop className='fa-icon' />,
 	save: <IoIosSave className='fa-icon' />,
 	ok: <BiBadgeCheck className='fa-icon' />,
 	undo: <IoArrowUndoSharp className='fa-icon' />,

@@ -1,7 +1,6 @@
 @import '../../../_variables'
 
 
-
 .jumping_card_cover-cont
     //border: 5px solid green
     $rad-list: 120px
@@ -15,7 +14,8 @@
         position: absolute
         left: 50%
         bottom: 0
-        height: 90%
+        width: auto
+        height: auto
         background-color: $color-backgr
         box-shadow: 2px 10px 30px #00000040
         overflow: visible
@@ -60,8 +60,8 @@
         .jumping_card-cont
             bottom: 50%
             left: 0
-            height: 100%
-            width: 90%
+            //height: 100%
+            //width: 90%
             transform: translateX(-100%) translateY(50%) scale($scale-card)
             &::before
                 top: auto
@@ -74,8 +74,8 @@
             bottom: 50%
             left: auto
             right: 0
-            height: 100%
-            width: 90%
+            //height: 100%
+            //width: 90%
             transform: translateX(100%) translateY(50%) scale($scale-card)
             &::before
                 top: auto

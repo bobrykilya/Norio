@@ -1,16 +1,11 @@
-import AuthService from "../services/Auth-service"
-import { COOKIE_SETTINGS } from "../../constants"
-import { getTime } from "../utils/getTime"
-import { ISignInController, ISignUpController } from "../types/Auth-types"
-import {
-	ICheckUserReq,
-	ICheckUserRes,
-	ILoginServiceRes,
-	ILogOutReq,
-	IRefreshReq,
-} from "../../../common/types/Auth-types"
-import { ICommonVar } from "../../../common/types/Global-types"
-import { catchError } from "../utils/Errors.ts"
+import AuthService from '../services/Auth-service'
+import { COOKIE_SETTINGS } from '../../constants'
+import { getTime } from '../utils/getTime'
+import { ISignInController, ISignUpController } from '../types/Auth-types'
+import { ICheckUserReq, ILoginServiceRes, ILogOutReq, IRefreshReq } from '../../../common/types/Auth-types'
+import { ICommonVar } from '../../../common/types/Global-types'
+import { catchError } from '../utils/Errors.ts'
+import UserService from '../services/User-service.ts'
 
 
 
@@ -44,7 +39,13 @@ class AuthController {
 
 
 		try {
-			const { accessToken, refreshToken, accessTokenExpiration, userInfo, deviceId }: ILoginServiceRes & Pick<ICommonVar, 'refreshToken'> = await AuthService.signIn({
+			const {
+				accessToken,
+				refreshToken,
+				accessTokenExpiration,
+				userInfo,
+				deviceId,
+			}: ILoginServiceRes & Pick<ICommonVar, 'refreshToken'> = await AuthService.signIn({
 				username,
 				password,
 				fingerprint,
@@ -68,7 +69,6 @@ class AuthController {
 	}
 
 
-
 	static async checkUser(req: ICommonVar['req'], res: ICommonVar['res']) {
 		const { username, password }: ICheckUserReq = req.body
 		const { fingerprint } = req
@@ -76,14 +76,19 @@ class AuthController {
 
 
 		try {
-			const { username: userName, hashedPassword, avatarsList }: ICheckUserRes = await AuthService.checkUser({ username, password, fingerprint, queryTime })
+			const { username: userName, hashedPassword } = await AuthService.checkUser({
+				username,
+				password,
+				fingerprint,
+				queryTime,
+			})
+			const avatarsList = await UserService.getUsedAvatarsList()
 
 			return res.status(200).json({ username: userName, hashedPassword, avatarsList })
 		} catch (err) {
 			return catchError({ req, res, err, queryTime, interCode: 711 })
 		}
 	}
-
 
 
 	static async signUp(req: ICommonVar['req'], res: ICommonVar['res']) {
@@ -103,22 +108,22 @@ class AuthController {
 			deviceIP,
 		}: ISignUpController = req.body
 		const { fingerprint } = req
-        const queryTime = getTime()
+		const queryTime = getTime()
 
-		
+
 		try {
 			const {
 				accessToken,
 				refreshToken,
 				accessTokenExpiration,
 				userInfo,
-				deviceId
+				deviceId,
 			}: ILoginServiceRes & Pick<ICommonVar, 'refreshToken'> = await AuthService.signUp({
 				username,
-				hashedPassword, 
-				phone, 
-				store, 
-				job, 
+				hashedPassword,
+				phone,
+				store,
+				job,
 				lastName,
 				firstName,
 				middleName,
@@ -130,9 +135,9 @@ class AuthController {
 				fingerprint,
 				queryTime,
 			})
-			
+
 			res.cookie(getUserCookieName(userInfo.userId), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
-			
+
 			return res.status(200).json({ accessToken, accessTokenExpiration, userInfo, deviceId })
 		} catch (err) {
 			return catchError({ req, res, err, queryTime, interCode: 205 })
@@ -140,12 +145,11 @@ class AuthController {
 	}
 
 
-
 	static async logOut(req: ICommonVar['req'], res: ICommonVar['res']) {
 		// console.log('logOut')
 		const { interCode, userId }: ILogOutReq = req.body
 		const refreshToken: string = req.cookies[getUserCookieName(userId)]
-        const queryTime = getTime()
+		const queryTime = getTime()
 
 
 		try {
@@ -161,12 +165,10 @@ class AuthController {
 	}
 
 
-
-	
 	static async refresh(req: ICommonVar['req'], res: ICommonVar['res']) {
 		const { lsDeviceId, userId }: IRefreshReq = req.body
 		const { fingerprint } = req
-        const queryTime = getTime()
+		const queryTime = getTime()
 		const currentRefreshToken = req.cookies[getUserCookieName(userId)]
 
 		try {
@@ -174,12 +176,12 @@ class AuthController {
 				await AuthService.refresh({
 					fingerprint,
 					currentRefreshToken,
-                    queryTime,
+					queryTime,
 					lsDeviceId,
 				})
 
 			res.cookie(getUserCookieName(userId), refreshToken, COOKIE_SETTINGS.REFRESH_TOKEN)
-			
+
 			return res.status(200).json({ accessToken, accessTokenExpiration, logOutTime, userInfo, deviceId, isFast })
 		} catch (err) {
 			res.clearCookie(getUserCookieName(userId))

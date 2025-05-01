@@ -1,0 +1,136 @@
+@import '../../../../../variables'
+
+
+//&::before
+    width: 4rem
+.avatar-list
+    //border: 2px solid red
+    width: 850px
+    height: 90vh
+    border-radius: 120px 120px 0 0
+    flex-direction: row
+    align-items: flex-start
+    flex-wrap: wrap
+    overflow-y: scroll
+    scroll-behavior: smooth
+    scroll-snap-type: y mandatory
+    -ms-overflow-style: none
+    scrollbar-width: none
+    opacity: 1
+    padding: 1.5rem
+    animation: fadeInAvatarList 0.7s ease
+    &::-webkit-scrollbar
+        display: none
+    .avatar_list_button-cont
+        //border: 2px solid brown
+        $size-avatar-elem: 6rem
+        width: $size-avatar-elem
+        height: auto
+        margin: 0.8rem 0.8rem 0.8rem
+        overflow: visible
+        button
+            //border: 2px solid orange
+            width: 100%
+            height: $size-avatar-elem
+            border-radius: 50%
+            box-shadow: 2px 3px 7px #0000003a
+            overflow: hidden
+            will-change: transform
+            img
+                //border: 2px solid blue
+                width: 100%
+                height: 100%
+                object-fit: cover
+                transition: all 0.1s ease-out
+            &:hover
+                border-radius: 45%
+                transform: translateY(calc($height-but-act-jump * 3))
+                box-shadow: 2px 3px 7px #0000005d
+            &:active
+                transform: translateY(calc($height-but-act-jump * 3)) scale(0.95)
+            &:focus
+                border-radius: 45%
+                border: 3px solid $color-cover-light
+                box-shadow: 2px 3px 7px #0000005d
+                img
+                    border-radius: 45%
+                    padding: 3px
+        label
+            //border: 1px solid black
+            margin-top: -0.4rem
+            padding-top: 1rem
+            text-align: center
+            font-size: $size-main-text
+            color: $color-main-text
+    .empty_list-message
+        line-height: 1.7rem
+        font-size: 1rem
+        text-align: center
+
+
+.scroll_buts-cont
+    //border: 1px solid black
+    position: absolute
+    left: 50%
+    //top: 42.5vh
+    width: auto
+    justify-content: space-between
+    overflow: visible
+    $size-scroll-but: 4rem
+    height: calc($size-scroll-but * 2.4)
+    transform: translateX(480px)
+    mix-blend-mode: screen
+    z-index: -1
+    .round-but
+        //border: 1px solid black
+        width: $size-scroll-but
+        height: $size-scroll-but
+        transition: all 0.1s ease
+        &::before
+            width: 140%
+            height: 140%
+            background-color: rgba(115, 115, 115, 0.09)
+        &:hover
+            .scroll_but-cont
+                .fa-icon
+                    color: #25364bd2
+        &:active
+            .scroll_but-cont
+                transform: scale(0.9)
+        &:disabled
+            opacity: 1
+        .scroll_but-cont
+            border-radius: 50%
+            background-color: $color-backgr
+            will-change: transform
+            transition: all 0.2s ease
+            .fa-icon
+                z-index: 5
+                font-size: 1.8rem
+                color: #2f4866d2
+                transition: all 0.2s ease
+    .up
+        transform: translate(-150px, 600px)
+    .down
+        transform: translate(-200px, 600px)
+    .tool_tip
+        &.right
+            bottom: 25%
+
+//&.opened
+//    .scroll_buts-cont
+//        .round-but
+//            transform: none
+//        .up
+//            transition: all 0.7s 0.2s $trans-bounce-style
+//        .down
+//            transition: all 0.7s 0.4s $trans-bounce-style
+
+@keyframes fadeInAvatarList
+    0%
+        padding: 300px 1.5rem 1.5rem 1.5rem
+        opacity: 0
+    100%
+        opacity: 1
+        padding: 1.5rem
+

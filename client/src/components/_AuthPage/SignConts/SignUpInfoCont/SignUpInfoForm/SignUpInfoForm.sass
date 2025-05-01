@@ -1,7 +1,6 @@
 @import '../../../AuthPage_variables'
 
 
-
 #signs-cont
     .sign-cont
         #sign_up_info-form
@@ -14,9 +13,13 @@
                 flex-direction: row
                 justify-content: space-around
                 overflow: visible
+                $size-but: calc($size-confirm-but / 1.7)
+                .select_avatar_but-cont
+                    width: $size-but
+                    height: $size-but
                 .submit-but
-                    width: calc($size-confirm-but / 1.7)
-                    height: calc($size-confirm-but / 1.7)
+                    width: $size-but
+                    height: $size-but
                     border-radius: 50%
                     .confirm_but_bg-cont
                         border-radius: 50%

@@ -1,24 +1,22 @@
-import React, { createContext, useEffect } from "react"
-import AuthService from "../services/Auth-service"
-import io from "socket.io-client"
-import { ILoginServiceRes } from "../../../common/types/Auth-types"
-import LogOut from "../features/auth/logOut"
-import logOut from "../features/auth/logOut"
-import { useAuthState } from "../stores/Auth-store"
-import JWTInfoService from "../services/JWTInfoService"
-import AuthCommon, { ICurrentUserLS, ISwitchUsersIdLS } from "../features/auth/authCommon"
-import FastSession from "../features/auth/fastSession"
-import { CURRENT_USER_LS, DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_ID_LS } from "../../constants"
-import { Loader } from "../components/common/Loader/Loader"
-import CoverAppTitle from "../components/common/CoverAppTitle/CoverAppTitle"
-import { getLSObject, removeLS } from "../utils/localStorage"
-import { IDeviceInfo } from "../types/Device-types"
+import React, { createContext, useEffect } from 'react'
+import AuthService from '../services/Auth-service'
+import io from 'socket.io-client'
+import { ILoginServiceRes } from '../../../common/types/Auth-types'
+import LogOut from '../features/auth/logOut'
+import logOut from '../features/auth/logOut'
+import { useAuthState } from '../stores/Auth-store'
+import TokenService from '../services/Token-service'
+import AuthCommon, { ICurrentUserLS, ISwitchUsersIdLS } from '../features/auth/authCommon'
+import FastSession from '../features/auth/fastSession'
+import { CURRENT_USER_LS, DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_ID_LS } from '../../constants'
+import { Loader } from '../components/common/Loader/Loader'
+import CoverAppTitle from '../components/common/CoverAppTitle/CoverAppTitle'
+import { getLSObject, removeLS } from '../utils/localStorage'
+import { IDeviceInfo } from '../types/Device-types'
 
 
 
-type IAuthContext = {
-
-}
+type IAuthContext = {}
 
 export const AuthContext = createContext<IAuthContext | null>(null)
 export const socket = io(import.meta.env.VITE_API_URL)
@@ -54,29 +52,47 @@ const AuthProvider = ({ children }) => {
 							.filter((userId) => userId !== currentUserId)
 							.map(async (userId) => {
 
-								try {
-									const { accessToken, accessTokenExpiration, userInfo, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, userId })
+									try {
+										const {
+											accessToken,
+											accessTokenExpiration,
+											userInfo,
+											isFast,
+										}: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, userId })
 
-									if (isFast) {
-										logOut.logOut({ interCode: 204, userId })
-										return
+										if (isFast) {
+											logOut.logOut({ interCode: 204, userId })
+											return
+										}
+
+										TokenService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
+									} catch (err) {
+										console.error('Error refresh for switch user: ', userId)
+										logOut.logOut({ interCode: 206, userId })
 									}
-
-									JWTInfoService.setJWTInfo({ userInfo, accessToken, accessTokenExpiration })
-								} catch (err) {
-									console.error('Error refresh for switch user: ', userId)
-									logOut.logOut({ interCode: 206, userId })
-								}
-							}
-						))
+								},
+							))
 					}
 				}
 
 				await refreshSwitchUsersTokens()
-					.then( async () => {
+					.then(async () => {
 						try {
-							const { accessToken, accessTokenExpiration, userInfo, deviceId, isFast }: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, userId: currentUserId })
-							AuthCommon.loginUser({ accessToken, accessTokenExpiration, userInfo, deviceId, lsDeviceId, isFast })
+							const {
+								accessToken,
+								accessTokenExpiration,
+								userInfo,
+								deviceId,
+								isFast,
+							}: ILoginServiceRes = await AuthService.refresh({ lsDeviceId, userId: currentUserId })
+							AuthCommon.loginUser({
+								accessToken,
+								accessTokenExpiration,
+								userInfo,
+								deviceId,
+								lsDeviceId,
+								isFast,
+							})
 						} catch (err) {
 							LogOut.userHasLogOut()
 							removeLS(CURRENT_USER_LS)
@@ -105,9 +121,9 @@ const AuthProvider = ({ children }) => {
 			}
 		}
 
-		window.addEventListener("storage", handlePersistedLogOut)
+		window.addEventListener('storage', handlePersistedLogOut)
 		return () => {
-			window.removeEventListener("storage", handlePersistedLogOut)
+			window.removeEventListener('storage', handlePersistedLogOut)
 		}
 	}, [])
 
@@ -133,9 +149,9 @@ const AuthProvider = ({ children }) => {
 		const handleBeforeUnload = () => {
 			FastSession.handleFastSessionRefresh()
 		}
-		window.addEventListener("beforeunload", handleBeforeUnload)
+		window.addEventListener('beforeunload', handleBeforeUnload)
 		return () => {
-			window.removeEventListener("beforeunload", handleBeforeUnload)
+			window.removeEventListener('beforeunload', handleBeforeUnload)
 		}
 	}, [])
 	useEffect(() => {
@@ -148,18 +164,16 @@ const AuthProvider = ({ children }) => {
 
 	return (
 		<AuthContext.Provider
-			value={{
-
-			}}
+			value={{}}
 		>
 			{appReadyState ? (
-				children
-			) :
+					children
+				) :
 				<>
 					<Loader
 						type={'circles'}
 						contClassName={'main_bg-gradient'}
-						width="100"
+						width='100'
 					/>
 					<CoverAppTitle dim={true} />
 				</>

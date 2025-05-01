@@ -1,25 +1,31 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 import SnackBar from '../../components/others/SnackBar/SnackBar'
-import { getTime } from "../../utils/getTime"
-import blockDevice from "../blockDevice/blockDevice"
-import timeout from "../../utils/timeout"
-import { useBlockErrorState } from "../../stores/Device-store"
-import { ISnack, SnackBarTypeOptions } from "../../../../common/types/Global-types"
-import saveLogInLocalStorage from "./saveLogInLocalStorage"
-import { ICONS } from "../../assets/common/Icons-data"
-import { removeLS } from "../../utils/localStorage"
-import { BLOCK_DEVICE } from "../../../constants"
+import { getTime } from '../../utils/getTime'
+import blockDevice from '../blockDevice/blockDevice'
+import timeout from '../../utils/timeout'
+import { useBlockErrorState } from '../../stores/Device-store'
+import { ISnack, SnackBarTypeOptions } from '../../../../common/types/Global-types'
+import saveLogInLocalStorage from './saveLogInLocalStorage'
+import { ICONS } from '../../assets/common/Icons-data'
+import { removeLS } from '../../utils/localStorage'
+import { BLOCK_DEVICE } from '../../../constants'
 
 
 
 const showAllSnacksDev = () => {
-	
+
 	const ALL_SNACKS = [getTypeDecoding('e'), getTypeDecoding('i'), getTypeDecoding('w'), getTypeDecoding('b'), getTypeDecoding('s')]
 
 	ALL_SNACKS.map(snack => {
 		toast.custom((toastElem) => (
-			<SnackBar title={snack.title} icon={snack.icon} message={'Тест уведомления. У тебя всё будет хорошо, красавчик'} toastElem={toastElem} type={snack.snackType} />
+			<SnackBar
+				title={snack.title}
+				icon={snack.icon}
+				message={'Тест уведомления. У тебя всё будет хорошо, красавчик'}
+				toastElem={toastElem}
+				type={snack.snackType}
+			/>
 		), {
 			duration: Infinity,
 			className: snack.snackType,
@@ -29,24 +35,32 @@ const showAllSnacksDev = () => {
 }
 
 const getTypeDecoding = (type: SnackBarTypeOptions) => {
-    switch (type) {
-		case 'e' : return { snackType: type, title: 'Ошибка', icon: ICONS.error, toastDuration: 4000 }
-		case 'i' : return { snackType: type, title: 'Инфо', icon: ICONS.info, toastDuration: 5000 }
-		case 'w' : return { snackType: type, title: 'Внимание', icon: ICONS.warning, toastDuration: Infinity }
-		case 'b' : return { snackType: type, title: 'Блок', icon: ICONS.block, toastDuration: Infinity }
-        case 's' : return { snackType: type, title: 'Успех', icon: ICONS.success, toastDuration: 2000 }
-    }
+	switch (type) {
+		case 'e' :
+			return { snackType: type, title: 'Ошибка', icon: ICONS.error, toastDuration: 4000 }
+		case 'i' :
+			return { snackType: type, title: 'Инфо', icon: ICONS.info, toastDuration: 5000 }
+		case 'w' :
+			return { snackType: type, title: 'Внимание', icon: ICONS.warning, toastDuration: Infinity }
+		case 'b' :
+			return { snackType: type, title: 'Блок', icon: ICONS.block, toastDuration: Infinity }
+		case 's' :
+			return { snackType: type, title: 'Успех', icon: ICONS.success, toastDuration: 2000 }
+	}
 }
 
 const messagePreprocessing = (message: string) => {
 	switch (message) {
-		case 'Failed to fetch' : return 'Ошибка подключения к серверу'
-		case 'Request timed out' : return 'Ошибка ответа сервера'
+		case 'Failed to fetch' :
+			return 'Ошибка подключения к серверу'
+		case 'Request timed out' :
+			return 'Ошибка ответа сервера'
 		case 'User denied Geolocation' :
 		case 'User denied geolocation prompt' :
-				return `Вами было запрещено получение информации о местоположении. Для отображения погоды по Вашим координатам <span class=\'bold\'>дайте разрешение и обновите страницу</span>`
-        default : return message
-    }
+			return `Вами было запрещено получение информации о местоположении. Для отображения погоды по Вашим координатам <span class=\'bold\'>дайте разрешение и обновите страницу</span>`
+		default :
+			return message
+	}
 }
 
 export const showSnack = async (snack: ISnack) => {
@@ -57,7 +71,13 @@ export const showSnack = async (snack: ISnack) => {
 		await timeout(100)
 	}
 	toast.custom((toastElem) => (
-		<SnackBar title={snack.messageTitle || title} icon={icon} message={messagePreprocessing(snack.message) || 'Непредвиденная ошибка'} toastElem={toastElem} type={snackType} />
+		<SnackBar
+			title={snack.messageTitle || title}
+			icon={icon}
+			message={messagePreprocessing(snack.message) || 'Непредвиденная ошибка'}
+			toastElem={toastElem}
+			type={snackType}
+		/>
 	), {
 		duration: snack.durationInSec * 1000 || toastDuration,
 		className: snackType,
@@ -68,9 +88,9 @@ export const showSnack = async (snack: ISnack) => {
 
 export const showSnackMessage = (snack: ISnack) => {
 	// console.log(snack)
-	
+
 	if (useBlockErrorState.getState().blockErrorState) return
-	
+
 	if (snack?.detail?.res?.status === 401) {
 		removeLS(BLOCK_DEVICE)
 	}
@@ -87,12 +107,12 @@ export const showSnackMessage = (snack: ISnack) => {
 			if (snack.response)
 				snack.response.json()
 					.then((snack: ISnack) => showSnackMessage(snack))
-		}catch {
+		} catch {
 			// if (messagePreprocessing())
 			showSnackMessage({
 				type: 'w',
 				message: snack.message || 'Непредвиденная ошибка',
-				snackTime: getTime()
+				snackTime: getTime(),
 			})
 		}
 		return
@@ -106,7 +126,7 @@ export const showSnackMessage = (snack: ISnack) => {
 	//* SnackTime adding
 	const snackWithTime: ISnack = {
 		...structuredClone(snack),
-		snackTime: snack.snackTime || getTime()
+		snackTime: snack.snackTime || getTime(),
 	}
 
 	//* Connection errors handling
@@ -118,6 +138,7 @@ export const showSnackMessage = (snack: ISnack) => {
 	showSnack(snackWithTime)
 
 	if (localStorage.getItem(BLOCK_DEVICE) || ['Failed to fetch', 'Device-service error'].includes(snack.message)) return
-	// if (!['s'].includes(snackWithTime.type))
+	if (!['s'].includes(snackWithTime.type)) {
 		saveLogInLocalStorage(snackWithTime)
+	}
 }

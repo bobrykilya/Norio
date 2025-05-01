@@ -1,31 +1,32 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { fastSessionTestForDataEditing, TopCardFormsProps } from "../../TopCard"
-import { useUserInfoState } from "../../../../../../stores/User-store"
+import { fastSessionTestForDataEditing, TopCardFormsProps } from '../../TopCard'
+import { useUserInfoState } from '../../../../../../stores/User-store'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import FormStatusButton from "../common/FormStatusButton/FormStatusButton"
-import PasswordInput from "../../../../../common/Inputs/InputFields/PasswordInput/PasswordInput"
-import FormSubmitButton from "../common/FormSubmitButton/FormSubmitButton"
-import { ICONS } from "../../../../../../assets/common/Icons-data"
-import { ICommonVar } from "../../../../../../../../common/types/Global-types"
-import { IAccountInfoEditReq } from "../../../../../../../../common/types/User-types"
-import NameInput from "../../../../../common/Inputs/InputFields/NameInput/NameInput"
-import { AVATARS_LIST } from "../../../../../../assets/AuthPage/AuthPage-data"
-import AvatarButton from "../../../../../_AuthPage/AvatarListCard/AvatarButton"
-import { showSnackMessage } from "../../../../../../features/showSnackMessage/showSnackMessage"
-import { useMatchConfirmPassword } from "../../../../../../hooks/useMatchConfirmPassword"
-import UserService from "../../../../../../services/User-service"
-import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
-import AuthCommon from "../../../../../../features/auth/authCommon"
+import FormStatusButton from '../common/FormStatusButton/FormStatusButton'
+import PasswordInput from '../../../../../common/Inputs/InputFields/PasswordInput/PasswordInput'
+import FormSubmitButton from '../common/FormSubmitButton/FormSubmitButton'
+import { ICONS } from '../../../../../../assets/common/Icons-data'
+import { ICommonVar } from '../../../../../../../../common/types/Global-types'
+import { IAccountInfoEditReq } from '../../../../../../../../common/types/User-types'
+import NameInput from '../../../../../common/Inputs/InputFields/NameInput/NameInput'
+import { showSnackMessage } from '../../../../../../features/showSnackMessage/showSnackMessage'
+import { useMatchConfirmPassword } from '../../../../../../hooks/useMatchConfirmPassword'
+import UserService from '../../../../../../services/User-service'
+import { IUserRepository } from '../../../../../../../../api/src/types/DB-types'
+import AuthCommon from '../../../../../../features/auth/authCommon'
+import { createName } from '../../../../../../utils/createString'
+import { useAvatarState } from '../../../../../../stores/Utils-store'
+import SelectAvatarButton from '../../../BottomCard/AvatarList/SelectAvatarButton/SelectAvatarButton'
 
 
 
 const updateBrowsersPasswordCredential = async (data: IAccountInfoEditReq, userInfo: IUserRepository) => {
 
-	if ("PasswordCredential" in window) {
+	if ('PasswordCredential' in window) {
 		let credential = new PasswordCredential({
 			id: data.username || userInfo.username,
 			password: data.password || '-',
-			name: `${userInfo.lastName} ${userInfo.firstName}`
+			name: createName(userInfo, ['lastName', 'firstName']),
 		})
 
 		try {
@@ -46,8 +47,13 @@ export type IAccountInfoEditForm = {
 const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) => {
 
 	const { userInfoState: userInfo } = useUserInfoState()
+	const {
+		listOfUsedAvatarsState,
+		setListOfUsedAvatarsState,
+		selectedAvatarState: avatar,
+		setSelectedAvatarState: setAvatar,
+	} = useAvatarState()
 	const defaultAvatar = userInfo?.avatar
-	const [avatar, setAvatar] = useState<ICommonVar['avatar']>(defaultAvatar)
 	const [errorAvatar, setErrorAvatar] = useState<{ message: string } | null>(null)
 	const inputRefPrevPassword = useRef<HTMLInputElement>(null)
 	const defaultValues: IAccountInfoEditForm = {
@@ -63,6 +69,12 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		email: userInfo?.email || '',
 	}
 
+	const checkUsedAvatars = async () => {
+		if (!listOfUsedAvatarsState || !listOfUsedAvatarsState[0]) {
+			setListOfUsedAvatarsState((await UserService.getUsedAvatarsList()).avatarsList)
+		}
+	}
+
 
 	const {
 		register,
@@ -73,11 +85,12 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		getValues,
 		setError,
 		setValue,
+		setFocus,
 		formState: { errors, isDirty, touchedFields },
 	} = useForm<IAccountInfoEditForm>({
 		mode: 'onChange',
 		reValidateMode: 'onChange',
-		defaultValues
+		defaultValues,
 	})
 
 	const commonProps = {
@@ -94,8 +107,8 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		withEmptyIcon: true,
 		undoFieldButParams: {
 			onClick: handleClickUndoFieldBut,
-			preloadValues
-		}
+			preloadValues,
+		},
 	}
 
 	const resetPasswords = () => {
@@ -112,6 +125,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		resetEditFields()
 		preloadFormValuesSetting()
 	}
+
 	function handleClickUndoFieldBut(name: string) {
 		const typedName = name as keyof IAccountInfoEditForm
 		reset(typedName)
@@ -132,9 +146,9 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 				// (otherwise userState will be update with AuthCommon.loginUser)
 				AuthCommon.updateUser({ userId: userInfo.userId, data })
 			}
-			
+
 			showSnackMessage({
-				type: "s",
+				type: 's',
 				message: 'Изменения сохранены',
 			})
 			setStatusState('ok')
@@ -156,7 +170,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		} else if (dirtyData.newPassword) {
 			if (dirtyData.newPassword === dirtyData.prevPassword) {
 				showSnackMessage({
-					type: "e",
+					type: 'e',
 					message: 'Новый пароль не должен совпадать с предыдущим',
 				})
 				return
@@ -201,6 +215,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		for (const name in preloadValues) {
 			setValue(name as keyof IAccountInfoEditForm, preloadValues[name])
 		}
+		setAvatar(defaultAvatar)
 	}
 
 
@@ -209,11 +224,15 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 		passVal: 'newPassword',
 		confirmVal: 'confirmNewPassword',
 		watch,
-		setError
+		setError,
 	})
 
 	useEffect(() => {
 		preloadFormValuesSetting()
+		checkUsedAvatars()
+		if (!preloadValues.email) {
+			setFocus('email')
+		}
 	}, [])
 
 	//* Update form inputs and selects watching
@@ -236,10 +255,10 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 			onSubmit={handleSubmit(handleSaveForm)}
 		>
 			<div
-			    className={'account_info_edit_form-header cont'}
+				className={'account_info_edit_form-header cont'}
 			>
 				<div
-				    className={'account_info_edit_form_title_and_username-cont'}
+					className={'account_info_edit_form_title_and_username-cont'}
 				>
 					<div
 						className={'edit_form_status_and_title-cont cont'}
@@ -263,7 +282,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 							placeholder={'Логин'}
 							icon={ICONS.user}
 							autoComplete={'off'}
-							{ ...nameInputProps }
+							{...nameInputProps}
 						/>
 					</div>
 				</div>
@@ -278,7 +297,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 						icon={ICONS.prevPassword}
 						required={false}
 						inputRefPassword={inputRefPrevPassword}
-						{ ...commonProps }
+						{...commonProps}
 					/>
 					<PasswordInput
 						name={'newPassword'}
@@ -286,7 +305,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 						inputType={'sign_up'}
 						autoComplete={'new-password'}
 						required={false}
-						{ ...commonProps }
+						{...commonProps}
 					/>
 					<PasswordInput
 						name={'confirmNewPassword'}
@@ -295,19 +314,19 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 						autoComplete={'new-password'}
 						matchWithName={'newPassword'}
 						required={false}
-						{ ...commonProps }
+						{...commonProps}
 					/>
 				</div>
 			</div>
 			<div
-			    className={'account_info_edit_form-footer cont'}
+				className={'account_info_edit_form-footer cont'}
 			>
-				<AvatarButton
-					LIST={AVATARS_LIST}
-					currentAvatar={avatar}
-					setAvatar={setAvatar}
+				<SelectAvatarButton
+					selectedAvatar={avatar}
+					setSelectedAvatar={setAvatar}
 					error={errorAvatar}
 					setError={setErrorAvatar}
+					isWhiteVersion={true}
 				/>
 				<div
 					className={'account_info_edit_form_email-card white-card'}
@@ -319,8 +338,7 @@ const AccountInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps)
 						icon={ICONS.email}
 						autoComplete={'email'}
 						inputMaxLength={50}
-						autoFocus={!preloadValues.email}
-						{ ...nameInputProps }
+						{...nameInputProps}
 					/>
 				</div>
 				<FormSubmitButton />

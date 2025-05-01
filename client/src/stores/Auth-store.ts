@@ -1,27 +1,23 @@
-import { create } from "zustand"
-import { CoverPanelOptions } from "../types/Auth-types"
-import { IUserRepository } from "../../../api/src/types/DB-types"
-import { ICommonVar } from "../../../common/types/Global-types"
+import { create } from 'zustand'
+import { CoverPanelOptions } from '../types/Auth-types'
+import { IUserRepository } from '../../../api/src/types/DB-types'
+import { ICommonVar } from '../../../common/types/Global-types'
 // import { persist } from "zustand/middleware"
 
 
-
 type IUseCoverPanelState = {
-    coverPanelState: CoverPanelOptions;
-    setCoverPanelState: (state: CoverPanelOptions) => void;
+	coverPanelState: CoverPanelOptions;
+	setCoverPanelState: (state: CoverPanelOptions) => void;
 }
 export const useCoverPanelState = create<IUseCoverPanelState>(set => ({
-    coverPanelState: 'sign_in',
-    setCoverPanelState: (state) => set({ coverPanelState: state })
+	coverPanelState: 'sign_in',
+	setCoverPanelState: (state) => set({ coverPanelState: state }),
 }))
-
 
 
 type IUseAuthState = {
 	appReadyState: boolean;
 	setAppReadyState: (state: boolean) => void;
-	listOfUsedAvatarsState: ICommonVar['avatar'][];
-	setListOfUsedAvatarsState: (state: ICommonVar['avatar'][]) => void;
 	socketSessIdState: string;
 	setSocketSessIdState: (state: string) => void;
 }
@@ -29,13 +25,9 @@ export const useAuthState = create<IUseAuthState>(set => ({
 	appReadyState: false,
 	setAppReadyState: (state) => set({ appReadyState: state }),
 
-	listOfUsedAvatarsState: [],
-	setListOfUsedAvatarsState: (state) => set({ listOfUsedAvatarsState: state }),
-
 	socketSessIdState: '',
-	setSocketSessIdState: (state) => set({ socketSessIdState: state })
+	setSocketSessIdState: (state) => set({ socketSessIdState: state }),
 }))
-
 
 
 type IJWTInfo = {
@@ -75,7 +67,7 @@ export const useJwtInfoListState = create<IUseJwtInfoState>((set, get) => ({
 		const jwtInfoListState = get().jwtInfoListState
 
 		set({
-			jwtInfoListState: jwtInfoListState.filter(el=> el.userInfo.userId !== userId)
+			jwtInfoListState: jwtInfoListState.filter(el => el.userInfo.userId !== userId),
 		})
 	},
 	updateJWTUserInfoState: (userId, data) => {
@@ -86,15 +78,15 @@ export const useJwtInfoListState = create<IUseJwtInfoState>((set, get) => ({
 				if (el.userInfo.userId !== userId) {
 					return el
 				}
-				
+
 				return {
 					...el,
 					userInfo: {
 						...el.userInfo,
-						...data
-					}
+						...data,
+					},
 				}
-			})
+			}),
 		})
-	}
+	},
 }))

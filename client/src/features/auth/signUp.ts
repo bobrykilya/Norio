@@ -1,22 +1,23 @@
-import { ICheckUserReq, ISignUpReq } from "../../../../common/types/Auth-types"
-import AuthService from "../../services/Auth-service"
-import AuthCommon from "./authCommon"
-import { useAuthState, useCoverPanelState } from "../../stores/Auth-store"
+import { ICheckUserReq, ISignUpReq } from '../../../../common/types/Auth-types'
+import AuthService from '../../services/Auth-service'
+import AuthCommon from './authCommon'
+import { useCoverPanelState } from '../../stores/Auth-store'
+import { useAvatarState } from '../../stores/Utils-store'
 
 
 
 const setCoverPanelState = useCoverPanelState.getState().setCoverPanelState
-const setListOfUsedAvatarsState = useAuthState.getState().setListOfUsedAvatarsState
+const setListOfUsedAvatarsState = useAvatarState.getState().setListOfUsedAvatarsState
 let signUpUserInfo = {
 	username: '',
-	hashedPassword: ''
+	hashedPassword: '',
 }
 
 
 const resetSignUpVariables = () => {
 	signUpUserInfo = {
 		username: '',
-		hashedPassword: ''
+		hashedPassword: '',
 	}
 	setListOfUsedAvatarsState([])
 }
@@ -34,8 +35,9 @@ class SignUp {
 
 		signUpUserInfo = {
 			username,
-			hashedPassword
+			hashedPassword,
 		}
+
 		setListOfUsedAvatarsState(avatarsList)
 
 		setCoverPanelState('sign_up_info')

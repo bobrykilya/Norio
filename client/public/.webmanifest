@@ -4,22 +4,22 @@
     "description": "Web-app for employees of corporation",
     "ICONS": [
         {
-            "src": "../src/assets/logos/little_logo_44x44.png",
+            "src": "/logos/little_logo_44x44.png",
             "sizes": "44x44",
             "type": "image/png"
         },
         {
-            "src": "../src/assets/logos/little_logo_48x48.png",
+            "src": "./logos/little_logo_48x48.png",
             "sizes": "48x48",
             "type": "image/png"
         },
         {
-            "src": "../src/assets/logos/little_logo_32x32.png",
+            "src": "/logos/little_logo_32x32.png",
             "sizes": "48x48",
             "type": "image/png"
         },
         {
-            "src": "../src/assets/logos/little_logo.png",
+            "src": "/logos/little_logo.png",
             "sizes": "512x512",
             "type": "image/png"
         }

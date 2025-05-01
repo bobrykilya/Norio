@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
-import { useClickOutside } from "../../../hooks/useClickOutside"
-import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
-import { useModalState } from "../../../stores/Global-store"
+import { useClickOutside } from '../../../hooks/useClickOutside'
+import useCloseOnEsc from '../../../hooks/useCloseOnEsc'
+import { useModalState } from '../../../stores/Utils-store'
 
 
 
@@ -14,17 +14,18 @@ type UnfoldingCardProps = {
 const UnfoldingCard = ({ isFullCard, closeCard, className, children }: UnfoldingCardProps) => {
 
 	const cardRef = useRef(null)
-	const { modalState, blurModalState,  } = useModalState()
+	const getCommonModalState = useModalState(s => s.getCommonModalState)
+	console.log(getCommonModalState())
 
 	useClickOutside({
 		ref: cardRef,
 		callback: closeCard,
-		conditionsList: [isFullCard, !blurModalState]
+		conditionsList: [isFullCard, !getCommonModalState()],
 	})
 
 	useCloseOnEsc({
 		callback: closeCard,
-		conditionsList: [isFullCard, !modalState, !blurModalState]
+		conditionsList: [isFullCard],
 	})
 
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import timeout from "../../../../utils/timeout"
-import ToolTip, { ToolTipProps } from "../../../others/ToolTip/ToolTip"
-import { capitalize } from "../../../../utils/capitalize"
-import SelectDropDown, { ISelectDropDownOptionListElem } from "../../SelectDropDown/SelectDropDown"
+import timeout from '../../../../utils/timeout'
+import ToolTip, { ToolTipProps } from '../../../others/ToolTip/ToolTip'
+import { capitalize } from '../../../../utils/capitalize'
+import SelectDropDown, { ISelectDropDownOptionListElem } from '../../SelectDropDown/SelectDropDown'
 
 
 
@@ -17,7 +17,17 @@ type SelectButtonProps = {
 	placeholder?: string;
 	isTabDisabled?: boolean;
 }
-const SelectButton = ({ OPTIONS_LIST, selectedState, contClassName, setSelectedState, onClick, needToSort=true, toolTip, placeholder, isTabDisabled=false }: SelectButtonProps) => {
+const SelectButton = ({
+						  OPTIONS_LIST,
+						  selectedState,
+						  contClassName,
+						  setSelectedState,
+						  onClick,
+						  needToSort = true,
+						  toolTip,
+						  placeholder,
+						  isTabDisabled = false,
+					  }: SelectButtonProps) => {
 
 	const [isDropDownOpened, setIsDropDownOpened] = useState(false)
 
@@ -29,7 +39,7 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, contClassName, setSelectedS
 	const handleClickOption = async (state: ISelectDropDownOptionListElem) => {
 		setIsDropDownOpened(false)
 		butRef.current.classList.add('hide')
-		
+
 		await timeout(400)
 
 		if (onClick) {
@@ -67,16 +77,16 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, contClassName, setSelectedS
 				ref={butRef}
 			>
 				<div
-				    className={`select_but-content cont ${isDropDownOpened ? 'active' : ''} ${!selectedState?.title ? 'placeholder' : ''}`}
+					className={`select_but-content cont ${isDropDownOpened ? 'active' : ''} ${!selectedState?.title ? 'placeholder' : ''}`}
 				>
-					{ selectedState?.icon && selectedState.icon }
+					{selectedState?.icon && selectedState.icon}
 					<p
 						className={'select_but_selected'}
 					>
 						{capitalize(selectedState?.title || placeholder || '')}
 					</p>
-					{ toolTip && <ToolTip {...toolTip} /> }
 				</div>
+				{toolTip && <ToolTip {...toolTip} />}
 			</button>
 			<SelectDropDown
 				OPTIONS_LIST={OPTIONS_LIST}
@@ -86,11 +96,11 @@ const SelectButton = ({ OPTIONS_LIST, selectedState, contClassName, setSelectedS
 				closeHooksParams={{
 					butRef: butRef,
 					callback: () => setIsDropDownOpened(false),
-					conditionsList: [isDropDownOpened]
+					conditionsList: [isDropDownOpened],
 				}}
 			/>
 		</div>
 	)
 }
 
-		export default SelectButton
+export default SelectButton

@@ -1,8 +1,8 @@
 import React, { forwardRef, useEffect, useRef } from 'react'
-import { useClickOutside } from "../../../hooks/useClickOutside"
-import useCloseOnEsc from "../../../hooks/useCloseOnEsc"
-import { ICloseHooksParams } from "../../../../../common/types/Global-types"
-import { useModalState } from "../../../stores/Global-store"
+import { useClickOutside } from '../../../hooks/useClickOutside'
+import useCloseOnEsc from '../../../hooks/useCloseOnEsc'
+import { ICloseHooksParams } from '../../../../../common/types/Global-types'
+import { useModalState } from '../../../stores/Utils-store'
 
 
 
@@ -14,7 +14,14 @@ type DropDownProps = {
 	isScrollContent?: boolean;
 	onKeyDown?: (e: React.KeyboardEvent<HTMLUListElement>) => void;
 }
-const DropDown = forwardRef(({ children, closeHooksParams, onClick, className, isScrollContent, ...restProps }: DropDownProps, ref?: React.RefObject<HTMLUListElement>) => {
+const DropDown = forwardRef(({
+								 children,
+								 closeHooksParams,
+								 onClick,
+								 className,
+								 isScrollContent,
+								 ...restProps
+							 }: DropDownProps, ref?: React.RefObject<HTMLUListElement>) => {
 
 	const dropDownRef = ref || useRef(null)
 	const setDropDownState = useModalState(s => s.setDropDownState) //* For forms Esc blur while any DropDown is opened
@@ -24,12 +31,12 @@ const DropDown = forwardRef(({ children, closeHooksParams, onClick, className, i
 		ref: dropDownRef,
 		butRef: closeHooksParams.butRef,
 		callback: closeHooksParams.callback,
-		conditionsList: closeHooksParams.conditionsList
+		conditionsList: closeHooksParams.conditionsList,
 	})
 
 	useCloseOnEsc({
 		callback: closeHooksParams.callback,
-		conditionsList: closeHooksParams.conditionsList
+		conditionsList: closeHooksParams.conditionsList,
 	})
 
 	useEffect(() => {

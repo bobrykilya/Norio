@@ -1,11 +1,11 @@
-import { HoroscopeTypeOptions, ICommonVar } from "../../../common/types/Global-types.ts"
-import { catchError } from "../utils/Errors.ts"
-import HoroscopeService from "../services/Horoscope-service.ts"
-import { IAccountInfoEditReq, IUserInfoEditReq } from "../../../common/types/User-types.ts"
-import UserService from "../services/User-service.ts"
-import { getTime } from "../utils/getTime.ts"
-import { COOKIE_SETTINGS } from "../../constants.ts"
-import { getUserCookieName } from "./Auth-controller.ts"
+import { HoroscopeTypeOptions, ICommonVar } from '../../../common/types/Global-types.ts'
+import { catchError } from '../utils/Errors.ts'
+import HoroscopeService from '../services/Horoscope-service.ts'
+import { IAccountInfoEditReq, IUserInfoEditReq } from '../../../common/types/User-types.ts'
+import UserService from '../services/User-service.ts'
+import { getTime } from '../utils/getTime.ts'
+import { COOKIE_SETTINGS } from '../../constants.ts'
+import { getUserCookieName } from './Auth-controller.ts'
 
 
 
@@ -22,7 +22,7 @@ class UserController {
 	}
 
 	static async editUserInfo(req: ICommonVar['req'], res: ICommonVar['res']) {
-		
+
 		try {
 			await UserService.editUserInfo(req.body as IUserInfoEditReq, req.user)
 
@@ -49,6 +49,17 @@ class UserController {
 			return res.status(200).json()
 		} catch (err) {
 			return catchError({ req, res, err, interCode: 211 })
+		}
+	}
+
+	static async getUsedAvatarsList(req: ICommonVar['req'], res: ICommonVar['res']) {
+
+		try {
+			const avatarsList = await UserService.getUsedAvatarsList()
+
+			return res.status(200).json({ avatarsList })
+		} catch (err) {
+			return catchError({ req, res, err })
 		}
 	}
 }

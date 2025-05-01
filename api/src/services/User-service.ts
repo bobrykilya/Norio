@@ -1,10 +1,11 @@
-import { IAccountInfoEditReq, IUserInfoEditReq } from "../../../common/types/User-types.ts"
-import { ICommonVar } from "../../../common/types/Global-types.ts"
-import { Errors } from "../utils/Errors.ts"
-import CommonRepository from "../_database/repositories/Common-db.ts"
-import bcrypt from "bcryptjs"
-import RefreshSessionRepository from "../_database/repositories/RefreshSession-db.ts"
-import AuthService from "./Auth-service.ts"
+import { IAccountInfoEditReq, IUserInfoEditReq } from '../../../common/types/User-types.ts'
+import { ICommonVar } from '../../../common/types/Global-types.ts'
+import { Errors } from '../utils/Errors.ts'
+import CommonRepository from '../_database/repositories/Common-db.ts'
+import bcrypt from 'bcryptjs'
+import RefreshSessionRepository from '../_database/repositories/RefreshSession-db.ts'
+import AuthService from './Auth-service.ts'
+import UserRepository from '../_database/repositories/User-db.ts'
 
 
 
@@ -32,14 +33,14 @@ class UserService {
 		const { userId, deviceId } = user
 		const { newPassword, prevPassword, ...restData } = data
 		const newData: IAccountInfoEditReq = {
-			...restData
+			...restData,
 		}
 
 		if (newPassword) {
 			await AuthService.checkPasswordByUsername({
 				username: user.username,
 				password: prevPassword,
-				error: Errors.passwordInvalid()
+				error: Errors.passwordInvalid(),
 			})
 			const salt = bcrypt.genSaltSync(10)
 			newData.password = bcrypt.hashSync(newPassword, salt)
@@ -65,17 +66,21 @@ class UserService {
 		if (newData.username) {
 			await RefreshSessionRepository.deleteRefreshSessionsByUserIdAndDeviceId({
 				userId,
-				deviceId
+				deviceId,
 			})
 			return await AuthService.createSession({
 				userId,
 				username: newData.username,
 				deviceId,
-				queryTime
+				queryTime,
 			})
 		}
 	}
-	
+
+	static async getUsedAvatarsList() {
+		return await UserRepository.getUsedAvatarsList()
+	}
+
 }
 
 export default UserService

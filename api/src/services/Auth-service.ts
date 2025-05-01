@@ -1,19 +1,19 @@
-import bcrypt from "bcryptjs"
-import TokenService from "./Token-service"
-import { Conflict, Errors } from "../utils/Errors"
-import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION, MAX_SESSION_FOR_USER } from "../../constants"
-import RefreshSessionsRepository from "../_database/repositories/RefreshSession-db"
-import UserRepository from "../_database/repositories/User-db"
+import bcrypt from 'bcryptjs'
+import TokenService from './Token-service'
+import { Conflict, Errors } from '../utils/Errors'
+import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION, MAX_SESSION_FOR_USER } from '../../constants'
+import RefreshSessionsRepository from '../_database/repositories/RefreshSession-db'
+import UserRepository from '../_database/repositories/User-db'
 import AuthDeviceRepository from '../_database/repositories/AuthDevice-db'
 import _logAttentionRepository from '../_database/repositories/_logAttention-db'
 import _logAuthRepository from '../_database/repositories/_LogAuth-db'
 import DeviceService from './Device-service'
 import { sendToClient } from './Socket-service'
 import { getEndTime, getTime } from '../utils/getTime'
-import { IService, ISignInController, ISignUpController } from "../types/Auth-types"
-import { ICheckUserReq, ILogOutReq, IRefreshReq } from "../../../common/types/Auth-types"
-import { IRefreshSessionRepository, IUserRepository } from "../types/DB-types"
-import { ICommonVar } from "../../../common/types/Global-types"
+import { IService, ISignInController, ISignUpController } from '../types/Auth-types'
+import { ICheckUserReq, ILogOutReq, IRefreshReq } from '../../../common/types/Auth-types'
+import { IRefreshSessionRepository, IUserRepository } from '../types/DB-types'
+import { ICommonVar } from '../../../common/types/Global-types'
 
 
 
@@ -32,33 +32,49 @@ type ICheckPasswordByUsername = {
 }
 
 class AuthService {
-	static async signIn({ username, password, fingerprint, fastSession, queryTime, deviceType, lsDeviceId, deviceIP }: IService<ISignInController>) {
-		
+	static async signIn({
+							username,
+							password,
+							fingerprint,
+							fastSession,
+							queryTime,
+							deviceType,
+							lsDeviceId,
+							deviceIP,
+						}: IService<ISignInController>) {
+
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP, queryTime })
 
 		const userData = await this.checkPasswordByUsername({
 			username,
 			password,
-			error: Errors.loginOrPasswordInvalid()
+			error: Errors.loginOrPasswordInvalid(),
 		})
 
 		const userId = userData.userId
 		const interCode = !fastSession ? 201 : 202
-		
+
 		//* Control of max sessions for every user
 		if (await RefreshSessionsRepository.getRefreshSessionsQuantity(userId) >= MAX_SESSION_FOR_USER) {
-			    await RefreshSessionsRepository.deleteOldestRefreshSessionByUserId(userId)
-			}
+			await RefreshSessionsRepository.deleteOldestRefreshSessionByUserId(userId)
+		}
 		//*
 
-		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTime, deviceType, lsDeviceId, deviceIP })
-		
+		const deviceId = await DeviceService.getDeviceId({
+			interCode,
+			fingerprint,
+			userId,
+			queryTime,
+			deviceType,
+			lsDeviceId,
+			deviceIP,
+		})
+
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTime })
 
 
 		return await this.createSession({ userId, username, deviceId, queryTime, fastSession })
 	}
-
 
 
 	static async checkUser({ username, password, fingerprint, queryTime }: IService<ICheckUserReq>) {
@@ -74,15 +90,12 @@ class AuthService {
 
 		const hashedPassword = bcrypt.hashSync(password, salt)
 
-		const avatarsList = await UserRepository.getUsedAvatarsList()
 
 		return {
 			username,
 			hashedPassword,
-			avatarsList,
 		}
 	}
-
 
 
 	static async signUp({
@@ -100,8 +113,8 @@ class AuthService {
 							queryTime,
 							deviceType,
 							lsDeviceId,
-							deviceIP
-	}: IService<ISignUpController>) {
+							deviceIP,
+						}: IService<ISignUpController>) {
 
 		await DeviceService.checkDeviceForBlock({ deviceId: lsDeviceId, fingerprint, deviceIP, queryTime })
 
@@ -118,7 +131,7 @@ class AuthService {
 		try {
 			userInfo = {
 				username,
-				hashedPassword, 
+				hashedPassword,
 				role,
 				status,
 				phone,
@@ -133,8 +146,8 @@ class AuthService {
 				isStore,
 			}
 			userId = await UserRepository.createUser(userInfo)
-			
-            userInfo.userId = userId
+
+			userInfo.userId = userId
 			delete userInfo.hashedPassword
 		} catch (err) {
 			// console.log(err)
@@ -146,7 +159,15 @@ class AuthService {
 			throw Errors.dbConflict(err)
 		}
 
-		const deviceId = await DeviceService.getDeviceId({ interCode, fingerprint, userId, queryTime, deviceType, lsDeviceId, deviceIP })
+		const deviceId = await DeviceService.getDeviceId({
+			interCode,
+			fingerprint,
+			userId,
+			queryTime,
+			deviceType,
+			lsDeviceId,
+			deviceIP,
+		})
 
 		await _logAttentionRepository.createLogAttention({ interCode, userId, deviceId, logTime: queryTime })
 		await _logAuthRepository.createLogAuth({ interCode, userId, deviceId, logTime: queryTime })
@@ -156,17 +177,24 @@ class AuthService {
 	}
 
 
-
-	static async logOut({ refreshToken, queryTime, interCode }: IService<Omit<ILogOutReq, 'userId'>> & Pick<ICommonVar, 'refreshToken'>) {
+	static async logOut({
+							refreshToken,
+							queryTime,
+							interCode,
+						}: IService<Omit<ILogOutReq, 'userId'>> & Pick<ICommonVar, 'refreshToken'>) {
 		const refreshSession = await RefreshSessionsRepository.getRefreshSession(refreshToken)
 
-		if (refreshSession){
-			await _logAuthRepository.createLogAuth({ interCode: interCode || 203, userId: refreshSession.user_id, deviceId: refreshSession.device_id, logTime: queryTime })
+		if (refreshSession) {
+			await _logAuthRepository.createLogAuth({
+				interCode: interCode || 203,
+				userId: refreshSession.user_id,
+				deviceId: refreshSession.device_id,
+				logTime: queryTime,
+			})
 		}
 
 		await RefreshSessionsRepository.deleteRefreshSessionByToken(refreshToken)
 	}
-
 
 
 	static async refresh({ fingerprint, currentRefreshToken, queryTime, lsDeviceId }: IService<IRefreshReq> & {
@@ -193,22 +221,53 @@ class AuthService {
 		}
 
 		let deviceId = await AuthDeviceRepository.getDeviceId(fingerprint.hash) ||
-		    await DeviceService.deviceIdHandlingAndUpdating({ lsDeviceId, fingerprint, userId: refreshSession.user_id, queryTime })
+			await DeviceService.deviceIdHandlingAndUpdating({
+				lsDeviceId,
+				fingerprint,
+				userId: refreshSession.user_id,
+				queryTime,
+			})
 
 		if (Number(refreshSession.device_id) !== Number(deviceId)) {
 
 			const interCode = deviceId ? 801 : 802
 			if (!deviceId) {
-				deviceId = await AuthDeviceRepository.createDevice({ fingerprint, regTime: queryTime, deviceType: 'Unknown' })
+				deviceId = await AuthDeviceRepository.createDevice({
+					fingerprint,
+					regTime: queryTime,
+					deviceType: 'Unknown',
+				})
 
-				await _logAttentionRepository.createLogAttention({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime })
+				await _logAttentionRepository.createLogAttention({
+					interCode,
+					userId: refreshSession.user_id,
+					deviceId,
+					logTime: queryTime,
+				})
 				await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
-				await DeviceService.blockDevice({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime, fingerprint })
+				await DeviceService.blockDevice({
+					interCode,
+					userId: refreshSession.user_id,
+					deviceId,
+					logTime: queryTime,
+					fingerprint,
+				})
 			}
 
-			await _logAttentionRepository.createLogAttention({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime })
+			await _logAttentionRepository.createLogAttention({
+				interCode,
+				userId: refreshSession.user_id,
+				deviceId,
+				logTime: queryTime,
+			})
 			await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
-			await DeviceService.blockDevice({ interCode, userId: refreshSession.user_id, deviceId, logTime: queryTime, fingerprint })
+			await DeviceService.blockDevice({
+				interCode,
+				userId: refreshSession.user_id,
+				deviceId,
+				logTime: queryTime,
+				fingerprint,
+			})
 		}
 
 		await RefreshSessionsRepository.deleteRefreshSessionByToken(currentRefreshToken)
@@ -263,7 +322,10 @@ class AuthService {
 		const accessToken = await TokenService.generateAccessToken(payload)
 		const refreshToken = await TokenService.generateRefreshToken(payload)
 
-		const logOutTime = fastSession ? getEndTime({ startTimeInSec: queryTime, duration: FAST_SESSION_DURATION }) : null
+		const logOutTime = fastSession ? getEndTime({
+			startTimeInSec: queryTime,
+			duration: FAST_SESSION_DURATION,
+		}) : null
 
 		await RefreshSessionsRepository.createRefreshSession({
 			userId,
@@ -299,7 +361,6 @@ class AuthService {
 		return userData
 	}
 
-	
 
 	static async fastSessionsExpireChecking(sessionInfo?: IRefreshSessionRepository) {
 		const sessionsLogOutList = sessionInfo ? [sessionInfo] : await RefreshSessionsRepository.getRefreshSessionsWithLogOutTime()
@@ -308,25 +369,30 @@ class AuthService {
 		if (!sessionsLogOutList[0]) {
 			return
 		}
-		
-		sessionsLogOutList.map( async ({ sess_id, user_id, device_id, log_out_time }) => {
+
+		sessionsLogOutList.map(async ({ sess_id, user_id, device_id, log_out_time }) => {
 			await RefreshSessionsRepository.deleteRefreshSessionById(sess_id)
 				.then(async () => {
-					await _logAuthRepository.createLogAuth({ interCode: 204, userId: user_id, deviceId: device_id, logTime: log_out_time })
+					await _logAuthRepository.createLogAuth({
+						interCode: 204,
+						userId: user_id,
+						deviceId: device_id,
+						logTime: log_out_time,
+					})
 					const { username, last_name, first_name } = await UserRepository.getUserName(user_id)
-					
+
 					//* Auto logout for client by Socket-io
 					sendToClient({
 						room: { userId: user_id, deviceId: device_id },
-						event: 'autoLogOut', 
-						payload: { 
-							isLogOut: true, 
-							userNameInfo: { 
+						event: 'autoLogOut',
+						payload: {
+							isLogOut: true,
+							userNameInfo: {
 								lastName: last_name,
 								firstName: first_name,
-                                username: username,
-							}
-						}
+								username: username,
+							},
+						},
 					})
 				})
 		})
@@ -340,21 +406,20 @@ class AuthService {
 			return
 		}
 
-		expireSessionsList.map( async ({ sess_id, user_id, device_id }) => {
+		expireSessionsList.map(async ({ sess_id, user_id, device_id }) => {
 			await RefreshSessionsRepository.deleteRefreshSessionById(sess_id)
 				.then(async () => {
 					await _logAuthRepository.createLogAuth({
 						interCode: 208,
 						userId: user_id,
 						deviceId: device_id,
-						logTime: getTime()
+						logTime: getTime(),
 					})
 				})
 		})
 	}
 
 
-	
 	static async intervalTestFunc() {
 		await AuthService.fastSessionsExpireChecking()
 		await AuthService.sessionExpireChecking()

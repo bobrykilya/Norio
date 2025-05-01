@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
-import ToolTip from "../../ToolTip/ToolTip"
-import UnfoldingCard from "../../../common/UnfoldingCard/UnfoldingCard"
-import SubmitBut from "../../../_AuthPage/SubmitBut/SubmitBut"
-import UserNameCopyButton from "./UserNameCopyButton/UserNameCopyButton"
-import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
-import SwitchUser from "../../../others/SwitchUser/SwitchUser"
-import LogOut from "../../../../features/auth/logOut"
-import SwapImg from "../../../common/SwapImg/SwapImg"
-import { useTopCardState } from "../../../../stores/Utils-store"
-import { ICONS } from "../../../../assets/common/Icons-data"
-import { useUserInfoState } from "../../../../stores/User-store"
+import ToolTip from '../../ToolTip/ToolTip'
+import UnfoldingCard from '../../../common/UnfoldingCard/UnfoldingCard'
+import SubmitBut from '../../../_AuthPage/SubmitBut/SubmitBut'
+import UserNameCopyButton from './UserNameCopyButton/UserNameCopyButton'
+import RoundButton from '../../../common/Buttons/RoundButton/RoundButton'
+import SwitchUser from '../../../others/SwitchUser/SwitchUser'
+import LogOut from '../../../../features/auth/logOut'
+import SwapImg from '../../../common/SwapImg/SwapImg'
+import { useTopCardState } from '../../../../stores/Utils-store'
+import { ICONS } from '../../../../assets/common/Icons-data'
+import { useUserInfoState } from '../../../../stores/User-store'
+import { getPathToAvatar } from '../../../../utils/createString'
 
 
 
@@ -36,19 +37,19 @@ const UserCard = ({ fastSessionState }: UserCardProps) => {
 				closeCard={toggleUserCard}
 			>
 				<div
-				    className={'account_change_buts-cont cont'}
+					className={'account_change_buts-cont cont'}
 				>
 					<RoundButton
 						className={'left clear-but'}
 						onClick={() => setTopCardState('userInfo')}
 						toolTip={{
-							message: 'Личные данные пользователя'
+							message: 'Личные данные пользователя',
 						}}
 					>
 						{ICONS.userEdit}
 					</RoundButton>
 					<button
-						className="account-but cont"
+						className='account-but cont'
 						onClick={toggleUserCard}
 						tabIndex={-1}
 					>
@@ -56,7 +57,7 @@ const UserCard = ({ fastSessionState }: UserCardProps) => {
 							className={'account_img-cont'}
 						>
 							<SwapImg
-								path={`/avatars/${userInfoState?.avatar}.jpg`}
+								path={getPathToAvatar(userInfoState?.avatar)}
 							/>
 						</div>
 						<ToolTip
@@ -68,19 +69,19 @@ const UserCard = ({ fastSessionState }: UserCardProps) => {
 						className={'right clear-but'}
 						onClick={() => setTopCardState('accountInfo')}
 						toolTip={{
-							message: 'Данные аккаунта'
+							message: 'Данные аккаунта',
 						}}
 					>
 						{ICONS.accountEdit}
 					</RoundButton>
 				</div>
 				<div
-				    className={'unfolding_card-only_full cont'}
+					className={'unfolding_card-only_full cont'}
 				>
 					{
 						fastSessionState &&
 						<span
-						    className={'fast_session-info'}
+							className={'fast_session-info'}
 						>
 						    -- Быстрая сессия --
 						</span>
@@ -92,13 +93,13 @@ const UserCard = ({ fastSessionState }: UserCardProps) => {
 						currentUserId={userInfoState.userId}
 						disabled={!isFullUserCard}
 					/>
-				    <SubmitBut
+					<SubmitBut
 						icon={ICONS.logout}
 						onClick={LogOut.currentUserLogOut}
 						useOnClick={true}
 						toolTip={{
 							message: 'Выйти из аккаунта пользователя',
-							position: 'bottom'
+							position: 'bottom',
 						}}
 					/>
 				</div>

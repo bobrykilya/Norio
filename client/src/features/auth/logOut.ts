@@ -1,16 +1,16 @@
-import { showSnackMessage } from "../showSnackMessage/showSnackMessage"
-import { ILogOutReq } from "../../../../common/types/Auth-types"
-import { useJwtInfoListState } from "../../stores/Auth-store"
-import AuthService from "../../services/Auth-service"
-import { queryClient } from "../../http/tanstackQuery-client"
-import { IUserNameInfo } from "../../types/Auth-types"
-import AuthCommon, { ICurrentUserLS } from "./authCommon"
-import JWTInfoService from "../../services/JWTInfoService"
-import { CURRENT_USER_LS, LOGOUT_LS } from "../../../constants"
-import { getTime } from "../../utils/getTime"
-import { useUserInfoState } from "../../stores/User-store"
-import { ICommonVar } from "../../../../common/types/Global-types"
-import { getLSObject, removeLS } from "../../utils/localStorage"
+import { showSnackMessage } from '../showSnackMessage/showSnackMessage'
+import { ILogOutReq } from '../../../../common/types/Auth-types'
+import { useJwtInfoListState } from '../../stores/Auth-store'
+import AuthService from '../../services/Auth-service'
+import { queryClient } from '../../http/tanstackQuery-client'
+import { IUserNameInfo } from '../../types/Auth-types'
+import AuthCommon, { ICurrentUserLS } from './authCommon'
+import TokenService from '../../services/Token-service'
+import { CURRENT_USER_LS, LOGOUT_LS } from '../../../constants'
+import { getTime } from '../../utils/getTime'
+import { useUserInfoState } from '../../stores/User-store'
+import { ICommonVar } from '../../../../common/types/Global-types'
+import { getLSObject, removeLS } from '../../utils/localStorage'
 
 
 
@@ -25,7 +25,7 @@ class LogOut {
 	static autoFastSessionLogOut = (userNameInfo: IUserNameInfo) => {
 		showSnackMessage({
 			type: 'w',
-			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${AuthCommon.getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`
+			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${AuthCommon.getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`,
 		})
 		this.currentUserLogOut({ interCode: 204 })
 	}
@@ -33,10 +33,9 @@ class LogOut {
 	static logOut = ({ interCode, userId }: ILogOutReq) => {
 		// console.log('logout')
 		AuthCommon.removeSwitchUserFromLS(userId)
-		JWTInfoService.deleteJWTInfo(userId)
+		TokenService.deleteJWTInfo(userId)
 		AuthService.logOut({ interCode, userId })
 	}
-
 
 
 	static currentUserLogOut = ({ interCode, userId }: Partial<ILogOutReq> = {}) => {
@@ -45,14 +44,13 @@ class LogOut {
 		if (!currentUserId) {
 			return
 		}
-		
+
 		removeLS(CURRENT_USER_LS)
 		localStorage.setItem(LOGOUT_LS, String(getTime()))
 		this.logOut({ interCode, userId: currentUserId })
 
 		this.userHasLogOut()
 	}
-
 
 
 	static handleSwitchUser = (newUserId?: ICommonVar['id']) => {
@@ -82,7 +80,7 @@ class LogOut {
 			this.currentUserLogOut({ interCode: 206, userId: currentUserId })
 			return
 		}
-		
+
 		this.logOut({ interCode: 206, userId })
 	}
 

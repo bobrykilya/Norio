@@ -1,27 +1,27 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { ISignUp } from "../../../../../../../../common/types/Auth-types"
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { ISignUp } from '../../../../../../../../common/types/Auth-types'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import PhoneInput from "../../../../../common/Inputs/InputFields/PhoneInput/PhoneInput"
-import DropDownSearchInput from "../../../../../common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput"
-import NameInput from "../../../../../common/Inputs/InputFields/NameInput/NameInput"
-import { COMPANIES_LIST, JOBS_LIST, STORES_LIST } from "../../../../../../assets/AuthPage/AuthPage-data"
-import { IUserRepository } from "../../../../../../../../api/src/types/DB-types"
-import DateInput from "../../../../../common/Inputs/InputFields/DateInput/DateInput"
-import FormStatusButton from "../common/FormStatusButton/FormStatusButton"
-import FormSubmitButton from "../common/FormSubmitButton/FormSubmitButton"
-import GenderSelectButton from "./GenderSelectButton/GenderSelectButton"
-import { GENDER_LIST } from "../../../../../../assets/common/Common-data"
-import { ISelectDropDownOptionListElem } from "../../../../../common/SelectDropDown/SelectDropDown"
-import { getDateInSecondsFromRussianDate, getDateInShortString } from "../../../../../../utils/getTime"
-import { ICONS } from "../../../../../../assets/common/Icons-data"
-import { ICommonVar } from "../../../../../../../../common/types/Global-types"
-import { showSnackMessage } from "../../../../../../features/showSnackMessage/showSnackMessage"
-import { IUserInfoEditReq } from "../../../../../../../../common/types/User-types"
-import UserService from "../../../../../../services/User-service"
-import { useUserInfoState } from "../../../../../../stores/User-store"
-import PassportButton from "./PassportButton/PassportButton"
-import { fastSessionTestForDataEditing, TopCardFormsProps } from "../../TopCard"
-import AuthCommon from "../../../../../../features/auth/authCommon"
+import PhoneInput from '../../../../../common/Inputs/InputFields/PhoneInput/PhoneInput'
+import DropDownSearchInput from '../../../../../common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput'
+import NameInput from '../../../../../common/Inputs/InputFields/NameInput/NameInput'
+import { COMPANIES_LIST, JOBS_LIST, STORES_LIST } from '../../../../../../assets/AuthPage/AuthPage-data'
+import { IUserRepository } from '../../../../../../../../api/src/types/DB-types'
+import DateInput from '../../../../../common/Inputs/InputFields/DateInput/DateInput'
+import FormStatusButton from '../common/FormStatusButton/FormStatusButton'
+import FormSubmitButton from '../common/FormSubmitButton/FormSubmitButton'
+import GenderSelectButton from './GenderSelectButton/GenderSelectButton'
+import { GENDER_LIST } from '../../../../../../assets/common/Common-data'
+import { ISelectDropDownOptionListElem } from '../../../../../common/SelectDropDown/SelectDropDown'
+import { getDateInSecondsFromRussianDate, getDateInShortString } from '../../../../../../utils/getTime'
+import { ICONS } from '../../../../../../assets/common/Icons-data'
+import { ICommonVar } from '../../../../../../../../common/types/Global-types'
+import { showSnackMessage } from '../../../../../../features/showSnackMessage/showSnackMessage'
+import { IUserInfoEditReq } from '../../../../../../../../common/types/User-types'
+import UserService from '../../../../../../services/User-service'
+import { useUserInfoState } from '../../../../../../stores/User-store'
+import PassportButton from './PassportButton/PassportButton'
+import { fastSessionTestForDataEditing, TopCardFormsProps } from '../../TopCard'
+import AuthCommon from '../../../../../../features/auth/authCommon'
 
 
 
@@ -37,8 +37,6 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 	const { userInfoState: userInfo } = useUserInfoState()
 	const defaultGender = GENDER_LIST.find(el => el.id === userInfo?.gender) || null
 	const [genderState, setGenderState] = useState<ISelectDropDownOptionListElem>(defaultGender)
-	const inputPhoneRef = useRef<HTMLInputElement>(null)
-	const inputBirthdayRef = useRef<HTMLInputElement>(null)
 	const defaultValues: IUserInfoEditForm = {
 		birthday: '',
 		phone: '',
@@ -64,11 +62,12 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 		getValues,
 		setError,
 		setValue,
+		setFocus,
 		formState: { errors, isDirty, touchedFields },
 	} = useForm<IUserInfoEditForm>({
 		mode: 'onChange',
-		reValidateMode: "onChange",
-		defaultValues
+		reValidateMode: 'onChange',
+		defaultValues,
 	})
 	// console.log(watch('lastName'))
 
@@ -82,7 +81,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 		withEmptyIcon: true,
 		undoFieldButParams: {
 			onClick: handleClickUndoFieldBut,
-			preloadValues
+			preloadValues,
 		},
 	}
 	const dropDownSearchInputProps = {
@@ -95,6 +94,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 		resetForm()
 		preloadFormValuesSetting()
 	}
+
 	function handleClickUndoFieldBut(name: string) {
 		const typedName = name as keyof IUserInfoEditForm
 		reset(typedName)
@@ -106,12 +106,12 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 		if (await UserService.editUserInfo(data)) {
 			AuthCommon.updateUser({
 				userId: userInfo.userId,
-				data: data as Partial<IUserRepository>
+				data: data as Partial<IUserRepository>,
 			})
 
 			showSnackMessage({
-				type: "s",
-				message: 'Изменения сохранены'
+				type: 's',
+				message: 'Изменения сохранены',
 			})
 			setStatusState('ok')
 		} else {
@@ -121,7 +121,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 
 	const handleSaveForm: SubmitHandler<IUserInfoEditForm> = async (data) => {
 		fastSessionTestForDataEditing(userInfo.userId)
-		
+
 		const dirtyData = getDirtyData() as IUserInfoEditReq
 		if (!Object.keys(dirtyData)[0]) {
 			return
@@ -175,7 +175,10 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 
 	useEffect(() => {
 		preloadFormValuesSetting()
-	}, [])	
+		if (!preloadValues.birthday) {
+			setFocus('birthday')
+		}
+	}, [])
 
 	//* Update form inputs and selects watching
 	useLayoutEffect(() => {
@@ -217,11 +220,9 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 				>
 					<DateInput
 						name='birthday'
-						inputDateRef={inputBirthdayRef}
 						icon={ICONS.birthday}
 						withEmptyIcon={true}
-						autoFocus={!preloadValues.birthday}
-						{ ...commonProps }
+						{...commonProps}
 					/>
 					<GenderSelectButton
 						selectedState={genderState}
@@ -237,8 +238,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 				>
 					<PhoneInput
 						name='phone'
-						inputPhoneRef={inputPhoneRef}
-						{ ...commonProps }
+						{...commonProps}
 					/>
 					<DropDownSearchInput
 						LIST={STORES_LIST}
@@ -246,7 +246,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 						placeholder='Точка'
 						icon={ICONS.store}
 						autoComplete={'home'}
-						{ ...dropDownSearchInputProps }
+						{...dropDownSearchInputProps}
 					/>
 					<NameInput
 						name='lastName'
@@ -255,7 +255,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 						inputType='name'
 						icon={ICONS.name}
 						autoComplete={'family-name'}
-						{ ...commonProps }
+						{...commonProps}
 					/>
 					<NameInput
 						name='firstName'
@@ -263,7 +263,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 						inputType='name'
 						icon={ICONS.name}
 						autoComplete={'given-name'}
-						{ ...commonProps }
+						{...commonProps}
 					/>
 					<NameInput
 						name='middleName'
@@ -271,7 +271,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 						inputType='name'
 						icon={ICONS.name}
 						autoComplete={'additional-name'}
-						{ ...commonProps }
+						{...commonProps}
 					/>
 				</div>
 				<div
@@ -286,7 +286,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 							placeholder='Организация'
 							icon={ICONS.company}
 							autoComplete={'organization'}
-							{ ...dropDownSearchInputProps }
+							{...dropDownSearchInputProps}
 						/>
 						<DropDownSearchInput
 							LIST={JOBS_LIST}
@@ -294,7 +294,7 @@ const UserInfoEditForm = ({ statusState, setStatusState }: TopCardFormsProps) =>
 							placeholder='Должность'
 							icon={ICONS.job}
 							autoComplete={'organization-title'}
-							{ ...dropDownSearchInputProps }
+							{...dropDownSearchInputProps}
 						/>
 					</div>
 					<div

@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react'
-import ToolTip from "../../../ToolTip/ToolTip"
-import { IUserRepository } from "../../../../../../../api/src/types/DB-types"
-import SelectDropDown from "../../../../common/SelectDropDown/SelectDropDown"
-import { ICommonVar } from "../../../../../../../common/types/Global-types"
-import { copyText } from "../../../../../utils/copy"
-import { ICONS } from "../../../../../assets/common/Icons-data"
+import ToolTip from '../../../ToolTip/ToolTip'
+import { IUserRepository } from '../../../../../../../api/src/types/DB-types'
+import SelectDropDown from '../../../../common/SelectDropDown/SelectDropDown'
+import { ICommonVar } from '../../../../../../../common/types/Global-types'
+import { copyText } from '../../../../../utils/copy'
+import { ICONS } from '../../../../../assets/common/Icons-data'
+import { createName } from '../../../../../utils/createString'
 
 
 
@@ -18,7 +19,7 @@ type UserNameCopyButtonProps = {
 }
 const UserNameCopyButton = ({ userInfoState }: UserNameCopyButtonProps) => {
 
-	if(!userInfoState) {
+	if (!userInfoState) {
 		return
 	}
 
@@ -28,17 +29,17 @@ const UserNameCopyButton = ({ userInfoState }: UserNameCopyButtonProps) => {
 		{
 			id: 'username',
 			title: userInfoState.username,
-			icon: ICONS.copyFilled
+			icon: ICONS.copyFilled,
 		},
 		{
 			id: 'name',
-			title: `${userInfoState.lastName} ${userInfoState.firstName} ${userInfoState.middleName}`,
-			icon: ICONS.copyFilled
+			title: createName(userInfoState, ['lastName', 'firstName', 'middleName']),
+			icon: ICONS.copyFilled,
 		},
 		{
 			id: 'job',
 			title: userInfoState.job,
-			icon: ICONS.copyFilled
+			icon: ICONS.copyFilled,
 		},
 	]
 
@@ -65,7 +66,7 @@ const UserNameCopyButton = ({ userInfoState }: UserNameCopyButtonProps) => {
 				<span
 					className={'user-name cont'}
 				>
-					{`${userInfoState.firstName} ${userInfoState.middleName}`}
+					{createName(userInfoState, ['firstName', 'middleName'])}
 					<span>
 						{userInfoState.lastName}
 					</span>
