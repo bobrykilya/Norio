@@ -1,10 +1,10 @@
-import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
+import { showSnackMessage } from '@features/showSnackMessage/showSnackMessage'
 
 
 
 const showCopyError = (text: string, err: string) => {
 	showSnackMessage({
-		type: "e",
+		type: 'e',
 		message: `Не удалось скопировать: <span class=\'bold\'>${text}</span>.<br/>Ошибка: ${err}`,
 	})
 }
@@ -17,9 +17,9 @@ const copyText = (text: string) => {
 	navigator.clipboard.writeText(text)
 		.then(() => {
 			showSnackMessage({
-				type: "s",
+				type: 's',
 				messageTitle: 'Скопировано:',
-				message: text
+				message: text,
 			})
 		})
 		.catch((err) => {
@@ -29,5 +29,5 @@ const copyText = (text: string) => {
 
 
 export {
-	copyText
+	copyText,
 }

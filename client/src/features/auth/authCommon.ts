@@ -1,14 +1,13 @@
-import { useDeviceInfoState } from '../../stores/Device-store'
-import { ILoginServiceRes } from '../../../../common/types/Auth-types'
-import TokenService from '../../services/Token-service'
-import { IUserNameInfo } from '../../types/Auth-types'
-import { IUserRepository } from '../../../../api/src/types/DB-types'
-import { CURRENT_USER_LS, DEVICE_LS, SWITCH_USERS_ID_LS } from '../../../constants'
-import { useUserInfoState } from '../../stores/User-store'
-import { HoroscopeTypeOptions, ICommonVar } from '../../../../common/types/Global-types'
-import { getLSObject, removeLS, setLSObject } from '../../utils/localStorage'
-import { IDeviceInfo } from '../../types/Device-types'
-import { useJwtInfoListState } from '../../stores/Auth-store'
+import { CURRENT_USER_LS, DEVICE_LS, SWITCH_USERS_ID_LS } from '@/../constants'
+import { IUserRepository } from '@api/src/types/DB-types'
+import TokenService from '@services/Token-service'
+import { ILoginServiceRes } from '@shared/types/Auth-types'
+import { HoroscopeTypeOptions, ICommonVar } from '@shared/types/Global-types'
+import { useJwtInfoListState } from '@stores/Auth-store'
+import { useDeviceInfoState } from '@stores/Device-store'
+import { useUserInfoState } from '@stores/User-store'
+import { IDeviceInfo } from '@type/Device-types'
+import { getLSObject, removeLS, setLSObject } from '@utils/localStorage'
 
 
 
@@ -58,10 +57,6 @@ class AuthCommon {
 		setLSObject(CURRENT_USER_LS, {
 			userId: userInfo.userId,
 		})
-	}
-
-	static getUserAccountInfo = ({ lastName, firstName, username }: IUserNameInfo) => {
-		return lastName ? `${lastName} ${firstName} "${username}"` : username
 	}
 
 	static addSwitchUserInLS = (userId: ICommonVar['id']) => {

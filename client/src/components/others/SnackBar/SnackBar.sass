@@ -1,5 +1,4 @@
-@import '../../../variables'
-
+@import '@/variables'
 
 
 .snackbar-cont
@@ -29,11 +28,11 @@
     &.opened
         visibility: visible
         pointer-events: auto
-        animation: fadeIn 0.5s $trans-bounce-style
+        animation: fadeIn $dur-snack-bar $trans-bounce-style
     &.closed
         visibility: hidden
         pointer-events: none
-        animation: fadeOut 0.3s ease
+        animation: fadeOut calc($dur-snack-bar * 0.65) ease
     &.blocked
         pointer-events: none
     .message-icon
@@ -102,7 +101,7 @@
                     height: 0.05rem
                     background-color: #0303031e
                     border-radius: 10px
-                
+
     .snackbar_close-icon
         //border: 2px solid black
         margin-left: 0.5rem

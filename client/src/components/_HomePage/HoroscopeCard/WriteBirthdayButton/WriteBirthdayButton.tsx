@@ -1,13 +1,14 @@
 import React from 'react'
-import { useTopCardState } from "../../../../stores/Utils-store"
+
+import { useJumpingCardsState } from '@stores/Utils-store'
 
 
 
 const WriteBirthdayButton = () => {
 
-	const setTopCardState = useTopCardState(s => s.setTopCardState)
+	const setJumpingCardsState = useJumpingCardsState(s => s.setJumpingCardsState)
 	const handleClick = () => {
-		setTopCardState('userInfo')
+		setJumpingCardsState('topCard', 'userInfo')
 	}
 
 	return (
@@ -17,7 +18,7 @@ const WriteBirthdayButton = () => {
 			onClick={handleClick}
 			tabIndex={-1}
 		>
-			<p>Указать дату рождения<br/> для гороскопа</p>
+			<p>Указать дату рождения<br /> для гороскопа</p>
 		</button>
 	)
 }

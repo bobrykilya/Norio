@@ -1,4 +1,4 @@
-import { DefaultCityOptions } from "./Global-types"
+import { DefaultCityOptions } from './Global-types'
 
 
 

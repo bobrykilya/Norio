@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
+
 import toast, { useToasterStore } from 'react-hot-toast'
-import { ICommonVar, SnackBarTypeOptions } from '../../../../../common/types/Global-types'
-import { TOAST_LIMIT } from '../../../../constants'
-import useCloseOnEsc from '../../../hooks/useCloseOnEsc'
-import { ICONS } from '../../../assets/common/Icons-data'
-import { useModalState } from '../../../stores/Utils-store'
+
+import { TOAST_LIMIT } from '@/../constants'
+import { ICONS } from '@assets/common/Icons-data'
+import { ICommonVar, SnackBarTypeOptions } from '@shared/types/Global-types'
+import { useModalState } from '@stores/Utils-store'
 
 
 
@@ -23,8 +24,7 @@ type SnackBarProps = {
 const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
 	const { toasts } = useToasterStore()
-	// const setModalState = useModalState(s => s.setModalState)
-	const setSnackBarState = useModalState(s => s.setSnackBarState)
+	const [addModal, removeModal] = useModalState(s => [s.addModal, s.removeModal])
 
 	useEffect(() => {
 		toasts
@@ -33,25 +33,38 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 			.forEach(t => toast.dismiss(t.id))
 	}, [toasts])
 
+	const handleCloseOnEsc = () => {
+		if (toasts.some(t => t.visible && t.duration !== Infinity)) {
+			toasts
+				.filter(t => t.visible && t.duration !== Infinity)
+				.forEach(t => toast.dismiss(t.id))
+		}
+	}
 
-	useCloseOnEsc({
-		conditionsList: [!!toasts[0]],
-		callback: () => {
-			if (toasts.find(t => t.visible && t.duration !== Infinity)) {
-				toasts
-					.filter(t => t.visible && t.duration !== Infinity)
-					.forEach(t => toast.dismiss(t.id))
-			}
-		},
-	})
+	// useCloseOnEsc({
+	// 	conditionsList: [!!toasts[0]],
+	// 	callback: () => {
+	// 		if (toasts.some(t => t.visible && t.duration !== Infinity)) {
+	// 			toasts
+	// 				.filter(t => t.visible && t.duration !== Infinity)
+	// 				.forEach(t => toast.dismiss(t.id))
+	// 		}
+	// 	},
+	// })
 
 	//* For forms Esc blur while any (not Infinity) SnackBar is opened
 	useEffect(() => {
 		if (toasts[0]) {
-			if (toasts.find(t => t.visible && t.duration !== Infinity)) {
-				setSnackBarState(true)
+			if (toasts.some(t => t.visible && t.duration !== Infinity)) {
+				addModal({
+					type: 'snack',
+					name: message,
+					callback: handleCloseOnEsc,
+				})
 			} else {
-				setSnackBarState(false)
+				removeModal({
+					type: 'snack',
+				})
 			}
 		}
 	}, [toasts])

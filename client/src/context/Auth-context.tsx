@@ -1,18 +1,20 @@
 import React, { createContext, useEffect } from 'react'
-import AuthService from '../services/Auth-service'
+
 import io from 'socket.io-client'
-import { ILoginServiceRes } from '../../../common/types/Auth-types'
-import LogOut from '../features/auth/logOut'
-import logOut from '../features/auth/logOut'
-import { useAuthState } from '../stores/Auth-store'
-import TokenService from '../services/Token-service'
-import AuthCommon, { ICurrentUserLS, ISwitchUsersIdLS } from '../features/auth/authCommon'
-import FastSession from '../features/auth/fastSession'
-import { CURRENT_USER_LS, DEVICE_LS, FAST_LS, LOGOUT_LS, SWITCH_USERS_ID_LS } from '../../constants'
-import { Loader } from '../components/common/Loader/Loader'
-import CoverAppTitle from '../components/common/CoverAppTitle/CoverAppTitle'
-import { getLSObject, removeLS } from '../utils/localStorage'
-import { IDeviceInfo } from '../types/Device-types'
+
+import { CURRENT_USER_LS, DEVICE_LS, LOGOUT_LS, SWITCH_USERS_ID_LS } from '@/../constants'
+import CoverAppTitle from '@common/CoverAppTitle/CoverAppTitle'
+import { Loader } from '@common/Loader/Loader'
+import AuthCommon, { ICurrentUserLS, ISwitchUsersIdLS } from '@features/auth/authCommon'
+import FastSession from '@features/auth/fastSession'
+import LogOut from '@features/auth/logOut'
+import logOut from '@features/auth/logOut'
+import AuthService from '@services/Auth-service'
+import TokenService from '@services/Token-service'
+import { IAutoLogoutPayload, ILoginServiceRes } from '@shared/types/Auth-types'
+import { useAuthState } from '@stores/Auth-store'
+import { IDeviceInfo } from '@type/Device-types'
+import { getLSObject, removeLS } from '@utils/localStorage'
 
 
 
@@ -39,13 +41,12 @@ const AuthProvider = ({ children }) => {
 	//* Refresh handling
 	useEffect(() => {
 		const refresh = async () => {
+			// console.log('refresh')
+			const lsDeviceId = getLSObject<IDeviceInfo>(DEVICE_LS)?.id || null
+			const currentUserId = getLSObject<ICurrentUserLS>(CURRENT_USER_LS)?.userId || null
+			const switchUsersIdList = getLSObject<ISwitchUsersIdLS>(SWITCH_USERS_ID_LS)
+			// console.log({ switchUsersIdList, currentUserId })
 			try {
-				// console.log('refresh')
-				const lsDeviceId = getLSObject<IDeviceInfo>(DEVICE_LS)?.id || null
-				const currentUserId = getLSObject<ICurrentUserLS>(CURRENT_USER_LS)?.userId || null
-				const switchUsersIdList = getLSObject<ISwitchUsersIdLS>(SWITCH_USERS_ID_LS)
-				// console.log({ switchUsersIdList, currentUserId })
-
 				const refreshSwitchUsersTokens = async () => {
 					if (switchUsersIdList) {
 						return Promise.all(switchUsersIdList
@@ -101,6 +102,7 @@ const AuthProvider = ({ children }) => {
 					})
 			} finally {
 				setAppReadyState(true)
+				FastSession.checkIsFastSessionDeprecated(currentUserId)
 			}
 		}
 
@@ -135,9 +137,11 @@ const AuthProvider = ({ children }) => {
 				// console.log(socket.id)
 				setSocketSessIdState(socket.id)
 			})
-			socket.on('autoLogOut', ({ isLogOut, userNameInfo }) => {
+			socket.on('autoLogOut', ({ isLogOut, userInfo }: IAutoLogoutPayload) => {
 				// console.log(isLogOut)
-				if (isLogOut) LogOut.autoFastSessionLogOut(userNameInfo)
+				if (isLogOut) {
+					LogOut.autoFastSessionLogOut(userInfo)
+				}
 			})
 		}
 		socketEvents()
@@ -147,17 +151,11 @@ const AuthProvider = ({ children }) => {
 	//* Fast session refresh and closing checking
 	useEffect(() => {
 		const handleBeforeUnload = () => {
-			FastSession.handleFastSessionRefresh()
+			FastSession.fastSessionRefresh()
 		}
 		window.addEventListener('beforeunload', handleBeforeUnload)
 		return () => {
 			window.removeEventListener('beforeunload', handleBeforeUnload)
-		}
-	}, [])
-	useEffect(() => {
-		const fastSession = localStorage.getItem(FAST_LS)
-		if (fastSession) {
-			FastSession.checkFastSessionLogOut(fastSession)
 		}
 	}, [])
 

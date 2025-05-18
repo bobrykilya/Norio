@@ -1,10 +1,18 @@
-import queryDB from '../../utils/queryDB'
-import { ILogErrorRepository } from "../../types/DB-types"
+import { ILogErrorRepository } from '@type/DB-types'
+import queryDB from '@utils/queryDB'
 
 
 
 class LogErrorRepository {
-	static async createLogError({ interCode, req=null, res=null, err, userId=null, deviceId=null, logTime }: ILogErrorRepository) {
+	static async createLogError({
+									interCode,
+									req = null,
+									res = null,
+									err,
+									userId = null,
+									deviceId = null,
+									logTime,
+								}: ILogErrorRepository) {
 		// err.myOperationCode = interCode
 		// delete err.length
 		// delete err.name
@@ -20,14 +28,14 @@ class LogErrorRepository {
 		// 	JSON.stringify(err),
 		// 	userId,
 		// 	deviceId,
-        //     logTime,
+		//     logTime,
 		// ])
 		//
 		// return response.rows[0]?.id
 	}
 
 	static async getLogError() {
-		const response = await queryDB("SELECT * FROM _log_Error")
+		const response = await queryDB('SELECT * FROM _log_Error')
 
 		return response.rows
 	}

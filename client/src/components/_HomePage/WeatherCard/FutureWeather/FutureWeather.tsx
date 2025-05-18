@@ -1,7 +1,8 @@
 import React from 'react'
-import WeatherElement from "../WeatherElement/WeatherElement"
-import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-import { getTimeParams } from "../../../../utils/getTime"
+
+import WeatherElement from '../WeatherElement/WeatherElement'
+import { ILocationWeatherElem } from '@shared/types/Device-types'
+import { getTimeParams } from '@utils/getTime'
 
 
 
@@ -9,18 +10,18 @@ const getFutureWeather = (weather: ILocationWeatherElem) => {
 	if (!weather) return
 
 	const result: ILocationWeatherElem & { label?: string } = {
-		...weather
+		...weather,
 	}
 
 	const weatherTime = getTimeParams(['hour'], weather.dt).hour
 	// console.log(weatherTime)
-	if (6 <= weatherTime &&  weatherTime <= 11) {
+	if (6 <= weatherTime && weatherTime <= 11) {
 		result.label = 'Утром'
-	} else if (12 <= weatherTime &&  weatherTime <= 18) {
+	} else if (12 <= weatherTime && weatherTime <= 18) {
 		result.label = 'Днём'
-	} else if (19 <= weatherTime &&  weatherTime <= 23) {
+	} else if (19 <= weatherTime && weatherTime <= 23) {
 		result.label = 'Вечером'
-	} else if (0 <= weatherTime &&  weatherTime <= 5) {
+	} else if (0 <= weatherTime && weatherTime <= 5) {
 		result.label = 'Ночью'
 	}
 
@@ -53,7 +54,7 @@ const FutureWeather = ({ hourlyWeatherList, currentWeather }: FutureWeatherProps
 			<WeatherElement
 				weather={{
 					label: 'Завтра',
-					...currentWeather
+					...currentWeather,
 				}}
 				labelPos={'end'}
 			/>

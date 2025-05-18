@@ -1,6 +1,7 @@
-import ky from "ky"
-import dotenv from "dotenv"
-import { APP_LANG } from "../../../client/constants.ts"
+import dotenv from 'dotenv'
+import ky from 'ky'
+
+import { APP_LANG } from '@client/constants.ts'
 
 
 
@@ -24,14 +25,14 @@ const $apiLocation = ky.extend({
 		language: APP_LANG,
 	},
 	headers: {
-		'Accept-Language': APP_LANG
-	}
+		'Accept-Language': APP_LANG,
+	},
 })
 
 const $apiHoroscope = 'https://horo.mail.ru/prediction'
 
 export {
-	$apiWeather,
-	$apiLocation,
 	$apiHoroscope,
+	$apiLocation,
+	$apiWeather,
 }

@@ -14,11 +14,28 @@
 			"react-dom",
 			"webappsec-credential-management"
 		],
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
+		"baseUrl": "src",
+		"paths": {
+			"@/*": ["*"],
+			"@assets/*": ["assets/*"],
+			"@components/*": ["components/*"],
+			"@common/*": ["components/common/*"],
+			"@others/*": ["components/others/*"],
+			"@type/*": ["types/*"],
+			"@hooks/*": ["hooks/*"],
+			"@utils/*": ["utils/*"],
+			"@stores/*": ["stores/*"],
+			"@features/*": ["features/*"],
+			"@services/*": ["services/*"],
+			"@api/*": ["../../api/*"],
+			"@shared/*": ["../../shared/*"]
+		}
 	},
 	"include": [
 		"./src/**/*",
-		"../common/**/*"
+		"../shared/**/*",
+		"vite-env.d.ts"
 	],
 	"exclude": [
 		"node_modules",

@@ -1,29 +1,29 @@
-import { ICommonVar } from "../../../common/types/Global-types"
+import { ICommonVar } from '@shared/types/Global-types'
 
 
 
 export type CoverPanelOptions = 'sign_in' | 'sign_up' | 'sign_up_info';
 
 export type SignContProps = {
-    actForm: CoverPanelOptions;
-    isFormDisabled: boolean;
+	actForm: CoverPanelOptions;
+	isFormDisabled: boolean;
 }
 
 export type IReactHookForm = {
+	register: any;
+	reset: any;
+	watch: any
+	setValue: any;
 	errors?: any;
-    reset?: any;
-    watch?: any
-    setError?: any;
-    setValue?: any;
-    register?: any;
+	setError?: any;
 }
 
 export type ISignFormInput = IReactHookForm & {
-    name: string;
+	name: string;
 	placeholder: string;
 	icon: ICommonVar['icon'];
-    disabled?: boolean;
-    notSaveUser?: boolean;
+	disabled?: boolean;
+	notSaveUser?: boolean;
 	withCopyBut?: boolean;
 	withEmptyIcon?: boolean;
 	autoComplete?: string;
@@ -36,9 +36,3 @@ export type ISignFormInput = IReactHookForm & {
 
 export type NameInputTypesOptions = 'sign_in' | 'sign_up' | 'name' | 'email';
 export type PasswordInputTypesOptions = 'sign_in' | 'sign_up' | 'confirm';
-
-export type IUserNameInfo = {
-	lastName: ICommonVar['lastName'];
-	firstName: ICommonVar['firstName'];
-	username: ICommonVar['username'];
-}

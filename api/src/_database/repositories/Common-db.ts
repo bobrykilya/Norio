@@ -1,5 +1,5 @@
-import queryDB from "../../utils/queryDB.ts"
-import { ICommonVar } from "../../../../common/types/Global-types.ts"
+import { ICommonVar } from '@shared/types/Global-types.ts'
+import queryDB from '@utils/queryDB.ts'
 
 
 
@@ -16,7 +16,12 @@ type IUpdateFieldsById<T> = {
 
 class CommonRepository {
 
-	static async updateFieldsById<T extends Record<string, any>>({ data, id, tableName, idFieldName }: IUpdateFieldsById<T>) {
+	static async updateFieldsById<T extends Record<string, any>>({
+																	 data,
+																	 id,
+																	 tableName,
+																	 idFieldName,
+																 }: IUpdateFieldsById<T>) {
 		const fields = Object.keys(data)
 
 		if (fields.length === 0) {

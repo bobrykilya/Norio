@@ -1,8 +1,8 @@
-import { ICheckUserReq, ISignUpReq } from '../../../../common/types/Auth-types'
-import AuthService from '../../services/Auth-service'
 import AuthCommon from './authCommon'
-import { useCoverPanelState } from '../../stores/Auth-store'
-import { useAvatarState } from '../../stores/Utils-store'
+import AuthService from '@services/Auth-service'
+import { ICheckUserReq, ISignUpReq } from '@shared/types/Auth-types'
+import { useCoverPanelState } from '@stores/Auth-store'
+import { useAvatarState } from '@stores/Utils-store'
 
 
 

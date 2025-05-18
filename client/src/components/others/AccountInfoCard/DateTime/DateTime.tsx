@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react"
-import { getDayOfWeek, getMonth, getTimeParams } from "../../../../utils/getTime"
-import ToolTip from "../../ToolTip/ToolTip"
+import React, { useEffect, useRef, useState } from 'react'
+
+import ToolTip from '../../ToolTip/ToolTip'
+import { getDayOfWeek, getMonth, getTimeParams } from '@utils/getTime'
 
 
 
@@ -12,7 +13,7 @@ const DateTime = () => {
 		timeString,
 		timeStringFull,
 		dayNum,
-		dateString
+		dateString,
 	} = getTimeParams(['second', 'month', 'timeString', 'timeStringFull', 'dayNum', 'dateString'])
 	const [time, setTime] = useState(timeString)
 	const [, setSeconds] = useState(null)
@@ -30,8 +31,8 @@ const DateTime = () => {
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			setTime(getTimeParams(['timeString']).timeString)
-		}, 1000*(60-second))
-		
+		}, 1000 * (60 - second))
+
 		return () => {
 			clearTimeout(timeout)
 		}

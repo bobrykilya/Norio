@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { AVATARS_LIST } from '../../../../../assets/AuthPage/AuthPage-data'
-import timeout from '../../../../../utils/timeout'
-import { sortByAlphabet } from '../../../../../utils/sort'
-import RoundButton from '../../../../common/Buttons/RoundButton/RoundButton'
-import { nextElems, prevElems } from '../../../../../utils/focusElementSibling'
-import { ICONS } from '../../../../../assets/common/Icons-data'
-import { getPathToAvatar } from '../../../../../utils/createString'
-import { useAvatarState, useBottomCardState } from '../../../../../stores/Utils-store'
+
+import { AVATARS_LIST } from '@assets/AuthPage/AuthPage-data'
+import { ICONS } from '@assets/common/Icons-data'
+import RoundButton from '@common/Buttons/RoundButton/RoundButton'
+import { useAvatarState, useJumpingCardsState } from '@stores/Utils-store'
+import { getPathToAvatar } from '@utils/createString'
+import { nextElems, prevElems } from '@utils/focusElementSibling'
+import { sortByAlphabet } from '@utils/sort'
+import timeout from '@utils/timeout'
 
 
 
@@ -18,11 +19,12 @@ const AvatarList = ({
 					}: AvatarListProps) => {
 
 	const [listOfUsedAvatarsState, setSelectedAvatarState] = useAvatarState(s => [s.listOfUsedAvatarsState, s.setSelectedAvatarState])
-	const setBottomCardState = useBottomCardState(s => s.setBottomCardState)
+	const setJumpingCardsState = useJumpingCardsState(s => s.setJumpingCardsState)
 	const [isArrowButsActive, setIsArrowButsActive] = useState(false)
 	const listRef = useRef<HTMLUListElement>(null)
 	const activeElemRef = useRef<HTMLButtonElement>(null)
 
+	//! Change?
 	const FILTERED_LIST = listOfUsedAvatarsState[0] ?
 		useMemo(() => {
 			return AVATARS_LIST.filter(avatar => !listOfUsedAvatarsState.includes(avatar.id))
@@ -55,7 +57,7 @@ const AvatarList = ({
 
 	const handleClickElem = (avatar: string) => {
 		// setSelectedAvatarState(avatar)
-		setBottomCardState(null)
+		setJumpingCardsState('bottomCard', null)
 	}
 
 	//* Active element auto-focus after list opening
@@ -146,7 +148,7 @@ const AvatarList = ({
 					>Аватары закончились...<br />Обратитесь к разработчику :)</span> :
 					SORTED_AND_FILTERED_LIST.map((el) => {
 						return (
-							<div
+							<li
 								className={'avatar_list_button-cont cont'}
 								key={el.id}
 							>
@@ -154,8 +156,8 @@ const AvatarList = ({
 									id={el.id}
 									type={'button'}
 									tabIndex={-1}
-									onClick={() => handleClickElem(el.id)}
-									onKeyDown={handleKeyDownOnElem}
+									// onClick={() => handleClickElem(el.id)} //! Move onto ul with delegation
+									// onKeyDown={handleKeyDownOnElem} //! Move onto ul
 									ref={currentAvatar === el.id ? activeElemRef : null}
 								>
 									<img src={getPathToAvatar(el.id)} alt='Avatar error 1' />
@@ -163,7 +165,7 @@ const AvatarList = ({
 								<label htmlFor={el.id}>
 									{el.title}
 								</label>
-							</div>
+							</li>
 						)
 					})
 			}

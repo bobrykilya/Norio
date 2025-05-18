@@ -1,7 +1,8 @@
-import { Forbidden, Unauthorized } from "../utils/Errors.ts"
-import TokenService from "../services/Token-service.ts"
-import { ICommonVar } from "../../../common/types/Global-types.ts"
 import { NextFunction, Response } from 'express'
+
+import TokenService from '@services/Token-service.ts'
+import { ICommonVar } from '@shared/types/Global-types.ts'
+import { Forbidden, Unauthorized } from '@utils/Errors.ts'
 
 
 
@@ -19,7 +20,7 @@ const protectMiddleware = async (req: ICommonVar['req'], _: Response, next: Next
 		}
 
 		req.user = await TokenService.verifyAccessToken(accessToken)
-		
+
 		next()
 	} catch (err) {
 		return next(new Forbidden(errorMessage))

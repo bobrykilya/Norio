@@ -1,4 +1,4 @@
-@import '../../../_variables'
+@import '@/variables'
 
 $height-short-horoscope-card: 130px
 $width-full-horoscope-card: 28rem
@@ -8,7 +8,7 @@ $width-full-horoscope-card: 28rem
     border-radius: $rad-main-border
     height: $height-short-horoscope-card
     max-height: 15%
-    .unfolding-card
+    .horoscope-card
         border: 1px solid rgba($color-backgr, 0.3)
         color: $color-backgr
         flex-direction: row
@@ -53,11 +53,16 @@ $width-full-horoscope-card: 28rem
                         transition-property: opacity, transform
                         transition-duration: $dur-unfolding-card * 2
                         transition-delay: $dur-unfolding-card * 1.5
+                        display: -webkit-box
+                        -webkit-line-clamp: 3
+                        -webkit-box-orient: vertical
+                        overflow: hidden
+                        text-overflow: ellipsis
                     .horoscope_info-full
                         //text-indent: 20px
-                        font-size: $size-main-text + 0.07rem
-                        line-height: $size-main-text + 0.2rem
-                        width: calc($width-full-horoscope-card - $padding-card*4 - $icon-width - $size-small-round-but - $frame-x-margin*2 - 3px)
+                        font-size: $size-main-text + 0.05rem
+                        line-height: $size-main-text + 0.15rem
+                        width: calc($width-full-horoscope-card - $padding-card * 4 - $icon-width - $size-small-round-but - $frame-x-margin * 2 - 3px)
                         transition-property: max-height, opacity
                         transition-duration: $dur-unfolding-card * 1.75, $dur-unfolding-card * 1.25
                         transition-timing-function: ease-out

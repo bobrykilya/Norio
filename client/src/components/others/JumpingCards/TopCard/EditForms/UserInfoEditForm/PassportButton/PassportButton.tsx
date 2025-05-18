@@ -1,6 +1,7 @@
 import React from 'react'
-import { ICONS } from "../../../../../../../assets/common/Icons-data"
-import ToolTip from "../../../../../ToolTip/ToolTip"
+
+import { ICONS } from '@assets/common/Icons-data'
+import ToolTip from '@others/ToolTip/ToolTip'
 
 
 
@@ -14,11 +15,12 @@ const PassportButton = ({ state }: PassportButtonProps) => {
 		<button
 			className={'user_info_edit_form_passport-but cont'}
 			type={'button'}
-			onClick={() => {}}
+			onClick={() => {
+			}}
 		>
 			{ICONS.passport}
 			<span>
-				Паспортные<br/> данные
+				Паспортные<br /> данные
 			</span>
 			<ToolTip
 				message={`${state ? 'Показать' : 'Скрыть'} паспортные данные`}

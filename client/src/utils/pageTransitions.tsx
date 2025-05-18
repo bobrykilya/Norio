@@ -1,10 +1,11 @@
 import React from 'react'
+
 import { motion } from 'framer-motion'
 
 
 
 const transitionSettings = {
-	duration: 0.6,
+	duration: 0.35,
 	ease: [0.22, 1, 0.86, 1],
 }
 const jumpY = 30
@@ -63,4 +64,4 @@ const AuthPageAnim = ({ children }) => {
 	)
 }
 
-export { ClassicAnim, AuthPageAnim }
+export { AuthPageAnim,ClassicAnim }

@@ -1,15 +1,17 @@
 import React from 'react'
+
 import toast from 'react-hot-toast'
-import SnackBar from '../../components/others/SnackBar/SnackBar'
-import { getTime } from '../../utils/getTime'
+
 import blockDevice from '../blockDevice/blockDevice'
-import timeout from '../../utils/timeout'
-import { useBlockErrorState } from '../../stores/Device-store'
-import { ISnack, SnackBarTypeOptions } from '../../../../common/types/Global-types'
 import saveLogInLocalStorage from './saveLogInLocalStorage'
-import { ICONS } from '../../assets/common/Icons-data'
-import { removeLS } from '../../utils/localStorage'
-import { BLOCK_DEVICE } from '../../../constants'
+import { BLOCK_DEVICE } from '@/../constants'
+import { ICONS } from '@assets/common/Icons-data'
+import SnackBar from '@others/SnackBar/SnackBar'
+import { ISnack, SnackBarTypeOptions } from '@shared/types/Global-types'
+import { useBlockErrorState } from '@stores/Device-store'
+import { getTime } from '@utils/getTime'
+import { removeLS } from '@utils/localStorage'
+import timeout from '@utils/timeout'
 
 
 
@@ -80,8 +82,8 @@ export const showSnack = async (snack: ISnack) => {
 		/>
 	), {
 		duration: snack.durationInSec * 1000 || toastDuration,
-		className: snackType,
 		// duration: Infinity,
+		className: snackType,
 	})
 	// showAllSnacksDev()
 }
@@ -89,7 +91,7 @@ export const showSnack = async (snack: ISnack) => {
 export const showSnackMessage = (snack: ISnack) => {
 	// console.log(snack)
 
-	if (useBlockErrorState.getState().blockErrorState) return
+	if (useBlockErrorState.getState().blockErrorMessage) return
 
 	if (snack?.detail?.res?.status === 401) {
 		removeLS(BLOCK_DEVICE)

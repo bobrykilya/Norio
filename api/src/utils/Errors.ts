@@ -1,20 +1,20 @@
-// import UserRepository from '../src/_database/repositories/User'
-// import AuthDeviceRepository from '../src/_database/repositories/AuthDevice'
-import { getTime, getTimeInShortString } from "./getTime"
-import { ICommonVar, IConflictDetail, ISnack } from "../../../common/types/Global-types"
-import { IBlockMessage } from "../types/Device-types"
+// import UserRepository from '@/_database/repositories/User'
+// import AuthDeviceRepository from '@/_database/repositories/AuthDevice'
+import { getTime, getTimeInShortString } from './getTime'
+import { ICommonVar, IConflictDetail, ISnack } from '@shared/types/Global-types'
+import { IBlockMessage } from '@type/Device-types'
 
 
 
 export const Errors = {
 	phoneEngaged: () => {
-		return new Conflict("Указанный номер телефона уже занят", 'phoneEngaged')
+		return new Conflict('Указанный номер телефона уже занят', 'phoneEngaged')
 	},
 	avatarEngaged: () => {
-		return new Conflict("Выбранный аватар уже занят", 'avatarEngaged')
+		return new Conflict('Выбранный аватар уже занят', 'avatarEngaged')
 	},
 	usernameEngaged: () => {
-		return new Conflict("Пользователь с таким логином уже существует", 'usernameEngaged')
+		return new Conflict('Пользователь с таким логином уже существует', 'usernameEngaged')
 	},
 	usernameNotFound: (username: ICommonVar['username']) => {
 		return new Conflict(`Пользователь с логином ${username} не найден`, 'usernameNotFound')
@@ -23,10 +23,10 @@ export const Errors = {
 		return new Conflict(`Redis connection error on port: ${process.env.REDIS_PORT}`, 'redisNoConnection')
 	},
 	loginOrPasswordInvalid: () => {
-		return new Conflict("Неверный логин или пароль", 'loginOrPasswordInvalid')
+		return new Conflict('Неверный логин или пароль', 'loginOrPasswordInvalid')
 	},
 	passwordInvalid: () => {
-		return new Conflict("Неверный старый пароль", 'passwordInvalid')
+		return new Conflict('Неверный старый пароль', 'passwordInvalid')
 	},
 	dbConflict: ({ message, detail }: { message: string, detail?: IConflictDetail }) => {
 		return new Conflict(message, 'dbConflict', detail)
@@ -103,61 +103,59 @@ type ICatchError = {
 	interCode?: ICommonVar['interCode'];
 }
 export const catchError = async ({ req, res, err, queryTime, interCode }: ICatchError) => {
-		// console.log(err)
-		if (err instanceof WebError) {
-			const status = err.status
+	// console.log(err)
+	if (err instanceof WebError) {
+		const status = err.status
 
-			const error: ISnack = {
-				type: status === 900 ? 'b' : 'e',
-				message: status === 900 ? '' : err.message as string,
-				snackTime: queryTime || getTime(),
-				detail: {
-					action: req.route.stack[0]?.name,
-					req: {
-
-					},
-					res: {
-						...err.detail,
-						status,
-						interCode,
-						title: err.title,
-					}
-				}
-			}
-
-			//* Request description
-			if (req.body) {
-				delete req.body.password
-				delete req.body.hashedPassword
-				delete req.body.deviceType
-				error.detail.req = req.body
-			}
-
-			//* Block handling (err.message is Object)
-			if (status === 900) {
-				const { interCode, description, unlockTime } = err.message as IBlockMessage
-
-				if (!(unlockTime === 0)) {
-					error.message = `${description}.<br><span class='info'> Устройство будет разблокировано в <span class='bold'>${getTimeInShortString(unlockTime)}</span></span>`
-				} else {
-					error.message = 'Устройство заблокировано. Обратитесь к администратору'
-				}
-
-                error.detail.res = {
-                    ...error.detail.res,
-                    interCode,
-                    unlockTime,
-                    description,
-                }
-			}
-
-			if (!(err instanceof Unauthorized)) {
-				console.log(error)
-			}
-			
-			return res.status(err.status).json(error)
-		} else {
-			console.log(err)
-			res.status(500).json('Непредвиденная ошибка. Обратитесь к администратору')
+		const error: ISnack = {
+			type: status === 900 ? 'b' : 'e',
+			message: status === 900 ? '' : err.message as string,
+			snackTime: queryTime || getTime(),
+			detail: {
+				action: req.route.stack[0]?.name,
+				req: {},
+				res: {
+					...err.detail,
+					status,
+					interCode,
+					title: err.title,
+				},
+			},
 		}
+
+		//* Request description
+		if (req.body) {
+			delete req.body.password
+			delete req.body.hashedPassword
+			delete req.body.deviceType
+			error.detail.req = req.body
+		}
+
+		//* Block handling (err.message is Object)
+		if (status === 900) {
+			const { interCode, description, unlockTime } = err.message as IBlockMessage
+
+			if (!(unlockTime === 0)) {
+				error.message = `${description}.<br><span class='info'> Устройство будет разблокировано в <span class='bold'>${getTimeInShortString(unlockTime)}</span></span>`
+			} else {
+				error.message = 'Устройство заблокировано. Обратитесь к администратору'
+			}
+
+			error.detail.res = {
+				...error.detail.res,
+				interCode,
+				unlockTime,
+				description,
+			}
+		}
+
+		if (!(err instanceof Unauthorized)) {
+			console.log(error)
+		}
+
+		return res.status(err.status).json(error)
+	} else {
+		console.log(err)
+		res.status(500).json('Непредвиденная ошибка. Обратитесь к администратору')
+	}
 }

@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import JumpingCard from '../../../common/JumpingCard/JumpingCard'
-import { useAvatarState, useBottomCardState } from '../../../../stores/Utils-store'
+
 import AvatarList from './AvatarList/AvatarList'
 import LogBook from './LogBook/LogBook'
-import timeout from '../../../../utils/timeout'
+import JumpingCard from '@common/JumpingCard/JumpingCard'
+import { useAvatarState, useJumpingCardsState } from '@stores/Utils-store'
+import timeout from '@utils/timeout'
 
 
 
 const BottomCard = () => {
 
-	const { bottomCardState, setBottomCardState } = useBottomCardState()
+	const [
+		bottomCardState,
+		setJumpingCardsState,
+	] = useJumpingCardsState(s => [s.getJumpingCardsState('bottomCard'), s.setJumpingCardsState])
 	const [content, setContent] = useState<typeof bottomCardState>(bottomCardState)
 	const selectedAvatarState = useAvatarState(s => s.selectedAvatarState)
 
@@ -28,7 +32,6 @@ const BottomCard = () => {
 
 	useEffect(() => {
 		const changeContent = async (state: typeof bottomCardState) => {
-			// console.log(state)
 			if (!state) {
 				await timeout(3000)
 				setContent(null)
@@ -47,9 +50,8 @@ const BottomCard = () => {
 			className={'bottom_card-cover'}
 			closeHooksParams={{
 				conditionsList: [Boolean(bottomCardState)],
-				callback: () => setBottomCardState(null),
+				callback: () => setJumpingCardsState('bottomCard', null),
 			}}
-			forceCloseJumpingCard={!bottomCardState}
 		>
 			{getContent(content)}
 		</JumpingCard>

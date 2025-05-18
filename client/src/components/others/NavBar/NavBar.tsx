@@ -1,21 +1,22 @@
 import React, { useRef, useState } from 'react'
-import { NAV_BAR_LIST } from '../../../assets/common/Common-data'
-import SettingsButton from '../JumpingCards/SettingsCard/SettingsButton'
-import { TOOLTIP_DELAY_TIME } from '../../../../constants'
+
+import { useLocation } from 'react-router-dom'
+
 import RoundButton from '../../common/Buttons/RoundButton/RoundButton'
-import ToolTip from '../ToolTip/ToolTip'
-import { ICONS } from '../../../assets/common/Icons-data'
 import LogBookButton from '../JumpingCards/BottomCard/LogBook/LogBookButton/LogBookButton'
-import { getPathToLogo } from '../../../utils/createString'
+import SettingsButton from '../JumpingCards/SettingsCard/SettingsButton'
+import ToolTip from '../ToolTip/ToolTip'
+import { TOOLTIP_DELAY_TIME } from '@/../constants'
+import { NAV_BAR_LIST } from '@assets/common/Common-data'
+import { ICONS } from '@assets/common/Icons-data'
+import { getPathToLogo } from '@utils/createString'
 
 
 
-type NavBarProps = {
-	location: {
-		pathname: string;
-	}
-}
-const NavBar = ({ location }: NavBarProps) => {
+type NavBarProps = {}
+const NavBar = ({}: NavBarProps) => {
+
+	const location = useLocation()
 	const curr_path = location.pathname.split('/')[1]
 	// console.log(curr_path)
 
@@ -72,7 +73,7 @@ const NavBar = ({ location }: NavBarProps) => {
 									isAlwaysToolTip: true,
 									delayTimeMS: toolTipDelayTimeMS,
 								}}
-								size={'big'}
+								size={'l'}
 							>
 								{el.icon}
 							</RoundButton>

@@ -1,12 +1,13 @@
 import React from 'react'
-import RoundButton, { RoundButtonProps } from "../RoundButton/RoundButton"
+
+import RoundButton, { RoundButtonProps } from '../RoundButton/RoundButton'
 
 
 
 type FastRoundButtonProps = RoundButtonProps & {
 	notif?: number;
 }
-const FastRoundButton = ({ notif, className, children, ...props  }: FastRoundButtonProps) => {
+const FastRoundButton = ({ notif, className, children, ...props }: FastRoundButtonProps) => {
 
 
 	return (
@@ -21,7 +22,7 @@ const FastRoundButton = ({ notif, className, children, ...props  }: FastRoundBut
 					<div
 						className={'notif_circle_cover'}
 					>
-						
+
 					</div>
 					<div
 						className={'notif_circle cont'}

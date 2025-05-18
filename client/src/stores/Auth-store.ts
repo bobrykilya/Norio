@@ -1,7 +1,9 @@
 import { create } from 'zustand'
-import { CoverPanelOptions } from '../types/Auth-types'
-import { IUserRepository } from '../../../api/src/types/DB-types'
-import { ICommonVar } from '../../../common/types/Global-types'
+
+import { IUserRepository } from '@api/src/types/DB-types'
+import { ICommonVar } from '@shared/types/Global-types'
+import { CoverPanelOptions } from '@type/Auth-types'
+
 // import { persist } from "zustand/middleware"
 
 
@@ -45,7 +47,7 @@ type IUseJwtInfoState = {
 export const useJwtInfoListState = create<IUseJwtInfoState>((set, get) => ({
 	jwtInfoListState: [],
 	addJwtInfoState: (state) => {
-		const jwtInfoListState = get().jwtInfoListState
+		const { jwtInfoListState } = get()
 		const duplicateIndex = jwtInfoListState.findIndex(el => el.userInfo.userId === state.userInfo.userId)
 
 		if (duplicateIndex !== -1) {
@@ -64,14 +66,14 @@ export const useJwtInfoListState = create<IUseJwtInfoState>((set, get) => ({
 			return
 		}
 
-		const jwtInfoListState = get().jwtInfoListState
+		const { jwtInfoListState } = get()
 
 		set({
 			jwtInfoListState: jwtInfoListState.filter(el => el.userInfo.userId !== userId),
 		})
 	},
 	updateJWTUserInfoState: (userId, data) => {
-		const jwtInfoListState = get().jwtInfoListState
+		const { jwtInfoListState } = get()
 
 		set({
 			jwtInfoListState: jwtInfoListState.map(el => {

@@ -1,16 +1,16 @@
 import { showSnackMessage } from '../showSnackMessage/showSnackMessage'
-import { ILogOutReq } from '../../../../common/types/Auth-types'
-import { useJwtInfoListState } from '../../stores/Auth-store'
-import AuthService from '../../services/Auth-service'
-import { queryClient } from '../../http/tanstackQuery-client'
-import { IUserNameInfo } from '../../types/Auth-types'
 import AuthCommon, { ICurrentUserLS } from './authCommon'
-import TokenService from '../../services/Token-service'
-import { CURRENT_USER_LS, LOGOUT_LS } from '../../../constants'
-import { getTime } from '../../utils/getTime'
-import { useUserInfoState } from '../../stores/User-store'
-import { ICommonVar } from '../../../../common/types/Global-types'
-import { getLSObject, removeLS } from '../../utils/localStorage'
+import { CURRENT_USER_LS, LOGOUT_LS } from '@/../constants'
+import { queryClient } from '@/http/tanstackQuery-client'
+import AuthService from '@services/Auth-service'
+import TokenService from '@services/Token-service'
+import { IAutoLogoutPayload, ILogOutReq } from '@shared/types/Auth-types'
+import { ICommonVar } from '@shared/types/Global-types'
+import { useJwtInfoListState } from '@stores/Auth-store'
+import { useUserInfoState } from '@stores/User-store'
+import { createName } from '@utils/createString'
+import { getTime } from '@utils/getTime'
+import { getLSObject, removeLS } from '@utils/localStorage'
 
 
 
@@ -22,12 +22,18 @@ class LogOut {
 		queryClient.removeQueries() //! Delete? Change to "not weather"
 	}
 
-	static autoFastSessionLogOut = (userNameInfo: IUserNameInfo) => {
+	static autoFastSessionLogOut = (userInfo: IAutoLogoutPayload['userInfo']) => {
+		const currentUserId = useUserInfoState.getState().userInfoState?.userId
+
+		if (!currentUserId) {
+			return
+		}
+
 		showSnackMessage({
 			type: 'w',
-			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${AuthCommon.getUserAccountInfo(userNameInfo)}</span> по истечении быстрой сессии`,
+			message: `Был выполнен выход из аккаунта пользователя: <span class='bold'>${createName(userInfo, ['lastName', 'firstName', 'username'])}</span> по истечении быстрой сессии`,
 		})
-		this.currentUserLogOut({ interCode: 204 })
+		this.currentUserLogOut({ interCode: 204, userId: currentUserId })
 	}
 
 	static logOut = ({ interCode, userId }: ILogOutReq) => {

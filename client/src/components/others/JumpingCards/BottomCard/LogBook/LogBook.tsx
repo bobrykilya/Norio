@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
-import { showSnackMessage } from '../../../../../features/showSnackMessage/showSnackMessage'
-import { useBlockErrorState } from '../../../../../stores/Device-store'
+
 import toast, { useToasterStore } from 'react-hot-toast'
+
+import { showSnackMessage } from '@features/showSnackMessage/showSnackMessage'
+import { useBlockErrorState } from '@stores/Device-store'
 
 
 
 const LogBook = () => {
 
-	const blockErrorState = useBlockErrorState(s => s.blockErrorState)
+	const blockErrorState = useBlockErrorState(s => s.blockErrorMessage)
 	const { toasts } = useToasterStore()
 
 	const closeLogBook = () => {

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
+
 import { SubmitHandler, useForm } from 'react-hook-form'
-import DropDownSearchInput from '../../../../common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput'
-import NameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
+
 import SubmitBut from '../../../SubmitBut/SubmitBut'
-import PhoneInput from '../../../../common/Inputs/InputFields/PhoneInput/PhoneInput'
-import { IDataListElement } from '../../../../../assets/AuthPage/AuthPage-data'
-import useCloseOnEsc from '../../../../../hooks/useCloseOnEsc'
-import { ISignUp, ISignUpReq } from '../../../../../../../common/types/Auth-types'
-import SignUp from '../../../../../features/auth/signUp'
-import { ICONS } from '../../../../../assets/common/Icons-data'
-import SelectAvatarButton
-	from '../../../../others/JumpingCards/BottomCard/AvatarList/SelectAvatarButton/SelectAvatarButton'
-import { useAvatarState, useModalState } from '../../../../../stores/Utils-store'
+import { JOBS_LIST, STORES_LIST } from '@assets/AuthPage/AuthPage-data'
+import { ICONS } from '@assets/common/Icons-data'
+import DropDownSearchInput from '@common/Inputs/InputFields/DropDownSearchInput/DropDownSearchInput'
+import NameInput from '@common/Inputs/InputFields/NameInput/NameInput'
+import PhoneInput from '@common/Inputs/InputFields/PhoneInput/PhoneInput'
+import SignUp from '@features/auth/signUp'
+import useCloseOnEsc from '@hooks/useCloseOnEsc'
+import SelectAvatarButton from '@others/JumpingCards/BottomCard/AvatarList/SelectAvatarButton/SelectAvatarButton'
+import { ISignUp, ISignUpReq } from '@shared/types/Auth-types'
+import { useAvatarState, useModalState } from '@stores/Utils-store'
 
 
 
@@ -30,21 +31,16 @@ const getDefaultGenderByMiddleName = (middleName: string) => {
 }
 
 type SignUpInfoFormProps = {
-	STORES_LIST: IDataListElement[];
-	JOBS_LIST: IDataListElement[];
-	AVATARS_LIST: IDataListElement[];
 	isFormDisabled: boolean;
 	isAvatarButDisabled: boolean;
 }
 const SignUpInfoForm = ({
-							STORES_LIST,
-							JOBS_LIST,
 							isFormDisabled,
 							isAvatarButDisabled,
 						}: SignUpInfoFormProps) => {
 	// console.log('SignUpInfoForm')
 
-	const { getCommonModalState } = useModalState()
+	const isModalStackEmpty = useModalState(s => s.isModalStackEmpty())
 	const [avatar, setAvatar] = useAvatarState(s => [s.selectedAvatarState, s.setSelectedAvatarState])
 	const [errorAvatar, setErrorAvatar] = useState<{ message: string } | null>(null)
 	const [isLoading, setIsLoading] = useState(false)
@@ -99,7 +95,7 @@ const SignUpInfoForm = ({
 
 	//* For forms Esc blur while any DropDown, SnackBar or JumpingCard is opened
 	useCloseOnEsc({
-		conditionsList: [!isFormDisabled, !getCommonModalState()],
+		conditionsList: [!isFormDisabled, isModalStackEmpty],
 		callback: () => SignUp.handleReturnToSignUp(),
 	})
 

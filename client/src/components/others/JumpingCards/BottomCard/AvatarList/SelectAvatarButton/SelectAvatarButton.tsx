@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
-import InputCleaner from '../../../../../common/Inputs/InputFields/InputUtils/InputCleaner/InputCleaner'
-import InputError from '../../../../../common/Inputs/InputFields/InputUtils/InputError/InputError'
-import { IReactHookForm } from '../../../../../../types/Auth-types'
-import ToolTip from '../../../../ToolTip/ToolTip'
-import { ICONS } from '../../../../../../assets/common/Icons-data'
-import { useBottomCardState } from '../../../../../../stores/Utils-store'
-import { getPathToAvatar } from '../../../../../../utils/createString'
-import timeout from '../../../../../../utils/timeout'
+
+import { ICONS } from '@/assets/common/Icons-data'
+import { IReactHookForm } from '@/types/Auth-types'
+import InputCleaner from '@common/Inputs/InputFields/InputUtils/InputCleaner/InputCleaner'
+import InputError from '@common/Inputs/InputFields/InputUtils/InputError/InputError'
+import ToolTip from '@others/ToolTip/ToolTip'
+import { useJumpingCardsState } from '@stores/Utils-store'
+import { getPathToAvatar } from '@utils/createString'
+import timeout from '@utils/timeout'
 
 
 
-type AvatarButtonProps = Omit<IReactHookForm, 'errors'> & {
+type AvatarButtonProps = Pick<IReactHookForm, 'setError'> & {
 	selectedAvatar: string | null;
 	setSelectedAvatar: (avatar: string) => void;
 	disabled?: boolean;
@@ -30,7 +31,10 @@ const SelectAvatarButton = ({
 								isWhiteVersion,
 							}: AvatarButtonProps) => {
 
-	const { bottomCardState, setBottomCardState } = useBottomCardState()
+	const [
+		bottomCardState,
+		setJumpingCardsState,
+	] = useJumpingCardsState(s => [s.getJumpingCardsState('bottomCard'), s.setJumpingCardsState])
 	const [isEmptyIcon, setIsEmptyIcon] = useState(!selectedAvatar)
 	const avatarButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -39,7 +43,7 @@ const SelectAvatarButton = ({
 		if (error) {
 			setError(null)
 		}
-		setBottomCardState('avatarList')
+		setJumpingCardsState('bottomCard', 'avatarList')
 	}
 
 	const handleClickCleaner = async () => {

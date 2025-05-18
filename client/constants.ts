@@ -12,22 +12,23 @@ export const APP_LANG = 'ru'
 export const MY_LOC = 'myLocation'
 
 //* Snack (err, warning, success) settings
-	export const TOAST_LIMIT = 3 						//* Max toasts quantity limit
+export const TOAST_LIMIT = 3 						//* Max toasts quantity limit
 
 //* ToolTip settings
-	export const TOOLTIP_DELAY_TIME = 1300              //* Default toolTip delay time in milliseconds
+export const TOOLTIP_DELAY_TIME = 1300              //* Default toolTip delay time in milliseconds
 
 //* LocalErrStorage settings
-	export const RECENTLY_TIME = 20 					//* Time of error counting in seconds
-	export const SAME_LOGS_QUANTITY = 7 				//* Limit of possible error quantity recently
-	export const LOCAL_LOG_STORAGE_TIME = 24 			//* User error storage time in hours
+export const RECENTLY_TIME = 20 					//* Time of error counting in seconds
+export const SAME_LOGS_QUANTITY = 7 				//* Limit of possible error quantity recently
+export const LOCAL_LOG_STORAGE_TIME = 24 			//* User error storage time in hours
 
 //* Auth settings
-	export const CHECK_IP_AND_COUNTRY = false 			//* IP and Country checking before request on Api (ipapi.co, ip-api.com services)
-	export const PERMITTED_COUNTRIES = ['BY', 'PL'] 	//* Permitted countries for working with app
+export const CHECK_IP_AND_COUNTRY = false 			//* IP and Country checking before request on Api (ipapi.co, ip-api.com services)
+export const PERMITTED_COUNTRIES = ['BY', 'PL'] 	//* Permitted countries for working with app
+export const FAST_SESSION_REFRESH_TIME = 3			//* Time for page refresh before fast session will become deprecated in seconds (default: 3)
 
 //* Weather settings
-	export const WEATHER_ACCURACY = 3 					//* Number of decimal places for weather-service's coords (default: 3)
+export const WEATHER_ACCURACY = 3 					//* Number of decimal places for weather-service's coords (default: 3)
 
 //* Users settings
-	export const MAX_SWITCH_USERS = 3					//* Max quantity of authorized users on client
+export const MAX_SWITCH_USERS = 3					//* Max quantity of authorized users on client

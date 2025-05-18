@@ -1,24 +1,30 @@
 import React from 'react'
-import SignInCont from '../../components/_AuthPage/SignConts/SignInCont/SignInCont'
-import SignUpCont from '../../components/_AuthPage/SignConts/SignUpCont/SignUpCont'
-import SignUpInfoCont from '../../components/_AuthPage/SignConts/SignUpInfoCont/SignUpInfoCont'
-import CoverPanel from '../../components/_AuthPage/CoverPanel/CoverPanel'
-import AppTitle from '../../components/common/AppTitle/AppTitle'
-import { AuthPageAnim } from '../../utils/pageTransitions'
+
+import clsx from 'clsx'
+
+import AppTitle from '@common/AppTitle/AppTitle'
+import CoverPanel from '@components/_AuthPage/CoverPanel/CoverPanel'
+import SignInCont from '@components/_AuthPage/SignConts/SignInCont/SignInCont'
+import SignUpCont from '@components/_AuthPage/SignConts/SignUpCont/SignUpCont'
+import SignUpInfoCont from '@components/_AuthPage/SignConts/SignUpInfoCont/SignUpInfoCont'
+import LogBookButton from '@others/JumpingCards/BottomCard/LogBook/LogBookButton/LogBookButton'
+import { useCoverPanelState } from '@stores/Auth-store'
+import { useBlockErrorState } from '@stores/Device-store'
+import { useModalState } from '@stores/Utils-store'
+import { AuthPageAnim } from '@utils/pageTransitions'
+
 import './AuthPage.sass'
-import { useCoverPanelState } from '../../stores/Auth-store'
-import LogBookButton from '../../components/others/JumpingCards/BottomCard/LogBook/LogBookButton/LogBookButton'
-import { useModalState } from '../../stores/Utils-store'
 
 
 
-type AuthPageProps = {
-	blockErrorMessage: string;
-}
-const AuthPage = ({ blockErrorMessage }: AuthPageProps) => {
+type AuthPageProps = {}
+const AuthPage = ({}: AuthPageProps) => {
 
 	const coverPanelState = useCoverPanelState(s => s.coverPanelState)
-	const getJumpingCardsState = useModalState(s => s.getJumpingCardsState)
+	const isAppBlocked = useBlockErrorState(s => s.isAppBlocked())
+	const isJumpingCardOpened = useModalState(s => s.isJumpingCardOpened())
+	const isDisabled = isJumpingCardOpened || isAppBlocked
+
 
 	return (
 		<>
@@ -31,25 +37,25 @@ const AuthPage = ({ blockErrorMessage }: AuthPageProps) => {
 			<AuthPageAnim>
 				<div
 					id='auth_page-cont'
-					className={`cont ${blockErrorMessage ? 'block' : ''}`}
+					className={clsx('cont', isAppBlocked && 'block')}
 				>
 					<div id='signs-cont' className='cont'>
 						<SignInCont
 							actForm={coverPanelState}
-							isFormDisabled={getJumpingCardsState() || !!blockErrorMessage}
+							isFormDisabled={isDisabled}
 						/>
 						<SignUpCont
 							actForm={coverPanelState}
-							isFormDisabled={getJumpingCardsState() || !!blockErrorMessage}
+							isFormDisabled={isDisabled}
 						/>
 						{coverPanelState !== 'sign_in' &&
 							<SignUpInfoCont
 								actForm={coverPanelState}
-								isFormDisabled={getJumpingCardsState() || !!blockErrorMessage}
+								isFormDisabled={isDisabled}
 							/>
 						}
 					</div>
-					<CoverPanel disabled={!!blockErrorMessage} />
+					<CoverPanel disabled={isAppBlocked} />
 				</div>
 			</AuthPageAnim>
 		</>

@@ -1,10 +1,12 @@
 import React, { useLayoutEffect, useRef } from 'react'
-import { focusInput } from '../../../../../utils/focusInput'
-import { ISignFormInput } from '../../../../../types/Auth-types'
-import InputField from '../InputField/InputField'
-import { ICommonVar } from '../../../../../../../common/types/Global-types'
+
 import { useIMask } from 'react-imask'
-import { getTimeParams } from '../../../../../utils/getTime'
+
+import InputField from '../InputField/InputField'
+import { ICommonVar } from '@shared/types/Global-types'
+import { ISignFormInput } from '@type/Auth-types'
+import { focusInput } from '@utils/focusInput'
+import { getTimeParams } from '@utils/getTime'
 
 
 

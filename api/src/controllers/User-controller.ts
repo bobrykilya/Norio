@@ -1,11 +1,11 @@
-import { HoroscopeTypeOptions, ICommonVar } from '../../../common/types/Global-types.ts'
-import { catchError } from '../utils/Errors.ts'
-import HoroscopeService from '../services/Horoscope-service.ts'
-import { IAccountInfoEditReq, IUserInfoEditReq } from '../../../common/types/User-types.ts'
-import UserService from '../services/User-service.ts'
-import { getTime } from '../utils/getTime.ts'
-import { COOKIE_SETTINGS } from '../../constants.ts'
 import { getUserCookieName } from './Auth-controller.ts'
+import { COOKIE_SETTINGS } from '@/../constants.ts'
+import HoroscopeService from '@services/Horoscope-service.ts'
+import UserService from '@services/User-service.ts'
+import { HoroscopeTypeOptions, ICommonVar } from '@shared/types/Global-types.ts'
+import { IAccountInfoEditReq, IUserInfoEditReq } from '@shared/types/User-types.ts'
+import { catchError } from '@utils/Errors.ts'
+import { getTime } from '@utils/getTime.ts'
 
 
 

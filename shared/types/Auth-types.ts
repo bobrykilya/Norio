@@ -1,5 +1,5 @@
-import { ICommonVar } from "./Global-types"
-import { IUserRepository } from "../../api/src/types/DB-types"
+import { ICommonVar } from './Global-types'
+import { IUserRepository } from '../../api/src/types/DB-types'
 
 
 //* Request types
@@ -62,6 +62,12 @@ export type ICheckUserRes = {
 	avatarsList: ICommonVar['avatar'][];
 }
 
-
-
-
+export type IAutoLogoutPayload = {
+	isLogOut: boolean;
+	userInfo: {
+		userId: ICommonVar['id'];
+		lastName: ICommonVar['lastName'];
+		firstName: ICommonVar['firstName'];
+		username: ICommonVar['username'];
+	}
+}

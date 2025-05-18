@@ -1,4 +1,4 @@
-import { ICommonVar } from "../../../common/types/Global-types"
+import { ICommonVar } from '@shared/types/Global-types'
 
 
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import timeout from "../../../utils/timeout"
+
+import timeout from '@utils/timeout'
 
 
 
@@ -25,12 +26,12 @@ const SwapImg = ({ path }: SwapImgProps) => {
 
 
 	return (
-			<img
-				className={'swap-img'}
-				src={pathState}
-				ref={imgRef}
-				alt="SwapIMG Error"
-			/>
+		<img
+			className={'swap-img'}
+			src={pathState}
+			ref={imgRef}
+			alt='SwapIMG Error'
+		/>
 	)
 }
 

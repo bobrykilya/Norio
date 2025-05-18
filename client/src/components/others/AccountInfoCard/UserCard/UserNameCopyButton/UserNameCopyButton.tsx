@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react'
-import ToolTip from '../../../ToolTip/ToolTip'
-import { IUserRepository } from '../../../../../../../api/src/types/DB-types'
-import SelectDropDown from '../../../../common/SelectDropDown/SelectDropDown'
-import { ICommonVar } from '../../../../../../../common/types/Global-types'
-import { copyText } from '../../../../../utils/copy'
-import { ICONS } from '../../../../../assets/common/Icons-data'
-import { createName } from '../../../../../utils/createString'
+
+import { IUserRepository } from '@api/src/types/DB-types'
+import { ICONS } from '@assets/common/Icons-data'
+import SelectDropDown from '@common/SelectDropDown/SelectDropDown'
+import ToolTip from '@others/ToolTip/ToolTip'
+import { ICommonVar } from '@shared/types/Global-types'
+import { copyText } from '@utils/copy'
+import { createName } from '@utils/createString'
 
 
 

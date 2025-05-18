@@ -1,19 +1,20 @@
 import bcrypt from 'bcryptjs'
-import TokenService from './Token-service'
-import { Conflict, Errors } from '../utils/Errors'
-import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION, MAX_SESSION_FOR_USER } from '../../constants'
-import RefreshSessionsRepository from '../_database/repositories/RefreshSession-db'
-import UserRepository from '../_database/repositories/User-db'
-import AuthDeviceRepository from '../_database/repositories/AuthDevice-db'
-import _logAttentionRepository from '../_database/repositories/_logAttention-db'
-import _logAuthRepository from '../_database/repositories/_LogAuth-db'
+
 import DeviceService from './Device-service'
 import { sendToClient } from './Socket-service'
-import { getEndTime, getTime } from '../utils/getTime'
-import { IService, ISignInController, ISignUpController } from '../types/Auth-types'
-import { ICheckUserReq, ILogOutReq, IRefreshReq } from '../../../common/types/Auth-types'
-import { IRefreshSessionRepository, IUserRepository } from '../types/DB-types'
-import { ICommonVar } from '../../../common/types/Global-types'
+import TokenService from './Token-service'
+import { ACCESS_TOKEN_EXPIRATION, FAST_SESSION_DURATION, MAX_SESSION_FOR_USER } from '@/../constants'
+import _logAttentionRepository from '@/_database/repositories/_logAttention-db'
+import _logAuthRepository from '@/_database/repositories/_LogAuth-db'
+import AuthDeviceRepository from '@/_database/repositories/AuthDevice-db'
+import RefreshSessionsRepository from '@/_database/repositories/RefreshSession-db'
+import UserRepository from '@/_database/repositories/User-db'
+import { IAutoLogoutPayload, ICheckUserReq, ILogOutReq, IRefreshReq } from '@shared/types/Auth-types'
+import { ICommonVar } from '@shared/types/Global-types'
+import { IService, ISignInController, ISignUpController } from '@type/Auth-types'
+import { IRefreshSessionRepository, IUserRepository } from '@type/DB-types'
+import { Conflict, Errors } from '@utils/Errors'
+import { getEndTime, getTime } from '@utils/getTime'
 
 
 
@@ -382,15 +383,16 @@ class AuthService {
 					const { username, last_name, first_name } = await UserRepository.getUserName(user_id)
 
 					//* Auto logout for client by Socket-io
-					sendToClient({
+					sendToClient<IAutoLogoutPayload>({
 						room: { userId: user_id, deviceId: device_id },
 						event: 'autoLogOut',
 						payload: {
 							isLogOut: true,
-							userNameInfo: {
+							userInfo: {
 								lastName: last_name,
 								firstName: first_name,
-								username: username,
+								username,
+								userId: user_id,
 							},
 						},
 					})

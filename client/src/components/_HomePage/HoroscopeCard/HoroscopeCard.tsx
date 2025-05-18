@@ -1,16 +1,17 @@
 import React, { useMemo, useState } from 'react'
-import { IUserRepository } from "../../../../../api/src/types/DB-types"
-import { useFetchHoroscope } from "../../../queries/Horoscope-queries"
-import { getHoroscopeType, HOROSCOPE_DATA } from "../../../assets/HomePage/Horoscope-data"
-import { capitalize } from "../../../utils/capitalize"
-import { CURRENT_USER_LS } from "../../../../constants"
-import CardLinkButton from "../CardLinkButton/CardLinkButton"
-import UnfoldingCard from "../../common/UnfoldingCard/UnfoldingCard"
-import WriteBirthdayButton from "./WriteBirthdayButton/WriteBirthdayButton"
-import { Loader } from "../../common/Loader/Loader"
-import { useUserInfoState } from "../../../stores/User-store"
-import { getLSObject, setLSObject } from "../../../utils/localStorage"
-import { ICurrentUserLS } from "../../../features/auth/authCommon"
+
+import CardLinkButton from '../CardLinkButton/CardLinkButton'
+import WriteBirthdayButton from './WriteBirthdayButton/WriteBirthdayButton'
+import { CURRENT_USER_LS } from '@/../constants'
+import { useFetchHoroscope } from '@/queries/Horoscope-queries'
+import { IUserRepository } from '@api/src/types/DB-types'
+import { getHoroscopeType, HOROSCOPE_DATA } from '@assets/HomePage/Horoscope-data'
+import { Loader } from '@common/Loader/Loader'
+import UnfoldingCard from '@common/UnfoldingCard/UnfoldingCard'
+import { ICurrentUserLS } from '@features/auth/authCommon'
+import { useUserInfoState } from '@stores/User-store'
+import { capitalize } from '@utils/capitalize'
+import { getLSObject, setLSObject } from '@utils/localStorage'
 
 
 
@@ -21,23 +22,15 @@ const checkHoroscopeInLS = (birthday: IUserRepository['birthday']) => {
 	if (currentUser && !horoscope || horoscope.birthday !== birthday) {
 		horoscope = {
 			horoscopeType: getHoroscopeType(birthday),
-			birthday
+			birthday,
 		}
 		setLSObject(CURRENT_USER_LS, {
 			...currentUser,
-			horoscope
+			horoscope,
 		})
 	}
 
 	return horoscope.horoscopeType
-}
-
-const getFirstPhrase = (text: string, quantityOfPhrases: number) => {
-	if (!text) {
-		return ''
-	}
-	const phrase = text.slice(0, quantityOfPhrases).split(' ')
-	return phrase.slice(0, phrase.length - 1).join(' ')
 }
 
 const HoroscopeCard = () => {
@@ -56,9 +49,6 @@ const HoroscopeCard = () => {
 	})
 	// console.log(horoscopeData)
 
-	const firstPhrase = useMemo(() => getFirstPhrase(horoscopeData?.messages[0], 57)
-		, [horoscopeData?.messages[0]])
-
 
 	return (
 		<div
@@ -69,8 +59,11 @@ const HoroscopeCard = () => {
 					<WriteBirthdayButton />
 					:
 					<UnfoldingCard
-						isFullCard={isFullHoroscopeCard}
-						closeCard={toggleHoroscopeCard}
+						className={'horoscope-card'}
+						closeHooksParams={{
+							callback: toggleHoroscopeCard,
+							conditionsList: [isFullHoroscopeCard],
+						}}
 					>
 						<div
 							className={'horoscope_icon-cont cont'}
@@ -89,18 +82,18 @@ const HoroscopeCard = () => {
 											{capitalize(horoscopeExtraInfo.ruName)}
 										</h2>
 										<div
-										    className={'horoscope-message cont'}
+											className={'horoscope-message cont'}
 										>
 											<p
 												className={'horoscope_info-short cont'}
 											>
-												{firstPhrase}...
+												{horoscopeData?.messages[0]}
 											</p>
 											<p
 												className={'horoscope_info-full'}
 											>
 												{horoscopeData?.messages[0]}
-												<br/><br/>
+												<br /><br />
 												{horoscopeData?.messages[1]}
 											</p>
 										</div>
@@ -121,7 +114,7 @@ const HoroscopeCard = () => {
 							isCloseIcon={isFullHoroscopeCard}
 						/>
 					</UnfoldingCard>
-				}
+			}
 		</div>
 	)
 }

@@ -1,6 +1,13 @@
-interface ImportMeta {
-	env: {
-		VITE_API_URL: string;
-		VITE_CLIENT_PORT: string;
-	};
+import { DefaultCityOptions } from '@shared/types/Global-types'
+
+
+
+export type SizeOptions = 'xs' | 's' | 'm' | 'l';
+
+export type IDataListElement = {
+	id: string;
+	title: string;
+}
+export type IStoresListElement = IDataListElement & {
+	cityId?: DefaultCityOptions;
 }

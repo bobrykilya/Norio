@@ -1,11 +1,11 @@
-import AuthService from '../services/Auth-service'
-import { COOKIE_SETTINGS } from '../../constants'
-import { getTime } from '../utils/getTime'
-import { ISignInController, ISignUpController } from '../types/Auth-types'
-import { ICheckUserReq, ILoginServiceRes, ILogOutReq, IRefreshReq } from '../../../common/types/Auth-types'
-import { ICommonVar } from '../../../common/types/Global-types'
-import { catchError } from '../utils/Errors.ts'
-import UserService from '../services/User-service.ts'
+import { COOKIE_SETTINGS } from '@/../constants'
+import AuthService from '@services/Auth-service'
+import UserService from '@services/User-service.ts'
+import { ICheckUserReq, ILoginServiceRes, ILogOutReq, IRefreshReq } from '@shared/types/Auth-types'
+import { ICommonVar } from '@shared/types/Global-types'
+import { ISignInController, ISignUpController } from '@type/Auth-types'
+import { catchError } from '@utils/Errors.ts'
+import { getTime } from '@utils/getTime'
 
 
 

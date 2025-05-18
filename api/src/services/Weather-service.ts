@@ -1,19 +1,19 @@
+import { WEATHER_UPDATE_TIME_IN_MIN } from '@/../constants.ts'
+import { $apiLocation, $apiWeather } from '@/http/http.ts'
 import {
 	IDeviceLocationReq,
 	ILocationAddress,
 	ILocationCoords,
 	ILocationWeather,
 	ILocationWeatherElem,
-} from "../../../common/types/Device-types.ts"
-import { $apiLocation, $apiWeather } from "../http/http.ts"
-import { redisGet, redisWeatherSet } from "../utils/redisUtils.ts"
-import { getTime } from "../utils/getTime.ts"
-import { WEATHER_UPDATE_TIME_IN_MIN } from "../../constants.ts"
+} from '@shared/types/Device-types.ts'
+import { getTime } from '@utils/getTime.ts'
+import { redisGet, redisWeatherSet } from '@utils/redisUtils.ts'
 
 
 
-const getWeatherObjectByKeys = <T> (object: T, keysList: string[]) => {
-	let newObject: T | {} = {}
+const getWeatherObjectByKeys = <T>(object: T, keysList: string[]) => {
+	const newObject: T | object = {}
 
 	keysList.forEach(i => {
 		if (object[i]) {
@@ -48,7 +48,7 @@ class WeatherService {
 		locationWeather = await redisGet(getCashKeyForWeather(location))
 		if (!locationWeather) {
 			const REQUIRED_KEYS_LIST = ['dt', 'rain', 'snow', 'wind_gust', 'temp', 'feels_like', 'humidity', 'icon', 'description']
-			const weatherData = await $apiWeather.get('onecall', { searchParams: {	lat, lon } })
+			const weatherData = await $apiWeather.get('onecall', { searchParams: { lat, lon } })
 				.json<ILocationWeather>()
 			// console.log(weatherData)
 
@@ -70,17 +70,16 @@ class WeatherService {
 	}
 
 	static async getLocationCityTitleByCoords({ lat, lon }: ILocationCoords) {
-		let locationAddress: ILocationAddress['address']
 		const REQUIRED_KEYS_LIST = ['city', 'town', 'village']
 
 		const locationData = await $apiLocation.get('reverse', {
 			searchParams: {
 				lat,
 				lon,
-			}
+			},
 		}).json<ILocationAddress>()
 		// console.log(locationData)
-		locationAddress = getWeatherObjectByKeys<ILocationAddress['address']>(locationData.address, REQUIRED_KEYS_LIST)
+		const locationAddress = getWeatherObjectByKeys<ILocationAddress['address']>(locationData.address, REQUIRED_KEYS_LIST)
 
 		return locationAddress.village || locationAddress.town || locationAddress.city
 	}

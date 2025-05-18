@@ -1,6 +1,7 @@
 import React from 'react'
-import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-import { getTemp } from "../WeatherCard"
+
+import { getTemp } from '../WeatherCard'
+import { ILocationWeatherElem } from '@shared/types/Device-types'
 
 
 
@@ -9,7 +10,7 @@ type WeatherElementProps = {
 	labelPos?: 'start' | 'center' | 'end';
 	isBigSize?: boolean;
 }
-const WeatherElement = ({ weather, labelPos='center', isBigSize=false }: WeatherElementProps) => {
+const WeatherElement = ({ weather, labelPos = 'center', isBigSize = false }: WeatherElementProps) => {
 
 	return (
 		<div
@@ -26,7 +27,7 @@ const WeatherElement = ({ weather, labelPos='center', isBigSize=false }: Weather
 				<div
 					className={'weather_el-icon'}
 				>
-					<img src={`/weather/${weather.icon}.svg`} alt="?" />
+					<img src={`/weather/${weather.icon}.svg`} alt='?' />
 				</div>
 				<p
 					className={'weather_el-temp'}

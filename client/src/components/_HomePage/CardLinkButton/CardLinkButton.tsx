@@ -1,6 +1,7 @@
 import React from 'react'
-import RoundButton, { RoundButtonProps } from "../../common/Buttons/RoundButton/RoundButton"
-import { ICONS } from "../../../assets/common/Icons-data"
+
+import { ICONS } from '@assets/common/Icons-data'
+import RoundButton, { RoundButtonProps } from '@common/Buttons/RoundButton/RoundButton'
 
 
 
@@ -20,11 +21,11 @@ const CardLinkButton = ({ onClick, link, isCloseIcon, className, ...props }: Car
 		<RoundButton
 			className={`card_link-but clear-but ${className || ''} ${isCloseIcon ? 'close_icon_opened' : ''}`}
 			onClick={onClick ? onClick : openLink}
-			size={'small'}
+			size={'s'}
 			{...props}
 		>
 			<div
-			    className={'fa_icons_tooltip-cont cont'}
+				className={'fa_icons_tooltip-cont cont'}
 			>
 				<div
 					className={'fa_icons_switch-cont cont'}

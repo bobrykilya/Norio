@@ -1,7 +1,6 @@
 @import '../AuthPage_variables'
 
 
-
 #signs-cont
     .sign-cont
         //border: 2px solid black
@@ -29,25 +28,22 @@
     // * CoverPanel toggle
     .sign-cont
         will-change: trasnform
-        transition: transform $trans-dur + 0.2s $trans-style, opacity $trans-dur $trans-style
+        transition: transform $dur-cover-panel + 0.2s $trans-style, opacity $dur-cover-panel $trans-style
         opacity: 0
         pointer-events: none
         overflow: visible
+        visibility: hidden
         &.active
-            transition: all $trans-dur + 0.2s $trans-style
+            visibility: visible
+            transition: all $dur-cover-panel + 0.2s $trans-style
             opacity: 1
             pointer-events: auto
+            transform: none !important
     #sign_in-cont
         transform: translateX($trans-content-X) scale(1 - $trans-content-scale)
-        &.active
-            transform: none
     #sign_up-cont
         transform: translateX(-$trans-content-X) scale(1 - $trans-content-scale)
-        &.active
-            transform: none
     #sign_up_info-cont
         position: absolute
         left: 1rem
         transform: translateX(-$trans-content-X) scale(1 - $trans-content-scale)
-        &.active
-            transform: none

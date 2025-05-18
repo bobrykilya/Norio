@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
-import RoundButton from "../../common/Buttons/RoundButton/RoundButton"
-import SwitchUserElem from "./SwitchUserElem/SwitchUserElem"
-import ToolTip from "../ToolTip/ToolTip"
-import { MAX_SWITCH_USERS, SWITCH_USERS_ID_LS } from "../../../../constants"
-import LogOut from "../../../features/auth/logOut"
-import { useJwtInfoListState } from "../../../stores/Auth-store"
-import timeout from "../../../utils/timeout"
-import { sortByAlphabet } from "../../../utils/sort"
-import { IUserRepository } from "../../../../../api/src/types/DB-types"
-import { ICONS } from "../../../assets/common/Icons-data"
-import { ICommonVar } from "../../../../../common/types/Global-types"
-import { getLSObject } from "../../../utils/localStorage"
-import { ISwitchUsersIdLS } from "../../../features/auth/authCommon"
+
+import ToolTip from '../ToolTip/ToolTip'
+import SwitchUserElem from './SwitchUserElem/SwitchUserElem'
+import { MAX_SWITCH_USERS, SWITCH_USERS_ID_LS } from '@/../constants'
+import { ICONS } from '@/assets/common/Icons-data'
+import { IUserRepository } from '@api/src/types/DB-types'
+import RoundButton from '@common/Buttons/RoundButton/RoundButton'
+import { ISwitchUsersIdLS } from '@features/auth/authCommon'
+import LogOut from '@features/auth/logOut'
+import { ICommonVar } from '@shared/types/Global-types'
+import { useJwtInfoListState } from '@stores/Auth-store'
+import { getLSObject } from '@utils/localStorage'
+import { sortByAlphabet } from '@utils/sort'
+import timeout from '@utils/timeout'
 
 
 
@@ -26,7 +27,9 @@ const SwitchUser = ({ currentUserId, isAuthPage, disabled }: SwitchUserProps) =>
 		return
 	}
 
-	const SAVED_USERS_INFO_LIST: IUserRepository[] = sortByAlphabet(useJwtInfoListState(s => s.jwtInfoListState).map(el => el.userInfo), 'lastName')
+	const jwtInfoListState = useJwtInfoListState(s => s.jwtInfoListState)
+	const SAVED_USERS_INFO_LIST: IUserRepository[] = sortByAlphabet(jwtInfoListState
+		.map(el => el.userInfo), 'lastName')
 	const switchUsersIdList = getLSObject<ISwitchUsersIdLS>(SWITCH_USERS_ID_LS) || []
 
 	const [usersIdList, setUsersIdList] = useState(switchUsersIdList)
@@ -63,9 +66,9 @@ const SwitchUser = ({ currentUserId, isAuthPage, disabled }: SwitchUserProps) =>
 					className={'before_hover-but'}
 					onClick={handleForgetAllUsers}
 					toolTip={{
-						message: 'Забыть все фоновые аккаунты'
+						message: 'Забыть все фоновые аккаунты',
 					}}
-					size={'tiny'}
+					size={'xs'}
 					disabled={(!isAuthPage ? !usersIdList[1] : !usersIdList[0])}
 				>
 					{ICONS.trash}
@@ -73,25 +76,25 @@ const SwitchUser = ({ currentUserId, isAuthPage, disabled }: SwitchUserProps) =>
 			</div>
 			{
 				switchUsersIdList.map((userId) => {
-					if ((currentUserId && userId === currentUserId) ) {
-						return
-					}
+						if ((currentUserId && userId === currentUserId)) {
+							return
+						}
 
-					const user = SAVED_USERS_INFO_LIST.find(userInfo => userInfo.userId === userId)
+						const user = SAVED_USERS_INFO_LIST.find(userInfo => userInfo.userId === userId)
 
-					if (!user) {
-						return
-					}
+						if (!user) {
+							return
+						}
 
 
-					return <SwitchUserElem
-								key={userId}
-								userInfo={user}
-								isVisible={usersIdList.includes(userId)}
-								isAuthPage={isAuthPage}
-								setUsersIdList={setUsersIdList}
-							/>
-					}
+						return <SwitchUserElem
+							key={userId}
+							userInfo={user}
+							isVisible={usersIdList.includes(userId)}
+							isAuthPage={isAuthPage}
+							setUsersIdList={setUsersIdList}
+						/>
+					},
 				)
 			}
 			<SwitchUserElem

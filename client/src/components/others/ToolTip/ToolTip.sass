@@ -1,5 +1,4 @@
-@import '../../../variables'
-
+@import '@/variables'
 
 
 .tool_tip-cont
@@ -30,7 +29,7 @@
         border-radius: 20px
         padding: 10px
         will-change: transform
-        transition: all 0.2s ease
+        transition: all $dur-tool-tip ease
         opacity: 0
         filter: blur(7px)
         -webkit-filter: blur(7px)
@@ -54,7 +53,7 @@
             bottom: calc(-50%)
             left: calc(100% + $tooltip-margin)
             transform: translateX(-($tooltip-step * 2)) scale($tooltip-scale)
-        &.bottom_left 
+        &.bottom_left
             top: calc(100% + $tooltip-margin)
             right: 0
             transform: translate($tooltip-step, -$tooltip-step) scale($tooltip-scale)

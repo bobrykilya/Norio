@@ -1,15 +1,17 @@
-import React from "react"
-import { FaHome } from "react-icons/fa"
-import { BsCalendar2DateFill, BsChatTextFill, BsCheckCircleFill } from "react-icons/bs"
-import { FaBuildingUser, FaFilePen } from "react-icons/fa6"
-import { HiDocumentSearch } from "react-icons/hi"
-import { TbTableFilled } from "react-icons/tb"
-import { IoMdAnalytics } from "react-icons/io"
-import { RiAppsFill } from "react-icons/ri"
-import { IoFemaleOutline, IoMaleFemaleOutline, IoMaleOutline } from "react-icons/io5"
-import { ICommonVar } from "../../../../common/types/Global-types"
-import { IDeviceLocation } from "../../../../common/types/Device-types"
-import { ISelectDropDownOptionListElem } from "../../components/common/SelectDropDown/SelectDropDown"
+import React from 'react'
+
+import { BsCalendar2DateFill, BsChatTextFill, BsCheckCircleFill } from 'react-icons/bs'
+import { FaHome } from 'react-icons/fa'
+import { FaBuildingUser, FaFilePen } from 'react-icons/fa6'
+import { HiDocumentSearch } from 'react-icons/hi'
+import { IoMdAnalytics } from 'react-icons/io'
+import { IoFemaleOutline, IoMaleFemaleOutline, IoMaleOutline } from 'react-icons/io5'
+import { RiAppsFill } from 'react-icons/ri'
+import { TbTableFilled } from 'react-icons/tb'
+
+import { ISelectDropDownOptionListElem } from '@common/SelectDropDown/SelectDropDown'
+import { IDeviceLocation } from '@shared/types/Device-types'
+import { ICommonVar } from '@shared/types/Global-types'
 
 
 
@@ -23,61 +25,61 @@ export const NAV_BAR_LIST: INavBarDataListElement[] = [
 	{
 		id: 'home',
 		title: 'Главная',
-		icon: <FaHome className='fa-icon'/>,
+		icon: <FaHome className='fa-icon' />,
 		link: '',
 	},
 	{
 		id: 'tasks',
 		title: 'Задачи',
-		icon: <BsCheckCircleFill className='fa-icon'/>,
+		icon: <BsCheckCircleFill className='fa-icon' />,
 		link: '',
 	},
 	{
 		id: 'chats',
 		title: 'Чаты',
-		icon: <BsChatTextFill className='fa-icon'/>,
+		icon: <BsChatTextFill className='fa-icon' />,
 		link: '',
 	},
 	{
 		id: 'calendar',
 		title: 'Календарь',
-		icon: <BsCalendar2DateFill className='fa-icon'/>,
+		icon: <BsCalendar2DateFill className='fa-icon' />,
 		link: '',
 	},
 	{
 		id: 'notes',
 		title: 'Заметки',
-		icon: <FaFilePen className='fa-icon'/>,
+		icon: <FaFilePen className='fa-icon' />,
 		link: '',
 	},
 	{
 		id: 'reporting',
 		title: 'Отчётность',
-		icon: <HiDocumentSearch className='fa-icon'/>,
+		icon: <HiDocumentSearch className='fa-icon' />,
 		link: '',
 	},
 	{
 		id: 'tables',
 		title: 'Таблицы',
-		icon: <TbTableFilled className='fa-icon'/>,
+		icon: <TbTableFilled className='fa-icon' />,
 		link: '',
 	},
 	{
 		id: 'analytics',
 		title: 'Аналитика',
-		icon: <IoMdAnalytics className='fa-icon'/>,
+		icon: <IoMdAnalytics className='fa-icon' />,
 		link: '',
 	},
 	{
 		id: 'company',
 		title: 'Компания',
-		icon: <FaBuildingUser className='fa-icon'/>,
+		icon: <FaBuildingUser className='fa-icon' />,
 		link: '',
 	},
 	{
 		id: 'apps',
 		title: 'Приложения',
-		icon: <RiAppsFill className='fa-icon'/>,
+		icon: <RiAppsFill className='fa-icon' />,
 		link: '',
 	},
 ]
@@ -91,7 +93,7 @@ export const LOCATIONS_LIST: IDeviceLocation[] = [
 		coords: {
 			lat: 54.307332,
 			lon: 26.838939,
-		}
+		},
 	},
 	{
 		city: {
@@ -101,7 +103,7 @@ export const LOCATIONS_LIST: IDeviceLocation[] = [
 		coords: {
 			lat: 54.248907,
 			lon: 27.077756,
-		}
+		},
 	},
 	{
 		city: {
@@ -111,7 +113,7 @@ export const LOCATIONS_LIST: IDeviceLocation[] = [
 		coords: {
 			lat: 55.485576,
 			lon: 28.768349,
-		}
+		},
 	},
 	{
 		city: {
@@ -121,7 +123,7 @@ export const LOCATIONS_LIST: IDeviceLocation[] = [
 		coords: {
 			lat: 55.138799,
 			lon: 27.685843,
-		}
+		},
 	},
 	{
 		city: {
@@ -131,7 +133,7 @@ export const LOCATIONS_LIST: IDeviceLocation[] = [
 		coords: {
 			lat: 54.156384,
 			lon: 27.242273,
-		}
+		},
 	},
 	{
 		city: {
@@ -141,7 +143,7 @@ export const LOCATIONS_LIST: IDeviceLocation[] = [
 		coords: {
 			lat: 54.282272,
 			lon: 26.820829,
-		}
+		},
 	},
 ]
 

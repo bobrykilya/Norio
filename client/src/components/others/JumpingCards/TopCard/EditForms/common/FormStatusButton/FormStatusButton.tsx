@@ -1,15 +1,16 @@
 import React from 'react'
-import RoundButton from "../../../../../../common/Buttons/RoundButton/RoundButton"
-import { Loader } from "../../../../../../common/Loader/Loader"
-import { ICONS } from "../../../../../../../assets/common/Icons-data"
+
+import { ICONS } from '@assets/common/Icons-data'
+import RoundButton from '@common/Buttons/RoundButton/RoundButton'
+import { Loader } from '@common/Loader/Loader'
 
 
 
-export type FormStatusButOptions =  'ok' | 'undo' | 'loading'
+export type FormStatusButOptions = 'ok' | 'undo' | 'loading'
 
 type FormStatusButProps = {
 	state: FormStatusButOptions;
-	handleClickUndoBut: (state: FormStatusButOptions) => void;
+	handleClickUndoBut: () => void;
 }
 const FormStatusButton = ({ state, handleClickUndoBut }: FormStatusButProps) => {
 
@@ -19,20 +20,20 @@ const FormStatusButton = ({ state, handleClickUndoBut }: FormStatusButProps) => 
 			className={`user_info_edit_form_status-but ${state || ''} round_blue-but`}
 			onClick={handleClickUndoBut}
 			toolTip={{
-				message: 'Откатить все поля обратно'
+				message: 'Откатить все поля обратно',
 			}}
 		>
 			<div
-			    className={'switch_form_status-cont cont'}
+				className={'switch_form_status-cont cont'}
 			>
-			    <div
-			        className={`switch_status-elem cont loading-cont ${state === 'loading' ? 'active' : ''}`}
-			    >
+				<div
+					className={`switch_status-elem cont loading-cont ${state === 'loading' ? 'active' : ''}`}
+				>
 					<Loader
 						type={'circles'}
 						width={'50'}
 					/>
-			    </div>
+				</div>
 				<div
 					className={`switch_status-elem cont ok-cont ${state === 'ok' ? 'active' : ''}`}
 				>

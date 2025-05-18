@@ -1,8 +1,8 @@
-import { queryOptions, useQuery, UseQueryResult } from "@tanstack/react-query"
-import { IDeviceLocation, ILocationWeather } from "../../../common/types/Device-types"
-import { getTime } from "../utils/getTime"
-import { queryClient } from "../http/tanstackQuery-client"
-import DeviceService from "../services/Device-service"
+import { queryClient } from '@/http/tanstackQuery-client'
+import DeviceService from '@services/Device-service'
+import { IDeviceLocation, ILocationWeather } from '@shared/types/Device-types'
+import { queryOptions, useQuery, UseQueryResult } from '@tanstack/react-query'
+import { getTime } from '@utils/getTime'
 
 
 
@@ -20,7 +20,7 @@ const getWeatherQueryOptions = (location?: IDeviceLocation) => {
 const useFetchWeather = (location: IDeviceLocation, options?: { enabled: boolean }) => {
 	let cashedData: ILocationWeather
 	let forecastUntilDeadTime = 0
-	
+
 	if (location) {
 		cashedData = queryClient.getQueryData(getWeatherQueryOptions(location).queryKey)
 		forecastUntilDeadTime = (cashedData?.deadTimeInSec - getTime()) * 1000
@@ -46,6 +46,6 @@ const useFetchWeather = (location: IDeviceLocation, options?: { enabled: boolean
 
 
 export {
+	getWeatherQueryOptions,
 	useFetchWeather,
-	getWeatherQueryOptions
 }

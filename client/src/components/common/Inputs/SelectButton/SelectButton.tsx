@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import timeout from '../../../../utils/timeout'
+
 import ToolTip, { ToolTipProps } from '../../../others/ToolTip/ToolTip'
-import { capitalize } from '../../../../utils/capitalize'
 import SelectDropDown, { ISelectDropDownOptionListElem } from '../../SelectDropDown/SelectDropDown'
+import { capitalize } from '@utils/capitalize'
+import timeout from '@utils/timeout'
 
 
 

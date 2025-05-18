@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react"
-import SelectDropDown, { ISelectDropDownOptionListElem } from "../SelectDropDown/SelectDropDown"
-import { ICloseHooksParams } from "../../../../../common/types/Global-types"
-import { createPortal } from "react-dom";
+import React, { useEffect, useState } from 'react'
+
+import { createPortal } from 'react-dom';
+
+import SelectDropDown, { ISelectDropDownOptionListElem } from '../SelectDropDown/SelectDropDown'
+import { ICloseHooksParams } from '@shared/types/Global-types'
 
 
 
@@ -18,7 +20,14 @@ type ContextMenuProps = {
 	needToSort?: boolean;
 	dropDownTitle?: string;
 }
-const ContextMenu = ({ contextMenuInfo, OPTIONS_LIST, handleClickOption, closeHooksParams, needToSort, dropDownTitle }: ContextMenuProps) => {
+const ContextMenu = ({
+						 contextMenuInfo,
+						 OPTIONS_LIST,
+						 handleClickOption,
+						 closeHooksParams,
+						 needToSort,
+						 dropDownTitle,
+					 }: ContextMenuProps) => {
 
 	// console.log(contextMenuInfo)
 	const [domReady, setDomReady] = useState(false)
@@ -52,7 +61,7 @@ const ContextMenu = ({ contextMenuInfo, OPTIONS_LIST, handleClickOption, closeHo
 							dropDownTitle={dropDownTitle}
 						/>
 					</div>,
-					mainPageElem
+					mainPageElem,
 				)
 			}
 		</>

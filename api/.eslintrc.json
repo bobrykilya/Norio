@@ -1,0 +1,42 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+    },
+    "plugins": ["simple-import-sort"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "env": {
+        "node": true,
+        "es2022": true
+    },
+    "rules": {
+        "simple-import-sort/imports": [
+            "warn",
+            {
+                "groups": [
+                    //* External imports (node_modules)
+                    ["^@?\\w"],
+                    //* One blank line after all global imports
+
+                    //* Internal imports with default imports (and/or named imports)
+                    ["^(?:@|\\.).*"]
+                ]
+            }
+        ],
+        "simple-import-sort/exports": "warn",
+        "@typescript-eslint/no-explicit-any": "off"
+    },
+    "settings": {
+        "import/resolver": {
+            "typescript": {
+                "project": "./tsconfig.json"
+            }
+        }
+    }
+}

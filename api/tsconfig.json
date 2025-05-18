@@ -5,12 +5,22 @@
         "moduleResolution": "node",
         "outDir": "dist",
         "allowImportingTsExtensions": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "baseUrl": "src",
+        "paths": {
+            "@/*": ["*"],
+            "@services/*": ["services/*"],
+            "@routers/*": ["routers/*"],
+            "@controllers/*": ["controllers/*"],
+            "@utils/*": ["utils/*"],
+            "@type/*": ["types/*"],
+            "@client/*": ["../../client/*"],
+            "@shared/*": ["../../shared/*"]
+        }
     },
     "include": [
         "./src/**/*.ts",
-        "./server.ts",
-        "../common/types/Socket-types.ts"
+        "./server.ts"
     ],
     "exclude": ["./node_modules", "./**/*.spec.ts"]
 }

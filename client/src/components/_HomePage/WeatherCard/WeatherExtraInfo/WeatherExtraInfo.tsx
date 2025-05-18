@@ -1,6 +1,7 @@
 import React from 'react'
-import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-import { ICONS } from "../../../../assets/common/Icons-data"
+
+import { ICONS } from '@assets/common/Icons-data'
+import { ILocationWeatherElem } from '@shared/types/Device-types'
 
 
 

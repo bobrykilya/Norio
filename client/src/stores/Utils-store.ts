@@ -1,41 +1,48 @@
 import { create } from 'zustand'
-import { ICommonVar } from '../../../common/types/Global-types'
+import { immer } from 'zustand/middleware/immer'
+
+import { IUseClickOutside } from '@hooks/useClickOutside'
+import { ICommonVar } from '@shared/types/Global-types'
 
 
 
-type IUseLogBookCardState = {
-	logBookCardState: boolean;
-	setLogBookCardState: (state: boolean) => void;
+type JumpingCardsStateOptions = {
+	topCard: 'accountInfo' | 'userInfo' | 'organization' | null;
+	bottomCard: 'avatarList' | 'logBook' | null;
 }
-export const useLogBookCardState = create<IUseLogBookCardState>(set => ({
-	logBookCardState: false,
-	setLogBookCardState: (state) => set({ logBookCardState: state }),
-}))
-
-
-type topCardStateOptions = 'accountInfo' | 'userInfo' | 'organization' | null
 type IUseTopCardState = {
-	topCardState: topCardStateOptions;
-	setTopCardState: (state: topCardStateOptions) => void;
+	jumpingCardsState: JumpingCardsStateOptions;
+	setJumpingCardsState: <T extends keyof JumpingCardsStateOptions>(card: T, state: JumpingCardsStateOptions[T]) => void;
+	getJumpingCardsState: <T extends keyof JumpingCardsStateOptions>(card: T) => JumpingCardsStateOptions[T];
 }
-export const useTopCardState = create<IUseTopCardState>(set => ({
-	// topCardState: null,
-	topCardState: 'accountInfo',
-	setTopCardState: (state) => set({ topCardState: state }),
-}))
-
-
-type bottomCardStateOptions = 'avatarList' | 'logBook' | null
-type IUseBottomCardState = {
-	bottomCardState: bottomCardStateOptions;
-	setBottomCardState: (state: bottomCardStateOptions) => void;
+const jumpingCardsInitialState: JumpingCardsStateOptions = {
+	topCard: null,
+	bottomCard: null,
 }
-export const useBottomCardState = create<IUseBottomCardState>(set => ({
-	bottomCardState: null,
-	// bottomCardState: 'avatarList',
-	setBottomCardState: (state) => set({ bottomCardState: state }),
-}))
+export const useJumpingCardsState = create<IUseTopCardState>()(immer(((set, get) => ({
+	jumpingCardsState: jumpingCardsInitialState,
+	setJumpingCardsState: <T extends keyof JumpingCardsStateOptions>(
+		card: T,
+		state: JumpingCardsStateOptions[T],
+	) => {
+		const { jumpingCardsState } = get()
+		jumpingCardsState[card] = state
+		set({ jumpingCardsState })
+	},
+	getJumpingCardsState: <T extends keyof JumpingCardsStateOptions>(
+		card: T,
+	) => get().jumpingCardsState[card],
+}))))
 
+
+// type IUseLogBookCardState = {
+// 	logBookCardState: boolean;
+// 	setLogBookCardState: (state: boolean) => void;
+// }
+// export const useLogBookCardState = create<IUseLogBookCardState>(set => ({
+// 	logBookCardState: false,
+// 	setLogBookCardState: (state) => set({ logBookCardState: state }),
+// }))
 
 type IUseAvatarState = {
 	listOfUsedAvatarsState: ICommonVar['avatar'][];
@@ -51,41 +58,98 @@ export const useAvatarState = create<IUseAvatarState>(set => ({
 }))
 
 
+// type IUseModalState = {
+// 	dropDownState: boolean;
+// 	setDropDownState: (state: boolean) => void;
+// 	openJumpingCardsList: string[];
+// 	addJumpingCardState: (name: string) => void;
+// 	removeJumpingCardState: (name: string) => void;
+// 	getJumpingCardsState: () => boolean;
+// 	snackBarState: boolean;
+// 	setSnackBarState: (state: boolean) => void;
+// 	getCommonModalState: () => boolean;
+// }
+// export const useModalState = create<IUseModalState>((set, get) => ({
+// 	dropDownState: false,
+// 	setDropDownState: (state) => set({ dropDownState: state }),
+//
+// 	openJumpingCardsList: [],
+// 	addJumpingCardState: (name) => {
+// 		const prevState = get().openJumpingCardsList
+// 		if (prevState.includes(name)) {
+// 			return
+// 		}
+//
+// 		set({
+// 			openJumpingCardsList: [...prevState, name],
+// 		})
+// 	},
+// 	removeJumpingCardState: (name) => set({
+// 		openJumpingCardsList: get().openJumpingCardsList.filter(el => el !== name),
+// 	}),
+// 	getJumpingCardsState: () => {
+// 		return get().openJumpingCardsList.length !== 0
+// 	},
+//
+// 	snackBarState: false,
+// 	setSnackBarState: (state) => set({ snackBarState: state }),
+//
+// 	getCommonModalState: () => [get().dropDownState, get().getJumpingCardsState(), get().snackBarState].includes(true),
+// }))
+
+type ModalOptions = 'dropDown' | 'jump' | 'unfold' | 'snack'
+type IModal = {
+	type: ModalOptions;
+	callback: () => void;
+	name?: string;
+	clickOutsideParams?: Pick<IUseClickOutside, 'ref' | 'butRef'>
+}
 type IUseModalState = {
-	dropDownState: boolean;
-	setDropDownState: (state: boolean) => void;
-	openJumpingCardsList: string[];
-	addJumpingCardState: (name: string) => void;
-	removeJumpingCardState: (name: string) => void;
-	getJumpingCardsState: () => boolean;
-	snackBarState: boolean;
-	setSnackBarState: (state: boolean) => void;
-	getCommonModalState: () => boolean;
+	modalStack: IModal[];
+	addModal: (modal: IModal) => void;
+	removeModal: (params?: Partial<Pick<IModal, 'type' | 'name'>>) => void;
+	getTopModal: () => IModal;
+	isModalOnTop: (name: string) => boolean;
+	isModalStackEmpty: () => boolean;
+	isJumpingCardOpened: () => boolean;
 }
 export const useModalState = create<IUseModalState>((set, get) => ({
-	dropDownState: false,
-	setDropDownState: (state) => set({ dropDownState: state }),
+	modalStack: [],
 
-	openJumpingCardsList: [],
-	addJumpingCardState: (name) => {
-		const prevState = get().openJumpingCardsList
-		if (prevState.includes(name)) {
+	addModal: (modal) => {
+		const { modalStack } = get()
+		if (modal.name &&
+			modalStack.some(mod => mod.name === modal.name)) {
 			return
 		}
-
-		set({
-			openJumpingCardsList: [...prevState, name],
-		})
+		set({ modalStack: [...modalStack, modal] })
 	},
-	removeJumpingCardState: (name) => set({
-		openJumpingCardsList: get().openJumpingCardsList.filter(el => el !== name),
-	}),
-	getJumpingCardsState: () => {
-		return get().openJumpingCardsList.length !== 0
+	removeModal: (params) => {
+		const { modalStack } = get()
+		if (modalStack.length > 0) {
+			set({
+				modalStack: params ?
+					modalStack.slice(0, -1) :
+					modalStack.filter(modal => {
+						for (const [key, val] of Object.entries(params)) {
+							if (modal[key] !== val) {
+								return false
+							}
+						}
+
+						return true
+					}),
+			})
+		}
 	},
-
-	snackBarState: false,
-	setSnackBarState: (state) => set({ snackBarState: state }),
-
-	getCommonModalState: () => [get().dropDownState, get().getJumpingCardsState(), get().snackBarState].includes(true),
+	getTopModal: () => {
+		const { modalStack } = get()
+		return modalStack.length > 0 ? modalStack.at(-1) : null
+	},
+	isModalOnTop: (name) => {
+		const { modalStack } = get()
+		return modalStack.length > 0 ? modalStack.at(-1).name === name : false
+	},
+	isModalStackEmpty: () => get().modalStack.length === 0,
+	isJumpingCardOpened: () => get().modalStack.some(mod => mod.type === 'jump'),
 }))

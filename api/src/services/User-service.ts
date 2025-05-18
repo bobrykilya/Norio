@@ -1,11 +1,12 @@
-import { IAccountInfoEditReq, IUserInfoEditReq } from '../../../common/types/User-types.ts'
-import { ICommonVar } from '../../../common/types/Global-types.ts'
-import { Errors } from '../utils/Errors.ts'
-import CommonRepository from '../_database/repositories/Common-db.ts'
 import bcrypt from 'bcryptjs'
-import RefreshSessionRepository from '../_database/repositories/RefreshSession-db.ts'
+
 import AuthService from './Auth-service.ts'
-import UserRepository from '../_database/repositories/User-db.ts'
+import CommonRepository from '@/_database/repositories/Common-db.ts'
+import RefreshSessionRepository from '@/_database/repositories/RefreshSession-db.ts'
+import UserRepository from '@/_database/repositories/User-db.ts'
+import { ICommonVar } from '@shared/types/Global-types.ts'
+import { IAccountInfoEditReq, IUserInfoEditReq } from '@shared/types/User-types.ts'
+import { Errors } from '@utils/Errors.ts'
 
 
 

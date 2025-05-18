@@ -1,7 +1,8 @@
 import React from 'react'
-import { GENDER_LIST } from "../../../../../../../assets/common/Common-data"
-import SelectButton from "../../../../../../common/Inputs/SelectButton/SelectButton"
-import { ISelectDropDownOptionListElem } from "../../../../../../common/SelectDropDown/SelectDropDown"
+
+import { GENDER_LIST } from '@assets/common/Common-data'
+import SelectButton from '@common/Inputs/SelectButton/SelectButton'
+import { ISelectDropDownOptionListElem } from '@common/SelectDropDown/SelectDropDown'
 
 
 

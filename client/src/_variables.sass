@@ -46,16 +46,6 @@ $padding-x-field-input: 1.9rem
 //* Radius
 $rad-main-border: 35px
 
-//* Animations
-$trans-style: ease-in-out
-$trans-bounce-style: cubic-bezier(.36, 1.48, .3, .83)
-$trans-little-bounce-style: cubic-bezier(.51, 1.51, .76, .88)
-// $trans-wave-bounce-style: cubic-bezier(.55,-0.25,.39,1.23)
-$height-but-act-jump: -1.5px
-
-$dur-unfolding-card: 0.12s
-$dur-drop-down: 0.3s
-$dur-jumping-card: 0.25s
 
 //* --- BG vars
 $color-confirm-but: rgba(40, 70, 118, 0.88)
@@ -77,3 +67,18 @@ $rad-white-card-border: $rad-main-border * 2
 $color-card-backgr: rgba($color-backgr, 0.03)
 
 //* ---
+
+//* Animations
+$trans-style: ease-in-out
+$trans-bounce-style: cubic-bezier(.36, 1.48, .3, .83)
+$trans-little-bounce-style: cubic-bezier(.51, 1.51, .76, .88)
+// $trans-wave-bounce-style: cubic-bezier(.55,-0.25,.39,1.23)
+$height-but-act-jump: -1.5px
+
+
+$dur-factor: 1
+$dur-unfolding-card: calc(108ms * $dur-factor)
+$dur-drop-down: calc(250ms * $dur-factor)
+$dur-jumping-card: calc(240ms * $dur-factor)
+$dur-tool-tip: calc(170ms * $dur-factor)
+$dur-snack-bar: calc(420ms * $dur-factor)

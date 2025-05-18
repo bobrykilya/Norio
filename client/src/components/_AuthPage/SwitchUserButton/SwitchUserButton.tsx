@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useJwtInfoListState } from "../../../stores/Auth-store"
-import ToolTip from "../../others/ToolTip/ToolTip"
-import { MAX_SWITCH_USERS, SWITCH_USERS_ID_LS } from "../../../../constants"
-import DropDown from "../../common/DropDown/DropDown"
-import SwitchUser from "../../others/SwitchUser/SwitchUser"
-import { ICONS } from "../../../assets/common/Icons-data"
-import { getLSObject } from "../../../utils/localStorage"
-import { ISwitchUsersIdLS } from "../../../features/auth/authCommon"
+
+import { MAX_SWITCH_USERS, SWITCH_USERS_ID_LS } from '@/../constants'
+import { ICONS } from '@assets/common/Icons-data'
+import DropDown from '@common/DropDown/DropDown'
+import { ISwitchUsersIdLS } from '@features/auth/authCommon'
+import SwitchUser from '@others/SwitchUser/SwitchUser'
+import ToolTip from '@others/ToolTip/ToolTip'
+import { useJwtInfoListState } from '@stores/Auth-store'
+import { getLSObject } from '@utils/localStorage'
 
 
 
@@ -68,9 +69,9 @@ const SwitchUserButton = ({ disabled }: SwitchUserButtonProps) => {
 									key={userId}
 									className={'switch_user_img-cont cont'}
 								>
-									<img src={`/avatars/${userInfo.avatar}.jpg`} alt="IMG switch userInfo but"/>
+									<img src={`/avatars/${userInfo.avatar}.jpg`} alt='IMG switch userInfo but' />
 								</div>
-							}
+							},
 						)
 					}
 					{
@@ -81,7 +82,7 @@ const SwitchUserButton = ({ disabled }: SwitchUserButtonProps) => {
 								className={'switch_user_img-cont cont'}
 							>
 								{ICONS.emptyAvatar}
-							</div>
+							</div>,
 						)
 					}
 				</div>
@@ -95,7 +96,7 @@ const SwitchUserButton = ({ disabled }: SwitchUserButtonProps) => {
 				closeHooksParams={{
 					butRef,
 					callback: () => setIsSwitchUserOpened(false),
-					conditionsList: [isSwitchUserOpened]
+					conditionsList: [isSwitchUserOpened],
 				}}
 			>
 				<SwitchUser

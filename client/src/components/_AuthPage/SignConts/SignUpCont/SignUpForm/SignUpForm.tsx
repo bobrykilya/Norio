@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
+
 import { useForm } from 'react-hook-form'
-import NameInput from '../../../../common/Inputs/InputFields/NameInput/NameInput'
-import PasswordInput from '../../../../common/Inputs/InputFields/PasswordInput/PasswordInput'
-import SubmitBut from '../../../SubmitBut/SubmitBut'
-import { useCoverPanelState } from '../../../../../stores/Auth-store'
-import useCloseOnEsc from '../../../../../hooks/useCloseOnEsc'
-import { ICheckUserReq } from '../../../../../../../common/types/Auth-types'
+
 import SignUp from '../../../../../features/auth/signUp'
-import { ICONS } from '../../../../../assets/common/Icons-data'
-import { useMatchConfirmPassword } from '../../../../../hooks/useMatchConfirmPassword'
-import { useModalState } from '../../../../../stores/Utils-store'
+import SubmitBut from '../../../SubmitBut/SubmitBut'
+import { ICONS } from '@assets/common/Icons-data'
+import NameInput from '@common/Inputs/InputFields/NameInput/NameInput'
+import PasswordInput from '@common/Inputs/InputFields/PasswordInput/PasswordInput'
+import useCloseOnEsc from '@hooks/useCloseOnEsc'
+import { useMatchConfirmPassword } from '@hooks/useMatchConfirmPassword'
+import { ICheckUserReq } from '@shared/types/Auth-types'
+import { useCoverPanelState } from '@stores/Auth-store'
+import { useModalState } from '@stores/Utils-store'
 
 
 
@@ -21,7 +23,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
 	// console.log('SignUp')
 
 	const { setCoverPanelState } = useCoverPanelState()
-	const { getCommonModalState } = useModalState()
+	const isModalStackEmpty = useModalState(s => s.isModalStackEmpty())
 	const [isLoading, setIsLoading] = useState(false)
 	const defaultValues = {
 		username: '',
@@ -79,7 +81,7 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
 
 	//* For forms Esc blur while any DropDown, SnackBar or JumpingCard is opened
 	useCloseOnEsc({
-		conditionsList: [!isFormDisabled, !getCommonModalState()],
+		conditionsList: [!isFormDisabled, isModalStackEmpty],
 		callback: () => setCoverPanelState('sign_in'),
 	})
 

@@ -1,17 +1,20 @@
-import { APP_TITLE } from "../../../../constants"
-import React from "react"
+import React from 'react'
+
+import { APP_TITLE } from '@/../constants'
+import { useBlockErrorState } from '@stores/Device-store'
 
 
 
 type CoverAppTitleProps = {
-	block?: boolean;
 	dim?: boolean;
 }
-const CoverAppTitle = ({ block, dim }: CoverAppTitleProps) => {
+const CoverAppTitle = ({ dim }: CoverAppTitleProps) => {
+
+	const isAppBlocked = useBlockErrorState(s => s.isAppBlocked())
 
 
 	return (
-		<div className={`coverAppTitle cont ${block && 'block'} ${dim && 'dim'}`}>
+		<div className={`coverAppTitle cont ${isAppBlocked && 'block'} ${dim && 'dim'}`}>
 			{APP_TITLE}
 		</div>
 	)

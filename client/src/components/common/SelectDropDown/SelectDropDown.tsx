@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react'
-import DropDown from "../DropDown/DropDown"
-import { sortByAlphabet } from "../../../utils/sort"
-import { ICloseHooksParams, ICommonVar } from "../../../../../common/types/Global-types"
-import { getFirstChild, nextElems, prevElems } from "../../../utils/focusElementSibling"
+
+import DropDown from '../DropDown/DropDown'
+import { ICloseHooksParams, ICommonVar } from '@shared/types/Global-types'
+import { getFirstChild, nextElems, prevElems } from '@utils/focusElementSibling'
+import { sortByAlphabet } from '@utils/sort'
 
 
 
@@ -26,7 +27,14 @@ type SelectDropDownProps = {
 	needToSort?: boolean;
 	closeHooksParams: ICloseHooksParams;
 }
-const SelectDropDown = ({ OPTIONS_LIST, handleClickOption, dropDownTitle, selectedState, needToSort, closeHooksParams }: SelectDropDownProps) => {
+const SelectDropDown = ({
+							OPTIONS_LIST,
+							handleClickOption,
+							dropDownTitle,
+							selectedState,
+							needToSort,
+							closeHooksParams,
+						}: SelectDropDownProps) => {
 
 	const dropDownRef = useRef(null)
 	const SORTED_LIST: ISelectDropDownOptionListElem[] = needToSort ? sortByAlphabet(OPTIONS_LIST, 'title') : OPTIONS_LIST
@@ -55,7 +63,7 @@ const SelectDropDown = ({ OPTIONS_LIST, handleClickOption, dropDownTitle, select
 		if (!e.code.includes('Arrow')) {
 			return
 		}
-		
+
 		e.preventDefault()
 		const active = document.activeElement as HTMLElement
 
@@ -73,7 +81,7 @@ const SelectDropDown = ({ OPTIONS_LIST, handleClickOption, dropDownTitle, select
 			return
 		}
 
-		switch(e.code) {
+		switch (e.code) {
 			case 'ArrowUp':
 				if (!prevElems(active)) {
 					return
@@ -128,7 +136,7 @@ const SelectDropDown = ({ OPTIONS_LIST, handleClickOption, dropDownTitle, select
 						tabIndex={-1}
 						type={'button'}
 						className={`option-but cont ${el.isFixed ? 'fixed' : ''} ${(el.id === selectedState?.id) ? 'active' : ''}`}
-						onClick={(e) => handleClickElem(e, el)}
+						onClick={(e) => handleClickElem(e, el)} //! Move onto ul with delegation
 					>
 						{el?.icon}
 						<p>

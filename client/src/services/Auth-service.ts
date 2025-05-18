@@ -1,6 +1,6 @@
-import { showSnackMessage } from '../features/showSnackMessage/showSnackMessage'
-import { $apiAuth, getIPInfo } from '../http/http'
-import { DEVICE_LS, PERMITTED_COUNTRIES } from '../../constants'
+import { DEVICE_LS, PERMITTED_COUNTRIES } from '@/../constants'
+import { $apiAuth, getIPInfo } from '@/http/http'
+import { showSnackMessage } from '@features/showSnackMessage/showSnackMessage'
 import {
 	ICheckUserReq,
 	ICheckUserRes,
@@ -10,10 +10,10 @@ import {
 	IRefreshReq,
 	ISignInReq,
 	ISignUpReq,
-} from '../../../common/types/Auth-types'
-import { useDeviceInfoState } from '../stores/Device-store'
-import { IDeviceInfo } from '../types/Device-types'
-import { getLSObject, setLSObject } from '../utils/localStorage'
+} from '@shared/types/Auth-types'
+import { useDeviceInfoState } from '@stores/Device-store'
+import { IDeviceInfo } from '@type/Device-types'
+import { getLSObject, setLSObject } from '@utils/localStorage'
 
 
 

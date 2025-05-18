@@ -1,11 +1,7 @@
 import React from 'react'
-import { GrUserExpert, GrUserWorker } from 'react-icons/gr'
-import { HiOutlineHome } from 'react-icons/hi'
-import { MdEmail, MdInstallDesktop, MdOutlineWaterDrop, MdOutlineWorkOutline } from 'react-icons/md'
-import { BsArrowUpRight, BsCloudRain, BsPassport } from 'react-icons/bs'
-import { LiaBirthdayCakeSolid } from 'react-icons/lia'
-import { FiCheckCircle, FiPhoneCall, FiWind } from 'react-icons/fi'
+
 import { BiBadgeCheck, BiLogInCircle, BiSolidCopy } from 'react-icons/bi'
+import { BsArrowUpRight, BsCloudRain, BsPassport } from 'react-icons/bs'
 import { FaKey, FaLock, FaUser } from 'react-icons/fa'
 import {
 	FaAngleLeft,
@@ -16,8 +12,11 @@ import {
 	FaUserGear,
 	FaUserPen,
 } from 'react-icons/fa6'
-import { LuBadgeInfo, LuCheckCircle, LuLogOut } from 'react-icons/lu'
-import { VscEye, VscEyeClosed } from 'react-icons/vsc'
+import { FiCheckCircle, FiPhoneCall, FiWind } from 'react-icons/fi'
+import { GrUserExpert, GrUserWorker } from 'react-icons/gr'
+import { HiOutlineHome } from 'react-icons/hi'
+import { HiDocumentText } from 'react-icons/hi2'
+import { IoIosSave, IoMdArrowRoundDown, IoMdArrowRoundUp } from 'react-icons/io'
 import {
 	IoAdd,
 	IoArrowBackCircleOutline,
@@ -27,7 +26,11 @@ import {
 	IoNotificationsSharp,
 	IoSnowOutline,
 } from 'react-icons/io5'
+import { LiaBirthdayCakeSolid } from 'react-icons/lia'
+import { LuBadgeInfo, LuCheckCircle, LuLogOut } from 'react-icons/lu'
+import { MdEmail, MdInstallDesktop, MdOutlineWaterDrop, MdOutlineWorkOutline } from 'react-icons/md'
 import { PiSealWarning, PiUser, PiWarning, PiWarningCircleBold, PiWarningFill } from 'react-icons/pi'
+import { RxCopy } from 'react-icons/rx'
 import {
 	TbInfoSquareRoundedFilled,
 	TbLockSquareRounded,
@@ -35,10 +38,8 @@ import {
 	TbSettingsFilled,
 	TbTrashXFilled,
 } from 'react-icons/tb'
-import { HiDocumentText } from 'react-icons/hi2'
-import { IoIosSave, IoMdArrowRoundDown, IoMdArrowRoundUp } from 'react-icons/io'
-import { RxCopy } from 'react-icons/rx'
 import { TiFlash } from 'react-icons/ti'
+import { VscEye, VscEyeClosed } from 'react-icons/vsc'
 
 
 

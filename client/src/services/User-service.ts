@@ -1,9 +1,9 @@
-import { HoroscopeTypeOptions, ICommonVar } from '../../../common/types/Global-types'
-import { $apiProtected, $apiUnprotected } from '../http/http'
-import { IAccountInfoEditReq, IHoroscopeDataRes, IUserInfoEditReq } from '../../../common/types/User-types'
-import { showSnackMessage } from '../features/showSnackMessage/showSnackMessage'
-import AuthCommon from '../features/auth/authCommon'
-import { ILoginServiceRes } from '../../../common/types/Auth-types'
+import { $apiProtected, $apiUnprotected } from '@/http/http'
+import AuthCommon from '@features/auth/authCommon'
+import { showSnackMessage } from '@features/showSnackMessage/showSnackMessage'
+import { ILoginServiceRes } from '@shared/types/Auth-types'
+import { HoroscopeTypeOptions, ICommonVar } from '@shared/types/Global-types'
+import { IAccountInfoEditReq, IHoroscopeDataRes, IUserInfoEditReq } from '@shared/types/User-types'
 
 
 

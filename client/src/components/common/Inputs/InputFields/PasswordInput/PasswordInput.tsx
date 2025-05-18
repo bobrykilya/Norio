@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react'
-import { focusInput } from "../../../../../utils/focusInput"
-import { ISignFormInput, PasswordInputTypesOptions } from '../../../../../types/Auth-types'
-import InputField from "../InputField/InputField"
-import ToolTip from "../../../../others/ToolTip/ToolTip"
-import { ICONS } from "../../../../../assets/common/Icons-data"
-import { PartialBy } from "../../../../../../../common/types/Global-types"
+
+import InputField from '../InputField/InputField'
+import { ICONS } from '@assets/common/Icons-data'
+import ToolTip from '@others/ToolTip/ToolTip'
+import { PartialBy } from '@shared/types/Global-types'
+import { ISignFormInput, PasswordInputTypesOptions } from '@type/Auth-types'
+import { focusInput } from '@utils/focusInput'
 
 
 
@@ -166,7 +167,7 @@ const PasswordInput = ({
 				className={`caps_lock-cont ${isCapsLockEnabled ? 'opened' : ''}`}
 			>
 				<span>CAPS</span>
-				<ToolTip message="Включён Caps-Lock"/>
+				<ToolTip message='Включён Caps-Lock' />
 			</div>
 		</InputField>
 	)

@@ -1,10 +1,10 @@
-import { IUserRepository } from '../../../api/src/types/DB-types'
 import AuthService from './Auth-service'
-import { useJwtInfoListState } from '../stores/Auth-store'
-import { DEVICE_LS } from '../../constants'
-import { ICommonVar } from '../../../common/types/Global-types'
-import { getLSObject } from '../utils/localStorage'
-import { IDeviceInfo } from '../types/Device-types'
+import { DEVICE_LS } from '@/../constants'
+import { IUserRepository } from '@api/src/types/DB-types'
+import { ICommonVar } from '@shared/types/Global-types'
+import { useJwtInfoListState } from '@stores/Auth-store'
+import { IDeviceInfo } from '@type/Device-types'
+import { getLSObject } from '@utils/localStorage'
 
 
 

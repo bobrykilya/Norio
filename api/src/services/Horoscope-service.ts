@@ -1,9 +1,10 @@
-import { redisGet, redisHoroscopeSet } from "../utils/redisUtils.ts"
-import { HoroscopeTypeOptions } from "../../../common/types/Global-types.ts"
-import puppeteer from "puppeteer"
-import { IHoroscopeDataRes } from "../../../common/types/User-types.ts"
-import { getDateInShortString, getTime, getTimeToNextDayInSec } from "../utils/getTime.ts"
-import { $apiHoroscope } from "../http/http.ts"
+import puppeteer from 'puppeteer'
+
+import { $apiHoroscope } from '@/http/http.ts'
+import { HoroscopeTypeOptions } from '@shared/types/Global-types.ts'
+import { IHoroscopeDataRes } from '@shared/types/User-types.ts'
+import { getDateInShortString, getTime, getTimeToNextDayInSec } from '@utils/getTime.ts'
+import { redisGet, redisHoroscopeSet } from '@utils/redisUtils.ts'
 
 
 
@@ -15,7 +16,7 @@ const getDataFromPuppeteer = async (url: string) => {
 
 	const horoscopeList = await page.evaluate(() => {
 		// return document.querySelector(".be13d659a4")
-		const list = document.querySelectorAll(".b6a5d4949c p")
+		const list = document.querySelectorAll('.b6a5d4949c p')
 		const result: string[] = []
 		list.forEach(el => {
 			result.push(el.textContent)

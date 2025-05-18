@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import useCloseOnEsc, { IUseCloseOnEsc } from '../../../hooks/useCloseOnEsc'
+import React from 'react'
+
 import CoverAppTitle from '../CoverAppTitle/CoverAppTitle'
-import { useModalState } from '../../../stores/Utils-store'
-import timeout from '../../../utils/timeout'
+import { IUseCloseOnEsc } from '@hooks/useCloseOnEsc'
+import { useModalState } from '@stores/Utils-store'
 
 
 
@@ -14,83 +14,71 @@ type JumpingCardProps = {
 	className: string;
 	position?: JumpingCardOptions;
 	other_children?: any;
-	isPrerender?: boolean;
-	forceCloseJumpingCard?: boolean;
 }
 const JumpingCard = ({
 						 children,
 						 className,
 						 position,
 						 other_children,
-						 isPrerender,
 						 closeHooksParams,
-						 forceCloseJumpingCard,
 					 }: JumpingCardProps) => {
 
-	const [addJumpingCardState, removeJumpingCardState, dropDownState, snackBarState] = useModalState(s => [s.addJumpingCardState, s.removeJumpingCardState, s.dropDownState, s.snackBarState])
-	const isCardOpened = closeHooksParams.conditionsList[0]
-	const [isJumpingCardOpened, setIsJumpingCardOpened] = useState(isCardOpened)
+	const [
+		addModal,
+		removeModal,
+		isModalOnTop,
+	] = useModalState(s => [s.addModal, s.removeModal, s.isModalOnTop])
+	const isOpened = closeHooksParams.conditionsList[0]
 
-
-	const handleCloseJumpingCard = async () => {
-		setIsJumpingCardOpened(false)
-		await timeout(300)
-		closeHooksParams.callback()
-	}
 
 	const handleClickOutside = () => {
-		if ([...closeHooksParams.conditionsList, !dropDownState].includes(false)) {
+		if (closeHooksParams.conditionsList.concat(isModalOnTop(className)).includes(false)) {
 			return
 		}
 
-		handleCloseJumpingCard()
+		closeHooksParams.callback()
 	}
 
-	useCloseOnEsc({
-		conditionsList: [...closeHooksParams.conditionsList, !dropDownState, !snackBarState],
-		callback: handleCloseJumpingCard,
-	})
+	// useCloseOnEsc({
+	// 	callback: closeHooksParams.callback,
+	// 	conditionsList: closeHooksParams.conditionsList.concat(isModalOnTop(className)),
+	// })
 
 
 	//* BlurModalState - For forms Esc blur while JumpingCard is opened
-	useEffect(() => {
-		if (isCardOpened) {
-			addJumpingCardState(className)
-			setIsJumpingCardOpened(true)
-		} else {
-			removeJumpingCardState(className)
-			setIsJumpingCardOpened(false)
-		}
-	}, [isCardOpened])
-
-	//* Handling for force closing without prerender
-	useEffect(() => {
-		if (forceCloseJumpingCard) {
-			handleCloseJumpingCard()
-		}
-	}, [forceCloseJumpingCard])
-
+	// useEffect(() => {
+	// 	if (isOpened) {
+	// 		addModal({
+	// 			type: 'jump',
+	// 			name: className,
+	// 			callback: closeHooksParams.callback,
+	// 		})
+	// 	} else {
+	// 		removeModal({
+	// 			name: className,
+	// 		})
+	// 	}
+	// }, [isOpened])
+	console.log(isOpened)
 
 	return (
 		<div
-			className={`${className || ''} jumping_card_cover-cont cover cont ${isJumpingCardOpened ? 'opened' : ''} ${position || ''}`}
+			className={`${className || ''} jumping_card_cover-cont cover cont ${isOpened ? 'opened' : ''} ${position || ''}`}
 		>
 			<div
 				className={'jumping_card-cont cont'}
 			>
 				{
-					isPrerender ?
-						children :
-						isCardOpened && children
+					isOpened &&
+					children
 				}
 				{
-					isPrerender ?
-						other_children :
-						isCardOpened && other_children
+					isOpened &&
+					other_children
 				}
 			</div>
 			<div
-				className={'jumping_card-cover'}
+				className={`jumping_card-cover ${isModalOnTop(className) ? 'visible' : ''}`}
 				onClick={handleClickOutside}
 			>
 				<CoverAppTitle dim={true} />

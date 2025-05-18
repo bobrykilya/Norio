@@ -1,18 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap")
-@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap') //* AppTitle
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap')
+//* AppTitle
 // @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Itim&display=swap')
 // @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap')
 // @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@500&display=swap')
 @import 'reset'
 @import 'common'
 //@import 'components/_AuthPage/ButtonsCont/ButtonsCont'
-@import 'components/common/common_imports'
-@import 'components/others/others_imports'
+@import '@common/common_imports'
+@import '@others/others_imports'
 @import 'components/_AuthPage/AuthPage_imports'
 @import 'components/_HomePage/HomePage_imports'
 @import 'pages/AuthPage/AuthPage'
 @import 'pages/HomePage/HomePage'
-
 
 
 #main_body-cont
@@ -20,12 +20,13 @@
     font-family: "Nunito", serif
     font-size: $size-main-text
     font-weight: 500
+
 .main_bg-gradient
     pointer-events: none
     z-index: -10
     background: radial-gradient(circle, $color-bg-light, $color-bg-dark)
-    // background: linear-gradient(70deg, $color-bg-dark 20%, $color-bg-light 50%, $color-bg-dark 80%)
-    //border-radius: $rad-main-border / 2
+// background: linear-gradient(70deg, $color-bg-dark 20%, $color-bg-light 50%, $color-bg-dark 80%)
+//border-radius: $rad-main-border / 2
 
 
 

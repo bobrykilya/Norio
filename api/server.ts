@@ -1,20 +1,21 @@
-import express from "express"
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import detect from 'detect-port'
+import dotenv from 'dotenv'
+import express from 'express'
+import Fingerprint from 'express-fingerprint'
+import killPort from 'kill-port'
 import { createServer } from 'node:http'
-import cors from "cors"
-import cookieParser from "cookie-parser"
-import Fingerprint from "express-fingerprint"
-import AuthRouter from "./src/routers/Auth-router.ts"
-import { socketConnection } from './src/services/Socket-service'
-import dotenv from "dotenv"
-import detect from "detect-port"
-import killPort from "kill-port"
-import UnprotectedRouter from "./src/routers/Unprotected-router.ts"
-import { createClient } from "redis"
-import { Errors } from "./src/utils/Errors.ts"
-import AuthService from "./src/services/Auth-service.ts"
-import { AUTO_LOGOUT_INTERVAL } from "./constants.ts"
-import ProtectedRouter from "./src/routers/Protected-router.ts"
-import protectMiddleware from "./src/middlewares/protect-middleware.ts"
+import { createClient } from 'redis'
+
+import { AUTO_LOGOUT_INTERVAL } from './constants.ts'
+import protectMiddleware from '@/middlewares/protect-middleware.ts'
+import AuthRouter from '@routers/Auth-router.ts'
+import ProtectedRouter from '@routers/Protected-router.ts'
+import UnprotectedRouter from '@routers/Unprotected-router.ts'
+import AuthService from '@services/Auth-service.ts'
+import { socketConnection } from '@services/Socket-service'
+import { Errors } from '@utils/Errors.ts'
 
 
 
@@ -38,25 +39,26 @@ export const redis = await createClient({
 app.use(cookieParser())
 app.use(express.json())
 app.use(cors({
-	credentials: true, 
+	credentials: true,
 	origin: process.env.CLIENT_URL,
-	methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-	allowedHeaders: ["Content-Type", "Authorization"],
+	methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+	allowedHeaders: ['Content-Type', 'Authorization'],
 }))
+
+const fp = Fingerprint as any
 app.use(
-	Fingerprint({
-		// @ts-ignore
-		parameters: [Fingerprint.useragent, Fingerprint.acceptHeaders],
-	})
+	fp({
+		parameters: [fp.useragent, fp.acceptHeaders],
+	}),
 )
 
-app.use("/auth", AuthRouter)
-app.use("/unprotected", UnprotectedRouter)
-app.use("/protected", protectMiddleware, ProtectedRouter)
+app.use('/auth', AuthRouter)
+app.use('/unprotected', UnprotectedRouter)
+app.use('/protected', protectMiddleware, ProtectedRouter)
 
 //* Handler for 404 Error
 app.use((_, res) => {
-	res.status(404).json({ message: "Route not found" })
+	res.status(404).json({ message: 'Route not found' })
 })
 
 server.on('error', (err) => {
@@ -68,8 +70,8 @@ server.on('error', (err) => {
 const portListeningTest = async () => {
 	const port = await detect(Number(PORT))
 	// if (port != Number(PORT)) {
-		// console.log('Server is listening right now!')
-		await killPort(Number(PORT), 'tcp')
+	// console.log('Server is listening right now!')
+	await killPort(Number(PORT), 'tcp')
 	// }
 	return port
 }

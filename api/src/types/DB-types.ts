@@ -1,5 +1,5 @@
-import { UserStatusOptions } from "./Global-types"
-import { ICommonVar, TimeType } from "../../../common/types/Global-types"
+import { UserStatusOptions } from './Global-types'
+import { ICommonVar, TimeType } from '@shared/types/Global-types'
 
 
 

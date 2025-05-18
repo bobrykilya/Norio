@@ -1,10 +1,13 @@
 import React, { useRef, useState } from 'react'
-import { getTemp } from "../WeatherCard"
-import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-import { getDayOfWeek, getMonth, getTimeParams } from "../../../../utils/getTime"
-import WeatherExtraInfo from "../WeatherExtraInfo/WeatherExtraInfo"
-import { useClickOutside } from "../../../../hooks/useClickOutside"
-import { capitalize } from "../../../../utils/capitalize"
+
+import clsx from 'clsx'
+
+import { getTemp } from '../WeatherCard'
+import WeatherExtraInfo from '../WeatherExtraInfo/WeatherExtraInfo'
+import { useClickOutside } from '@hooks/useClickOutside'
+import { ILocationWeatherElem } from '@shared/types/Device-types'
+import { capitalize } from '@utils/capitalize'
+import { getDayOfWeek, getMonth, getTimeParams } from '@utils/getTime'
 
 
 
@@ -24,19 +27,19 @@ const DailyWeatherElement = ({ weather, label }: DailyWeatherElementProps) => {
 	}
 
 	useClickOutside({
-			ref: extraInfoRef,
-			butRef: butRef,
-			callback: switchDailyExtraInfoState,
-			conditionsList: [isDailyExtraInfoOpened]
+		ref: extraInfoRef,
+		butRef: butRef,
+		callback: switchDailyExtraInfoState,
+		conditionsList: [isDailyExtraInfoOpened],
 	})
 
 
 	return (
 		<div
-		    className={'daily_weather_el-cont'}
+			className={'daily_weather_el-cont'}
 		>
 			<button
-				className={`daily_weather_el-but cont  before_lines-hover ${isDailyExtraInfoOpened ? 'extra_info_opened' : ''}`}
+				className={clsx('daily_weather_el-but', 'cont', 'before_lines-hover', isDailyExtraInfoOpened && 'extra_info_opened')}
 				tabIndex={-1}
 				onClick={switchDailyExtraInfoState}
 				ref={butRef}
@@ -62,7 +65,7 @@ const DailyWeatherElement = ({ weather, label }: DailyWeatherElementProps) => {
 					<div
 						className={'daily_weather_el-icon'}
 					>
-						<img src={`/weather/${weather.icon}.svg`} alt="?"/>
+						<img src={`/weather/${weather.icon}.svg`} alt='?' />
 					</div>
 					<p
 						className={'daily_weather_el-temp'}
@@ -72,7 +75,7 @@ const DailyWeatherElement = ({ weather, label }: DailyWeatherElementProps) => {
 				</div>
 			</button>
 			<div
-				className={`daily_extra_info-cont cont ${isDailyExtraInfoOpened ? 'opened' : ''}`}
+				className={clsx('daily_extra_info-cont', 'cont', isDailyExtraInfoOpened && 'opened')}
 				ref={extraInfoRef}
 			>
 				<WeatherExtraInfo

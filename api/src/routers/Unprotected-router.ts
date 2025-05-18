@@ -1,6 +1,7 @@
 import { Application, Router } from 'express'
-import DeviceController from '../controllers/Device-controller'
-import UserController from '../controllers/User-controller.ts'
+
+import DeviceController from '@controllers/Device-controller'
+import UserController from '@controllers/User-controller.ts'
 
 
 

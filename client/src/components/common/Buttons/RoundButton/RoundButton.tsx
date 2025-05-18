@@ -1,33 +1,37 @@
-import React, { forwardRef } from 'react'
-import ToolTip, { ToolTipProps } from "../../../others/ToolTip/ToolTip"
+import React, { ButtonHTMLAttributes, forwardRef } from 'react'
+
+import ToolTip, { ToolTipProps } from '@others/ToolTip/ToolTip'
+import { SizeOptions } from '@type/Global-types'
 
 
 
 export type RoundButtonProps = {
-	onClick?: (...arg: any[]) => void;
-	className?: string;
-	disabled?: boolean;
 	toolTip?: ToolTipProps;
-	size?: 'tiny' | 'norm' | 'small' | 'big'
-	isSubmitBut?: boolean;
-	children?: any;
-	tabIndex?: number;
+	size?: SizeOptions;
 	bigZIndex?: boolean;
-}
-const RoundButton = forwardRef<HTMLButtonElement, RoundButtonProps>(({ className, toolTip, size, isSubmitBut, children, tabIndex, bigZIndex, disabled, onClick }, ref) => {
+} & ButtonHTMLAttributes<HTMLButtonElement>
+const RoundButton = forwardRef<HTMLButtonElement, RoundButtonProps>(({
+																		 toolTip,
+																		 size,
+																		 bigZIndex,
+																		 className,
+																		 children,
+																		 tabIndex,
+																		 type,
+																		 ...otherProps
+																	 }, ref) => {
 
 
 	return (
 		<button
-			className={`${className || ''} round-but ${size || 'norm'} ${bigZIndex && 'bigZIndex'} cont`}
-			type={!isSubmitBut ? 'button' : 'submit'}
-			tabIndex={tabIndex ? tabIndex : !isSubmitBut ? -1 : 0}
+			{...otherProps}
+			className={`${className || ''} round-but ${size ? size + '_size' : 'm_size'} ${bigZIndex ? 'bigZIndex' : ''} cont`}
+			type={type || 'button'}
+			tabIndex={tabIndex ? tabIndex : type !== 'submit' && -1}
 			ref={ref}
-			disabled={disabled}
-			onClick={onClick}
 		>
 			{children}
-			{toolTip && <ToolTip { ...toolTip } />}
+			{toolTip && <ToolTip {...toolTip} />}
 		</button>
 	)
 })

@@ -1,10 +1,10 @@
-import { IBlockMessage } from "../../api/src/types/Device-types"
-import { ExpressReq, ExpressRes } from "../../api/src/types/Global-types"
-import { IJWTPayload } from "../../api/src/services/Token-service"
+import { IBlockMessage } from '../../api/src/types/Device-types'
+import { ExpressReq, ExpressRes } from '../../api/src/types/Global-types'
+import { IJWTPayload } from '../../api/src/services/Token-service'
 // @ts-ignore
-import React from "react"
-import { IUseClickOutside } from "../../client/src/hooks/useClickOutside"
-import { IUseCloseOnEsc } from "../../client/src/hooks/useCloseOnEsc"
+import React from 'react'
+import { IUseClickOutside } from '../../client/src/hooks/useClickOutside'
+import { IUseCloseOnEsc } from '../../client/src/hooks/useCloseOnEsc'
 
 
 

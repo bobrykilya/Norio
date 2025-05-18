@@ -1,5 +1,5 @@
-import React from "react"
-import { HoroscopeTypeOptions, ICommonVar } from "../../../../common/types/Global-types"
+import React from 'react'
+
 import {
 	TbZodiacAries,
 	TbZodiacCancer,
@@ -12,9 +12,11 @@ import {
 	TbZodiacScorpio,
 	TbZodiacTaurus,
 	TbZodiacVirgo,
-} from "react-icons/tb"
-import { IUserRepository } from "../../../../api/src/types/DB-types"
-import { getTimeParams, zeroHandler } from "../../utils/getTime"
+} from 'react-icons/tb'
+
+import { IUserRepository } from '@api/src/types/DB-types'
+import { HoroscopeTypeOptions, ICommonVar } from '@shared/types/Global-types'
+import { getTimeParams, zeroHandler } from '@utils/getTime'
 
 
 
@@ -56,7 +58,6 @@ export const getHoroscopeType = (birthdayInSec: IUserRepository['birthday']): Ho
 }
 
 
-
 type IHoroscopeData = Record<HoroscopeTypeOptions, {
 	ruName: string;
 	icon: ICommonVar['icon'];
@@ -65,50 +66,50 @@ type IHoroscopeData = Record<HoroscopeTypeOptions, {
 export const HOROSCOPE_DATA: IHoroscopeData = {
 	aquarius: {
 		ruName: 'водолей',
-		icon: <TbZodiacVirgo className={'fa-icon'} />
+		icon: <TbZodiacVirgo className={'fa-icon'} />,
 	},
 	pisces: {
 		ruName: 'рыбы',
-		icon: <TbZodiacPisces className={'fa-icon'} />
+		icon: <TbZodiacPisces className={'fa-icon'} />,
 	},
 	aries: {
 		ruName: 'овен',
-		icon: <TbZodiacAries className={'fa-icon'} />
+		icon: <TbZodiacAries className={'fa-icon'} />,
 	},
 	taurus: {
 		ruName: 'телец',
-		icon: <TbZodiacTaurus className={'fa-icon'} />
+		icon: <TbZodiacTaurus className={'fa-icon'} />,
 	},
 	gemini: {
 		ruName: 'близнецы',
-		icon: <TbZodiacGemini className={'fa-icon'} />
+		icon: <TbZodiacGemini className={'fa-icon'} />,
 	},
 	cancer: {
 		ruName: 'рак',
-		icon: <TbZodiacCancer className={'fa-icon'} />
+		icon: <TbZodiacCancer className={'fa-icon'} />,
 	},
 	leo: {
 		ruName: 'лев',
-		icon: <TbZodiacLeo className={'fa-icon'} />
+		icon: <TbZodiacLeo className={'fa-icon'} />,
 	},
 	virgo: {
 		ruName: 'дева',
-		icon: <TbZodiacVirgo className={'fa-icon'} />
+		icon: <TbZodiacVirgo className={'fa-icon'} />,
 	},
 	libra: {
 		ruName: 'весы',
-		icon: <TbZodiacLibra className={'fa-icon'} />
+		icon: <TbZodiacLibra className={'fa-icon'} />,
 	},
 	scorpio: {
 		ruName: 'скорпион',
-		icon: <TbZodiacScorpio className={'fa-icon'} />
+		icon: <TbZodiacScorpio className={'fa-icon'} />,
 	},
 	sagittarius: {
 		ruName: 'стрелец',
-		icon: <TbZodiacSagittarius className={'fa-icon'} />
+		icon: <TbZodiacSagittarius className={'fa-icon'} />,
 	},
 	capricorn: {
 		ruName: 'козерог',
-		icon: <TbZodiacCapricorn className={'fa-icon'} />
+		icon: <TbZodiacCapricorn className={'fa-icon'} />,
 	},
 }

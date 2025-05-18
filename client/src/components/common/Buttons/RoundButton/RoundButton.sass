@@ -1,5 +1,4 @@
-@import '../../../../variables'
-
+@import '@/variables'
 
 
 $differenceButAndIcon: 0.7rem
@@ -16,24 +15,24 @@ $differenceButAndIcon: 0.7rem
     &:disabled
         pointer-events: none
         opacity: 0.4
-    &.tiny
+    &.xs_size
         width: $size-tiny-round-but
         height: $size-tiny-round-but
         .fa-icon
             font-size: $size-tiny-round-but - $differenceButAndIcon
-    &.small
+    &.s_size
         width: $size-small-round-but
         height: $size-small-round-but
         .fa-icon
             font-size: $size-small-round-but - $differenceButAndIcon * 1.2
-    &.norm
+    &.m_size
         width: $size-round-but
         height: $size-round-but
         .fa-icon
             //width: $size-round-but - $differenceButAndIcon * 1.5
             //height: $size-round-but - $differenceButAndIcon * 1.5
             font-size: $size-round-but - $differenceButAndIcon * 1.5
-    &.big
+    &.l_size
         width: $size-big-round-but
         height: $size-big-round-but
         .fa-icon

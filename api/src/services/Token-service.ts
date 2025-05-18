@@ -1,7 +1,8 @@
-import jwt, { JwtPayload } from "jsonwebtoken"
-import { ICommonVar } from "../../../common/types/Global-types"
-import dotenv from "dotenv"
-import { ACCESS_TOKEN_EXPIRATION, COOKIE_SETTINGS } from "../../constants"
+import dotenv from 'dotenv'
+import jwt, { JwtPayload } from 'jsonwebtoken'
+
+import { ACCESS_TOKEN_EXPIRATION, COOKIE_SETTINGS } from '@/../constants'
+import { ICommonVar } from '@shared/types/Global-types'
 
 
 

@@ -1,10 +1,11 @@
 import React from 'react'
-import WeatherElement from "../WeatherElement/WeatherElement"
-import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-import { getTemp } from "../WeatherCard"
-import WeatherExtraInfo from "../WeatherExtraInfo/WeatherExtraInfo"
-import { getTimeParams } from "../../../../utils/getTime"
-import { capitalize } from "../../../../utils/capitalize"
+
+import { getTemp } from '../WeatherCard'
+import WeatherElement from '../WeatherElement/WeatherElement'
+import WeatherExtraInfo from '../WeatherExtraInfo/WeatherExtraInfo'
+import { ILocationWeatherElem } from '@shared/types/Device-types'
+import { capitalize } from '@utils/capitalize'
+import { getTimeParams } from '@utils/getTime'
 
 
 
@@ -31,11 +32,11 @@ type WeatherWithDescriptionProps = {
 	hourlyWeatherList?: ILocationWeatherElem[];
 }
 const WeatherWithDescription = ({ weather, hourlyWeatherList }: WeatherWithDescriptionProps) => {
-	
+
 	const weatherAlertForecastTime = 10
 	const weatherAlert = getWeatherAlert(hourlyWeatherList?.slice(1, weatherAlertForecastTime))
 
-	
+
 	return (
 		<div
 			className={'weather_with_description-cont cont'}

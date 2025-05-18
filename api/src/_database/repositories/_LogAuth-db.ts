@@ -1,5 +1,5 @@
-import queryDB from '../../utils/queryDB'
-import { ILogRepository } from "../../types/DB-types"
+import { ILogRepository } from '@type/DB-types'
+import queryDB from '@utils/queryDB'
 
 
 
@@ -15,7 +15,7 @@ class LogAuthRepository {
 	}
 
 	static async getLogAuth() {
-		const response = await queryDB("SELECT * FROM _log_Auth")
+		const response = await queryDB('SELECT * FROM _log_Auth')
 
 		return response.rows
 	}

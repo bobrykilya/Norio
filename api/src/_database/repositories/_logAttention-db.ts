@@ -1,5 +1,5 @@
-import queryDB from '../../utils/queryDB'
-import { ILogRepository } from "../../types/DB-types"
+import { ILogRepository } from '@type/DB-types'
+import queryDB from '@utils/queryDB'
 
 
 
@@ -41,10 +41,10 @@ class LogAttentionRepository {
 		// 	receiver_user_role
 		// ])
 	}
-    
+
 
 	static async getLogsAttention() {
-		const response = await queryDB("SELECT * FROM _log_Attention")
+		const response = await queryDB('SELECT * FROM _log_Attention')
 
 		return response.rows
 	}

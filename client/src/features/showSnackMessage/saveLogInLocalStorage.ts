@@ -1,13 +1,12 @@
-import { getLastTime } from '../../utils/getTime'
-import { ISnack } from '../../../../common/types/Global-types'
-import DeviceService from "../../services/Device-service"
-import { DEVICE_LS, LOCAL_LOG_STORAGE_TIME, LOG_LIST_LS, RECENTLY_TIME, SAME_LOGS_QUANTITY } from "../../../constants"
-import { showSnackMessage } from "./showSnackMessage"
-import { useUserInfoState } from "../../stores/User-store"
-import { getLSObject, setLSObject } from "../../utils/localStorage"
-import { IDeviceInfo } from "../../types/Device-types"
-// import { useBlockError } from '../../stores/Global-store'
-
+import { showSnackMessage } from './showSnackMessage'
+import { DEVICE_LS, LOCAL_LOG_STORAGE_TIME, LOG_LIST_LS, RECENTLY_TIME, SAME_LOGS_QUANTITY } from '@/../constants'
+import DeviceService from '@services/Device-service'
+import { ISnack } from '@shared/types/Global-types'
+import { useUserInfoState } from '@stores/User-store'
+import { IDeviceInfo } from '@type/Device-types'
+import { getLastTime } from '@utils/getTime'
+import { getLSObject, setLSObject } from '@utils/localStorage'
+// import { useBlockError } from '@stores/Global-store'
 
 
 const filterLogListByTime = (err: ISnack) => {
@@ -20,7 +19,7 @@ const checkLogQuantityForRecently = (list: ISnack[], type: ISnack['type']) => {
 
 	const filteredLogList = list.filter(err => err.type === type && getLastTime(err.snackTime, 'second') < RECENTLY_TIME)
 	const countObject = {}
-	
+
 	for (let err of filteredLogList) {
 		if (!countObject[err.message]) {
 			countObject[err.message] = 1
@@ -31,7 +30,7 @@ const checkLogQuantityForRecently = (list: ISnack[], type: ISnack['type']) => {
 		}
 	}
 	// console.log(countObject)
-	
+
 	Object.values(countObject).forEach((quantity: any) => {
 		if (quantity >= SAME_LOGS_QUANTITY) {
 			result = true
@@ -43,8 +42,8 @@ const checkLogQuantityForRecently = (list: ISnack[], type: ISnack['type']) => {
 
 
 const saveLogInLocalStorage = (snack: ISnack) => {
-	
-    let logList = getLSObject<ISnack[]>(LOG_LIST_LS) || []
+
+	let logList = getLSObject<ISnack[]>(LOG_LIST_LS) || []
 	if (logList[0]) {
 		logList = logList.filter(filterLogListByTime)
 	}
@@ -52,10 +51,10 @@ const saveLogInLocalStorage = (snack: ISnack) => {
 
 	// console.log(snack)
 	logList.push(snack)
-	
+
 	// console.log(logList)
 	setLSObject(LOG_LIST_LS, logList)
-	
+
 	//* Error counting for short time blocking
 	if (logList.length < SAME_LOGS_QUANTITY || snack.type === 'b') return
 	if (checkLogQuantityForRecently(logList, 'e')) {
@@ -71,7 +70,7 @@ const saveLogInLocalStorage = (snack: ISnack) => {
 		if (checkLogQuantityForRecently(logList, 's')) {
 			showSnackMessage({
 				type: 'w',
-				message: 'Очень не хорошо <span class=\'bold\'>дудосить</span>!'
+				message: 'Очень не хорошо <span class=\'bold\'>дудосить</span>!',
 			})
 		}
 	}

@@ -1,12 +1,14 @@
-import React from 'react'
-import { focusInput } from '../../../../../utils/focusInput'
-import InputError from '../InputUtils/InputError/InputError'
-import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
-import { ICommonVar } from '../../../../../../../common/types/Global-types'
+import React, { InputHTMLAttributes } from 'react'
+
 import RoundButton from '../../../Buttons/RoundButton/RoundButton'
-import { ToolTipProps } from '../../../../others/ToolTip/ToolTip'
-import { copyText } from '../../../../../utils/copy'
-import { ICONS } from '../../../../../assets/common/Icons-data'
+import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
+import InputError from '../InputUtils/InputError/InputError'
+import { ICONS } from '@assets/common/Icons-data'
+import { ToolTipProps } from '@others/ToolTip/ToolTip'
+import { ICommonVar } from '@shared/types/Global-types'
+import { copyText } from '@utils/copy'
+import { safeDestructure } from '@utils/desctructure'
+import { focusInput } from '@utils/focusInput'
 
 
 
@@ -22,20 +24,9 @@ type InputFieldProps = {
 		};
 	};
 	inputParams: {
-		placeholder: string;
 		label?: string;
 		isPhone?: boolean;
-		type?: string;
-		maxLength?: number;
-		autoComplete?: string;
-		autoFocus?: boolean;
-		onInput?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-		onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-		onBlur?: () => void;
-		onFocus?: () => void;
-		disabled?: boolean;
-		inputMode?: string;
-	};
+	} & InputHTMLAttributes<HTMLInputElement>;
 	cleanerParams: {
 		isCleanerOpened: boolean;
 		handleClickCleaner: () => void;
@@ -69,7 +60,6 @@ const InputField = ({
 						children,
 					}: InputFieldProps) => {
 
-	// console.log(registerForm.restRegister)
 	const copyInputValue = () => {
 		copyText(inputRef.current.value)
 	}
@@ -80,12 +70,12 @@ const InputField = ({
 	}
 
 	const { placeholder, isPhone, label, ...restInputParams } = inputParams
-	const undoFieldButParams = extraButParams?.undoFieldButParams
+	const { undoFieldButParams, isExtraButVisible, isCopy, ...restExtraButParams } = safeDestructure(extraButParams)
 
 
 	return (
 		<div
-			className={`${contClassName || ''} input_field-cont cont ${extraButParams?.isCopy ? 'with_copy' : ''} ${registerForm.error?.message ? 'error' : ''}`}
+			className={`${contClassName || ''} input_field-cont cont ${isCopy ? 'with_copy' : ''} ${registerForm.error?.message ? 'error' : ''}`}
 		>
             <span
 				className='input_field-label'
@@ -123,7 +113,7 @@ const InputField = ({
 							<RoundButton
 								className={`undo_field-but small_clear-but ${undoFieldButParams.isOpened && 'opened'}`}
 								onClick={handleClickUndoFieldBut}
-								size={'tiny'}
+								size={'xs'}
 								toolTip={{
 									message: 'Откатить поле обратно',
 								}}
@@ -145,11 +135,11 @@ const InputField = ({
 			}
 			{
 				extraButParams &&
-				extraButParams.isCopy ?
+				isCopy ?
 					<RoundButton
-						className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible && 'opened'}`}
+						className={`extra_input_field-but before_hover-but ${isExtraButVisible && 'opened'}`}
 						onClick={extraButParams.onClick || copyInputValue}
-						size={'tiny'}
+						size={'xs'}
 						toolTip={{
 							message: 'Скопировать поле',
 						}}
@@ -157,9 +147,9 @@ const InputField = ({
 						{ICONS.copy}
 					</RoundButton> :
 					<RoundButton
-						className={`extra_input_field-but before_hover-but ${extraButParams.isExtraButVisible && 'opened'}`}
-						size={'tiny'}
-						{...extraButParams}
+						className={`extra_input_field-but before_hover-but ${isExtraButVisible && 'opened'}`}
+						size={'xs'}
+						{...restExtraButParams}
 					>
 						{extraButParams.icon}
 					</RoundButton>

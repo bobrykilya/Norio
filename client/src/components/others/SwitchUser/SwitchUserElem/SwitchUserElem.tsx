@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import ToolTip from "../../ToolTip/ToolTip"
-import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
-import logOut from "../../../../features/auth/logOut"
-import { IUserRepository } from "../../../../../../api/src/types/DB-types"
-import timeout from "../../../../utils/timeout"
-import { useJwtInfoListState } from "../../../../stores/Auth-store"
-import AuthCommon, { ISwitchUsersIdLS } from "../../../../features/auth/authCommon"
-import { SWITCH_USERS_ID_LS } from "../../../../../constants"
-import { ICONS } from "../../../../assets/common/Icons-data"
-import { ICommonVar } from "../../../../../../common/types/Global-types"
-import { getLSObject } from "../../../../utils/localStorage"
+
+import { SWITCH_USERS_ID_LS } from '@/../constants'
+import { IUserRepository } from '@api/src/types/DB-types'
+import { ICONS } from '@assets/common/Icons-data'
+import RoundButton from '@common/Buttons/RoundButton/RoundButton'
+import AuthCommon, { ISwitchUsersIdLS } from '@features/auth/authCommon'
+import logOut from '@features/auth/logOut'
+import ToolTip from '@others/ToolTip/ToolTip'
+import { ICommonVar } from '@shared/types/Global-types'
+import { useJwtInfoListState } from '@stores/Auth-store'
+import { getLSObject } from '@utils/localStorage'
+import timeout from '@utils/timeout'
 
 
 
@@ -81,11 +82,11 @@ const SwitchUserElem = ({ isVisible, setUsersIdList, userInfo, isNewUser, isAuth
 				>
 					{
 						!isNewUser ?
-						<img
-							src={`/avatars/${userInfo?.avatar}.jpg`}
-							alt="IMG Error 6"
-						/> :
-						ICONS.add
+							<img
+								src={`/avatars/${userInfo?.avatar}.jpg`}
+								alt='IMG Error 6'
+							/> :
+							ICONS.add
 					}
 				</div>
 				<div
@@ -96,8 +97,8 @@ const SwitchUserElem = ({ isVisible, setUsersIdList, userInfo, isNewUser, isAuth
 					>
 						{
 							!isNewUser ?
-							`${userInfo?.lastName} ${userInfo?.firstName}` :
-							'Новый аккаунт'
+								`${userInfo?.lastName} ${userInfo?.firstName}` :
+								'Новый аккаунт'
 						}
 					</span>
 					<span
@@ -105,25 +106,25 @@ const SwitchUserElem = ({ isVisible, setUsersIdList, userInfo, isNewUser, isAuth
 					>
 						{
 							!isNewUser ?
-							userInfo?.job :
-							'Выполнить вход'
+								userInfo?.job :
+								'Выполнить вход'
 						}
 					</span>
 				</div>
 				{
 					!isAuthPage ?
-					<ToolTip
-						message={
-							!isNewUser ?
-							`Сменить аккаунт на ${userInfo?.username}` :
-							'Сменить аккаунт на нового пользователя'
-						}
-						position={'left'}
-					/> :
-					<ToolTip
-						message={`Войти в аккаунт ${userInfo?.username}`}
-						position={'right'}
-					/>
+						<ToolTip
+							message={
+								!isNewUser ?
+									`Сменить аккаунт на ${userInfo?.username}` :
+									'Сменить аккаунт на нового пользователя'
+							}
+							position={'left'}
+						/> :
+						<ToolTip
+							message={`Войти в аккаунт ${userInfo?.username}`}
+							position={'right'}
+						/>
 				}
 			</button>
 			{
@@ -133,7 +134,7 @@ const SwitchUserElem = ({ isVisible, setUsersIdList, userInfo, isNewUser, isAuth
 					toolTip={{
 						message: `Забыть аккаунт ${userInfo?.username}`,
 					}}
-					size={'tiny'}
+					size={'xs'}
 				>
 					{ICONS.close}
 				</RoundButton>

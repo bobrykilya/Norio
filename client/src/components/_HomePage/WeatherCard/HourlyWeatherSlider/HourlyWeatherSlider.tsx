@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ILocationWeatherElem } from "../../../../../../common/types/Device-types"
-import { getTemp } from "../WeatherCard"
-import { getTimeParams } from "../../../../utils/getTime"
-import { throttle } from "../../../../utils/debounce"
-import RoundButton from "../../../common/Buttons/RoundButton/RoundButton"
-import { ICONS } from "../../../../assets/common/Icons-data"
+
+import { getTemp } from '../WeatherCard'
+import { ICONS } from '@assets/common/Icons-data'
+import RoundButton from '@common/Buttons/RoundButton/RoundButton'
+import { ILocationWeatherElem } from '@shared/types/Device-types'
+import { throttle } from '@utils/debounce'
+import { getTimeParams } from '@utils/getTime'
 
 
 
-type scrollTestOptions = 'start' | 'end'
+type ScrollTestOptions = 'start' | 'end'
 type HourlyWeatherSliderProps = {
 	hourlyWeatherList: ILocationWeatherElem[];
 	isReset?: boolean;
@@ -23,7 +24,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 	const debounceFault = 5
 	// console.log({ scrollPosition })
 
-	const scrollTest = (option: scrollTestOptions = 'start') => {
+	const scrollTest = (option: ScrollTestOptions = 'start') => {
 		if (option === 'start') {
 			return scrollPosition < debounceFault
 		} else {
@@ -76,7 +77,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 				onClick={handleScrollToTheStart}
 				className={'left before_hover-but'}
 				disabled={scrollTest()}
-				size={'tiny'}
+				size={'xs'}
 			>
 				{ICONS.arrowLeft}
 			</RoundButton>
@@ -100,14 +101,14 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 							<div
 								className={'hourly_weather_el-icon'}
 							>
-								<img src={`/weather/${weather.icon}.svg`} alt="?"/>
+								<img src={`/weather/${weather.icon}.svg`} alt='?' />
 							</div>
 							<p
 								className={`hourly_weather_el-time`}
 							>
 								{getTimeParams(['timeString'], weather.dt).timeString}
 							</p>
-						</li>
+						</li>,
 					)
 				}
 			</ul>
@@ -115,7 +116,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 				onClick={handleScrollToTheEnd}
 				className={'right before_hover-but'}
 				disabled={scrollTest('end')}
-				size={'tiny'}
+				size={'xs'}
 			>
 				{ICONS.arrowRight}
 			</RoundButton>

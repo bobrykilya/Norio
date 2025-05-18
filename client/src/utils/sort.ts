@@ -1,18 +1,42 @@
-export const sortByAlphabet = (LIST: any[], propName?: string) => {
-	// console.log(LIST)
+export function sortByAlphabet<T>(LIST: T[], propName?: keyof T): T[] {
 	if (propName) {
-		return LIST.sort((a: { propName: string }, b: { propName: string }) => a[propName].toLowerCase().localeCompare(b[propName].toLowerCase()))
+		return [...LIST]
+			.sort((a, b) =>
+				a[propName]
+					.toString()
+					.toLowerCase()
+					.localeCompare(b[propName]
+						.toString()
+						.toLowerCase(),
+					),
+			)
 	}
-	return LIST.sort((a: string, b: string) => a.toLowerCase().localeCompare(b.toLowerCase()))
+	return [...LIST].sort((a, b) =>
+		a
+			.toString()
+			.toLowerCase()
+			.localeCompare(b
+				.toString()
+				.toLowerCase(),
+			),
+	)
 }
 
-export const sortByValPosInString = (LIST: any[], val: string, propName?: string) => {
-	if (propName) {
-		return LIST.sort(
-			(a: { propName: string }, b: { propName: string }) => a[propName].toLowerCase().indexOf(val) > b[propName].toLowerCase().indexOf(val) ? 1 : -1
-		)
+
+export function sortByValPosInString<T>(LIST: T[], val: string, propName?: keyof T): T[] {
+	const getHandledStr = (str: T[keyof T] | T): string => {
+		return str.toString().toLowerCase()
 	}
-	return LIST.sort(
-		(a: string, b: string) => a.toLowerCase().indexOf(val) > b.toLowerCase().indexOf(val) ? 1 : -1
-	)
+	if (propName) {
+		return [...LIST].sort((a, b) => {
+			const aVal = getHandledStr(a[propName])
+			const bVal = getHandledStr(b[propName])
+			return aVal.indexOf(val.toLowerCase()) - bVal.indexOf(val.toLowerCase())
+		})
+	}
+	return [...LIST].sort((a, b) => {
+		const aVal = getHandledStr(a)
+		const bVal = getHandledStr(b)
+		return aVal.indexOf(val.toLowerCase()) - bVal.indexOf(val.toLowerCase())
+	})
 }

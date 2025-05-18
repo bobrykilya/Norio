@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Circles, ThreeDots } from 'react-loader-spinner'
 
 
@@ -16,18 +17,18 @@ export const Loader = ({ type, contClassName, color, width }: LoaderProps) => {
 	const getLoader = (type: LoaderOptions) => {
 
 		const defaultProps = {
-			color: color || "#e9edf0cc",
-			width: width || "60"
+			color: color || '#e9edf0cc',
+			width: width || '60',
 		}
 
 		switch (type) {
 			case 'circles':
 				return <Circles
-					{ ...defaultProps }
+					{...defaultProps}
 				/>
 			default:
 				return <ThreeDots
-					{ ...defaultProps }
+					{...defaultProps}
 				/>
 		}
 	}
@@ -36,7 +37,7 @@ export const Loader = ({ type, contClassName, color, width }: LoaderProps) => {
 		<div
 			className={`${contClassName || ''} cont`}
 		>
-			{ getLoader(type) }
+			{getLoader(type)}
 		</div>
 	)
 }

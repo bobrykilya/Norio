@@ -1,8 +1,9 @@
 import React, { useRef } from 'react'
-import { focusInput } from '../../../../../utils/focusInput'
-import { capitalize } from '../../../../../utils/capitalize'
-import { ISignFormInput, NameInputTypesOptions } from '../../../../../types/Auth-types'
+
 import InputField from '../InputField/InputField'
+import { ISignFormInput, NameInputTypesOptions } from '@type/Auth-types'
+import { capitalize } from '@utils/capitalize'
+import { focusInput } from '@utils/focusInput'
 
 
 

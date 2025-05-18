@@ -1,8 +1,9 @@
-import ky from "ky"
-import { CHECK_IP_AND_COUNTRY } from "../../constants"
-import { showSnackMessage } from "../features/showSnackMessage/showSnackMessage"
-import { useJwtInfoListState } from "../stores/Auth-store"
-import { useUserInfoState } from "../stores/User-store"
+import ky from 'ky'
+
+import { CHECK_IP_AND_COUNTRY } from '@/../constants'
+import { showSnackMessage } from '@features/showSnackMessage/showSnackMessage'
+import { useJwtInfoListState } from '@stores/Auth-store'
+import { useUserInfoState } from '@stores/User-store'
 
 
 
@@ -11,7 +12,7 @@ const getApiURL = () => {
 }
 const $apiAuth = ky.create({
 	prefixUrl: `${getApiURL()}/auth`,
-	cache: 'no-store', 
+	cache: 'no-store',
 	credentials: 'include',
 })
 
@@ -25,13 +26,13 @@ const $apiProtected = ky.create({
 	credentials: 'include',
 	hooks: {
 		beforeRequest: [
-		  (req) => {
-			const currentUserId = useUserInfoState.getState().userInfoState.userId
-			const accessToken = useJwtInfoListState.getState().getJwtInfoState(currentUserId)?.token
-			if (accessToken) {
-				req.headers.set("Authorization", `Bearer ${accessToken}`)
-			}
-		  },
+			(req) => {
+				const currentUserId = useUserInfoState.getState().userInfoState.userId
+				const accessToken = useJwtInfoListState.getState().getJwtInfoState(currentUserId)?.token
+				if (accessToken) {
+					req.headers.set('Authorization', `Bearer ${accessToken}`)
+				}
+			},
 		],
 	},
 })
@@ -59,11 +60,11 @@ const getIPInfo = async () => {
 	try {
 		if (!CHECK_IP_AND_COUNTRY) return undefined
 
-		return await $apiIpInfo.get("").json<IApiIpInfoResponse>()
+		return await $apiIpInfo.get('').json<IApiIpInfoResponse>()
 	} catch {
 		console.error('Ошибка обращения к сервису ipapi.co')
 		try {
-			const res = await $apiIpInfoReserve.get("").json<IApiIpInfoReserveResponse>()
+			const res = await $apiIpInfoReserve.get('').json<IApiIpInfoReserveResponse>()
 			return {
 				country_code: res.countryCode,
 				ip: res.query,
@@ -71,7 +72,7 @@ const getIPInfo = async () => {
 		} catch {
 			showSnackMessage({
 				type: 'w',
-				message: 'Ошибка обращения к сервисам ipapi.co, ip-api.com'
+				message: 'Ошибка обращения к сервисам ipapi.co, ip-api.com',
 			})
 			console.error('Ошибка обращения к сервисам ipapi.co, ip-api.com')
 			return undefined
@@ -82,10 +83,10 @@ const getIPInfo = async () => {
 
 export {
 	$apiAuth,
-	$apiProtected,
-	$apiUnprotected,
 	$apiIpInfo,
 	$apiIpInfoReserve,
-	getIPInfo
+	$apiProtected,
+	$apiUnprotected,
+	getIPInfo,
 }
 

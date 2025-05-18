@@ -36,6 +36,11 @@
         "@types/kill-port": "^2",
         "@types/node": "^22.6.1",
         "@types/pg": "^8.11.10",
+        "@typescript-eslint/eslint-plugin": "^8.32.1",
+        "@typescript-eslint/parser": "^8.32.1",
+        "eslint": "^9.27.0",
+        "eslint-import-resolver-typescript": "^4.3.4",
+        "eslint-plugin-simple-import-sort": "^12.1.1",
         "tsx": "^4.19.1",
         "typescript": "^5.5.4"
     }
