@@ -1,5 +1,7 @@
 import React from 'react'
 
+import clsx from 'clsx'
+
 import CoverAppTitle from '../CoverAppTitle/CoverAppTitle'
 import { IUseCloseOnEsc } from '@hooks/useCloseOnEsc'
 import { useModalState } from '@stores/Utils-store'
@@ -63,7 +65,7 @@ const JumpingCard = ({
 
 	return (
 		<div
-			className={`${className || ''} jumping_card_cover-cont cover cont ${isOpened ? 'opened' : ''} ${position || ''}`}
+			className={clsx(className, 'jumping_card_cover-cont', 'cover', 'cont', isOpened && 'opened', position)}
 		>
 			<div
 				className={'jumping_card-cont cont'}
@@ -78,12 +80,13 @@ const JumpingCard = ({
 				}
 			</div>
 			<div
-				className={`jumping_card-cover ${isModalOnTop(className) ? 'visible' : ''}`}
+				className={clsx('jumping_card-cover', isModalOnTop(className) && 'visible')}
 				onClick={handleClickOutside}
 			>
 				<CoverAppTitle dim={true} />
 			</div>
 		</div>
+
 	)
 }
 

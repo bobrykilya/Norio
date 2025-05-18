@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react'
 
+import clsx from 'clsx'
+
 import DropDown from '../../../DropDown/DropDown'
 import InputField from '../InputField/InputField'
 import { ISignFormInput } from '@type/Auth-types'
@@ -268,7 +270,7 @@ const DropDownSearchInput = ({
 								tabIndex={-1}
 								onKeyDown={handleKeyDownOnElem} //! Move onto ul with delegation
 								disabled={disabled}
-								className={i === 0 ? `active` : ''}
+								className={clsx(i === 0 && 'active')}
 							>
 								{el.title}
 							</button>

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import clsx from 'clsx'
+
 import { ICONS } from '@assets/common/Icons-data'
 import { ILocationWeatherElem } from '@shared/types/Device-types'
 
@@ -43,13 +45,13 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 
 	return (
 		<div
-			className={`weather_extra_info-cont cont ${isFull ? 'full' : ''}`}
+			className={clsx('weather_extra_info-cont', 'cont', isFull && 'full')}
 		>
 			<div
 				className={'weather_extra_info_double-cont cont'}
 			>
 				<div
-					className={`weather_extra_info_el-cont cont`}
+					className={'weather_extra_info_el-cont cont'}
 				>
 					{ICONS.humidity}
 					<span>
@@ -61,7 +63,7 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 				>
 					{ICONS.wind}
 					<span
-						className={`${getWindDescription(wind)}`}
+						className={getWindDescription(wind)}
 					>
 						{wind}м/c
 				</span>
@@ -77,7 +79,7 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 					>
 						{ICONS.rain}
 						<span
-							className={`${getRainDescription(weather.rain)}`}
+							className={getRainDescription(weather.rain)}
 						>
 							{getAlert(weather.rain)}мм/ч
 						</span>
@@ -87,7 +89,7 @@ const WeatherExtraInfo = ({ weather, isFull }: WeatherExtraInfoProps) => {
 					>
 						{ICONS.snow}
 						<span
-							className={`${getSnowDescription(weather.snow)}`}
+							className={getSnowDescription(weather.snow)}
 						>
 							{getAlert(weather.snow)}мм/ч
 						</span>

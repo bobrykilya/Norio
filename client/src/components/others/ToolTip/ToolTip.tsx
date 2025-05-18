@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import clsx from 'clsx'
+
 import { TOOLTIP_DELAY_TIME } from '@/../constants'
 
 
@@ -53,7 +55,9 @@ const ToolTip = ({ message, position = 'top', delayTimeMS, isBlock, isAlwaysTool
 			onMouseEnter={handleEnterMouse}
 			onMouseLeave={handleLeaveMouse}
 		>
-			<div className={`tool_tip ${isToolTipVisible ? 'active' : ''} ${position}`}>{message}</div>
+			<div className={clsx('tool_tip', isToolTipVisible && 'active', position)}>
+				{message}
+			</div>
 		</div>
 	)
 }

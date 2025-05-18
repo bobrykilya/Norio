@@ -51,7 +51,7 @@ const AccountInfoCard = () => {
 			{
 				fastSessionState &&
 				<span
-					className={`fast_session_bg-icon`}
+					className={'fast_session_bg-icon'}
 				>
 					{ICONS.flash}
 				</span>

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 
+import clsx from 'clsx'
 import toast, { useToasterStore } from 'react-hot-toast'
 
 import { TOAST_LIMIT } from '@/../constants'
@@ -72,7 +73,12 @@ const SnackBar = ({ title, icon, message, toastElem, type }: SnackBarProps) => {
 
 	return (
 		<button
-			className={`snackbar-cont cont ${toastElem.visible ? 'opened' : 'closed'} ${type === 'b' && 'blocked'}`}
+			className={clsx(
+				'snackbar-cont',
+				'cont',
+				toastElem.visible ? 'opened' : 'closed',
+				type === 'b' && 'blocked',
+			)}
 			type='button'
 			tabIndex={-1}
 			onClick={(e) => {

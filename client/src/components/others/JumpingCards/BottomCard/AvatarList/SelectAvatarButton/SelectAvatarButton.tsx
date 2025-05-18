@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import clsx from 'clsx'
+
 import { ICONS } from '@/assets/common/Icons-data'
 import { IReactHookForm } from '@/types/Auth-types'
 import InputCleaner from '@common/Inputs/InputFields/InputUtils/InputCleaner/InputCleaner'
@@ -74,7 +76,12 @@ const SelectAvatarButton = ({
 	return (
 		<div className={'select_avatar_but-cont cont'}>
 			<button
-				className={`select_avatar-but cont ${error?.message ? 'error' : ''} ${isWhiteVersion ? 'white' : ''}`}
+				className={clsx(
+					'select_avatar-but',
+					'cont',
+					error?.message && 'error',
+					isWhiteVersion && 'white',
+				)}
 				type={'button'}
 				tabIndex={isTabDisabled ? -1 : 0}
 				onClick={handleClickAvatarButton}
@@ -83,7 +90,10 @@ const SelectAvatarButton = ({
 				autoFocus={false}
 			>
 				<div
-					className={`no_avatar-cont ${isEmptyIcon && 'opened'}`}
+					className={clsx(
+						'no_avatar-cont',
+						isEmptyIcon && 'opened',
+					)}
 				>
 					{ICONS.emptyAvatar}
 				</div>

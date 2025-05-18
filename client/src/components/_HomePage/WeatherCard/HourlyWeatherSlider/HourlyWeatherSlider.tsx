@@ -104,7 +104,7 @@ const HourlyWeatherSlider = ({ hourlyWeatherList, isReset }: HourlyWeatherSlider
 								<img src={`/weather/${weather.icon}.svg`} alt='?' />
 							</div>
 							<p
-								className={`hourly_weather_el-time`}
+								className={'hourly_weather_el-time'}
 							>
 								{getTimeParams(['timeString'], weather.dt).timeString}
 							</p>

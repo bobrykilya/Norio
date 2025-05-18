@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import clsx from 'clsx'
+
 import ToolTip from '../ToolTip/ToolTip'
 import SwitchUserElem from './SwitchUserElem/SwitchUserElem'
 import { MAX_SWITCH_USERS, SWITCH_USERS_ID_LS } from '@/../constants'
@@ -45,7 +47,7 @@ const SwitchUser = ({ currentUserId, isAuthPage, disabled }: SwitchUserProps) =>
 
 	return (
 		<div
-			className={`switch_user-cont cont ${disabled ? 'disabled' : ''}`}
+			className={clsx('switch_user-cont', 'cont', disabled && 'disabled')}
 		>
 			<div
 				className={'switch_user_info-cont cont'}

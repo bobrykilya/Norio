@@ -1,5 +1,7 @@
 import React, { InputHTMLAttributes } from 'react'
 
+import clsx from 'clsx'
+
 import RoundButton from '../../../Buttons/RoundButton/RoundButton'
 import InputCleaner from '../InputUtils/InputCleaner/InputCleaner'
 import InputError from '../InputUtils/InputError/InputError'
@@ -75,14 +77,20 @@ const InputField = ({
 
 	return (
 		<div
-			className={`${contClassName || ''} input_field-cont cont ${isCopy ? 'with_copy' : ''} ${registerForm.error?.message ? 'error' : ''}`}
+			className={clsx(
+				contClassName,
+				'input_field-cont',
+				'cont',
+				isCopy && 'with_copy',
+				registerForm.error?.message && 'error',
+			)}
 		>
-            <span
+			<span
 				className='input_field-label'
 				onClick={() => focusInput(inputRef)}
 			>
-                {label || placeholder}
-            </span>
+				{label || placeholder}
+			</span>
 			<input
 				{...registerForm.restRegister}
 				{...restInputParams}
@@ -92,26 +100,37 @@ const InputField = ({
 				}}
 			/>
 			<span
-				className={`input_field-placeholder ${isPhone && 'phone'} ${cleanerParams.isCleanerOpened && 'hide'}`}
+				className={clsx(
+					'input_field-placeholder',
+					isPhone && 'phone',
+					cleanerParams.isCleanerOpened && 'hide',
+				)}
 			>
-			    {placeholder}
+				{placeholder}
 			</span>
 			{
 				!undoFieldButParams ?
 					<div
-						className={`input_field_icon-cont opened`}
+						className={clsx('input_field_icon-cont', 'opened')}
 					>
 						{inputIcon}
 					</div> :
 					(
 						<>
 							<div
-								className={`input_field_icon-cont ${!undoFieldButParams.isOpened && 'opened'}`}
+								className={clsx(
+									'input_field_icon-cont',
+									!undoFieldButParams.isOpened && 'opened',
+								)}
 							>
 								{inputIcon}
 							</div>
 							<RoundButton
-								className={`undo_field-but small_clear-but ${undoFieldButParams.isOpened && 'opened'}`}
+								className={clsx(
+									'undo_field-but',
+									'small_clear-but',
+									undoFieldButParams.isOpened && 'opened',
+								)}
 								onClick={handleClickUndoFieldBut}
 								size={'xs'}
 								toolTip={{
@@ -130,14 +149,21 @@ const InputField = ({
 			{
 				emptyIconParams &&
 				<div
-					className={`input_field_empty-icon ${emptyIconParams.isOpened && 'opened'}`}
+					className={clsx(
+						'input_field_empty-icon',
+						emptyIconParams.isOpened && 'opened',
+					)}
 				/>
 			}
 			{
 				extraButParams &&
 				isCopy ?
 					<RoundButton
-						className={`extra_input_field-but before_hover-but ${isExtraButVisible && 'opened'}`}
+						className={clsx(
+							'extra_input_field-but',
+							'before_hover-but',
+							isExtraButVisible && 'opened',
+						)}
 						onClick={extraButParams.onClick || copyInputValue}
 						size={'xs'}
 						toolTip={{
@@ -147,7 +173,11 @@ const InputField = ({
 						{ICONS.copy}
 					</RoundButton> :
 					<RoundButton
-						className={`extra_input_field-but before_hover-but ${isExtraButVisible && 'opened'}`}
+						className={clsx(
+							'extra_input_field-but',
+							'before_hover-but',
+							isExtraButVisible && 'opened',
+						)}
 						size={'xs'}
 						{...restExtraButParams}
 					>

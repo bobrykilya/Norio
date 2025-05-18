@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 
+import clsx from 'clsx'
+
 import DropDown from '../DropDown/DropDown'
 import { ICloseHooksParams, ICommonVar } from '@shared/types/Global-types'
 import { getFirstChild, nextElems, prevElems } from '@utils/focusElementSibling'
@@ -135,7 +137,7 @@ const SelectDropDown = ({
 						key={el.id}
 						tabIndex={-1}
 						type={'button'}
-						className={`option-but cont ${el.isFixed ? 'fixed' : ''} ${(el.id === selectedState?.id) ? 'active' : ''}`}
+						className={clsx('option-but', 'cont', el.isFixed && 'fixed', el.id === selectedState?.id && 'active')}
 						onClick={(e) => handleClickElem(e, el)} //! Move onto ul with delegation
 					>
 						{el?.icon}

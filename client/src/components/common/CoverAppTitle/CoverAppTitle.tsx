@@ -1,5 +1,7 @@
 import React from 'react'
 
+import clsx from 'clsx'
+
 import { APP_TITLE } from '@/../constants'
 import { useBlockErrorState } from '@stores/Device-store'
 
@@ -14,7 +16,14 @@ const CoverAppTitle = ({ dim }: CoverAppTitleProps) => {
 
 
 	return (
-		<div className={`coverAppTitle cont ${isAppBlocked && 'block'} ${dim && 'dim'}`}>
+		<div
+			className={clsx(
+				'coverAppTitle',
+				'cont',
+				isAppBlocked && 'block',
+				dim && 'dim',
+			)}
+		>
 			{APP_TITLE}
 		</div>
 	)

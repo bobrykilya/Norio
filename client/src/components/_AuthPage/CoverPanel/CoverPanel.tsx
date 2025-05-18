@@ -1,5 +1,7 @@
 import React from 'react'
 
+import clsx from 'clsx'
+
 import { ICONS } from '@/assets/common/Icons-data'
 // @ts-ignore
 import SignInImg from '@assets/AuthPage/sign_in.png'
@@ -19,7 +21,10 @@ const CoverPanel = ({ disabled }: CoverPanelProps) => {
 	const { coverPanelState, setCoverPanelState } = useCoverPanelState()
 
 	return (
-		<div id='cover_and_img-cont' className={`cont opened_${coverPanelState}`}>
+		<div
+			id='cover_and_img-cont'
+			className={clsx('cont', `opened_${coverPanelState}`)}
+		>
 			<div id='cover-cont' className='cont'>
 				<div id='cover-content' className='cont'>
 					<section id='sign_up_info-cont' className='cont'>

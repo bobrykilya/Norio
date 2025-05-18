@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react'
 
+import clsx from 'clsx'
+
 import InputField from '../InputField/InputField'
 import { ICONS } from '@assets/common/Icons-data'
 import ToolTip from '@others/ToolTip/ToolTip'
@@ -164,7 +166,7 @@ const PasswordInput = ({
 			}}
 		>
 			<div
-				className={`caps_lock-cont ${isCapsLockEnabled ? 'opened' : ''}`}
+				className={clsx('caps_lock-cont', isCapsLockEnabled && 'opened')}
 			>
 				<span>CAPS</span>
 				<ToolTip message='Включён Caps-Lock' />

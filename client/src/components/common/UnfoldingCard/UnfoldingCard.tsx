@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 
+import clsx from 'clsx'
+
 import { IUseCloseOnEsc } from '@hooks/useCloseOnEsc'
 import { useModalState } from '@stores/Utils-store'
 
@@ -47,7 +49,7 @@ const UnfoldingCard = ({ className, closeHooksParams, children }: UnfoldingCardP
 
 	return (
 		<div
-			className={`${className || ''} unfolding-card card cont ${isFullCard ? 'full' : ''}`}
+			className={clsx(className, 'unfolding-card', 'card', 'cont', isFullCard && 'full')}
 			ref={cardRef}
 		>
 			{children}

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import clsx from 'clsx'
+
 import { getTemp } from '../WeatherCard'
 import { ILocationWeatherElem } from '@shared/types/Device-types'
 
@@ -17,12 +19,12 @@ const WeatherElement = ({ weather, labelPos = 'center', isBigSize = false }: Wea
 			className={'weather_el-cont'}
 		>
 			<p
-				className={`weather_el-label ${labelPos}`}
+				className={clsx('weather_el-label', labelPos)}
 			>
 				{weather.label}
 			</p>
 			<div
-				className={`weather_el-body cont ${isBigSize ? 'big' : ''}`}
+				className={clsx('weather_el-body', 'cont', isBigSize && 'big')}
 			>
 				<div
 					className={'weather_el-icon'}

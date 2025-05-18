@@ -47,7 +47,7 @@ class UserRepository {
 		const response = await queryDB('SELECT user_id, password FROM users WHERE username=$1', [username])
 
 		if (response?.rows[0]) {
-			const { user_id, password } = response?.rows[0]
+			const { user_id, password } = response?.rows[0] //! Fix
 			return {
 				userId: user_id,
 				hashedPassword: password,
@@ -60,7 +60,7 @@ class UserRepository {
 		const response = await queryDB('SELECT * FROM users WHERE user_id=$1', [userId])
 
 		if (response?.rows[0]) {
-			const { user_id, password, last_name, first_name, middle_name, is_store, ...rest } = response?.rows[0]
+			const { user_id, password, last_name, first_name, middle_name, is_store, ...rest } = response?.rows[0] //! Fix
 			const handledUserInfo: IUserRepository = {
 				...rest,
 				userId: user_id,

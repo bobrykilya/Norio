@@ -1,5 +1,7 @@
 import React, { ButtonHTMLAttributes, forwardRef } from 'react'
 
+import clsx from 'clsx'
+
 import ToolTip, { ToolTipProps } from '@others/ToolTip/ToolTip'
 import { SizeOptions } from '@type/Global-types'
 
@@ -12,7 +14,7 @@ export type RoundButtonProps = {
 } & ButtonHTMLAttributes<HTMLButtonElement>
 const RoundButton = forwardRef<HTMLButtonElement, RoundButtonProps>(({
 																		 toolTip,
-																		 size,
+																		 size = 'm',
 																		 bigZIndex,
 																		 className,
 																		 children,
@@ -25,7 +27,13 @@ const RoundButton = forwardRef<HTMLButtonElement, RoundButtonProps>(({
 	return (
 		<button
 			{...otherProps}
-			className={`${className || ''} round-but ${size ? size + '_size' : 'm_size'} ${bigZIndex ? 'bigZIndex' : ''} cont`}
+			className={clsx(
+				className,
+				'round-but',
+				size && `${size}_size`,
+				bigZIndex && 'bigZIndex',
+				'cont',
+			)}
 			type={type || 'button'}
 			tabIndex={tabIndex ? tabIndex : type !== 'submit' && -1}
 			ref={ref}

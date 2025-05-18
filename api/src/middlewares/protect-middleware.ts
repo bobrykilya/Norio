@@ -22,7 +22,7 @@ const protectMiddleware = async (req: ICommonVar['req'], _: Response, next: Next
 		req.user = await TokenService.verifyAccessToken(accessToken)
 
 		next()
-	} catch (err) {
+	} catch {
 		return next(new Forbidden(errorMessage))
 	}
 }

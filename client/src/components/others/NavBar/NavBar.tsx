@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 
+import clsx from 'clsx'
 import { useLocation } from 'react-router-dom'
 
 import RoundButton from '../../common/Buttons/RoundButton/RoundButton'
@@ -66,7 +67,7 @@ const NavBar = ({}: NavBarProps) => {
 								key={el.id}
 								onClick={() => {
 								}}
-								className={`clear-but ${el.id === curr_path ? 'selected' : ''}`}
+								className={clsx('clear-but', el.id === curr_path && 'selected')}
 								toolTip={{
 									message: el.title,
 									position: 'right',

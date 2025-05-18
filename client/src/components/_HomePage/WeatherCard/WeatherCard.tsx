@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import clsx from 'clsx'
+
 import CardLinkButton from '../CardLinkButton/CardLinkButton'
 import DailyWeatherElement from './DailyWeatherElement/DailyWeatherElement'
 import FutureWeather from './FutureWeather/FutureWeather'
@@ -164,7 +166,7 @@ const WeatherCard = () => {
 				{
 					weather && deviceLocationState?.coords ?
 						<div
-							className={`weather_part-cont cont ${isPending ? 'loading' : ''}`}
+							className={clsx('weather_part-cont', 'cont', isPending && 'loading')}
 						>
 							<div
 								className={'weather_tool_tip-cont cont'}

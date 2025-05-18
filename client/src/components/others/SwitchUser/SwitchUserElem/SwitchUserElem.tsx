@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import clsx from 'clsx'
+
 import { SWITCH_USERS_ID_LS } from '@/../constants'
 import { IUserRepository } from '@api/src/types/DB-types'
 import { ICONS } from '@assets/common/Icons-data'
@@ -62,9 +64,12 @@ const SwitchUserElem = ({ isVisible, setUsersIdList, userInfo, isNewUser, isAuth
 
 
 	return (
-
 		<div
-			className={`switch_user_elem-cont cont ${isRendered && isVisible ? 'opened' : ''}`}
+			className={clsx(
+				'switch_user_elem-cont',
+				'cont',
+				isRendered && isVisible && 'opened',
+			)}
 		>
 			<button
 				className={'switch_user_elem-but cont'}
@@ -92,24 +97,24 @@ const SwitchUserElem = ({ isVisible, setUsersIdList, userInfo, isNewUser, isAuth
 				<div
 					className={'switch_user_elem_text-cont cont'}
 				>
-					<span
-						className={'switch_user_elem-name'}
-					>
-						{
-							!isNewUser ?
-								`${userInfo?.lastName} ${userInfo?.firstName}` :
-								'Новый аккаунт'
-						}
-					</span>
+			<span
+				className={'switch_user_elem-name'}
+			>
+				{
+					!isNewUser ?
+						`${userInfo?.lastName} ${userInfo?.firstName}` :
+						'Новый аккаунт'
+				}
+			</span>
 					<span
 						className={'switch_user_elem-job'}
 					>
-						{
-							!isNewUser ?
-								userInfo?.job :
-								'Выполнить вход'
-						}
-					</span>
+				{
+					!isNewUser ?
+						userInfo?.job :
+						'Выполнить вход'
+				}
+			</span>
 				</div>
 				{
 					!isAuthPage ?

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
+import clsx from 'clsx'
 import { createPortal } from 'react-dom';
 
 import SelectDropDown, { ISelectDropDownOptionListElem } from '../SelectDropDown/SelectDropDown'
@@ -50,7 +51,7 @@ const ContextMenu = ({
 				domReady &&
 				createPortal(
 					<div
-						className={`context_menu-cont cont ${contextMenuInfo.state ? 'opened' : ''}`}
+						className={clsx('context_menu-cont', 'cont', contextMenuInfo.state && 'opened')}
 						style={{ left: contextMenuInfo.x, top: contextMenuInfo.y }}
 					>
 						<SelectDropDown

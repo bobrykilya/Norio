@@ -1,5 +1,6 @@
 import React from 'react'
 
+import clsx from 'clsx'
 import { Circles, ThreeDots } from 'react-loader-spinner'
 
 
@@ -35,7 +36,7 @@ export const Loader = ({ type, contClassName, color, width }: LoaderProps) => {
 
 	return (
 		<div
-			className={`${contClassName || ''} cont`}
+			className={clsx(contClassName, 'cont')}
 		>
 			{getLoader(type)}
 		</div>

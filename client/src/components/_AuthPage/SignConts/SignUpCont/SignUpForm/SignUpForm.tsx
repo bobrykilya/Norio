@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
+import clsx from 'clsx'
 import { useForm } from 'react-hook-form'
 
 import SignUp from '../../../../../features/auth/signUp'
@@ -101,8 +102,18 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
 
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} id='sign_up-form' className='form cont'>
-			<div className={`inputs-cont cont ${isFormBlur ? 'blur' : ''}`}>
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			id='sign_up-form'
+			className='form cont'
+		>
+			<div
+				className={clsx(
+					'inputs-cont',
+					'cont',
+					isFormBlur && 'blur',
+				)}
+			>
 				<NameInput
 					name='username'
 					placeholder='Логин'
@@ -125,7 +136,13 @@ const SignUpForm = ({ isFormBlur, isFormDisabled }: SignUpFormProps) => {
 					{...commonProps}
 				/>
 			</div>
-			<div className={`blur_icon-cont cont ${isFormBlur ? 'active' : ''}`}>
+			<div
+				className={clsx(
+					'blur_icon-cont',
+					'cont',
+					isFormBlur && 'active',
+				)}
+			>
 				{ICONS.check}
 			</div>
 			<SubmitBut

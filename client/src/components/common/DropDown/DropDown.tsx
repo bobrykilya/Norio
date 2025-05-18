@@ -1,5 +1,7 @@
 import React, { forwardRef, useEffect, useRef } from 'react'
 
+import clsx from 'clsx'
+
 import { ICloseHooksParams } from '@shared/types/Global-types'
 import { useModalState } from '@stores/Utils-store'
 
@@ -58,7 +60,7 @@ const DropDown = forwardRef(({
 
 	return (
 		<ul
-			className={`${isScrollContent ? 'scroll' : ''} dropdown-cont ${isOpened ? 'opened' : ''}`}
+			className={clsx('dropdown-cont', isScrollContent && 'scroll', isOpened && 'opened')}
 			onClick={(e) => {
 				e.stopPropagation()
 				if (onClick) {
@@ -71,6 +73,7 @@ const DropDown = forwardRef(({
 		>
 			{children}
 		</ul>
+
 	)
 })
 

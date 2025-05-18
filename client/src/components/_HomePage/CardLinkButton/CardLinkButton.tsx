@@ -1,5 +1,7 @@
 import React from 'react'
 
+import clsx from 'clsx'
+
 import { ICONS } from '@assets/common/Icons-data'
 import RoundButton, { RoundButtonProps } from '@common/Buttons/RoundButton/RoundButton'
 
@@ -19,7 +21,12 @@ const CardLinkButton = ({ onClick, link, isCloseIcon, className, ...props }: Car
 
 	return (
 		<RoundButton
-			className={`card_link-but clear-but ${className || ''} ${isCloseIcon ? 'close_icon_opened' : ''}`}
+			className={clsx(
+				'card_link-but',
+				'clear-but',
+				className,
+				isCloseIcon && 'close_icon_opened',
+			)}
 			onClick={onClick ? onClick : openLink}
 			size={'s'}
 			{...props}

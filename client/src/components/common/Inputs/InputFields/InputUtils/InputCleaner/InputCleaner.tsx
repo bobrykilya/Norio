@@ -1,5 +1,7 @@
 import React from 'react';
 
+import clsx from 'clsx'
+
 import RoundButton from '../../../../Buttons/RoundButton/RoundButton'
 import { ICONS } from '@assets/common/Icons-data'
 
@@ -14,7 +16,7 @@ const InputCleaner = ({ opened, onClick }: InputCleanerProps) => {
 	return (
 		<RoundButton
 			onClick={onClick}
-			className={`inputs_cleaner-but before_hover-but ${opened ? 'opened' : ''}`}
+			className={clsx('inputs_cleaner-but', 'before_hover-but', opened && 'opened')}
 			toolTip={{
 				message: 'Очистить поле',
 			}}
@@ -22,6 +24,7 @@ const InputCleaner = ({ opened, onClick }: InputCleanerProps) => {
 		>
 			{ICONS.closeCircled}
 		</RoundButton>
+
 	)
 }
 

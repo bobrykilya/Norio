@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import clsx from 'clsx'
+
 import ToolTip, { ToolTipProps } from '../../../others/ToolTip/ToolTip'
 import SelectDropDown, { ISelectDropDownOptionListElem } from '../../SelectDropDown/SelectDropDown'
 import { capitalize } from '@utils/capitalize'
@@ -67,10 +69,10 @@ const SelectButton = ({
 
 	return (
 		<div
-			className={`${contClassName || ''} select_but-cont cont`}
+			className={clsx(contClassName, 'select_but-cont', 'cont')}
 		>
 			<button
-				className={`select-but ${!selectedState?.title && !placeholder ? 'empty' : ''}`}
+				className={clsx('select-but', !selectedState?.title && !placeholder && 'empty')}
 				type={'button'}
 				tabIndex={isTabDisabled ? -1 : 0}
 				onClick={handleClickBut}
@@ -78,7 +80,12 @@ const SelectButton = ({
 				ref={butRef}
 			>
 				<div
-					className={`select_but-content cont ${isDropDownOpened ? 'active' : ''} ${!selectedState?.title ? 'placeholder' : ''}`}
+					className={clsx(
+						'select_but-content',
+						'cont',
+						isDropDownOpened && 'active',
+						!selectedState?.title && 'placeholder',
+					)}
 				>
 					{selectedState?.icon && selectedState.icon}
 					<p

@@ -48,7 +48,7 @@ const DailyWeatherElement = ({ weather, label }: DailyWeatherElementProps) => {
 					className={'daily_weather_el_text-cont cont'}
 				>
 					<p
-						className={`daily_weather_el-day`}
+						className={'daily_weather_el-day'}
 					>
 						{label || getDayOfWeek(dayParams.dayNum)},
 						{` ${dayParams.day} ${getMonth(dayParams.month)}`}

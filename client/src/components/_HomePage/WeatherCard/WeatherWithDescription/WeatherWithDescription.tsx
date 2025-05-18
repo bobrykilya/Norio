@@ -1,5 +1,7 @@
 import React from 'react'
 
+import clsx from 'clsx'
+
 import { getTemp } from '../WeatherCard'
 import WeatherElement from '../WeatherElement/WeatherElement'
 import WeatherExtraInfo from '../WeatherExtraInfo/WeatherExtraInfo'
@@ -50,7 +52,7 @@ const WeatherWithDescription = ({ weather, hourlyWeatherList }: WeatherWithDescr
 				weather={weather}
 			/>
 			<div
-				className={`weather_with_description_text-cont cont ${weatherAlert ? 'with_alert' : ''}`}
+				className={clsx('weather_with_description_text-cont', 'cont', weatherAlert && 'with_alert')}
 			>
 				<span
 					className={'weather_with_description-description'}
